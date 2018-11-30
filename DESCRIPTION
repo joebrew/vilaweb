@@ -1,12 +1,12 @@
 Package: vilaweb
-Title: What the Package Does (One Line, Title Case)
+Title: Reproducible data analysis for www.vilaweb.cat
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Joe",
+           family = "Brew",
            role = c("aut", "cre"),
-           email = "first.last@example.com")
-Description: What the package does (one paragraph).
+           email = "joebrew@gmail.com")
+Description: This package contains all the code and data (when not private) for reproducing analyses carried out by Joe Brew for VilaWeb.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
