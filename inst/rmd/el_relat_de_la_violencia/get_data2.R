@@ -4,7 +4,7 @@ library(tidyverse)
 
 # Define the people whose data is to be analyzed
 people <- 
-  c("ciudadanoscs","josepborrellf","socialistes_cat","societatcc","lavanguardia","cronicaglobal")
+  c("ciudadanoscs","josepborrellf","socialistes_cat","societatcc","cronicaglobal")
 
 # Get twitter data
 out_list <- list()

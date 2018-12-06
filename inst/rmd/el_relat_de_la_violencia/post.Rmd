@@ -383,7 +383,8 @@ ggplot(data = bt %>%
             # formula = y ~ poly(x, 1),
             size = 1, alpha = 0.5,
               aes(x = date,
-                  y = n)) 
+                  y = n)) +
+  theme(plot.caption = element_text(size = 7))
 ```
 
 
