@@ -33,7 +33,8 @@ people <- c('InesArrimadas',
             'elperiodico',
             'elconfidencial',
             'OKDIARIO',
-            'enoticiescat'
+            'enoticiescat',
+            'publico_es'
             )
 
 
