@@ -1,0 +1,58 @@
+body{ /* Normal  */
+      font-size: 12px;
+      font-family: proxima-nova, sans-serif;
+  }
+td {  /* Table  */
+  font-size: 10px;
+}
+h1.title {
+  font-weight: bold;
+  font-size: 40px;
+  font-family: proxima-nova, sans-serif;
+  color: 12402C;
+}
+h1 { /* Header 1 */
+  font-size: 36px;
+  text-decoration: underline;
+  font-weight: bold;
+  font-family: proxima-nova, sans-serif;
+  color: #12402C;
+}
+h2 { /* Header 2 */
+  font-size: 32px;
+  font-weight: bold;
+  font-family: proxima-nova, sans-serif;
+  color: #12402C;
+}
+h3 { /* Header 3 */
+  font-size: 24px;
+  font-weight: bold;
+  font-family: proxima-nova, sans-serif;
+  color: #12402C;
+}
+
+h4 { /* Header 4 */
+  font-size: 20px;
+  font-weight: bold;
+  font-family: proxima-nova, sans-serif;
+  color: #12402C;
+}
+
+h5 { /* Header 5 */
+  font-size: 18px;
+  font-family: proxima-nova, sans-serif;
+  color: #12402C;
+}
+
+h6 { /* Header 6 */
+  font-size: 15px;
+  font-family: proxima-nova, sans-serif;
+  color: #12402C;
+}
+
+code.r{ /* Code block */
+    font-size: 8px;
+}
+pre { /* Code block - determines code spacing between lines */
+    font-size: 8px;
+}
