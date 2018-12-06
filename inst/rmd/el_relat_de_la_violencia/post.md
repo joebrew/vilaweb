@@ -20,7 +20,7 @@ If there was indeed a violent uprising or violent rebellion in Catalonia in Sept
 The data
 --------
 
-We examined tweets from the year beginning in August 2017. We limited our analysis to individuals and groups which are most opposed to the Catalan independence movement, since these accounts were most likely to discuss the supposed violence of independentists. In total, our analysis covered 227890 tweets from 22 twitter accounts.
+We examined tweets from the year beginning in August 2017. We limited our analysis to individuals and groups which are most opposed to the Catalan independence movement, since these accounts were most likely to discuss the supposed violence of independentists. In total, our analysis covered 313195 tweets from 26 twitter accounts.
 
 The results
 -----------
@@ -35,7 +35,7 @@ It is clear in the above chart that tweets about "violence" did not spike during
 
 For example, the Partido Popular made no mentions of "violence" during the 3 days following the September 20th protest for which "the Jordis" are now imprisoned. However, on September 24th, they - along with now Spanish President Pedro Sánchez (who also made no mentions of the "violence" of September 20th) - tweeted about an unrelated assault in Zaragoza:
 
-<table style="width:50%">
+<table style="width:100%">
 <tr>
     <td><img src="img/pp.png" /></td>
     <td><img src="img/sanchez.png" /></td>

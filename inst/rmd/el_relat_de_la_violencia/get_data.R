@@ -15,7 +15,7 @@ people <- c('InesArrimadas',
             'ALevySoler',
             'alejandroTGN',
             'vox_es',
-            'CiudadanosCs',
+            'ciudadanoscs',
             'pablocasado_',
             'miqueliceta',
             'Santi_ABASCAL',
@@ -36,11 +36,12 @@ people <- c('InesArrimadas',
             'enoticiescat'
             )
 
+
 # Get twitter data
 out_list <- list()
 for(p in 1:length(people)){
   this_person <- people[p]
-  file_name <- paste0('data/', this_person, '_tweets/tweets.csv')
+  file_name <- (paste0('data/', this_person, '_tweets/tweets.csv'))
   if(!file.exists(file_name)){
     message(toupper(this_person), '----------------')
     system(paste0("python3 ../../../foreign/twint/Twint.py -u ",
@@ -50,7 +51,7 @@ for(p in 1:length(people)){
                   "_tweets.csv --csv"))
   }
   # Read in the data
-  tl <- read_csv(paste0('data/', this_person, '_tweets/tweets.csv'))
+  tl <- read_csv(paste0('data/', (this_person), '_tweets/tweets.csv'))
   out_list[[p]] <- tl
 }
 # Combine all the different users data
