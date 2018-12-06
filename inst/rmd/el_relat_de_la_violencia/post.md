@@ -3,66 +3,6 @@ The tall tale of violence
 
 ### El relat de la violència
 
-<style>
-body{ /* Normal  */
-      font-size: 16px;
-      font-family: 'Open Sans';
-  }
-td {  /* Table  */
-  font-size: 10px;
-}
-h1.title {
-  <!-- font-weight: bold; -->
-  font-size: 46px;
-  font-family: 'Open Sans';
-  color: #000000;
-}
-h1 { /* Header 1 */
-  font-size: 60px;
-  /*text-decoration: underline;*/
-  <!-- font-weight: bold; -->
-  font-family: 'Open Sans';
-  color: #111111;
-}
-h2 { /* Header 2 */
-  font-size: 32px;
-  font-weight: bold;
-  font-family: 'Open Sans';
-  color: #333333;
-}
-h3 { /* Header 3 */
-  font-size: 24px;
-  font-weight: bold;
-  font-family: 'Open Sans';
-  color: #ff6600;
-}
-
-h4 { /* Header 4 */
-  font-size: 20px;
-  font-weight: bold;
-  font-family: 'Open Sans';
-  color: #333333;
-}
-
-h5 { /* Header 5 */
-  font-size: 18px;
-  font-family: 'Open Sans';
-  color: #333333;
-}
-
-h6 { /* Header 6 */
-  font-size: 15px;
-  font-family: 'Open Sans';
-  color: #333333;
-}
-
-code.r{ /* Code block */
-    font-size: 8px;
-}
-pre { /* Code block - determines code spacing between lines */
-    font-size: 8px;
-}
-</style>
 The question
 ------------
 
@@ -93,22 +33,17 @@ The below chart shows all tweets containing the words violence/violent during th
 
 It is clear in the above chart that tweets about "violence" did not spike during the supposed violent events. Anti-independence politicians did not mention violence in the immediate aftermath of "violent uprising".
 
-For example, the Partido Popular made no mentions of violence during the 3 days following the September 20th protest for which "the Jordis" are now imprisoned. However, on September 24th, they tweeted about an agression in Zaragoza:
+For example, the Partido Popular made no mentions of "violence" during the 3 days following the September 20th protest for which "the Jordis" are now imprisoned. However, on September 24th, they - along with now Spanish President Pedro Sánchez (who also made no mentions of the "violence" of September 20th) - tweeted about an unrelated assault in Zaragoza:
 
 <table style="width:50%">
 <tr>
     <td><img src="img/pp.png" /></td>
-
-</tr>
-</table>
-Pedro Sánchez also made no mention of the violent uprising in the days following September 20th. However, he tweeted about the same incident in Zaragoza on September 24th:
-
-<table style="width:50%">
-<tr>
     <td><img src="img/sanchez.png" /></td>
 
 </tr>
 </table>
+Why condemn the "violence" of an assault in Zaragoza, but not of a rebellion in Catalonia?
+
 On the day after the "violent uprising" of September 20th, Inés Arrimadas tweeted about budgets, World Alzheimer day, the fight against corruption - but no mention of violence. Xavier García Albiol tweeted about the Espanyol football team, and the 17th anniversary of the assassination of José Luis Ruiz Casado by ETA - but no mention of the "violence" the previous night.
 
 Rather, the peak in tweets mentioning the word violence did not occur until late March and April of 2018 - precisely the time at which Puigdemont was detained in Germany. The increase in tweets about violence remained high for several weeks during Puigdemont's detention. For example, Albert Rivera, whose only tweet mentioning the term "violence" in September and October 2017 (the period of the supposed violent rebellion) pertained to [gender violence](https://twitter.com/Albert_Rivera/status/913379945455538176), tweeted several articles associating violence and Catalan nationalism.
