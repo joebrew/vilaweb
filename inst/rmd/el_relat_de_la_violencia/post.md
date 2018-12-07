@@ -119,7 +119,9 @@ The trend of using event-related violence words at a low frequency, but then inc
 
 ![](figures/unnamed-chunk-8-1.png)
 
-The above chart shows the normal relationship between and event and words related to the event. The terrorist attack of august 2017 certainly occurred - there is no debate about that. And the tweet-trail of the event is normal - high attention immediately after the event, followed by a decline. What is *abnormal* is the fact that there was a supposed event (violent rebellion/uprising) which very few perceived at the moment of the event. And the tweet trail of the violent rebellion takes on the opposite form: more people talked about the "violence" of the "rebellion" many *months* after it took place than in the immediate days after Could it be that a violent rebellion simply did not take place?
+The above chart shows the normal relationship between and event and words related to the event. The terrorist attack of august 2017 certainly occurred - there is no debate about that. And the tweet-trail of the terrorist attack is normal - high attention immediately after the event, followed by a decline. What is *abnormal* is the fact that there was a supposed, major event (violent rebellion/uprising) which very few perceived as violent at the moment of the event. And the tweet trail of the violent rebellion takes on the opposite form: more people talked about the "violence" of the "rebellion" many *months* after it took place than in the immediate days after.
+
+Could it be that a violent rebellion simply did not take place?
 
 Qualitative interpretation
 --------------------------
@@ -148,7 +150,11 @@ Perhaps Ciudadanos' Carlos Carrizosa explained the phenomenon best in a quote tw
 
 </tr>
 </table>
-The rationale of the above is simply incoherent, both chronologically and logically.
+<br>
+
+The rationale of the above is simply incoherent, both chronologically and logically. Carrizosa's understanding of whether there was violence hinges not on the events which occurred, but on politics.
+
+<br>
 
 One of the benefits of living in the era of "big data" is that we can look back on things as they were, and not simply as we remember them. On the morning of September 21st, the day after the "violent uprising" lead by Jordi Sánchez and Jordi Cuixart, their political opponents woke up, read the news, and tweeted about many things. But not about violence.
 

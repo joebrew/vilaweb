@@ -603,13 +603,13 @@ make_terror_plot <- function(language = 'en'){
   
    if(language == 'en'){
     title = 'Twitter and terrorism'
-         subtitle = 'Monthly, May 2017-February 2018'
+         subtitle = 'Monthly, July 2017-February 2018'
          caption = 'Data extracted/processed and chart created on 5 December 2018. Lines smoothed via local regression. Joe Brew. @joethebrew.'
          x = 'Month'
          y = 'Tweets'
   } else {
     title = 'Twitter i el terrorisme'
-         subtitle = 'Mensual, Maig 2017-Febrer 2018'
+         subtitle = 'Mensual, Juliol 2017-Febrer 2018'
          caption = 'Dades descarregades/processades i gràfic creat el 5 de desembre 2018. Linies suavitzades a traves de regressió local. Joe Brew. @joethebrew.'
          x = 'Mes'
          y = 'Tuits'
@@ -626,7 +626,7 @@ make_terror_plot <- function(language = 'en'){
             n_terror = length(which(terror)),
             n_rambla = length(which(ramblas))) %>%
   dplyr::select(date, type, person, n_terror, n_rambla) %>%
-  filter(date >= '2017-05-01', date <= '2018-02-01')
+  filter(date >= '2017-07-01', date <= '2018-02-01')
   
 pd <- other %>% gather(key, value, n_terror:n_rambla)
 
@@ -674,7 +674,9 @@ return(g)
 make_terror_plot()
 ```
 
-The above chart shows the normal relationship between and event and words related to the event. The terrorist attack of august 2017 certainly occurred - there is no debate about that. And the tweet-trail of the event is normal - high attention immediately after the event, followed by a decline. What is _abnormal_ is the fact that there was a supposed event (violent rebellion/uprising) which very few perceived at the moment of the event. And the tweet trail of the violent rebellion takes on the opposite form: more people talked about the "violence" of the "rebellion" many _months_ after it took place than in the immediate days after Could it be that a violent rebellion simply did not take place?
+The above chart shows the normal relationship between and event and words related to the event. The terrorist attack of august 2017 certainly occurred - there is no debate about that. And the tweet-trail of the terrorist attack is normal - high attention immediately after the event, followed by a decline. What is _abnormal_ is the fact that there was a supposed, major event (violent rebellion/uprising) which very few perceived as violent at the moment of the event. And the tweet trail of the violent rebellion takes on the opposite form: more people talked about the "violence" of the "rebellion" many _months_ after it took place than in the immediate days after.
+
+Could it be that a violent rebellion simply did not take place?
 
 ## Qualitative interpretation
 
@@ -702,7 +704,11 @@ Perhaps Ciudadanos' Carlos Carrizosa explained the phenomenon best in a quote tw
   </tr>
 </table>
 
-The rationale of the above is simply incoherent, both chronologically and logically.  
+<br>
+
+The rationale of the above is simply incoherent, both chronologically and logically. Carrizosa's understanding of whether there was violence hinges not on the events which occurred, but on politics.  
+
+<br>
 
 
 
