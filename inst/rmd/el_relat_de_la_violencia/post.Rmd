@@ -66,9 +66,14 @@ tl <- tl %>%
   mutate(genero = grepl('machis|masclis|mujer|dona|done|géner|gèner|genero|marido|marit|novio|esposa|novia|doméstic|domèstic', tolower(tweet))) %>%
   mutate(violence_not_genero = violence & !genero) %>%
   mutate(tumultos = grepl('tumult', tolower(tweet))) %>%
-  mutate(atac = grepl('atac|ataq|asalt', tolower(tweet))) %>%
+  mutate(atac = grepl('atac|ataq', tolower(tweet))) %>%
+  mutate(rebelion = grepl('rebel', tolower(tweet))) %>%
+  mutate(comandos = grepl('comando', tolower(tweet))) %>%
+  mutate(asalt = grepl('asalt', tolower(tweet))) %>%
   mutate(indepe = grepl('indepe', tolower(tweet))) %>%
   mutate(violence_indepe = violence_not_genero & indepe) %>%
+  mutate(ramblas = grepl('ramblas', tolower(tweet))) %>%
+  mutate(terror = grepl('terroris', tolower(tweet))) %>%
   # Flag the newspaper posts
   mutate(newspaper = tolower(username) %in% tolower(c(
     'ElMundoEspana',
@@ -105,10 +110,16 @@ bt <-
   summarise(n = length(which(violence_not_genero)),
             n_atac = length(which(atac)),
             n_violence_indepe = length(which(violence_indepe)),
+            n_asalt = length(which(asalt)),
+            n_comandos = length(which(comandos)),
+            n_rebelion = length(which(rebelion)),
             d = n()) %>%
   ungroup %>%
   mutate(p = n / d * 100,
-         p_atac = n_atac / d) %>%
+         p_atac = n_atac / d * 100,
+         p_asalt = n_asalt / d * 100,
+         p_comandos = n_comandos / d * 100,
+         p_rebelion = n_rebelion / d * 100) %>%
   filter(date >= '2017-08-01',
          date <= '2018-07-31')
 
@@ -121,6 +132,8 @@ agg_type <- bt %>%
   group_by(date, type) %>%
   summarise(n = sum(n)) %>%
   ungroup
+
+
 
 # Define the important labels
 label_df <-
@@ -436,13 +449,13 @@ make_special_plot <- function(language = 'en'){
     title = 'Tweets containing the word "violence"*'
          subtitle = 'Monthly, August 2017-November 2018'
          caption = '*Removed tweets identified as being specific to gender violence: "machista, masclisme, mujer, dona, género, marido, etc.".\n*A tweet was flagged as containing the word "violence" if it contained the sub-string "violen", ie "violencia", "violentos"...\nData extracted/processed and chart created on 5 December 2018. Lines smoothed via local regression. Joe Brew. @joethebrew.'
-         x = 'Week'
+         x = 'Month'
          y = 'Tweets'
   } else {
     title = 'Tuits amb la paraula "violència"*'
          subtitle = 'Mensual, Agost 2017-Novembre 2018'
          caption = '*Es va treure els tuits identificats com relacionats amb la violència de gènere fent servir les paraules: "machista, masclisme, mujer, dona, género, marido, etc.".\n*Es considera que un tuit conté la paraula "violència" si conté les lletres "violen", o sigui "violencia", "violento", etc.\nDades descarregades/processades i gràfic creat el 5 de desembre 2018. Linies suavitzades a traves de regressió local. Joe Brew. @joethebrew.'
-         x = 'Setmana'
+         x = 'Mes'
          y = 'Tuits'
   }
 
@@ -491,8 +504,177 @@ make_special_plot <- function(language = 'en'){
 make_special_plot('en')
 ```
 
+Among these accounts (Ciudadanos and SCC), a similar trend emerges if we examine other violence-related words, such as "assault", "attack", "comandos" and "rebellion". With the exception of the August 2017 peak with the word "attack" (a function of the terrorist attack on the Ramblas at that time), references to violent words were _low_ during the supposed violent rebellion of the Catalan independence movement, but have been increasing since.
+
+
+
+```{r}
+
+make_ciudadanos_plot <- function(language = 'en'){
+  
+   if(language == 'en'){
+    title = 'Tweets containing violence-related words'
+         subtitle = 'Monthly, August 2017-November 2018'
+         caption = 'Data extracted/processed and chart created on 5 December 2018. Lines smoothed via local regression. Joe Brew. @joethebrew.'
+         x = 'Month'
+         y = 'Tweets'
+  } else {
+    title = 'Tuits amb paraules relacionades amb la violència'
+         subtitle = 'Mensual, Agost 2017-Novembre 2018'
+         caption = 'Dades descarregades/processades i gràfic creat el 5 de desembre 2018. Linies suavitzades a traves de regressió local. Joe Brew. @joethebrew.'
+         x = 'Mes'
+         y = 'Tuits'
+  }
+  other <- 
+    tl %>%
+  filter(username %in% c('albert_rivera', 'carrizosacarlos', 'ciutadanscs',
+                                'inesarrimadas', 'ciudadanoscs', 'societatcc')) %>%
+         mutate(person = paste0('@', username)) %>%
+  mutate(year_month = date_truncate(date, level = 'month')) %>%
+  group_by(type, date = year_month, 
+           person) %>%
+  summarise(n = length(which(violence_not_genero)),
+            n_atac = length(which(atac)),
+            n_violence_indepe = length(which(violence_indepe)),
+            n_asalt = length(which(asalt)),
+            n_comandos = length(which(comandos)),
+            n_rebelion = length(which(rebelion))) %>%
+  dplyr::select(date, type, person, n_atac, n_asalt, n_rebelion, n_comandos) %>%
+  filter(date >= '2017-08-01', date <= '2018-11-30')
+  
+pd <- other %>% gather(key, value, n_atac:n_comandos)
+
+  right <- data_frame(key = c('n_atac',
+                              'n_asalt',
+                              'n_comandos',
+                              'n_rebelion'),
+                      new_key = c('Atacar/ataque',
+                                  'Asaltar/asalto',
+                                  'Comandos',
+                                  'Rebelión/rebeldes'))
+  if(language == 'en'){
+    right$new_key <- c('Atack', 'Assault', 'Comandos', 'Rebellion/rebels')
+  }
+  
+  pd <- left_join(pd,
+                  right) %>%
+    dplyr::select(-key) %>%
+    dplyr::rename(key = new_key)
+g <- ggplot(data = pd,
+       aes(x = date,
+           y = value,
+           color = person,
+           group = person)) +
+  geom_line(alpha = 0.6, size = 0.3) + 
+  geom_point(alpha = 0.4) +
+  facet_wrap(~key, scales = 'free_y') +
+  theme_vilaweb() +
+  geom_line(stat = 'smooth', method = 'auto', 
+            formula = y ~ poly(x, 1),
+            size = 0.5, alpha = 0.8) +
+   labs(title = title,
+        subtitle = subtitle,
+        x = x,
+        y = y,
+        caption = caption) +
+  theme(axis.text.x = element_text(size = 8)) +
+  scale_x_date(labels = function(x){format(x, '%b\n%Y')}) +
+  theme(plot.caption = element_text(size = 7),
+        strip.text = element_text(size = 18)) +
+  scale_color_manual(name = '',
+                     values = databrew::make_colors(n = length(unique(pd$person)))) +
+      guides(color = guide_legend(ncol = 1)) +
+  theme(legend.position = 'right')
+
+return(g)
+
+}
+
+make_ciudadanos_plot()
+```
+
 Is violence in Catalonia greater now than it was a year ago? Or has the narrative simply coalesced more clearly around violence?
 
+The trend of using event-related violence words at a low frequency, but then increasing their usage over time is the exact _opposite_ of how reality is usually perceived and discussed. For example, if we examine the use of the words "terror" ("terrorism", "terrorist", etc.) and "Rambla" (the location of the August 2017 terrorist attack) among the same group of accounts, we say that there is an initial spike in attention, followed by a long decline (see below chart). This is normal for newsworthy events.
+
+```{r}
+
+make_terror_plot <- function(language = 'en'){
+  
+   if(language == 'en'){
+    title = 'Twitter and terrorism'
+         subtitle = 'Monthly, May 2017-February 2018'
+         caption = 'Data extracted/processed and chart created on 5 December 2018. Lines smoothed via local regression. Joe Brew. @joethebrew.'
+         x = 'Month'
+         y = 'Tweets'
+  } else {
+    title = 'Twitter i el terrorisme'
+         subtitle = 'Mensual, Maig 2017-Febrer 2018'
+         caption = 'Dades descarregades/processades i gràfic creat el 5 de desembre 2018. Linies suavitzades a traves de regressió local. Joe Brew. @joethebrew.'
+         x = 'Mes'
+         y = 'Tuits'
+  }
+  other <- 
+    tl %>%
+  filter(username %in% c('albert_rivera', 'carrizosacarlos', 'ciutadanscs',
+                                'inesarrimadas', 'ciudadanoscs', 'societatcc')) %>%
+         mutate(person = paste0('@', username)) %>%
+  mutate(year_month = date_truncate(date, level = 'month')) %>%
+  group_by(type, date = year_month, 
+           person) %>%
+  summarise(n = length(which(violence_not_genero)),
+            n_terror = length(which(terror)),
+            n_rambla = length(which(ramblas))) %>%
+  dplyr::select(date, type, person, n_terror, n_rambla) %>%
+  filter(date >= '2017-05-01', date <= '2018-02-01')
+  
+pd <- other %>% gather(key, value, n_terror:n_rambla)
+
+  right <- data_frame(key = c('n_terror',
+                              'n_rambla'),
+                      new_key = c('Terrorisme/Terrorista', 'Ramblas'))
+  if(language == 'en'){
+    right$new_key <- c('Terrorism/Terrorist', 'Ramblas')
+  }
+  
+  pd <- left_join(pd,
+                  right) %>%
+    dplyr::select(-key) %>%
+    dplyr::rename(key = new_key)
+g <- ggplot(data = pd,
+       aes(x = date,
+           y = value,
+           color = person,
+           group = person)) +
+  geom_line(alpha = 0.6, size = 0.3) + 
+  geom_point(alpha = 0.4) +
+  facet_wrap(~key, scales = 'free_y') +
+  theme_vilaweb() +
+  geom_line(stat = 'smooth', method = 'auto', 
+            formula = y ~ poly(x, 1),
+            size = 0.5, alpha = 0.8) +
+   labs(title = title,
+        subtitle = subtitle,
+        x = x,
+        y = y,
+        caption = caption) +
+  theme(axis.text.x = element_text(size = 8)) +
+  scale_x_date(labels = function(x){format(x, '%b\n%Y')}) +
+  theme(plot.caption = element_text(size = 7),
+        strip.text = element_text(size = 18)) +
+  scale_color_manual(name = '',
+                     values = databrew::make_colors(n = length(unique(pd$person)))) +
+      guides(color = guide_legend(ncol = 3)) +
+  theme(legend.position = 'bottom')
+
+return(g)
+
+}
+
+make_terror_plot()
+```
+
+The above chart shows the normal relationship between and event and words related to the event. The terrorist attack of august 2017 certainly occurred - there is no debate about that. And the tweet-trail of the event is normal - high attention immediately after the event, followed by a decline. What is _abnormal_ is the fact that there was a supposed event (violent rebellion/uprising) which very few perceived at the moment of the event. And the tweet trail of the violent rebellion takes on the opposite form: more people talked about the "violence" of the "rebellion" many _months_ after it took place than in the immediate days after Could it be that a violent rebellion simply did not take place?
 
 ## Qualitative interpretation
 
@@ -545,6 +727,8 @@ Follow Joe Brew on twitter at @joethebrew.
 make_people_plot('ca')
 make_newspaper_plot('ca')
 make_special_plot('ca')
+make_ciudadanos_plot('ca')
+make_terror_plot('ca')
 ```
 
 

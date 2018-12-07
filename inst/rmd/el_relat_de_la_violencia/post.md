@@ -109,7 +109,17 @@ In the above we've seen that tweets about violence largely occurred many months 
 
 ![](figures/unnamed-chunk-6-1.png)
 
+Among these accounts (Ciudadanos and SCC), a similar trend emerges if we examine other violence-related words, such as "assault", "attack", "comandos" and "rebellion". With the exception of the August 2017 peak with the word "attack" (a function of the terrorist attack on the Ramblas at that time), references to violent words were *low* during the supposed violent rebellion of the Catalan independence movement, but have been increasing since.
+
+![](figures/unnamed-chunk-7-1.png)
+
 Is violence in Catalonia greater now than it was a year ago? Or has the narrative simply coalesced more clearly around violence?
+
+The trend of using event-related violence words at a low frequency, but then increasing their usage over time is the exact *opposite* of how reality is usually perceived and discussed. For example, if we examine the use of the words "terror" ("terrorism", "terrorist", etc.) and "Rambla" (the location of the August 2017 terrorist attack) among the same group of accounts, we say that there is an initial spike in attention, followed by a long decline (see below chart). This is normal for newsworthy events.
+
+![](figures/unnamed-chunk-8-1.png)
+
+The above chart shows the normal relationship between and event and words related to the event. The terrorist attack of august 2017 certainly occurred - there is no debate about that. And the tweet-trail of the event is normal - high attention immediately after the event, followed by a decline. What is *abnormal* is the fact that there was a supposed event (violent rebellion/uprising) which very few perceived at the moment of the event. And the tweet trail of the violent rebellion takes on the opposite form: more people talked about the "violence" of the "rebellion" many *months* after it took place than in the immediate days after Could it be that a violent rebellion simply did not take place?
 
 Qualitative interpretation
 --------------------------
@@ -157,4 +167,4 @@ Follow Joe Brew on twitter at @joethebrew.
 Catalan language plots
 ----------------------
 
-![](figures/unnamed-chunk-7-1.png)![](figures/unnamed-chunk-7-2.png)![](figures/unnamed-chunk-7-3.png)
+![](figures/unnamed-chunk-9-1.png)![](figures/unnamed-chunk-9-2.png)![](figures/unnamed-chunk-9-3.png)![](figures/unnamed-chunk-9-4.png)![](figures/unnamed-chunk-9-5.png)
