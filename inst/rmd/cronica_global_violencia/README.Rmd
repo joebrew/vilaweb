@@ -150,7 +150,7 @@ make_cronica_plot <- function(language = 'en'){
     #           aes(x = date,
     #               y = y)) +
     theme(plot.title = element_text(size = 18),
-          plot.subtitle = element_text(size = 15),
+          plot.subtitle = element_text(size = 10),
           legend.text = element_text(size = 10,
                                      color = 'black'))
     # guides(fill = guide_legend(ncol = 3,
