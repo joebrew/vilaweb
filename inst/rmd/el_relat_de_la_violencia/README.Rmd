@@ -216,7 +216,7 @@ We restricted our analysis to the 1 year period between August 1, 2017 and July 
 
 #### Aggregation and counting
 
-We grouped the resultant data by person/account and calendar month, and calculated the sum of the total number of violence-flagged tweets (excluding those flagged as domestic/gender violence) for each person-month.
+We grouped the resultant data by person/account and week, and calculated the sum of the total number of violence-flagged tweets (excluding those flagged as domestic/gender violence) for each person-week
 
 
 
@@ -440,8 +440,7 @@ comandos: 'comando' (ie, comandos)
 assault: 'asalt' (ie, asaltar, asalto, asaltan)
 ```
 
-With the exception of the August 2017 peak with the word "attack" (a function of the terrorist attack on the Ramblas at that time), references to violent words among mainstraim Spanish and Catalan politicians were _low_ during the supposed violent rebellion of the Catalan independence movement, but have been increasing since.
-
+With the exception of the August 2017 peak with the word "attack" (a function of the terrorist attack on the Ramblas at that time), references to violent words among mainstraim Spanish and Catalan politicians were _low_ during the supposed violent rebellion of the Catalan independence movement, but have been increasing since. The below chart shows the number of tweets per month containing the titled words.
 
 
 ```{r}
@@ -535,7 +534,7 @@ make_ciudadanos_plot()
 
 ### Comparison with actual violent event
 
-The trend of using event-related violence words at a low frequency, but then increasing their usage over time is the exact _opposite_ of how reality is usually perceived and discussed. For example, if we examine the use of the words "terror" ("terrorism", "terrorist", etc.) and "rambla" (the location of the August 2017 terrorist attack) among the same group of accounts, we say that there is an initial spike in attention, followed by a long decline (see below chart). This is normal for newsworthy events.
+The trend of using event-related violence words at a low frequency, but then increasing their usage over time is the exact _opposite_ of how reality is usually perceived and discussed. For example, if we examine the use of the words "terror" ("terrorism", "terrorist", etc.) and "rambla" (the location of the August 2017 terrorist attack) among the same group of accounts, we say that there is an initial spike in attention, followed by a long decline (see below chart with monthly tweets mentioning the strings "rambla" and "terror" among the same politicians as the above chart). This is normal for newsworthy events.
 
 ```{r}
 
@@ -557,7 +556,9 @@ make_terror_plot <- function(language = 'en'){
   other <- 
     tl %>%
   filter(username %in% c('albert_rivera', 'carrizosacarlos', 'ciutadanscs',
-                                'inesarrimadas', 'ciudadanoscs', 'societatcc')) %>%
+                                'inesarrimadas', 'ciudadanoscs', 'societatcc',
+                         'albiol_xg', 'alevysoler', 'miqueliceta', 'pablocasado_',
+                         'ppcatalunya', 'ppopular', 'psoe', 'sanchezcatejon', 'socialistes_cat')) %>%
          mutate(person = paste0('@', username)) %>%
   mutate(year_month = date_truncate(date, level = 'month')) %>%
   group_by(type, date = year_month, 
@@ -630,23 +631,4 @@ if(!dir.exists('data_outputs')){
 x <- make_people_plot(return_table = TRUE)
 write_csv(x, 'data_outputs/raw_data.csv')
 ```
-
-
-
-### Technical details
-
-All of the code for this analysis is open-source and available at https://github.com/joebrew/vilaweb.
-
-Follow Joe Brew on twitter at @joethebrew.
-
-## Catalan language plots
-
-```{r}
-make_people_plot('ca')
-make_newspaper_plot('ca')
-make_special_plot('ca')
-make_ciudadanos_plot('ca')
-make_terror_plot('ca')
-```
-
 
