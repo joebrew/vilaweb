@@ -1,2 +1,4 @@
 credentials/credentials.yaml
 data-raw/*
+*.RData
+*.Rhistory

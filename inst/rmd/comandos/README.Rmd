@@ -1,0 +1,486 @@
+---
+title: "Comandos separatistas"
+output: github_document
+---
+
+### Comandos separatistas
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+```
+
+```{r, eval = TRUE}
+# Set up
+source('get_data.R')
+# There is now an object named tl, with all tweets
+# Ensure no duplicates
+tl <- tl %>% dplyr::distinct(.keep_all = TRUE) %>%
+  filter(!duplicated(id))
+```
+
+
+```{r}
+# # Read temp data <-
+# out_list <- list()
+# peeps <- dir('data')
+# # peeps <- gsub('_tweets', '', peeps)
+# for(i in 1:length(peeps)){
+#   peep <- peeps[i]
+#   dat <- read_csv(paste0('data/', peep, '/tweets.csv'))
+#   out_list[[i]] <- dat
+# }
+# tl <-bind_rows(out_list)
+
+# # Filter out low-posters
+# removers <- c('eva_granados',
+#               'carmencalvo_',
+#               'meritxell_batet',
+#               'alejandrotgn')
+
+# Flag the  posts
+tl <- tl %>%
+  # filter(!username %in% removers) %>%
+  # Only keep those who have posts going back to Sep 2017
+  group_by(username) %>%
+  filter(min(date) <= '2017-09-01') %>%
+  ungroup %>%
+  # Identify comandos posts
+  mutate(rebelion = grepl('rebel', tolower(tweet))) %>%
+  mutate(comandos = grepl('comando', tolower(tweet)),
+         kale = grepl('kale borroka', tolower(tweet))) %>%
+    mutate(violence = grepl('violen', tolower(tweet))) %>%
+  mutate(genero = grepl('machis|masclis|mujer|dona|done|géner|gèner|genero|marido|marit|novio|esposa|novia|doméstic|domèstic', tolower(tweet))) %>%
+  mutate(violence_not_genero = violence & !genero) %>%
+  mutate(cent = grepl('155', tolower(tweet))) %>%
+  # Flag the newspaper posts
+  mutate(newspaper = tolower(username) %in% tolower(c(
+    'ElMundoEspana',
+    'elpais_espana',
+    'LaVanguardia',
+    'cronicaglobal',
+    'elespanolcom',
+    'elperiodico',
+    'elconfidencial',
+    'OKDIARIO',
+    'enoticiescat'))) %>%
+  mutate(party = tolower(username) %in% tolower(c(
+            'PSOE',
+            'socialistes_cat',
+            'CiutadansCs',
+            'PPopular',
+            'PPCatalunya',
+            'vox_es',
+            'CiudadanosCs',
+            'Societatcc'))) %>%
+  mutate(type = ifelse(newspaper, 'Newspaper', 
+                       ifelse(party, 'Party/group',
+                              'Person')))
+
+
+
+
+# By time
+bt <- 
+  tl %>%
+  mutate(year_month = date_truncate(date, level = 'month') + 15) %>%
+  group_by(type, date = year_month, 
+           person = username) %>%
+  summarise(n_violence_not_genero = length(which(violence_not_genero)),
+            n_violence = length(which(violence)),
+            n_comandos = length(which(comandos)),
+            n_kale = length(which(kale)),
+            n_rebelion = length(which(rebelion)),
+            n_cent = length(which(cent)),
+            d = n()) %>%
+  ungroup %>%
+  mutate(p_comandos = n_comandos / d * 100,
+         p_kale = n_kale / d * 100,
+         p_violence = n_violence / d * 100,
+         p_cent = n_cent / d * 100) 
+
+bt_kale <- bt %>%
+  filter(date >= '2017-08-01',
+         date <= '2018-12-30')
+
+bt <- bt %>%
+  filter(date >= '2017-08-01',
+         date <= '2018-11-30')
+```
+
+```{r, fig.height=6}
+# Plot of use of comandos among ciudadanos
+make_people_plot <- function(language = 'en'){
+  dater <- catalan_date(new_line = FALSE)
+  plot_data <- bt %>% filter(type %in% c('Person', 'Party/group'))
+  plot_data <- plot_data %>%
+    filter(person %in% c('albert_rivera',
+                         'inesarrimadas',
+                         'ciudadanoscs',
+                         'ciutadanscs'))
+  gapper <- 5
+    date_breaks <- sort(unique(plot_data$date))
+  plot_data$person<- paste0('@', plot_data$person)
+  
+  label_df <- data_frame(date = as.Date('2017-10-01'),
+                         y = 15,
+                         label = 'La "Rebelión"')
+  
+  if(language == 'en'){
+    title = 'Tweets containing the word "comandos"'
+         subtitle = 'Monthly, August 2017-November 2018'
+         caption = 'Data extracted/processed and chart created on 8 December 2018. Joe Brew. @joethebrew.'
+         x = 'Month'
+         y = 'Tweets'
+  } else {
+    title = 'Tuits amb la paraula "comando(s)"'
+         subtitle = 'Mensual, Agost 2017-Nov 2018'
+         caption = 'Dades descarregades/processades i gràfic creat el 8 de desembre 2018. Joe Brew. @joethebrew.'
+         x = 'Mes'
+         y = 'Tuits'
+  }
+  
+  g <- ggplot(data = plot_data,
+         aes(x = date,
+             y = n_comandos)) +
+    geom_bar(stat = 'identity',
+             aes(group = person,
+             fill = person)) +
+    theme_vilaweb() +
+    labs(title = title,
+         caption = caption,
+         subtitle = subtitle,
+         x = x,
+         y = y) +
+    scale_fill_manual(name = '',
+                      values = databrew::make_colors(n = length(unique(plot_data$person))))  +
+    scale_y_continuous(breaks = seq(0, 100, 5)) +
+    scale_x_date(breaks = sort(unique(plot_data$date)),
+                 labels = dater(sort(unique(plot_data$date)))) +
+    # facet_wrap(~person) +
+    theme(axis.text.x = element_text(angle = 90,
+                                     hjust = 1)) +
+    geom_label(data = label_df,
+               aes(x = date,
+                   y = y,
+                   label = label),
+               fill = 'white',
+               size = 6) +
+    geom_line(data = data.frame(date = rep(as.Date('2017-10-15'), 2),
+                                 y = c(12, 0)),
+              aes(x = date,
+                  y = y)) +
+    geom_point(data = data.frame(date = rep(as.Date('2017-10-15'), 2),
+                                 y = c(12, 0)),
+              aes(x = date,
+                  y = y)) +
+    theme(plot.title = element_text(size = 24),
+          plot.subtitle = element_text(size = 20),
+          legend.text = element_text(size = 18,
+                                     color = 'black')) +
+    guides(fill = guide_legend(ncol = 2,
+                               keywidth=0.3,
+                 keyheight=0.4,
+                 default.unit="inch")) 
+    # theme(legend.position = 'right')
+  return(g)
+}
+
+make_people_plot('ca')
+
+```
+
+```{r}
+# Plot of use of kale among ciudadanos
+make_kale_plot <- function(language = 'en'){
+  dater <- catalan_date(new_line = FALSE)
+  plot_data <- bt_kale %>% filter(type %in% c('Person', 'Party/group'))
+  # plot_data <- plot_data %>%
+  #   group_by(person) %>%
+  #   filter(sum(n_kale) > 0) %>%
+  #   ungroup
+  plot_data <- plot_data %>% filter(person == 'pablocasado_')
+  # Manually insert not yet gathered dec data
+  plot_data$n_kale[plot_data$date == '2018-12-16'] <- 2
+  # plot_data <- plot_data %>%
+  #   filter(person %in% c('albert_rivera',
+  #                        'inesarrimadas',
+  #                        'ciudadanoscs',
+  #                        'ciutadanscs'))
+  gapper <- 5
+    date_breaks <- sort(unique(plot_data$date))
+  plot_data$person<- paste0('@', plot_data$person)
+  
+  label_df <- data_frame(date = as.Date('2017-10-01'),
+                         y = 15,
+                         label = 'La "Rebelión"')
+  
+  if(language == 'en'){
+    title = 'Tweets from Pablo Casado containing the words "kale borroka"'
+         subtitle = 'Monthly, August 2017-December 2018'
+         caption = 'Data extracted/processed and chart created on 8 December 2018. Joe Brew. @joethebrew.'
+         x = 'Month'
+         y = 'Tweets'
+  } else {
+    title = 'Tuits de Pablo Casado amb les paraules "kale borroka"'
+         subtitle = 'Mensual, Agost 2017-Desesmbre 2018'
+         caption = 'Dades descarregades/processades i gràfic creat el 8 de desembre 2018. Joe Brew. @joethebrew.'
+         x = 'Mes'
+         y = 'Tuits'
+  }
+  
+  g <- ggplot(data = plot_data,
+         aes(x = date,
+             y = n_kale)) +
+    geom_bar(stat = 'identity',
+             fill = '#ff6600',
+             color = 'black',
+             lwd = 0.3,
+             aes(group = person
+             # ,fill = person
+             )) +
+    theme_vilaweb() +
+    labs(title = title,
+         caption = caption,
+         subtitle = subtitle,
+         x = '',
+         y = y) +
+    # scale_fill_manual(name = '',
+    #                   values = databrew::make_colors(n = length(unique(plot_data$person))))  +
+    scale_y_continuous(breaks = seq(0, 100, 5)) +
+    scale_x_date(breaks = sort(unique(plot_data$date)),
+                 labels = dater(sort(unique(plot_data$date)))) +
+    # facet_wrap(~person) +
+    theme(axis.text.x = element_text(angle = 90,
+                                     hjust = 1,
+                                     size = 15)) +
+    # geom_label(data = label_df,
+    #            aes(x = date,
+    #                y = y,
+    #                label = label),
+    #            fill = 'white',
+    #            size = 6) +
+    # geom_line(data = data.frame(date = rep(as.Date('2017-10-15'), 2),
+    #                              y = c(12, 0)),
+    #           aes(x = date,
+    #               y = y)) +
+    # geom_point(data = data.frame(date = rep(as.Date('2017-10-15'), 2),
+    #                              y = c(12, 0)),
+    #           aes(x = date,
+    #               y = y)) +
+    theme(plot.title = element_text(size = 18),
+          plot.subtitle = element_text(size = 15),
+          legend.text = element_text(size = 10,
+                                     color = 'black')) +
+    geom_text(aes(label = n_kale),
+               nudge_y = 0.5,
+               size = 7,
+              alpha = 0.7)
+    # guides(fill = guide_legend(ncol = 3,
+    #                            keywidth=0.3,
+    #              keyheight=0.2,
+    #              default.unit="inch")) 
+    # theme(legend.position = 'right')
+  return(g)
+}
+
+make_kale_plot('ca')
+```
+
+```{r}
+# Plot of use of violence among cronica global
+make_cronica_plot <- function(language = 'en'){
+  dater <- catalan_date(new_line = FALSE)
+  plot_data <- bt 
+  # plot_data <- plot_data %>%
+  #   group_by(person) %>%
+  #   filter(sum(n_kale) > 0) %>%
+  #   ungroup
+  plot_data <- plot_data %>% filter(person == 'cronicaglobal')
+
+  # plot_data <- plot_data %>%
+  #   filter(person %in% c('albert_rivera',
+  #                        'inesarrimadas',
+  #                        'ciudadanoscs',
+  #                        'ciutadanscs'))
+  gapper <- 5
+    date_breaks <- sort(unique(plot_data$date))
+  plot_data$person<- paste0('@', plot_data$person)
+  
+  label_df <- data_frame(date = as.Date('2017-10-01'),
+                         y = 15,
+                         label = 'La "Rebelión"')
+  
+  if(language == 'en'){
+    title = 'Tweets from Cronica Global containing the word "violence"'
+         subtitle = 'Monthly, August 2017-December 2018'
+         caption = 'Data extracted/processed and chart created on 8 December 2018. Joe Brew. @joethebrew.'
+         x = 'Month'
+         y = 'Tweets'
+  } else {
+    title = 'Tuits de Cronica Global amb la paraula "violencia"'
+         subtitle = 'Mensual, Agost 2017-Desesmbre 2018'
+         caption = 'Dades descarregades/processades i gràfic creat el 8 de desembre 2018. Joe Brew. @joethebrew.'
+         x = 'Mes'
+         y = 'Tuits'
+  }
+  
+  g <- ggplot(data = plot_data,
+         aes(x = date,
+             y = n_violence)) +
+    geom_bar(stat = 'identity',
+             fill = '#ff6600',
+             color = 'black',
+             lwd = 0.3,
+             aes(group = person
+             # ,fill = person
+             )) +
+    theme_vilaweb() +
+    labs(title = title,
+         caption = caption,
+         subtitle = subtitle,
+         x = '',
+         y = y) +
+    # scale_fill_manual(name = '',
+    #                   values = databrew::make_colors(n = length(unique(plot_data$person))))  +
+    scale_y_continuous(breaks = seq(0, 100, 5)) +
+    scale_x_date(breaks = sort(unique(plot_data$date)),
+                 labels = dater(sort(unique(plot_data$date)))) +
+    # facet_wrap(~person) +
+    theme(axis.text.x = element_text(angle = 90,
+                                     hjust = 1,
+                                     size = 15)) +
+    # geom_label(data = label_df,
+    #            aes(x = date,
+    #                y = y,
+    #                label = label),
+    #            fill = 'white',
+    #            size = 6) +
+    # geom_line(data = data.frame(date = rep(as.Date('2017-10-15'), 2),
+    #                              y = c(12, 0)),
+    #           aes(x = date,
+    #               y = y)) +
+    # geom_point(data = data.frame(date = rep(as.Date('2017-10-15'), 2),
+    #                              y = c(12, 0)),
+    #           aes(x = date,
+    #               y = y)) +
+    theme(plot.title = element_text(size = 18),
+          plot.subtitle = element_text(size = 15),
+          legend.text = element_text(size = 10,
+                                     color = 'black'))
+    # guides(fill = guide_legend(ncol = 3,
+    #                            keywidth=0.3,
+    #              keyheight=0.2,
+    #              default.unit="inch")) 
+    # theme(legend.position = 'right')
+  return(g)
+}
+make_cronica_plot('ca')
+```
+
+```{r}
+# Plot of use of rebelion from casado
+make_casado_plot <- function(language = 'en'){
+  dater <- catalan_date(new_line = FALSE)
+  plot_data <- bt 
+  # plot_data <- plot_data %>%
+  #   group_by(person) %>%
+  #   filter(sum(n_kale) > 0) %>%
+  #   ungroup
+  plot_data <- plot_data %>% filter(person == 'pablocasado_')
+
+  # plot_data <- plot_data %>%
+  #   filter(person %in% c('albert_rivera',
+  #                        'inesarrimadas',
+  #                        'ciudadanoscs',
+  #                        'ciutadanscs'))
+  gapper <- 1
+    date_breaks <- sort(unique(plot_data$date))
+  plot_data$person<- paste0('@', plot_data$person)
+  
+  label_df <- data_frame(date = as.Date('2017-10-01'),
+                         y = 2,
+                         label = 'La "Rebelión"')
+  
+  if(language == 'en'){
+    title = 'Tweets from Pablo Casado containing the word "rebellion"'
+         subtitle = 'Monthly, August 2017-December 2018'
+         caption = 'Data extracted/processed and chart created on 8 December 2018. Joe Brew. @joethebrew.'
+         x = 'Month'
+         y = 'Tweets'
+  } else {
+    title = 'Tuits de Pablo Casado amb la paraula "rebelión"'
+         subtitle = 'Mensual, Agost 2017-Desesmbre 2018'
+         caption = 'Dades descarregades/processades i gràfic creat el 8 de desembre 2018. Joe Brew. @joethebrew.'
+         x = 'Mes'
+         y = 'Tuits'
+  }
+  
+  g <- ggplot(data = plot_data,
+         aes(x = date,
+             y = n_rebelion)) +
+    geom_bar(stat = 'identity',
+             fill = '#ff6600',
+             color = 'black',
+             lwd = 0.3,
+             aes(group = person
+             # ,fill = person
+             )) +
+    theme_vilaweb() +
+    labs(title = title,
+         caption = caption,
+         subtitle = subtitle,
+         x = '',
+         y = y) +
+    # scale_fill_manual(name = '',
+    #                   values = databrew::make_colors(n = length(unique(plot_data$person))))  +
+    scale_y_continuous(breaks = seq(0, 100, 5)) +
+    scale_x_date(breaks = sort(unique(plot_data$date)),
+                 labels = dater(sort(unique(plot_data$date)))) +
+    # facet_wrap(~person) +
+    theme(axis.text.x = element_text(angle = 90,
+                                     hjust = 1,
+                                     size = 15)) +
+    geom_label(data = label_df,
+               aes(x = date,
+                   y = y,
+                   label = label),
+               fill = 'white',
+               size = 6) +
+    geom_line(data = data.frame(date = rep(as.Date('2017-10-15'), 2),
+                                 y = c(1.7, 0)),
+              aes(x = date,
+                  y = y)) +
+    geom_point(data = data.frame(date = rep(as.Date('2017-10-15'), 2),
+                                 y = c(1.7, 0)),
+              aes(x = date,
+                  y = y)) +
+    theme(plot.title = element_text(size = 18),
+          plot.subtitle = element_text(size = 15),
+          legend.text = element_text(size = 10,
+                                     color = 'black'))
+    # guides(fill = guide_legend(ncol = 3,
+    #                            keywidth=0.3,
+    #              keyheight=0.2,
+    #              default.unit="inch")) 
+    # theme(legend.position = 'right')
+  return(g)
+}
+make_casado_plot('ca')
+```
