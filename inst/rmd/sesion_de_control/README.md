@@ -98,6 +98,11 @@ ALTERNATIVE TO ABOVE VISUALIZATION
 
 ![](figures/unnamed-chunk-9-1.png)
 
+Conclusion
+----------
+
+Sánchez used significantly more emotionally negative words when referencing the Catalan independence movement than when discussing other themes.
+
 Technical details
 -----------------
 

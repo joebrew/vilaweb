@@ -732,6 +732,10 @@ ALTERNATIVE TO ABOVE VISUALIZATION
 simple_plot('en', violin = TRUE)
 ```
 
+## Conclusion
+
+Sánchez used significantly more emotionally negative words when referencing the Catalan independence movement than when discussing other themes. 
+
 ## Technical details
 
 All code for this analysis is openly available at https://github.com/joebrew/vilaweb/blob/master/inst/rmd/sesion_de_control/README.md.
