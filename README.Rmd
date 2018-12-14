@@ -64,7 +64,9 @@ In order to reproduce the entire package, raw data will need to be downloaded fr
 
 #### 1. Download CIS data
 
-Download into `data-raw/cis` the "Barómetro Mensual - 2000-2018 all data" file from http://analisis.cis.es/fid/fidHistorico.jsp. This requires an account. Following log-in, go to the "Ficheros Integrados de Datos"  page. Download the full data file. This will be downloaded as `FID_637_06bcee7b-ea6b-4f41-a74e-37a941519966.zip` (or similar, depending on date downloaded). Extract the data as is in the folder in which it was downloaded.
+Download into `data-raw/cis/fichero_integrado` the "Barómetro Mensual - 2000-2018 all data" file from http://analisis.cis.es/fid/fidHistorico.jsp. This requires an account. Following log-in, go to the "Ficheros Integrados de Datos"  page. Download the full data file. This will be downloaded as `FID_637_06bcee7b-ea6b-4f41-a74e-37a941519966.zip` (or similar, depending on date downloaded). Extract the data as is in the folder in which it was downloaded.
+
+For month specific files, download from the CIS page into `data-raw/cis/monthly` into a folder with the following format: `YYYY-MM`. Extract the file .The final path of each monthly survey will resemble something like this: `'data-raw/cis/monthly/2018-10/MD3226/3226.sav'`
 
 #### 2. Download CEO data
 
@@ -73,3 +75,7 @@ Download into `data-raw/ceo` the "Matriu de dades fusionada a partir de 2014 (pr
 #### 3. Download ICPS data
 
 Download into `data-raw/icps` the "Sondeig d'opinió Catalunya 2018" data from https://www.icps.cat/recerca/sondeigs-i-dades/sondeigs/sondeigs-d-opinio-catalunya. This will require creating an account and password. Download both the 2017 and 2018 data into the 'data' sub-folder.
+
+#### 4. Download sentiment data
+
+Download the following into `data-raw/sentiment`: http://www.saifmohammad.com/WebDocs/NRC-Emotion-Lexicon-v0.92-InManyLanguages-web.xlsx
