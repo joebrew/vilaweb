@@ -572,7 +572,8 @@ simple_plot <- function(language = 'en',
            subtitle = subtitle,
            caption = caption) +
       scale_fill_manual(name = '', values = cols) +
-      theme(legend.position = 'none')
+      theme(legend.position = 'none',
+            plot.title = element_text(size = 15))
     # g <- 
     #   ggplot(data = pd,
     #          aes(x = theme,
@@ -613,7 +614,8 @@ simple_plot <- function(language = 'en',
                            labels = y_labels) +
     
       scale_fill_manual(name = '', values = rev(cols)) +
-      theme(legend.position = 'none')
+      theme(legend.position = 'none',
+            axis.text.x = element_text(size = 10)) 
   }
   return(g)
 }
