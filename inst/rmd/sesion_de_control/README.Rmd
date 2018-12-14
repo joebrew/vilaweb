@@ -431,15 +431,13 @@ What follows is linguistic analysis of the speeches and counter-speeches of 6 po
 
 2. Does polarity change when different subjects are discussed (specifically, Catalonia)?
 
-3. What is the relationship between emotional polarity, violence and references to Catalonia?
-
-4. Are there differences in lexical diversity between different politicians' speeches?
+3. Are there differences in complexity between different politicians' speeches?
 
 ## The methods
 
-We digitized the speeches from December 12 into a [machine-readable format](https://github.com/joebrew/vilaweb/blob/master/inst/rmd/sesion_de_control/data/transcript.csv), and then used an algorithm based on the [AFINN library](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010) (a dictionary of words with assigned sentimental polarity) to classify each sentence's average emotional direction. Certain words are categorized as positive or negative, with -5 being the most negative (for example, "bastard", "slut") and +5 being the most positive (for example, "superb" (magnífico) or "thrilled" (encantado)). The majority of words do not have an emotional weight ("to act", "administration", etc.) and are classified as 0. The average of a sentence's emotionally-weighted words constitute its positivity.
+We digitized the speeches from December 12 into a [machine-readable format](https://github.com/joebrew/vilaweb/blob/master/inst/rmd/sesion_de_control/data/transcript.csv), and then used an algorithm based on the [AFINN library](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010) (a dictionary of words with assigned sentimental polarity) to classify each sentence's average emotional direction, excluding the question and answer section at the end. Certain words are categorized as positive or negative, with -5 being the most negative (for example, "bastard", "slut") and +5 being the most positive (for example, "superb" (magnífico) or "thrilled" (encantado)). The majority of words do not have an emotional weight ("to act", "administration", "aquí", etc.) and are classified as 0. The average of a sentence's emotionally-weighted words constitute its positivity.
 
-The below is an example of how the algorithm works on an ctual sentene from the speech. The sentence contained some negative words and some positive words, and was classified as neutral.
+The below is an example of how the algorithm works on an actual sentence from Pedro Sánchez's speech. The sentence contained some negative words and some positive words, and was classified as neutral.
 
 <table style="width:100%">
   <tr>
@@ -455,8 +453,7 @@ The below is an example of how the algorithm works on an ctual sentene from the 
 # data.frame(example_split, x)
 ```
 
-We ran the algorithm on the entire content of speeches, and analyzed trends in positivity. We also tabulated word frequencies and associations.
-
+We ran the algorithm on the entire content of speeches, and analyzed trends in positivity. We also tabulated word frequencies and associations. Finally, we ran an analysis on lexical diversity (ie, the complexity of each politicians' speech) in an effort to better understand who their messaging targetted.
 
 ## The results
 
@@ -473,7 +470,8 @@ plot_data <-
   group_by(person) %>%
   summarise(sentiment = mean(sentiment),
             size = n()) %>%
-  ungroup
+  ungroup %>%
+  mutate(person = gsub(' ', '\n', person))
 
 x = ''
 y = 'Positivity'
@@ -496,10 +494,11 @@ ggplot(data = plot_data,
   scale_y_continuous(breaks = seq(-0.4, 0, by = 0.1), labels = c('', 'Negative', '', '', 'Neutral')) +
   geom_text(aes(label = round(sentiment, digits = 2)),
              nudge_y = -0.02,
-            alpha = 0.8)
+            alpha = 0.8) +
+  theme(legend.position = 'none')
 ```
 
-The above should come as no surprise. Generally formal speeches are more positive than the critiques that follow them (hence Sánchez positive score), and Iglesias' support of the Sánchez government...
+Since Sánchez delivered a formal written address, it should come as no surprise that his speech was the most positive (generally formal speeches are more positive than the critiques that follow them). And since and Iglesias' Podemos party is the main supporter of the Sánchez government, it should also came as no surprise that his speech was net positive.
 
 ### Does polarity change when different subjects are discussed (specifically, Catalonia)?
 
@@ -550,7 +549,7 @@ ggplot(data = plot_data,
   #                color = 'black')
 ```
 
-In fact, if we filter for only those sentences which contained references to Catalonia*, the emotional polarity values take on a radically different form.
+In fact, if we filter for only those sentences which contained references to Catalonia*, the emotional polarity values take on a radically different form. If we only examine sentences in which Catalonia is mentioned, we see that all non-independence parties sentimentality becomes more negative, whereas the 2 pro-independence politicians' speech becomes more positive.
 
 ```{r}
 plot_data <-
@@ -561,7 +560,8 @@ plot_data <-
             size = n(),
             viol = length(which(violence))) %>%
   ungroup %>%
-  mutate(p = viol / size * 100)
+  mutate(p = viol / size * 100) %>%
+  mutate(person = gsub(' ', '\n', person))
 
 x = ''
 y = 'Positivity'
@@ -584,38 +584,68 @@ ggplot(data = plot_data,
   scale_y_continuous(breaks = seq(-0.4, 0, by = 0.1), labels = c('', 'Negative', '', '', 'Neutral')) +
   geom_text(aes(label = round(sentiment, digits = 2)),
              nudge_y = -0.02,
-            alpha = 0.8)
+            alpha = 0.8) +
+  theme(legend.position = 'none')
 ```
 
-### What is the relationship between emotional polarity, violence and references to Catalonia?
+The below shows sentimentality over the course of the speeches, filtering only for sentences in which Catalonia is referenced. Note that the large majority of the sentiment curves are below 0 (ie, negative).
+
+```{r}
+plot_data <- transcript %>%
+  filter(catalan) %>%
+  mutate(cs = 1) %>%
+  mutate(sentence_number_all = cumsum(cs)) 
+
+y_labels <- c('Very negative', 'Negative', 'Neutral', 'Positive', 'Very positive')
+x = 'Sentence'
+y = 'Positivity'
+title = 'Catalonia-specific sentimental polarity in speeches'
+subtitle = 'Congreso de los Diputados, 12 de diciembre, 2018'
+caption = ''
+ggplot(data = plot_data,
+       aes(x = sentence_number_all,
+           y = sentiment,
+           color = person,
+           group = intervention_number)) +
+  geom_smooth(span = 1, 
+              # n = 5,
+              se = FALSE) +
+  geom_jitter(size = 0.3) +
+  # geom_smooth(span = 0.2, 
+  #   # n = 200,
+  #             se = FALSE,
+  #             size = 0.7) +
+  scale_color_manual(name = '', 
+                     values = databrew::make_colors(n = length(unique(plot_data$person)))) +
+  theme_vilaweb() +
+  scale_y_continuous(breaks = c(seq(-3, 3, 1.5)), labels = y_labels) + 
+  ylim(-3, 3) +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption) +
+  geom_hline(yintercept = 0, lty = 2)#+
+  # geom_label(data = data.frame(x = 200, 
+  #                y = -1,
+  #                label = 'Low point'),
+  #            aes(x = x,
+  #                y = y,
+  #                label = label),
+  #                group = NA,
+  #                color = 'black')
+```
 
 
-Much of this emotional parity is attributible to violence-related words. For example, Albert Rivera used the words golpe (4), guerra (1), muertos (2), terrorismo (1), and violencia (1). Pablo Casado took on a similar tone, saying golpe/golpista (3), violencia (2), but adding more evocative, specific words like batasunización (1), balcanizar (1), and kale borroka (1). The irony of violence vocabulary is that once it is injected into the discourse, even those who deny it still end up talking about it. For example, even Joan Tardà used the words golpe (3) and violencia/violentos (2) 
+#### Are there differences in complexity between different politicians' speeches?  
 
-Such a high level of talk about violence is clearly not a reflection of reality - there has been no notable increase in violence in recent months, and the much discussed acts of the last week in which pro-independence protestors blocked roadways is arguably illegal, but certainly not violent. No, rather, the high frequency of violence-related words is an _anticipatory_ violence, creating a mental frame primed to interpret the upcoming protests of December 21 as war-like.
+Lexical diversity is a measure of how many different words are used (ie, how often one repeats words). It is a reflection of how complex or advanced a speech is. For example, children have much lower lexical diversity than adults.  
 
-As evidence of this interpretation, have a look at today's newspaper headlines:
+A speech with high lexical diversity generally correlates with a complicated message. A speech with low lexical diversity among politicians does not generally reflect low intelligence (most politicians are smart), but rather an intentional effort to target a specific audience with simplistic, repetitive messaging. Donald Trump, for example, has become infamous for simple, repetive slogans; his speeches, to no surprise, have very low lexical diversity.
 
-<table style="width:100%">
-  <tr>
-    <td><img src="img/elpais.jpg" /></td>
-    <td><img src="img/abc.jpg" /></td>
-  </tr>
-  <tr>
-    <td><img src="img/larazon.jpg" /></td>
-    <td><img src="img/elmundo.jpg" /></td>
-  </tr>
-</table>
+TTR (Type-Token Ratio) is a measure of lexical diversity. Here, it refers to the number of unique words used in any given 100 word sequence. For example, if one repeated the same word 100 times, the TTR would be 1. If one said 100 words and did not repeat at all, the TTR would be 100. The higher the TTR, the higher the level and complexity of speech.
 
-El País headlines about security force increases and includes the line that the CDR (pro-independence protest groups) "llaman a dar batalla" (have called to battle). ABC uses the military words "comandos" and "asaltar" (to assault) to describe next week's planned protests. La Razón takes a similarly military-esque tone with the words "ejército" (army) and "guerrilla". Meanwhile, El Mundo front-pages an interview with former Spanish President Aznar saying that "the intervention in Catalonia should be total and without a time limit". 
-
-Just like in the congressional speeches, the newspapers are not covering real violence (of which there is not), but rather anticipatory violence. 
-
-#### Are there differences in lexical diversity between different politicians' speeches?  
-
-Lexical diversity is a measure of how many different words are used (ie, how often one repeats words). It is a reflection of how complex or advanced a speech is. For example, children have much lower lexical diversity than adults. Analysis has shown that lexical diversity has _decreased_ among American politicians over time. A speech with high lexical diversity generally correlates with high intelligence and a complicated message. A speech with low lexical diversity among politicians does not generally reflect low intelligence (most politicians are smart), but rather an intentional effort to target a specific audience with simplistic, repetitive messaging.
-
-TTR (Type-Token Ratio) is a measure of lexical diversity.
+The below chart shows TTR for each politician analyzed. 
 
 ```{r}
 fn <- 'ttr.RData'
@@ -631,6 +661,7 @@ if(fn %in% dir()){
     this_person <- results$person[i]
     this_text <- x$text[i]
     this_text_parsed <- unlist(strsplit(this_text, ' '))
+    # this_text_parsed <- this_text_parsed[!this_text_parsed %in% catalan_spanish_stopwords]
     possible_indices <- 100:length(this_text_parsed) 
     for(j in 1:1000){
       message(this_person, '---', j)
@@ -647,6 +678,8 @@ if(fn %in% dir()){
   out <- bind_rows(out_list)
   save(out, file = fn)
 }
+out <- out %>%
+  mutate(person = gsub(' ', '\n', person))
 
 agg <- out %>%
   group_by(person) %>%
@@ -662,27 +695,22 @@ title = 'Lexical diversity (type-token ratio)'
 subtitle = 'Speeches and counter-speeches, Congreso de los Diputados, 12 December 2018'
 caption = 'Chart by Joe Brew'
 
-ggplot(data = agg,
-       aes(x = person,
-           y = avg)) +
-  geom_point(size = 2) +
-  geom_linerange(aes(ymin = q25,
-                     ymax = q75)) +
-  theme_vilaweb() +
-  labs(x = x,
-       y = y,
-       title = title,
-       subtitle = subtitle,
-       caption = caption)
+# ggplot(data = agg,
+#        aes(x = person,
+#            y = avg)) +
+#   geom_point(size = 2) +
+#   geom_linerange(aes(ymin = q25,
+#                      ymax = q75)) +
+#   theme_vilaweb() +
+#   labs(x = x,
+#        y = y,
+#        title = title,
+#        subtitle = subtitle,
+#        caption = caption)
 cols <- databrew::make_colors(n = length(unique(out$person)))
 ggplot(data = out,
        aes(x = person,
            y = n)) +
-  geom_errorbar(data = agg,
-                 aes(x = person,
-                     ymin = q25,
-                     y = avg,
-                     ymax = q75)) +
   geom_jitter(aes(color = person),
               size = 0.3) +
   geom_violin(aes(fill = person,
@@ -699,20 +727,25 @@ ggplot(data = out,
        y = y,
        title = title,
        subtitle = subtitle,
-       caption = caption) 
+       caption = caption) +
+  geom_errorbar(data = agg,
+                 aes(x = person,
+                     ymin = q25,
+                     y = avg,
+                     ymax = q75)) 
 
 ```
 
-Percent below 60
+The below shows the percentage of 100 word sequences with a very low TTC (below 60). In other words, these are 100 word sequences in which the 40% of the words have already been said.
 
 ```{r}
 x = '' 
-y = 'Percent with low lexical diversity'
+y = 'Percent of samples with low lexical diversity'
 title = 'Percent of speech with low lexical diversity (<60 words per 100)'
 subtitle = 'Speeches and counter-speeches, Congreso de los Diputados, 12 December 2018'
 caption = 'Chart by Joe Brew'
 pd <- out %>%
-  group_by(person) %>%
+  group_by(person = gsub(' ', '\n', person)) %>%
   summarise(y = length(which(n <= 60)) / n() * 100)
 
 ggplot(data = pd,
@@ -731,6 +764,78 @@ ggplot(data = pd,
        caption = caption) 
 ```
 
+Lexical diversity is lowest among Albert Rivera and Pablo Casado, suggesting a more Trump-like messaging style (ie, targetting a less ophisticated audience and aiming for sound bites).
+
+
+
+
+## Qualitative interpretation 
+
+
+In this analysis we have seen that (a) much of what is said at the Congreso is negative, (b) negativity is higher when speaking about Catalonia than about other topics, and (c) there are drastically different levels of speech complexity among different politicians.
+
+Much of this emotional negativity is attributible to violence-related words. For example, Albert Rivera used the words golpe (4), guerra (1), muertos (2), terrorismo (1), and violencia (1). Pablo Casado took on a similar tone, saying golpe/golpista (3), violencia (2), but adding more evocative, specific words like batasunización (1), balcanizar (1), and kale borroka (1). The irony of violence vocabulary is that once it is injected into the discourse, even those who deny it still end up talking about it. For example, even Joan Tardà used the words golpe (3) and violencia/violentos (2). 
+
+The below chart shows the rate of violence-related words when discussing Catalonia (left) vs. other matters (right). For most politicians, the rate is highest on the left (ie, when discussing Catalonia). The most drastic differences are among Casado and Rivera. 
+
+
+```{r}
+pd <- transcript %>%
+  mutate(#violence = ifelse(violence, 'Violent', 'Not violent'), 
+           catalan = ifelse(catalan, 'Catalan', 'Not Catalan'),
+                            person) %>%
+  group_by(person, catalan) %>%
+  summarise(n = length(which(violence)),
+            d = n())  %>%
+  # group_by(person) %>%
+  mutate(p = n / d * 100)
+cols <- databrew::make_colors(n = length(unique(pd$person)))
+
+
+
+x = ''
+y = 'Tasa'
+title = 'Frequency of violence-related words: Catalonia vs. non-Catalonia sentences'
+subtitle = 'Congreso de los Diputados, 12 December 2018'
+caption = 'Joe Brew'
+
+ggplot(data = pd,
+       aes(x = catalan,
+           y = p,
+           color = person,
+           group = person)) +
+  geom_path() +
+  geom_point() +
+  facet_wrap(~person) +
+  theme_vilaweb() +
+  scale_color_manual(name = '',
+                    values = cols) +
+  theme(legend.position = 'none') +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption)
+```
+
+Such a high level of talk about violence is clearly not a reflection of reality - there has been no notable increase in violence in recent months, and the much discussed acts of the last weeks in which pro-independence protestors blocked roadways are arguably illegal, but certainly not violent. Rather, the high frequency of violence-related words is an _anticipatory_ violence, creating a mental frame primed to interpret the upcoming protests of December 21 as war-like.
+
+The construction of a mental framework in which Catalonia is at war is equally apparent in the speech data as in the media. Take, for example, the newspaper headlines from Friday December 14:
+
+<table style="width:100%">
+  <tr>
+    <td><img src="img/elpais.jpg" /></td>
+    <td><img src="img/abc.jpg" /></td>
+  </tr>
+  <tr>
+    <td><img src="img/larazon.jpg" /></td>
+    <td><img src="img/elmundo.jpg" /></td>
+  </tr>
+</table>
+
+El País writes about security force increases and includes the line that the CDR (pro-independence protest groups) "llaman a dar batalla" (have called to battle). ABC uses the military words "comandos" and "asaltar" (to assault) to describe next week's planned protests. La Razón takes a similarly military-esque tone with the words "ejército" (army) and "guerrilla". Meanwhile, El Mundo front-pages an interview with former Spanish President Aznar saying that "the intervention in Catalonia should be total and without a time limit". 
+
+Just like in the congressional speeches, the newspapers are not covering real violence (of which there is not), but rather anticipatory violence. This violence, real or perceived, serves to justify both (a) continued imprisonment of political leaders and (b) direct rule over Catalonia from central Spain. It should come as no surprise that those who favor the previous two measures are also the ones most likely to evoke violence in their speeches.
 
 
 
@@ -757,49 +862,4 @@ plot_data <- bind_rows(out_list)
 # Keep only violence words
 flag <- flag_words(x = plot_data$word, words = violence_words)
 # plot_data <- plot_data[flag,]
-```
-
-# Lexical diversity
-
-```{r}
-# Lexical diversity
-ld <- textstat_lexdiv(my_dfm,
-                      # measure = c('R', 'S'),
-                      measure = c("all"),
-                      log.base = 10) %>%
-  mutate(person = document) 
-ld <- ld %>%
-  gather(key, value, R:S) 
-ggplot(data = ld,
-       aes(x = person,
-           y = value)) +
-  geom_bar(stat = 'identity',
-           position = position_dodge(width = 0.8)) +
-  geom_text(size = 3,
-            aes(label = round(value, digits = 3))) +
-  facet_wrap(~key,
-             scales= 'free_y') +
-  theme(axis.text.x = element_text(angle = 90,
-                                   vjust = 0.5,
-                                   hjust = 1))
-
-ggplot(data = transcript,
-       aes(x = sentence_number,
-           y = sentiment_cumulative_average)) +
-  geom_point(data = transcript,
-       aes(x = sentence_number,
-           y = sentiment)) +
-  geom_line() +
-  facet_wrap(~person, scales = 'free') 
-
-# Sentences which contain cataluna, polarity
-transcript %>%
-  group_by(catalan) %>%
-  summarise(polarity= mean(sentiment),
-            viol = length(which(violence)) / n())
-transcript %>%
-  group_by(spanish) %>%
-  summarise(polarity= mean(sentiment))
-
-
 ```
