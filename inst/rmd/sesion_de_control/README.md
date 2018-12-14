@@ -98,6 +98,11 @@ ALTERNATIVE TO ABOVE VISUALIZATION
 
 ![](figures/unnamed-chunk-9-1.png)
 
+Technical details
+-----------------
+
+All code for this analysis is openly available at <https://github.com/joebrew/vilaweb/blob/master/inst/rmd/sesion_de_control/README.md>.
+
 Catalan language plots
 ----------------------
 
