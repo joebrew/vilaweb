@@ -441,7 +441,7 @@ my_dfm <- dfm(corpus_x,
 cols <- 'darkblue'
 textplot_wordcloud(my_dfm, min_count = 1, random_order = FALSE,
                    rotation = 0,#0.25, 
-                   min_size = 0.65,
+                   min_size = 0.35,
                    max_size = 2.8,
                    max_words = 1000,
                    # labelcolor = cols,
@@ -565,6 +565,14 @@ simple_plot <- function(language = 'en',
                     y = theme,
                     fill = theme)) +
       ggthemes::theme_fivethirtyeight() +
+      theme(plot.background = element_rect(fill = 'white'),
+            panel.background = element_rect(fill = "white",
+                                colour = "white",
+                                size = 0.5, linetype = "solid"),
+  panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                colour = "white"), 
+  panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                colour = "white")) +
       geom_density_ridges() +
       labs(x = y,
            y = x,
@@ -573,7 +581,10 @@ simple_plot <- function(language = 'en',
            caption = caption) +
       scale_fill_manual(name = '', values = cols) +
       theme(legend.position = 'none',
-            plot.title = element_text(size = 15))
+            plot.title = element_text(size = 15)) +
+      geom_vline(xintercept = 0,
+                 alpha = 0.5,
+                 lty = 2)
     # g <- 
     #   ggplot(data = pd,
     #          aes(x = theme,
@@ -615,10 +626,10 @@ simple_plot <- function(language = 'en',
     
       scale_fill_manual(name = '', values = rev(cols)) +
       theme(legend.position = 'none',
-            axis.text.x = element_text(size = 10)) 
+            axis.text.x = element_text(size = 9)) 
   }
   return(g)
-}
+  }
 library(TTR)
 time_plot <- function(language = 'en'){
  
@@ -702,7 +713,7 @@ sanchez_freq_plot <- function(language = 'en'){
 
 The below shows the overall sentiment trajectory of the Sánchez speech. The speech begins with discussion of the Balkans and Catalonia, followed by a long comparison between Brexit and Catalan independence, before going into more detail on Brexit, Spain's political situation, and Europe, and then looping back to Catalonia and Brexit. Each dot shows the sentimentality of a sentence, with the solid lines indicating the 15-sentence theme-specific rolling sentimental average. Sentences above 0 are emotionally positive, whereas those below 0 are emotionally negative.
 
-```{r}
+```{r, fig.height = 7}
 time_plot('en')
 ```
 
