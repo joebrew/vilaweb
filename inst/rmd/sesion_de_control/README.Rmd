@@ -288,6 +288,7 @@ ma <- function(arr, n=15){
   for(i in n:length(arr)){
     res[i] = mean(arr[(i-n):i])
   }
+  res[1:n] <- mean(res[1:n])
   res
 }
 transcript <- transcript %>%
@@ -314,12 +315,13 @@ flag_words <- function(x,
 
 # Define word groups
 catalan_words <- c('generalitat', 'catalu',
-                   'catala', 'torra', 'independe',
+                   'catala', 'torra', 'independe', 'puigdemont',
                    'secioni', 'separat', 'barcelo')
 violence_words <- 
   c('guerra', 'violen', 'balas', 'bala ', 'odio', 'sufrir', 'golp', 'tanqu', 
     'kale borroka', 'batasun', ' atac', ' ataque', 'muerto', 'morir', 'escrach', 'terror',
-    'rebel')
+    'liquidar', 'destruir',
+    'rebel', 'víctima', 'balcan')
 spain_words <- c('constituc', 'españ')
 
 
@@ -376,7 +378,7 @@ top_bigram_freqs <- bigram_freqs %>%
   arrange(-percent) 
 ```
 
-## Catalonia, Brexit, and Violence: An analysis of Pedro Sánchez's December 2018 speech to Congress (and reactions to it)
+## Congreso de los diputados speeches
 
 
 ```{r}
@@ -396,7 +398,7 @@ my_dfm <- dfm(corpus_x,
               remove_punct = TRUE,
               remove = catalan_spanish_stopwords)
 # ## See top 20 words
-# topfeatures(my_dfm, 20)
+# topfeatures(my_dfm, 5, groups = 'Person')
 ## Wordcloud
 cols <- c(databrew::make_colors(n = length(unique(dim(my_dfm)[1]))))
 textplot_wordcloud(my_dfm, min_count = 1, random_order = FALSE,
@@ -427,9 +429,11 @@ What follows is linguistic analysis of the speeches and counter-speeches of 6 po
 
 1. Are there differences in "polarity" (postivity-negativity) between the different politicians' speeches?
 
-2. Are there differences in the frequency of violence-associated words between the different politicians' speeches?
+2. Does polarity change when different subjects are discussed (specifically, Catalonia)?
 
 3. What is the relationship between emotional polarity, violence and references to Catalonia?
+
+4. Are there differences in lexical diversity between different politicians' speeches?
 
 ## The methods
 
@@ -456,48 +460,303 @@ We ran the algorithm on the entire content of speeches, and analyzed trends in p
 
 ## The results
 
-### Overall positivity
+### Are there differences in "polarity" (postivity-negativity) between the different politicians' speeches?
+
+Yes.
+
+Of the 6 speakers examined, 4 had generally "negative" speeches, whereas 2 had "positive" speeches.
 
 ```{r}
 plot_data <-
   transcript %>%
+  # filter(catalan) %>%
   group_by(person) %>%
-  summarise(sentiment = mean(sentiment)) %>%
+  summarise(sentiment = mean(sentiment),
+            size = n()) %>%
   ungroup
 
+x = ''
+y = 'Positivity'
+title = 'Overall sentimental polarity in speeches'
+subtitle = 'Congreso de los Diputados, 12 de diciembre, 2018'
+caption = ''
 ggplot(data = plot_data,
        aes(x = person,
-           y = sentiment)) +
-  geom_bar(stat = 'identity')
+           y = sentiment,
+           fill = person)) +
+  geom_bar(stat = 'identity') +
+  theme_vilaweb() +
+  scale_fill_manual(name = '', 
+                     values = databrew::make_colors(n = length(unique(plot_data$person)))) +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption) +
+  scale_y_continuous(breaks = seq(-0.4, 0, by = 0.1), labels = c('', 'Negative', '', '', 'Neutral')) +
+  geom_text(aes(label = round(sentiment, digits = 2)),
+             nudge_y = -0.02,
+            alpha = 0.8)
 ```
 
-### Frequency of violent words
+The above should come as no surprise. Generally formal speeches are more positive than the critiques that follow them (hence Sánchez positive score), and Iglesias' support of the Sánchez government...
+
+### Does polarity change when different subjects are discussed (specifically, Catalonia)?
+
+Yes. 
+
+The previous chart oversimplifies very large changes in positivity throughout each person's interventions. For example, in the below, we can see wide swings in emotionality. About 1/4 through Sánchez's opening speech, for example, he hit his emotional low point. What was he talking about then? Catalonia.
+
+```{r}
+plot_data <- transcript %>%
+  mutate(cs = 1) %>%
+  mutate(sentence_number_all = cumsum(cs)) 
+
+y_labels <- c('Very negative', 'Negative', 'Neutral', 'Positive', 'Very positive')
+x = 'Sentence'
+y = 'Positivity'
+title = 'Sentimental polarity in speeches'
+subtitle = 'Congreso de los Diputados, 12 de diciembre, 2018'
+caption = ''
+ggplot(data = plot_data,
+       aes(x = sentence_number_all,
+           y = sentiment,
+           color = person,
+           group = intervention_number)) +
+  geom_line(aes(y = sentiment_cumulative_average),
+            size = 0.7) +
+  geom_jitter(size = 0.3) +
+  # geom_smooth(span = 0.2, 
+  #   # n = 200,
+  #             se = FALSE,
+  #             size = 0.7) +
+  scale_color_manual(name = '', 
+                     values = databrew::make_colors(n = length(unique(plot_data$person)))) +
+  theme_vilaweb() +
+  scale_y_continuous(breaks = c(seq(-3, 3, 1.5)), labels = y_labels) + 
+  ylim(-3, 3) +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption) #+
+  # geom_label(data = data.frame(x = 200, 
+  #                y = -1,
+  #                label = 'Low point'),
+  #            aes(x = x,
+  #                y = y,
+  #                label = label),
+  #                group = NA,
+  #                color = 'black')
+```
+
+In fact, if we filter for only those sentences which contained references to Catalonia*, the emotional polarity values take on a radically different form.
 
 ```{r}
 plot_data <-
   transcript %>%
-  filter(intervention_number != 1) %>%
-  group_by(person, sentence_percent) %>%
-  summarise(viol = length(which(violence)) / n() * 100) %>%
-  ungroup
+  filter(catalan) %>%
+  group_by(person) %>%
+  summarise(sentiment = mean(sentiment),
+            size = n(),
+            viol = length(which(violence))) %>%
+  ungroup %>%
+  mutate(p = viol / size * 100)
+
+x = ''
+y = 'Positivity'
+title = 'Catalonia-specific sentimental polarity in speeches'
+subtitle = 'Congreso de los Diputados, 12 de diciembre, 2018'
+caption = ''
 ggplot(data = plot_data,
-       aes(x = sentence_percent,
-           y = viol)) +
-  geom_point() +
-  facet_wrap(~person, scales = 'free_x') +
-  geom_smooth()
+       aes(x = person,
+           y = sentiment,
+           fill = person)) +
+  geom_bar(stat = 'identity') +
+  theme_vilaweb() +
+  scale_fill_manual(name = '', 
+                     values = databrew::make_colors(n = length(unique(plot_data$person)))) +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption) +
+  scale_y_continuous(breaks = seq(-0.4, 0, by = 0.1), labels = c('', 'Negative', '', '', 'Neutral')) +
+  geom_text(aes(label = round(sentiment, digits = 2)),
+             nudge_y = -0.02,
+            alpha = 0.8)
 ```
 
-### Positivity over course of speech
+### What is the relationship between emotional polarity, violence and references to Catalonia?
+
+
+Much of this emotional parity is attributible to violence-related words. For example, Albert Rivera used the words golpe (4), guerra (1), muertos (2), terrorismo (1), and violencia (1). Pablo Casado took on a similar tone, saying golpe/golpista (3), violencia (2), but adding more evocative, specific words like batasunización (1), balcanizar (1), and kale borroka (1). The irony of violence vocabulary is that once it is injected into the discourse, even those who deny it still end up talking about it. For example, even Joan Tardà used the words golpe (3) and violencia/violentos (2) 
+
+Such a high level of talk about violence is clearly not a reflection of reality - there has been no notable increase in violence in recent months, and the much discussed acts of the last week in which pro-independence protestors blocked roadways is arguably illegal, but certainly not violent. No, rather, the high frequency of violence-related words is an _anticipatory_ violence, creating a mental frame primed to interpret the upcoming protests of December 21 as war-like.
+
+As evidence of this interpretation, have a look at today's newspaper headlines:
+
+<table style="width:100%">
+  <tr>
+    <td><img src="img/elpais.jpg" /></td>
+    <td><img src="img/abc.jpg" /></td>
+  </tr>
+  <tr>
+    <td><img src="img/larazon.jpg" /></td>
+    <td><img src="img/elmundo.jpg" /></td>
+  </tr>
+</table>
+
+El País headlines about security force increases and includes the line that the CDR (pro-independence protest groups) "llaman a dar batalla" (have called to battle). ABC uses the military words "comandos" and "asaltar" (to assault) to describe next week's planned protests. La Razón takes a similarly military-esque tone with the words "ejército" (army) and "guerrilla". Meanwhile, El Mundo front-pages an interview with former Spanish President Aznar saying that "the intervention in Catalonia should be total and without a time limit". 
+
+Just like in the congressional speeches, the newspapers are not covering real violence (of which there is not), but rather anticipatory violence. 
+
+#### Are there differences in lexical diversity between different politicians' speeches?  
+
+Lexical diversity is a measure of how many different words are used (ie, how often one repeats words). It is a reflection of how complex or advanced a speech is. For example, children have much lower lexical diversity than adults. Analysis has shown that lexical diversity has _decreased_ among American politicians over time. A speech with high lexical diversity generally correlates with high intelligence and a complicated message. A speech with low lexical diversity among politicians does not generally reflect low intelligence (most politicians are smart), but rather an intentional effort to target a specific audience with simplistic, repetitive messaging.
+
+TTR (Type-Token Ratio) is a measure of lexical diversity.
 
 ```{r}
-plot_data <- transcript %>% group_by(person) %>% filter(intervention_number == min(intervention_number)) %>% ungroup
-ggplot(data = plot_data,
-       aes(x = sentence_percent,
-           y = sentiment)) +
-  geom_point(size = 0.2) +
-  facet_wrap(~person, scales = 'free_x') +
-  geom_smooth()
+fn <- 'ttr.RData'
+if(fn %in% dir()){
+  load(fn)
+} else {
+  x <- flattened_df
+  x$text <- clean_text(x$text)
+  results <- data.frame(person = x$person)
+  counter <- 0
+  out_list <- list()
+  for(i in 1:nrow(results)){
+    this_person <- results$person[i]
+    this_text <- x$text[i]
+    this_text_parsed <- unlist(strsplit(this_text, ' '))
+    possible_indices <- 100:length(this_text_parsed) 
+    for(j in 1:1000){
+      message(this_person, '---', j)
+      counter <- counter + 1
+      random_index <- sample(possible_indices, 1)
+      random_words <- this_text_parsed[(random_index-99):(random_index)]
+      out <- data.frame(word = random_words) %>%
+        group_by(word) %>% tally %>% nrow
+      done <- data.frame(person = this_person,
+                         n = out)
+      out_list[[counter]] <- done
+    }
+  }
+  out <- bind_rows(out_list)
+  save(out, file = fn)
+}
+
+agg <- out %>%
+  group_by(person) %>%
+  summarise(avg = mean(n),
+            q75 = quantile(n, 0.75),
+            q25 = quantile(n, 0.25),
+            q50 = median(n)) %>%
+  ungroup
+
+x = '' 
+y = 'Lexical diversity'
+title = 'Lexical diversity (type-token ratio)'
+subtitle = 'Speeches and counter-speeches, Congreso de los Diputados, 12 December 2018'
+caption = 'Chart by Joe Brew'
+
+ggplot(data = agg,
+       aes(x = person,
+           y = avg)) +
+  geom_point(size = 2) +
+  geom_linerange(aes(ymin = q25,
+                     ymax = q75)) +
+  theme_vilaweb() +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption)
+cols <- databrew::make_colors(n = length(unique(out$person)))
+ggplot(data = out,
+       aes(x = person,
+           y = n)) +
+  geom_errorbar(data = agg,
+                 aes(x = person,
+                     ymin = q25,
+                     y = avg,
+                     ymax = q75)) +
+  geom_jitter(aes(color = person),
+              size = 0.3) +
+  geom_violin(aes(fill = person,
+                  color = person),
+              alpha = 0.6) +
+  theme_vilaweb() +
+    scale_color_manual(name = '', 
+                     values = cols) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+  theme_vilaweb() +
+  theme(legend.position = 'none') +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption) 
+
+```
+
+Percent below 60
+
+```{r}
+x = '' 
+y = 'Percent with low lexical diversity'
+title = 'Percent of speech with low lexical diversity (<60 words per 100)'
+subtitle = 'Speeches and counter-speeches, Congreso de los Diputados, 12 December 2018'
+caption = 'Chart by Joe Brew'
+pd <- out %>%
+  group_by(person) %>%
+  summarise(y = length(which(n <= 60)) / n() * 100)
+
+ggplot(data = pd,
+       aes(x = person,
+           y = y,
+           fill = person)) +
+  geom_bar(stat = 'identity') +
+   scale_fill_manual(name = '',
+                    values = cols) +
+  theme_vilaweb() +
+  theme(legend.position = 'none') +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption) 
+```
+
+
+
+
+```{r}
+# Frequency of words related to cat
+people <- sort(unique(transcript$person))
+out_list <- list()
+for(i in 1:length(people)){
+  message(i)
+  this_person <- people[i]
+  this_transcript <- transcript %>% filter(catalan) %>% filter(person == this_person)
+  this_word_df <- make_word_df(this_transcript$text)
+  # Remove stopwords
+  this_word_df <- this_word_df %>%
+    filter(!word %in% catalan_spanish_stopwords)
+  flag <- flag_words(this_word_df$word, words = catalan_words) |
+    flag_words(this_word_df$word, words = spain_words)
+  # this_word_df <- this_word_df[!flag,]
+  # Keep only top 5
+  # this_word_df <- this_word_df[1:5,]
+  out_list[[i]] <- this_word_df %>% mutate(person = this_person)
+}
+plot_data <- bind_rows(out_list)
+# Keep only violence words
+flag <- flag_words(x = plot_data$word, words = violence_words)
+# plot_data <- plot_data[flag,]
 ```
 
 # Lexical diversity

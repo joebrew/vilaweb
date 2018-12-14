@@ -42,31 +42,31 @@ improve_timeline <- function(tmls){
   tmls$hour <- as.POSIXct(cut(tmls$created_at, 'hour'))
   return(tmls)
 }
-# Get most recent tweets from ciudadanos
-tmls <- get_timelines(c('venciendoen1714'), n = 3200)
-guy <- lookup_users(users = tmls$user_id[1])
-tmls <- improve_timeline(tmls)
-pd <- tmls %>%
-  mutate(hour = as.POSIXct(cut(created_at, 'hour'))) %>%
-  group_by(hour) %>%
-  tally
-
-ggplot(data = pd,
-       aes(x = hour,
-           y = n)) +
-  geom_bar(stat = 'identity') +
-  theme(axis.text.x = element_text(angle = 90))
-
-library(ggridges)
-ggplot(data = tmls,
-       aes(x = time_only,
-           y = as.factor(date))) +
-  geom_density_ridges() +
-  theme_minimal() 
+# # Get most recent tweets from ciudadanos
+# tmls <- get_timelines(c('venciendoen1714'), n = 3200)
+# guy <- lookup_users(users = tmls$user_id[1])
+# tmls <- improve_timeline(tmls)
+# pd <- tmls %>%
+#   mutate(hour = as.POSIXct(cut(created_at, 'hour'))) %>%
+#   group_by(hour) %>%
+#   tally
+# 
+# ggplot(data = pd,
+#        aes(x = hour,
+#            y = n)) +
+#   geom_bar(stat = 'identity') +
+#   theme(axis.text.x = element_text(angle = 90))
+# 
+# library(ggridges)
+# ggplot(data = tmls,
+#        aes(x = time_only,
+#            y = as.factor(date))) +
+#   geom_density_ridges() +
+#   theme_minimal() 
 ```
 
 ```{r}
-file_name <- 'no_hay_presos.RData'
+file_name <- 'no_hay_presos.RDatas.RData'
 if(!file_name %in% dir()){
   rt <- search_tweets(
     '"No hay presos políticos en España"', 
@@ -108,7 +108,7 @@ if(!file_name %in% dir()){
 file_name <- 'vaga.RData'
 if(!file_name %in% dir()){
   va <- search_tweets(
-    '"vaga de fam" OR #vagadefam', 
+    '"vaga de fam"', 
     n = 1000000, 
     include_rts = T, 
     retryonratelimit = TRUE
@@ -118,27 +118,41 @@ if(!file_name %in% dir()){
   load(file_name)
 }
 
-data <- list(va, pp, cs, rt)
-data_names <- c('Vaga de fam', 'Presos polítics', 'Comandos separatistas', 'No hay presos políticos en España')
-out_list <- list()
-guys_list <- list()
-tl_list <- list()
-for(i in 1:length(data)){
-  the_data <- data[[i]]
-  out_list[[i]] <- the_data %>%
-    mutate(source = data_names[i])
-  bots <- lookup_users(users = unique(the_data$user_id)) %>%
-    mutate(source = data_names[i]) %>%
-    mutate(fake = followers_count < 10)
-  guys_list[[i]] <- bots
-  tls <- get_timelines(bots$screen_name, n = 3200) %>%
-    mutate(source = data_names[i])
-  tl_list[[i]] <- tls
-}
+if(!'data.RData' %in% dir()){
+  data <- list(va, cs,  rt)
+  data_names <- c('Vaga de fam', 'Comandos separatistas', 'No hay presos políticos en España')
+  out_list <- list()
+  guys_list <- list()
+  tl_list <- list()
+  for(i in 1:length(data)){
+    message(data_names[i])
+    the_data <- data[[i]]
+    out_list[[i]] <- the_data %>%
+      mutate(source = data_names[i])
+    message('---getting users')
+    bots <- lookup_users(users = unique(the_data$user_id)) %>%
+      mutate(source = data_names[i]) 
+    guys_list[[i]] <- bots
+    bots <- bots %>% filter(followers_count <= 10)
+    message('---getting tweets')
+    # i = 4 here:   
+    # save(bots, the_data, out_list, guys_list, tl_list, file = 'temp.RData')
 
-tweets <- bind_rows(out_list)
-people <- bind_list(guys_list)
-people_tls <- bind_list(tl_list)
+    tls <- get_timelines(bots$screen_name, n = 3200) %>%
+      mutate(source = data_names[i])
+    tl_list[[i]] <- tls
+  }
+  
+  tweets <- bind_rows(out_list)
+  people <- bind_rows(guys_list)
+  people_tls <- bind_rows(tl_list)
+  save(tweets,
+       people,
+       people_tls,
+       file = 'data.RData')
+} else {
+  load('data.RData')
+}
 
 
 out <- bind_rows()

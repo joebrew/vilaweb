@@ -617,6 +617,108 @@ make_terror_plot()
 
 The above chart shows the normal relationship between and event and words related to the event. The terrorist attack of august 2017 certainly occurred - there is no debate about that. And the tweet-trail of the terrorist attack is normal - high attention immediately after the event, followed by a decline. What is _abnormal_ is the fact that there was a supposed, major event (violent rebellion/uprising) which very few perceived as violent at the moment of the event. And the tweet trail of the violent rebellion takes on the opposite form: more people talked about the "violence" of the "rebellion" many _months_ after it took place than in the immediate days after.
 
+
+```{r, eval = FALSE}
+
+## Direct comparison: real violence vs. invented violence
+
+make_comparison_plot <- function(language = 'en'){
+  
+   if(language == 'en'){
+    title = 'Tweets containing the following words'
+         subtitle = 'Terror (terrorismo, terrorista, terrorisme) vs. Rebellion (rebellion, rebeldes, rebelar)'
+         caption = 'Data extracted/processed and chart created on 5 December 2018. Lines smoothed via local regression. Joe Brew. @joethebrew.'
+         x = 'Month'
+         y = 'Tweets'
+  } else {
+    title = 'Tuits que contenen les paraules següents'
+         subtitle = 'Terrorismo   (terrorismo, terrorista, terrorisme, etc.)   vs.\nRebelión        (rebeldes, rebelar, rebel·lió, etc.)'
+         caption = 'Dades descarregades/processades i gràfic creat el 5 de desembre 2018. Linies suavitzades a traves de regressió local. Joe Brew. @joethebrew.'
+         x = 'Mes'
+         y = 'Tuits'
+  }
+  other <- 
+    tl %>%
+  filter(username %in% c('albert_rivera', 'carrizosacarlos', 'ciutadanscs',
+                                'inesarrimadas', 'ciudadanoscs', 'societatcc',
+                         'albiol_xg', 'alevysoler', 'miqueliceta', 'pablocasado_',
+                         'ppcatalunya', 'ppopular', 'psoe', 'sanchezcatejon', 'socialistes_cat')) %>%# |
+    #        type != 'Person') %>%
+    # filter(type != 'Newspaper') %>%
+         mutate(person = paste0('@', username)) %>%
+  mutate(year_month = date_truncate(date, level = 'month')) %>%
+  group_by(type, date = year_month, 
+           person) %>%
+  summarise(n = length(which(violence_not_genero)),
+            n_terror = length(which(terror)),
+            n_rebelion = length(which(rebelion))) %>%
+  dplyr::select(date, type, person, n_terror, n_rebelion) %>%
+  filter(date >= '2017-07-01', date <= '2018-11-30')
+  
+pd <- other %>% gather(key, value, n_terror:n_rebelion)
+
+  right <- data_frame(key = c('n_terror',
+                              'n_rebelion'),
+                      new_key = c('Terrorismo', 'Rebelión'))
+  if(language == 'ca'){
+    right$new_key <- factor(right$new_key,
+                          levels = c('Terrorismo', 'Rebelión'))
+  } else if(language == 'en'){
+    right$new_key <- c('Terrorism', 'Rebellion')
+    right$new_key <- factor(right$new_key,
+                          levels = c('Terrorism', 'Rebellion'))
+  }
+  
+  # Keep only relevant dates
+  pd <- pd %>%
+    filter(
+      (grepl('error', key) & date >= '2017-07-01' & date <= '2018-01-01' ) |
+        (grepl('ebel', key) & date >= '2017-08-01' & date <= '2018-11-30') 
+    )
+  
+  pd <- left_join(pd,
+                  right) %>%
+    dplyr::select(-key) %>%
+    dplyr::rename(key = new_key)
+g <- ggplot(data = pd,
+       aes(x = date,
+           y = value,
+           color = person,
+           group = person)) +
+  geom_line(alpha = 0.6, size = 0.8) +
+  geom_point(alpha = 0.8) +
+  facet_wrap(~key,
+             scales = 'free') +
+  theme_vilaweb() +
+  geom_line(stat = 'smooth', method = 'auto', 
+            formula = y ~ poly(x, 1),
+            size = 0.8, alpha = 0.8) +
+   labs(title = title,
+        subtitle = subtitle,
+        x = x,
+        y = y,
+        caption = caption) +
+  theme(axis.text.x = element_text(size = 8)) +
+  scale_x_date(labels = function(x){format(x, '%b\n%Y')}) +
+  theme(plot.caption = element_text(size = 10),
+        strip.text = element_text(size = 18),
+        legend.text = element_text(size = 11),
+        axis.text.x = element_text(size = 14),
+        plot.subtitle = element_text(size = 20),
+        plot.title = element_text(size = 24)) +
+  scale_color_manual(name = '',
+                     values = databrew::make_colors(n = length(unique(pd$person)))) +
+      guides(color = guide_legend(ncol = 5)) +
+  theme(legend.position = 'bottom') +
+    ylim(-1, 35) 
+
+return(g)
+}
+
+make_comparison_plot('ca')
+ggsave('~/Desktop/violence.png')
+```
+
 ## Raw data
 
 The raw data (number of tweets of each type for each account for each month) is viewable [here](https://github.com/joebrew/vilaweb/blob/master/inst/rmd/el_relat_de_la_violencia/data_outputs/raw_data.csv)

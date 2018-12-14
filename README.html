@@ -36,11 +36,14 @@ body {
 <p>In order to reproduce the entire package, raw data will need to be downloaded from various sources</p>
 <h3 id="downloading-raw-data">Downloading raw data</h3>
 <h4 id="download-cis-data">1. Download CIS data</h4>
-<p>Download into <code>data-raw/cis</code> the &quot;Barómetro Mensual - 2000-2018 all data&quot; file from <a href="http://analisis.cis.es/fid/fidHistorico.jsp" class="uri">http://analisis.cis.es/fid/fidHistorico.jsp</a>. This requires an account. Following log-in, go to the &quot;Ficheros Integrados de Datos&quot; page. Download the full data file. This will be downloaded as <code>FID_637_06bcee7b-ea6b-4f41-a74e-37a941519966.zip</code> (or similar, depending on date downloaded). Extract the data as is in the folder in which it was downloaded.</p>
+<p>Download into <code>data-raw/cis/fichero_integrado</code> the &quot;Barómetro Mensual - 2000-2018 all data&quot; file from <a href="http://analisis.cis.es/fid/fidHistorico.jsp" class="uri">http://analisis.cis.es/fid/fidHistorico.jsp</a>. This requires an account. Following log-in, go to the &quot;Ficheros Integrados de Datos&quot; page. Download the full data file. This will be downloaded as <code>FID_637_06bcee7b-ea6b-4f41-a74e-37a941519966.zip</code> (or similar, depending on date downloaded). Extract the data as is in the folder in which it was downloaded.</p>
+<p>For month specific files, download from the CIS page into <code>data-raw/cis/monthly</code> into a folder with the following format: <code>YYYY-MM</code>. Extract the file .The final path of each monthly survey will resemble something like this: <code>'data-raw/cis/monthly/2018-10/MD3226/3226.sav'</code></p>
 <h4 id="download-ceo-data">2. Download CEO data</h4>
 <p>Download into <code>data-raw/ceo</code> the &quot;Matriu de dades fusionada a partir de 2014 (presdencial)&quot; file as <code>2014_Microdades_anonimitzades_fusio_cine_pres.rar</code> from <a href="http://ceo.gencat.cat/ca/barometre/matrius-fusionada-BOP/" class="uri">http://ceo.gencat.cat/ca/barometre/matrius-fusionada-BOP/</a>. Extract the data as is in the folder in which it was downloaded.</p>
 <h4 id="download-icps-data">3. Download ICPS data</h4>
 <p>Download into <code>data-raw/icps</code> the &quot;Sondeig d'opinió Catalunya 2018&quot; data from <a href="https://www.icps.cat/recerca/sondeigs-i-dades/sondeigs/sondeigs-d-opinio-catalunya" class="uri">https://www.icps.cat/recerca/sondeigs-i-dades/sondeigs/sondeigs-d-opinio-catalunya</a>. This will require creating an account and password. Download both the 2017 and 2018 data into the 'data' sub-folder.</p>
+<h4 id="download-sentiment-data">4. Download sentiment data</h4>
+<p>Download the following into <code>data-raw/sentiment</code>: <a href="http://www.saifmohammad.com/WebDocs/NRC-Emotion-Lexicon-v0.92-InManyLanguages-web.xlsx" class="uri">http://www.saifmohammad.com/WebDocs/NRC-Emotion-Lexicon-v0.92-InManyLanguages-web.xlsx</a></p>
 
 </body>
 </html>
