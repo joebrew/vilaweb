@@ -1,5 +1,5 @@
 ---
-title: "Sesión de control"
+title: "Analysis of congressional speeches"
 output: github_document
 ---
 
@@ -167,7 +167,12 @@ transcript <- read_csv('data/transcript.csv') %>%
                 'Albert Rivera',
                 'Pablo Iglesias',
                 'Joan Tardà',
-                'Carles Campuzano'))
+                'Carles Campuzano')) %>%
+  # remove certain terms
+  mutate(text = gsub('(Aplausos)', '', text, fixed = TRUE)) %>%
+  mutate(text = gsub('(Rumores)', '', text, fixed = TRUE)) %>%
+  mutate(text = gsub('(Risas)', '', text, fixed = TRUE)) %>%
+  mutate(text = gsub('(Protestas)', '', text, fixed = TRUE))
 
 # Get by sentence
 sentencify <- function(transcript){
@@ -263,7 +268,8 @@ catalan_words <- c('generalitat', 'catalu',
                    'secioni', 'separat', 'barcelo')
 violence_words <- 
   c('guerra', 'violen', 'balas', 'bala ', 'odio', 'sufrir', 'golp', 'tanqu', 
-    'kale borroka', 'batasun')
+    'kale borroka', 'batasun', ' atac', ' ataque', 'muerto', 'morir', 'escrach', 'terror',
+    'rebel')
 spain_words <- c('constituc', 'españ')
 
 
@@ -320,7 +326,7 @@ top_bigram_freqs <- bigram_freqs %>%
   arrange(-percent) 
 ```
 
-## Catalonia and Brexit: An analysis of Pedro Sánchez's December 2018 speech to Congress (and reactions to it)
+## Catalonia, Brexit, and Violence: An analysis of Pedro Sánchez's December 2018 speech to Congress (and reactions to it)
 
 
 ```{r}
@@ -377,7 +383,22 @@ What follows is linguistic analysis of the speeches and counter-speeches of 6 po
 
 ## The methods
 
-We 
+We digitized the speeches from December 12 into a [machine-readable format](https://github.com/joebrew/vilaweb/blob/master/inst/rmd/sesion_de_control/data/transcript.csv), and then used an algorithm based on the [AFINN library](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010) (a dictionary of words with assigned sentimental polarity) to classify each sentence's average emotional direction. The below is an example of how the algorithm works.
+
+<table style="width:100%">
+  <tr>
+    <td><img src="img/sanchez.png" /></td>
+    <td><img src="img/sanchez2.png" /></td>
+  </tr>
+</table>
+
+```{r}
+example <- c("Y lealtad entre administraciones, señorías, algo que por desgracia no se construye con declaraciones que se sitúan fuera de toda lógica y apelan a la violencia, como hemos escuchado en algún dirigente de la Generalitat de Cataluña. Que conste en acta por tanto: tiempo, diálogo y lealtad.")
+example_split <- unlist(strsplit(clean_text(example), ' '))
+
+x <- score_sentiment(example_split, language = 'es')
+data.frame(example_split, x)
+```
 
 
 ```{r}
