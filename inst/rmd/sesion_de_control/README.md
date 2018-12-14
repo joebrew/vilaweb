@@ -28,7 +28,7 @@ We then classified every set of sentences into one of eight themes:
 <table style="width:100%">
 <tr>
     <td>1. Independentisme català</td>
-    <td>Any sentence referncing Catalonia and the independence moevement</td>
+    <td>Any sentence referencing Catalonia and the independence movement (identified algorithmically through the phrases "secession", "independentista", "independencia", "unilateralitat")</td>
 
 </tr>
     <tr>

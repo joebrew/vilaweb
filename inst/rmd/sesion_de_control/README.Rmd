@@ -442,7 +442,7 @@ cols <- 'darkblue'
 textplot_wordcloud(my_dfm, min_count = 1, random_order = FALSE,
                    rotation = 0,#0.25, 
                    min_size = 0.35,
-                   max_size = 2.8,
+                   max_size = 2,
                    max_words = 1000,
                    # labelcolor = cols,
                    # labeloffset = 1,
@@ -471,7 +471,7 @@ We then classified every set of sentences into one of eight themes:
 <table style="width:100%">
   <tr>
     <td>1. Independentisme català</td>
-    <td>Any sentence referncing Catalonia and the independence moevement</td>
+    <td>Any sentence referencing Catalonia and the independence movement (identified algorithmically through the phrases "secession", "independentista", "independencia", "unilateralitat")</td>
   </tr>
     <tr>
     <td>2. Balkans</td>
