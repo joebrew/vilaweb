@@ -238,4 +238,4 @@ Just like in the congressional speeches, the newspapers are not covering real vi
 Catalan language plots
 ----------------------
 
-    Error in scale_y_continuous(breaks = seq(-0.4, 0, by = 0.1), labels = y_labels): object 'y_labels' not found
+![](figures/unnamed-chunk-21-1.png)![](figures/unnamed-chunk-21-2.png)![](figures/unnamed-chunk-21-3.png)![](figures/unnamed-chunk-21-4.png)

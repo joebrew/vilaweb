@@ -890,14 +890,14 @@ overall_plot <- function(language = 'en', cat_only = FALSE){
     x = ''
   y = 'Positivitat'
   if(cat_only){
-    title = 'Polaritat sentimental especifíca a Catalunya en discursos'
+    title = 'Polaritat sentimental especifíca a Catalunya'
   } else {
-    title = 'Polaritat sentimental general en discursos'
+    title = 'Polaritat sentimental general'
   }
   
   subtitle = 'Congreso de los Diputados, 12 de desembre, 2018'
   caption = ''
-  c('', 'Negatiu', '', '', 'Neutral')
+  y_labels <- c('', 'Negatiu', '', '', 'Neutral')
     }
   
   ggplot(data = plot_data,
@@ -1002,7 +1002,6 @@ In fact, if we filter for only those sentences which contained references to Cat
 
 ```{r}
 overall_plot('en', cat_only = TRUE)
-
 ```
 
 The below shows sentimentality over the course of the speeches, filtering only for sentences in which Catalonia is referenced. Note that the large majority of the sentiment curves are below 0 (ie, negative).
@@ -1243,5 +1242,8 @@ flag <- flag_words(x = plot_data$word, words = violence_words)
 
 ```{r}
 overall_plot('ca')
+overall_plot('ca', cat_only = TRUE)
+time_series_plot('ca', cat_only = FALSE)
+time_series_plot('ca', cat_only = TRUE)
 
 ```
