@@ -1,0 +1,424 @@
+---
+title: "Sesión de control"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(waffle)
+library(stringr)
+library(tidyverse)
+library(languageR) #https://www.rdocumentation.org/packages/languageR/versions/1.4.1/topics/compare.richness.fnc
+library(quanteda) # https://www.rdocumentation.org/packages/quanteda/versions/0.9.8.5/topics/lexdiv
+library(readr)
+library(dplyr)
+library(stringr)
+library(lubridate)
+library(tidyr)
+library(tidytext)
+library(quanteda)
+library(ggplot2)
+library(DT)
+```
+
+```{r}
+# Define some functions
+simplify_text <- function(x){
+  x <- gsub("[\r\n]", "", x)
+  x <- str_replace(gsub("\\s+", " ", str_trim(x)), "B", "b")
+  return(x)
+}
+
+clean_text <- function(x){
+  x <- str_replace_all(x, "[[:punct:]]", " ")
+  x <- tolower(x)
+  x <- simplify_text(x)
+  return(x)
+}
+
+make_word_vector <- function(x){
+  x <- clean_text(x)
+  x_parsed <- strsplit(x, " ")
+  x <- unlist(x_parsed)
+}
+
+make_word_df <- function(x){
+  x <- make_word_vector(x)
+  x <- data_frame(word = x)
+  x <- x %>% group_by(word) %>% summarise(freq = n()) %>% arrange(desc(freq)) %>%
+    mutate(cs = cumsum(freq)) %>%
+    mutate(p = freq / sum(freq)) %>%
+    mutate(psc = cs / sum(freq)) %>%
+    filter(! word %in% c('', '\n'))
+  # Calculate type token ratio
+  # (types = total number of DIFFERENT words)
+  # (tokens = total number of words)
+  return(x)
+}
+
+# Make a score sentiment function
+score_sentiment <- function (x, language = 'en',
+                             valence_only = TRUE) {
+  # Get the afinn and nrc dictionary
+    af <- vilaweb::afinn
+    nr <- vilaweb::nrc
+    # Define the column for the right language
+    word <- af %>% dplyr::select_(language)
+    names(word) <- 'word'
+    af$word <- word$word
+    # Define the nr data for the right language
+    if(language == 'en'){
+      nr <- nrc %>% filter(lang == 'english')
+    }
+    if(language == 'ca'){
+      nr <- nrc %>% filter(lang == 'catalan')
+    }
+    if(language == 'es'){
+      nr <- nrc %>% filter(lang == 'spanish')
+    }
+    
+    x <- clean_text(x)
+    # Split at spaces
+    x_parsed <- strsplit(x, " ")
+    out <- rep(NA, length(x))
+    nr_out <- list()
+    for (i in 1:length(out)) {
+        this_element <- x[i]
+        this_element_parsed <- x_parsed[[i]]
+        # Get af just for this
+        af_small <- af %>% filter(word %in% this_element_parsed)
+        if (nrow(af_small) == 0) {
+            out[i] <- 0
+        }
+        else {
+            out[i] <- mean(af_small$score, na.rm = TRUE)
+        }
+        
+        # Get nr just for this
+        nr_small <- nr %>% filter(word %in% this_element_parsed)
+        nrc_names <- sort(unique(nrc$sentiment))
+        nr_df <- data.frame(matrix(rep(0, length(nrc_names)), nrow = 1))
+        names(nr_df) <- nrc_names
+        if(nrow(nr_small) > 0){
+          nr_scored <- nr_small %>%
+            group_by(sentiment) %>%
+            summarise(value = sum(value)) %>%
+            ungroup
+          for(j in 1:nrow(nr_scored)){
+            nr_df[,nr_scored$sentiment[j]] <- nr_scored$value[j]
+          }
+        } 
+        nr_out[[i]] <- nr_df
+    }
+    nr_out <- bind_rows(nr_out)
+    nr_out$sentiment <- out
+    if(valence_only){
+      return(out)
+    } else {
+      return(nr_out)
+    }
+}
+```
+
+```{r}
+# Read in stopwords
+catalan_spanish_stopwords <- 
+  c(
+    readLines('stopwords/stopwords-ca.txt'),
+    readLines('stopwords/stopwords-es.txt')
+  )
+# Add a few
+catalan_spanish_stopwords <- 
+  c(catalan_spanish_stopwords,
+    c('señor',
+      'señoría',
+      'señorías',
+      'sánchez'))
+# Remove numbers
+numbers <- as.character(c(0:154,156:1935,1937:1977, 1979:2018))
+catalan_spanish_stopwords <- c(catalan_spanish_stopwords, numbers)
+
+# Read in transcripts from session de control
+transcript <- read_csv('data/transcript.csv') %>%
+  dplyr::select(date, source, person, text, qa) %>%
+  # Remove qa
+  filter(!qa) %>%
+  # Keep only relevant speakers
+  filter(person %in% c('Pedro Sánchez',
+                'Pablo Casado',
+                'Albert Rivera',
+                'Pablo Iglesias',
+                'Joan Tardà',
+                'Carles Campuzano'))
+
+# Get by sentence
+sentencify <- function(transcript){
+  # Define whether there was an interruption
+  transcript$interruption <- FALSE
+  for(i in 2:nrow(transcript)){
+    if(transcript$person[i] != transcript$person[i-1]){
+      transcript$interruption[i] <- TRUE
+    }
+  }
+  # Use interruptions to get intervention number
+  transcript$intervention_number <- NA
+  counter <- 1
+  for(i in 1:nrow(transcript)){
+    if(transcript$interruption[i]){
+      counter <- counter + 1
+    }
+    transcript$intervention_number[i] <- counter
+  }
+  out_list <- list()
+  for(i in 1:nrow(transcript)){
+    sub_transcript <- transcript[i,]
+    # split by sentence 
+    sub_transcript_split <- unlist(strsplit(sub_transcript$text, split = '.', fixed = TRUE))
+    sub_transcript_split <- trimws(sub_transcript_split)
+    # If greater than 1, larger dataframe
+    if(length(sub_transcript_split) > 1){
+      out <- data_frame(date = sub_transcript$date,
+                        source = sub_transcript$source,
+                        person = sub_transcript$person,
+                        text = sub_transcript_split,
+                        intervention_number = sub_transcript$intervention_number)
+    } else {
+      out <- sub_transcript
+    }
+    out_list[[i]] <- out
+  }
+  out <- bind_rows(out_list)
+  # Create a sentence number
+  out <- out %>%
+    mutate(cs = 1) %>%
+    group_by(person) %>%
+    mutate(sentence_number = cumsum(cs)) %>%
+    ungroup %>%
+    dplyr::select(-cs) %>%
+    # Create a sentence %
+    group_by(person) %>%
+    mutate(sentence_percent = sentence_number / max(sentence_number) * 100) %>%
+    ungroup
+  return(out)
+}
+
+# Make transcript a 1 row per person-sentence df
+transcript <- sentencify(transcript = transcript)
+
+# Score the sentiment
+right <- score_sentiment(transcript$text, language = 'es', valence_only = FALSE)
+transcript <- bind_cols(transcript, right)
+
+# Cumulative average polarity
+ma <- function(arr, n=15){
+  res = arr
+  for(i in n:length(arr)){
+    res[i] = mean(arr[(i-n):i])
+  }
+  res
+}
+transcript <- transcript %>%
+  group_by(person, intervention_number) %>%
+  mutate(sentiment_cumulative_average = ma(sentiment, 10)) %>%
+  ungroup
+
+# Flag words
+flag_words <- function(x, 
+                       words = c('generalitat', 'catalu', 'govern',
+                   'catala', 'torra', 'independe',
+                   'secioni', 'separat', 'barcelo', 
+                   'carreter')){
+  out <- list()
+  for(i in 1:length(words)){
+    out[[i]] <- grepl(words[i], tolower(x))
+  }
+  z <- data.frame(out, fix.empty.names = FALSE)
+  names(z) <- words
+  z <- as.matrix(z)
+  z <- apply(z, 1, function(x){any(x)})
+  return(z)
+}
+
+# Define word groups
+catalan_words <- c('generalitat', 'catalu',
+                   'catala', 'torra', 'independe',
+                   'secioni', 'separat', 'barcelo')
+violence_words <- 
+  c('guerra', 'violen', 'balas', 'bala ', 'odio', 'sufrir', 'golp', 'tanqu', 
+    'kale borroka', 'batasun')
+spain_words <- c('constituc', 'españ')
+
+
+# Identify catalan sentences in the data
+transcript$catalan <- flag_words(transcript$text, words = catalan_words)
+transcript$spanish <- flag_words(transcript$text, words = spain_words)
+transcript$violence <- flag_words(transcript$text, words = violence_words)
+
+# Combine
+combined_df <- transcript %>%
+  group_by(person, intervention_number) %>%
+  summarise(text = paste0(text, collapse = ' ')) %>%
+  ungroup
+
+# Flatten (just one thing per person)
+flattened_df <- 
+  transcript %>%
+  group_by(person) %>%
+  summarise(text = paste0(text, collapse = ' ')) %>%
+  ungroup
+
+
+# PAIR WORDS
+ # break text into bigrams
+bigrams <- transcript %>% 
+  unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
+  separate(bigram, into = c("first","second"), sep = " ", remove = FALSE) %>%
+  # # remove stop words from tidytext package 
+  # anti_join(stop_words, by = c("first" = "word")) %>%
+  # anti_join(stop_words, by = c("second" = "word")) %>%
+  filter(!first %in% catalan_spanish_stopwords,
+         !second %in% catalan_spanish_stopwords) %>%
+  filter(str_detect(first, "[a-z]"),
+         str_detect(second, "[a-z]")) %>%
+  group_by(person) %>%
+  count(bigram) %>%
+  arrange(-n)
+
+bigram_freqs <- bigrams %>% 
+  left_join(bigrams %>% 
+              group_by(person) %>% 
+              summarise(total = sum(n))) %>%
+  mutate(percent = n/total*100) %>%
+  group_by(person)
+
+# get the top bigram for each address
+top_bigrams <- bigram_freqs %>%
+  top_n(10) %>%
+  arrange(-percent)
+
+top_bigram_freqs <- bigram_freqs %>%
+  semi_join(top_bigrams) %>%
+  ungroup() %>%
+  arrange(-percent) 
+```
+
+## Catalonia and Brexit: An analysis of Pedro Sánchez's December 2018 speech to Congress (and reactions to it)
+
+
+```{r}
+corpus_x <- corpus(simplify_text(flattened_df$text),
+                   docnames = flattened_df$person)
+docvars(corpus_x, 'Person') <- flattened_df$person
+# summary(corpus_x)
+# texts(corpus_x)[1]
+## Quick search
+# kwic(corpus_x, "comandos")
+# head(docvars(corpus_x))
+## Extract tokens
+# tokens(corpus_x, remove_numbers = TRUE,  remove_punct = TRUE)
+## Document feature matrix
+
+my_dfm <- dfm(corpus_x,
+              remove_punct = TRUE,
+              remove = catalan_spanish_stopwords)
+# ## See top 20 words
+# topfeatures(my_dfm, 20)
+## Wordcloud
+cols <- c(databrew::make_colors(n = length(unique(dim(my_dfm)[1]))))
+textplot_wordcloud(my_dfm, min_count = 1, random_order = FALSE,
+                   rotation = 0,#0.25, 
+                   min_size = 0.65,
+                   max_size = 2.8,
+                   max_words = 1000,
+                   # labelcolor = cols,
+                   # labeloffset = 1,
+                   labelsize = 1.2,
+                   color = cols,
+                   comparison = TRUE)
+
+```
+
+On Wednesday, December 12th, Spanish President Pedro Sánchez delivered an address to the Congreso de los Diputados regarding Brexit and the political situation in Catalonia ([official transcription here](http://www.congreso.es/public_oficiales/L12/CONG/DS/PL/DSCD-12-PL-170.PDF)). The speech reflected rising tensions between pro-independence Catalans and the pro-union Sánchez government, and marked a sharp break with Sánchez's previous more conciliatory tone. The following back-and-forth between Sánchez and the leaders of other major Spanish political parties was tense.
+
+What follows is linguistic analysis of the speeches and counter-speeches of 6 politicians:
+
+- Pedro Sánchez (President, PSOE, unionist)
+- Pablo Casado (PP, unionist)
+- Albert Rivera (Ciudadanos, unionist)
+- Pablo Iglesias (Podemos, ambivalent)
+- Carles Campuzano (PDeCat, independentist)
+- Joan Tardà (Catalan Left, independentist)
+
+## The questions
+
+1. Are there differences in "polarity" (postivity-negativity) between the different politicians' speeches?
+
+2. Are there differences in the frequency of violence-associated words between the different politicians' speeches?
+
+3. What is the relationship between emotional polarity and references to Catalonia?
+
+## The methods
+
+We 
+
+
+```{r}
+# Lexical diversity
+ld <- textstat_lexdiv(my_dfm,
+                      # measure = c('R', 'S'),
+                      measure = c("all"),
+                      log.base = 10) %>%
+  mutate(person = document) 
+ld <- ld %>%
+  gather(key, value, R:S) 
+ggplot(data = ld,
+       aes(x = person,
+           y = value)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.8)) +
+  geom_text(size = 3,
+            aes(label = round(value, digits = 3))) +
+  facet_wrap(~key,
+             scales= 'free_y') +
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.5,
+                                   hjust = 1))
+
+ggplot(data = transcript,
+       aes(x = sentence_number,
+           y = sentiment_cumulative_average)) +
+  geom_point(data = transcript,
+       aes(x = sentence_number,
+           y = sentiment)) +
+  geom_line() +
+  facet_wrap(~person, scales = 'free') 
+
+# Sentences which contain cataluna, polarity
+transcript %>%
+  group_by(catalan) %>%
+  summarise(polarity= mean(sentiment),
+            viol = length(which(violence)) / n())
+transcript %>%
+  group_by(spanish) %>%
+  summarise(polarity= mean(sentiment))
+
+
+```
