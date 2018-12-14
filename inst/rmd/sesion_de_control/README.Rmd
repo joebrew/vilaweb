@@ -583,9 +583,10 @@ simple_plot <- function(language = 'en',
   } else {
     plot_data <- pd %>%
     group_by(theme) %>%
-    summarise(sentiment = mean(sentiment)) %>%
-    arrange(sentiment)
-  plot_data$theme <- factor(plot_data$theme, levels = plot_data$theme)
+    summarise(sentiment = mean(sentiment)) 
+    cols <- cols[rev(order(plot_data$sentiment))]
+  plot_data <- plot_data %>% arrange(sentiment)
+    plot_data$theme <- factor(plot_data$theme, levels = plot_data$theme)
   plot_data <- plot_data %>%
     mutate(label_location = ifelse(sentiment > 0,
                                    sentiment - 0.1,
