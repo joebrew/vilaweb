@@ -39,7 +39,7 @@ if('tl.RData' %in% dir()){
               # 'elperiodico',
               # 'elconfidencial',
               # 'OKDIARIO',
-              # 'enoticiescat',
+              # 'enoticiescat',git sta
               # 'publico_es',
               'junqueras',
               'KRLS',
@@ -120,6 +120,35 @@ if('tl.RData' %in% dir()){
     tl$host[i] <- done
   }
   
-  
   save(tl, file = 'tl.RData')
 }
+
+# Get the highest hosts
+hosts <- tl %>%
+  group_by(host) %>%
+  tally %>%
+  arrange(desc(n)) %>%
+  mutate(p = n / sum(n) * 100)
+
+
+
+make_keys <- function(x,y){
+  return(data_frame(newspaper = x,
+                    key = y))
+}
+# Extract core
+# Define the url keys
+keys <- 
+  list(
+    make_keys('La Vanguardia', 'lavanguardia.com'),
+    make_keys('El Mundo', 'elmundo.es'),
+    make_keys('Telecinco', 'telecinco.es'),
+    make_keys('El Diario', 'eldiario.es'),
+    make_keys('Huffington Post', 'huffingtonpost.es'),
+    make_keys('El Público', 'publico.es'),
+    make_keys('El Periódico', 'elperiodico.es'),
+    make_keys('Cadana Ser', 'cadenaser.com'),
+    make_keys('La Verdad', 'laverdad.es'),
+    make_keys('20 Minutos', '20minutos.es')
+  )
+# Get urls
