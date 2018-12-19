@@ -268,11 +268,11 @@ create_plot <- function(language = 'en',
     paste0("20 Minutos, ABC, ARA, Cadana Ser, CCMA, CCMA/324, COPE, Diari de Balears, Diari de Girona, Diari la Veu, Diario de Mallorca,\nE-noticies, Economia Digital, El Confidencial, El Diario, El Economista, El Español, El Mundo, El Nacional, El País, \nEl Periódico, El Público, El Punt Avui, elCatalán, Europa Press, Huffington Post, L'independant, La Razón, La Vanguardia, \nLa Verdad, Le Figaró, Le Monde, Libertad Digital, Nació Digital, OKDiario, Onda Cero, RTVE, Telecinco, Última hora, VilaWeb, Voz Populi")
   if(language == 'en'){
     x <- 'Source'
-    title <- 'Distribution of newspaper references by politician (top 10)'
+    title <- 'Distribution of newspaper references (top 10)'
     caption <- paste0('Includes the following only: ', the_list)
   } else {
     x <- 'Font'
-    title <- 'Distribució de referencies a diaris per polític (top 10)'
+    title <- 'Distribució de referencies a diaris (top 10)'
     caption <- paste0('Només inclou: ', the_list)
     
   }
@@ -341,15 +341,15 @@ create_plot_newspaper <- function(language = 'en',
     paste0("adacolau, albanodante76, albert_rivera, albiol_xg, alejandrotgn, alevysoler, carlescampuzano, carmencalvo_, carrizosacarlos,\ncatencomu_podem, ciudadanoscs, ciutadanscs, compromis, cridanacional, cupnacional, enricmorera, espciudadana, esquerra_erc,\neva_granados, f_armengol, gabrielrufian, gabrielrufian_, inesarrimadas, isabelbonig, jeanmarcpujol, joanbaldovi, joanribo, joantarda,\njosepborrellf, junqueras, krls, marianorajoy, meritxell_batet, mespermallorca, mespermenorca, miqueliceta, monicaoltra, pablocasado_,\npdemocratacat, perearagones, ppcatalunya, ppopular, psoe, quimtorraipla, rogertorrent, sanchezcastejon, santi_abascal, socialistes_cat,\nsocialistesval, societatcc, toninoguera, vicentsolerm, vox_es, ximopuig")
   if(language == 'en'){
     x <- 'Twitter account'
-    title <- 'Distribution of newspaper references by politician (top 10)'
+    title <- 'Distribution of newspaper references (top 10)'
     caption <- paste0('Includes the following twitter accounts only:\n', the_list)
   } else {
     x <- 'Compte twitter'
-    title <- 'Distribució de referencies a diaris per polític (top 10)'
+    title <- 'Distribució de referencies a diaris (top 10)'
     caption <- paste0('Només inclou els comptes twitter següents:\n', the_list)
     
   }
-  subtitle <- ifelse(only_one, paste0('@', plot_data$newspaper[1]), '')
+  subtitle <- ifelse(only_one, paste0('', plot_data$newspaper[1]), '')
   y <- 'Percentage'
   
   g <- g +
