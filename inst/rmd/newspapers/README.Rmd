@@ -69,7 +69,7 @@ politics <- sort(unique(df$username))
 politics <- politics[!is.na(politics)]
 for(i in 1:length(politics)){
   this_politic <- politics[i]
-  print(create_plot(username = this_politic, n = 10))
+  print(create_plot(usernames = this_politic, n = 10))
 }
 ```
 

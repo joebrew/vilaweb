@@ -255,7 +255,7 @@ create_plot <- function(language = 'en',
     plot_data <- plot_data[1:n,]
   }
   
-  ny <- max(plot_data$n, na.rm = TRUE) / 30
+  ny <- max(plot_data$p, na.rm = TRUE) / 30
   
   g <- ggplot(data = plot_data,
          aes(x = newspaper,
@@ -329,7 +329,7 @@ create_plot_newspaper <- function(language = 'en',
   if(!is.null(n)){
     plot_data <- plot_data[1:n,]
   }
-  ny <- max(plot_data$n, na.rm = TRUE) / 30
+  ny <- max(plot_data$p, na.rm = TRUE) / 30
   
   g <- ggplot(data = plot_data,
               aes(x = person,
