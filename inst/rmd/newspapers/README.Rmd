@@ -34,6 +34,13 @@ library(tldextract)
 ```{r, eval = TRUE}
 # Set up
 source('get_tweets.R')
+
+# 
+people <- sort(unique(df$username))
+people_df <- data_frame(username = people,
+                        category = '')
+write_csv(people_df,
+          'people.csv')
 ```
 
 
