@@ -39,7 +39,9 @@ source('get_tweets.R')
 
 # The question
 
-Politicians often tweet about newspapers, either by directly linking to a story or by re-tweeting a newspaper's tweet of a story. But politicians tend to link to stories favorable to their worldview. What is the distribution of newspaper article retweets/links among politicians 
+Politicians often tweet about newspapers, either by directly linking to a story or by re-tweeting a newspaper's tweet of a story. Knowing which newspapers politicians link to gives insight both into (a) what they read and (b) their worldview. For example, Donald Trump is well-known for tweeting stories from Fox News, a right-wing news outlet. 
+
+Among Catalan and Spanish politicians, what is the distribution of newspaper articles?
 
 # The methods
 
@@ -47,6 +49,15 @@ We gathered `r nrow(tl)` tweets from `r length(unique(tl$username))` well-known 
 
 
 # Results
+
+## Highlights
+
+- ABC is a favorite of the right, but especially Pablo Casado: Pablo Casado % tweeted about ABC articles in 9% of his tweets, followed by España Ciudadana and Societat Civil Catalana.
+- The cross-over between newspapers of preference for the Partido Popular, Ciudadanos and SCC was high: for example, El Confidencial, El Español, El Mundo, E-noticies, OKDiario saw high reference rates from politicians in these groups. 
+- The cross-over between newspapers of preference for pro-independence politicians was also high: Ara, CCMA, Vilaweb, and local newspapers saw high reference rates from politicians in these groups.
+- El País had the highest overall reference rates (7.48% of all tweets containing any link or tag). 
+- Where unionist and independentist groups overlapped, it was generally politicians of ERC, Comuns and Socialists: for example, with high rates of El Diario and Público.
+
 
 ## By politician
 
@@ -104,3 +115,13 @@ for(i in 1:length(newspapers)){
   print(create_plot_newspaper(newspapers = this_politic, n = 10, language = 'ca'))
 }
 ```
+
+
+
+
+# Details
+
+## Code
+
+All code for this analysis is openly available at [https://github.com/joebrew/vilaweb/tree/master/inst/rmd/newspapers](https://github.com/joebrew/vilaweb/tree/master/inst/rmd/newspapers).
+

@@ -4,15 +4,26 @@ Newspapers
 The question
 ============
 
-Politicians often tweet about newspapers, either by directly linking to a story or by re-tweeting a newspaper's tweet of a story. But politicians tend to link to stories favorable to their worldview. What is the distribution of newspaper article retweets/links among politicians
+Politicians often tweet about newspapers, either by directly linking to a story or by re-tweeting a newspaper's tweet of a story. Knowing which newspapers politicians link to gives insight both into (a) what they read and (b) their worldview. For example, Donald Trump is well-known for tweeting stories from Fox News, a right-wing news outlet.
+
+Among Catalan and Spanish politicians, what is the distribution of newspaper articles?
 
 The methods
 ===========
 
-We gathered 786973 tweets from 54 well-known Catalan and Spanish politicians. We algorithmically identified references to 41 newspapers, and calculated the percentage of references to each for each politician.
+We gathered 786973 tweets from 54 well-known Catalan and Spanish politicians. We algorithmically identified references to 40 newspapers, and calculated the percentage of references to each for each politician.
 
 Results
 =======
+
+Highlights
+----------
+
+-   ABC is a favorite of the right, but especially Pablo Casado: Pablo Casado % tweeted about ABC articles in 9% of his tweets, followed by España Ciudadana and Societat Civil Catalana.
+-   The cross-over between newspapers of preference for the Partido Popular, Ciudadanos and SCC was high: for example, El Confidencial, El Español, El Mundo, E-noticies, OKDiario saw high reference rates from politicians in these groups.
+-   The cross-over between newspapers of preference for pro-independence politicians was also high: Ara, CCMA, Vilaweb, and local newspapers saw high reference rates from politicians in these groups.
+-   El País had the highest overall reference rates (7.48% of all tweets containing any link or tag).
+-   Where unionist and independentist groups overlapped, it was generally politicians of ERC, Comuns and Socialists: for example, with high rates of El Diario and Público.
 
 By politician
 -------------
@@ -26,7 +37,7 @@ By newspaper
 
 The below shows the top 10 re-tweeters for each newspaper (relative to each person's overall tweet-load).
 
-![](figures/unnamed-chunk-4-1.png)![](figures/unnamed-chunk-4-2.png)![](figures/unnamed-chunk-4-3.png)![](figures/unnamed-chunk-4-4.png)![](figures/unnamed-chunk-4-5.png)![](figures/unnamed-chunk-4-6.png)![](figures/unnamed-chunk-4-7.png)![](figures/unnamed-chunk-4-8.png)![](figures/unnamed-chunk-4-9.png)![](figures/unnamed-chunk-4-10.png)![](figures/unnamed-chunk-4-11.png)![](figures/unnamed-chunk-4-12.png)![](figures/unnamed-chunk-4-13.png)![](figures/unnamed-chunk-4-14.png)![](figures/unnamed-chunk-4-15.png)![](figures/unnamed-chunk-4-16.png)![](figures/unnamed-chunk-4-17.png)![](figures/unnamed-chunk-4-18.png)![](figures/unnamed-chunk-4-19.png)![](figures/unnamed-chunk-4-20.png)![](figures/unnamed-chunk-4-21.png)![](figures/unnamed-chunk-4-22.png)![](figures/unnamed-chunk-4-23.png)![](figures/unnamed-chunk-4-24.png)![](figures/unnamed-chunk-4-25.png)![](figures/unnamed-chunk-4-26.png)![](figures/unnamed-chunk-4-27.png)![](figures/unnamed-chunk-4-28.png)![](figures/unnamed-chunk-4-29.png)![](figures/unnamed-chunk-4-30.png)![](figures/unnamed-chunk-4-31.png)![](figures/unnamed-chunk-4-32.png)![](figures/unnamed-chunk-4-33.png)![](figures/unnamed-chunk-4-34.png)![](figures/unnamed-chunk-4-35.png)![](figures/unnamed-chunk-4-36.png)![](figures/unnamed-chunk-4-37.png)![](figures/unnamed-chunk-4-38.png)![](figures/unnamed-chunk-4-39.png)![](figures/unnamed-chunk-4-40.png)![](figures/unnamed-chunk-4-41.png)
+![](figures/unnamed-chunk-4-1.png)![](figures/unnamed-chunk-4-2.png)![](figures/unnamed-chunk-4-3.png)![](figures/unnamed-chunk-4-4.png)![](figures/unnamed-chunk-4-5.png)![](figures/unnamed-chunk-4-6.png)![](figures/unnamed-chunk-4-7.png)![](figures/unnamed-chunk-4-8.png)![](figures/unnamed-chunk-4-9.png)![](figures/unnamed-chunk-4-10.png)![](figures/unnamed-chunk-4-11.png)![](figures/unnamed-chunk-4-12.png)![](figures/unnamed-chunk-4-13.png)![](figures/unnamed-chunk-4-14.png)![](figures/unnamed-chunk-4-15.png)![](figures/unnamed-chunk-4-16.png)![](figures/unnamed-chunk-4-17.png)![](figures/unnamed-chunk-4-18.png)![](figures/unnamed-chunk-4-19.png)![](figures/unnamed-chunk-4-20.png)![](figures/unnamed-chunk-4-21.png)![](figures/unnamed-chunk-4-22.png)![](figures/unnamed-chunk-4-23.png)![](figures/unnamed-chunk-4-24.png)![](figures/unnamed-chunk-4-25.png)![](figures/unnamed-chunk-4-26.png)![](figures/unnamed-chunk-4-27.png)![](figures/unnamed-chunk-4-28.png)![](figures/unnamed-chunk-4-29.png)![](figures/unnamed-chunk-4-30.png)![](figures/unnamed-chunk-4-31.png)![](figures/unnamed-chunk-4-32.png)![](figures/unnamed-chunk-4-33.png)![](figures/unnamed-chunk-4-34.png)![](figures/unnamed-chunk-4-35.png)![](figures/unnamed-chunk-4-36.png)![](figures/unnamed-chunk-4-37.png)![](figures/unnamed-chunk-4-38.png)![](figures/unnamed-chunk-4-39.png)![](figures/unnamed-chunk-4-40.png)
 
 Charts in Catalan
 =================
@@ -43,4 +54,12 @@ By newspaper
 
 The below shows the top 10 re-tweeters for each newspaper (relative to each person's overall tweet-load).
 
-![](figures/unnamed-chunk-6-1.png)![](figures/unnamed-chunk-6-2.png)![](figures/unnamed-chunk-6-3.png)![](figures/unnamed-chunk-6-4.png)![](figures/unnamed-chunk-6-5.png)![](figures/unnamed-chunk-6-6.png)![](figures/unnamed-chunk-6-7.png)![](figures/unnamed-chunk-6-8.png)![](figures/unnamed-chunk-6-9.png)![](figures/unnamed-chunk-6-10.png)![](figures/unnamed-chunk-6-11.png)![](figures/unnamed-chunk-6-12.png)![](figures/unnamed-chunk-6-13.png)![](figures/unnamed-chunk-6-14.png)![](figures/unnamed-chunk-6-15.png)![](figures/unnamed-chunk-6-16.png)![](figures/unnamed-chunk-6-17.png)![](figures/unnamed-chunk-6-18.png)![](figures/unnamed-chunk-6-19.png)![](figures/unnamed-chunk-6-20.png)![](figures/unnamed-chunk-6-21.png)![](figures/unnamed-chunk-6-22.png)![](figures/unnamed-chunk-6-23.png)![](figures/unnamed-chunk-6-24.png)![](figures/unnamed-chunk-6-25.png)![](figures/unnamed-chunk-6-26.png)![](figures/unnamed-chunk-6-27.png)![](figures/unnamed-chunk-6-28.png)![](figures/unnamed-chunk-6-29.png)![](figures/unnamed-chunk-6-30.png)![](figures/unnamed-chunk-6-31.png)![](figures/unnamed-chunk-6-32.png)![](figures/unnamed-chunk-6-33.png)![](figures/unnamed-chunk-6-34.png)![](figures/unnamed-chunk-6-35.png)![](figures/unnamed-chunk-6-36.png)![](figures/unnamed-chunk-6-37.png)![](figures/unnamed-chunk-6-38.png)![](figures/unnamed-chunk-6-39.png)![](figures/unnamed-chunk-6-40.png)![](figures/unnamed-chunk-6-41.png)
+![](figures/unnamed-chunk-6-1.png)![](figures/unnamed-chunk-6-2.png)![](figures/unnamed-chunk-6-3.png)![](figures/unnamed-chunk-6-4.png)![](figures/unnamed-chunk-6-5.png)![](figures/unnamed-chunk-6-6.png)![](figures/unnamed-chunk-6-7.png)![](figures/unnamed-chunk-6-8.png)![](figures/unnamed-chunk-6-9.png)![](figures/unnamed-chunk-6-10.png)![](figures/unnamed-chunk-6-11.png)![](figures/unnamed-chunk-6-12.png)![](figures/unnamed-chunk-6-13.png)![](figures/unnamed-chunk-6-14.png)![](figures/unnamed-chunk-6-15.png)![](figures/unnamed-chunk-6-16.png)![](figures/unnamed-chunk-6-17.png)![](figures/unnamed-chunk-6-18.png)![](figures/unnamed-chunk-6-19.png)![](figures/unnamed-chunk-6-20.png)![](figures/unnamed-chunk-6-21.png)![](figures/unnamed-chunk-6-22.png)![](figures/unnamed-chunk-6-23.png)![](figures/unnamed-chunk-6-24.png)![](figures/unnamed-chunk-6-25.png)![](figures/unnamed-chunk-6-26.png)![](figures/unnamed-chunk-6-27.png)![](figures/unnamed-chunk-6-28.png)![](figures/unnamed-chunk-6-29.png)![](figures/unnamed-chunk-6-30.png)![](figures/unnamed-chunk-6-31.png)![](figures/unnamed-chunk-6-32.png)![](figures/unnamed-chunk-6-33.png)![](figures/unnamed-chunk-6-34.png)![](figures/unnamed-chunk-6-35.png)![](figures/unnamed-chunk-6-36.png)![](figures/unnamed-chunk-6-37.png)![](figures/unnamed-chunk-6-38.png)![](figures/unnamed-chunk-6-39.png)![](figures/unnamed-chunk-6-40.png)
+
+Details
+=======
+
+Code
+----
+
+All code for this analysis is openly available at <https://github.com/joebrew/vilaweb/tree/master/inst/rmd/newspapers>.

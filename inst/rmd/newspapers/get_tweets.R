@@ -149,7 +149,7 @@ keys <-
     make_keys('Telecinco', 'telecinco.es', 'telecincoes'),
     make_keys('El Diario', 'eldiario.es', 'eldiarioes'),
     make_keys('Huffington Post', 'huffingtonpost.es',''),
-    make_keys('El Público', 'publico.es', 'publico'),
+    make_keys('Público', 'publico.es', 'publico'),
     make_keys('El Periódico', 'elperiodico.es', 'elperiodico'),
     make_keys('El Periódico', 'elperiodico.com', 'elperiodico'),
     make_keys('Cadana Ser', 'cadenaser.com', 'cadanaser_espa'),
@@ -158,7 +158,7 @@ keys <-
     make_keys('El Español', 'elespanol.com', 'elespanolcom'),
     make_keys('ABC', 'abc.es', 'abc_es'),
     make_keys('Crónica Global', 'cronicaglobal.com', 'cronicaglobal'),
-    make_keys('CCMA', 'ccma.cat', 'ccmaa_cat'),
+    make_keys('CCMA/324', 'ccma.cat', 'ccmaa_cat'),
     make_keys('RTVE', 'rtve.es', 'rtve'),
     make_keys('ARA', 'ara.cat', 'diariaara'),
     make_keys('El Confidencial', 'elconfidencial.com', 'elconfidencial'),
@@ -255,6 +255,8 @@ create_plot <- function(language = 'en',
     plot_data <- plot_data[1:n,]
   }
   
+  ny <- max(plot_data$n, na.rm = TRUE) / 30
+  
   g <- ggplot(data = plot_data,
          aes(x = newspaper,
              y = p)) +
@@ -285,7 +287,7 @@ create_plot <- function(language = 'en',
     theme(plot.subtitle = element_text(size = 24, hjust = 0.5),
           plot.caption = element_text(size = 7)) +
     geom_text(aes(label = round(p, digits = 2)),
-               nudge_y = 0.3,
+               nudge_y = ny,
               alpha = 0.6) +
     theme(axis.text.x = element_text(angle = 90,
                                      vjust = 0.5,
@@ -327,6 +329,7 @@ create_plot_newspaper <- function(language = 'en',
   if(!is.null(n)){
     plot_data <- plot_data[1:n,]
   }
+  ny <- max(plot_data$n, na.rm = TRUE) / 30
   
   g <- ggplot(data = plot_data,
               aes(x = person,
@@ -358,12 +361,20 @@ create_plot_newspaper <- function(language = 'en',
     theme(plot.subtitle = element_text(size = 24, hjust = 0.5),
           plot.caption = element_text(size = 7)) +
     geom_text(aes(label = round(p, digits = 2)),
-              nudge_y = 0.3,
+              nudge_y = ny,
               alpha = 0.6) +
     theme(axis.text.x = element_text(angle = 90,
                                      vjust = 0.5,
                                      hjust = 1))
   
   return(g)
+}
+
+overall_plot <- function(language = 'en'){
+  plot_data <- df %>%
+    group_by(newspaper) %>%
+    tally %>% ungroup %>%
+    mutate(p = n / sum(n) * 100) %>%
+    arrange(desc(n))
 }
 
