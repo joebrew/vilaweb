@@ -1,4 +1,4 @@
-
+library(tidyverse)
 # Read in twitter credentials
 library(yaml)
 twitter_credentials <- yaml.load_file('../../../credentials/credentials.yaml')
@@ -14,9 +14,9 @@ token <- create_token(
 # ## check to see if the token is loaded
 # identical(token, get_token())
 
-x = get_friends('joethebrew')
-z = search_users(q = x[1])
-y = get_mentions('joethebrew')
+# x = get_friends('joethebrew')
+# z = search_users(q = x[1])
+# y = get_mentions('joethebrew')
 
 
 hunger_strike <-
@@ -27,23 +27,64 @@ hunger_strike <-
     retryonratelimit = TRUE
   )
 
+
+# save(hunger_strike, file = 'hunger_strike_17_des.RData')
+
 ## preview tweets data
 rt <- hunger_strike
 x <- rt
 # save(hunger_strike, file = 'hunger_strike_10_des.RData')
-load('hunger_strike.RData')
-x <- bind_rows(x, rt)
+# load('hunger_strike.RData')
+
+load('hunger_strike_10_des.RData')
+h1 <- hunger_strike
+load('hunger_strike_17_des.RData')
+h2 <- hunger_strike
+# x <- bind_rows(x, rt)
+x <- bind_rows(h1, h2)
 x <- x %>% dplyr::distinct(status_id, .keep_all = TRUE)
-ts_plot(rt, by = '30 mins', trim = 0) +
+
+library(vilaweb)
+agg <- 
+  x %>%
+  mutate(date = as.Date(cut(created_at, 'day'))) %>%
+  mutate(english = grepl('hunger strike', tolower(text))) %>%
+  group_by(date, english) %>%
+  tally %>%
+  ungroup %>%
+  mutate(english = ifelse(english, 'English', 'Catalan or\nSpanish'))
+agg <- agg %>% filter(date < '2018-12-18')
+
+cols <- databrew::make_colors(n=9)[c(5,2)]
+ggplot(data = agg,
+       aes(x = date,
+           y = n,
+           fill = english)) +
+  geom_bar(stat = 'identity') +
   databrew::theme_databrew() +
-  labs(x = 'Temps (intervals de 30 minuts)',
+  labs(x = '',
        y = 'Tuits',
        title = 'Tuits sobre la vaga de fam',
        subtitle = 'Freqüència de tuits amb les paraules "vaga de fam"*',
-       caption = '\nFont: Dades recollides del API REST de Twitter via rtweet a 2018-12-09 23:00:00 per @joethebrew.\n*Inclou les expressions "vaga de fam", "vagadefam", "#vagadefam", "huelga de hambre", "hunger strike".') +
+       caption = '\nFont: Dades recollides del API REST de Twitter via rtweet a 2018-12-18 per @joethebrew.\n*Inclou les expressions "vaga de fam", "vagadefam", "#vagadefam", "huelga de hambre", "hunger strike".\nClassified as English if containing the exact term "hunger strike".') +
+  theme(plot.subtitle = element_text(size = 18),
+        plot.title = element_text(size = 34),
+        axis.text.x = element_text(angle = 90)) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+  scale_x_date(breaks = sort(unique(agg$date)))
+  
+
+ts_plot(x, by = '60 mins', trim = 0) +
+  databrew::theme_databrew() +
+  labs(x = 'Temps (intervals de 60 minuts)',
+       y = 'Tuits',
+       title = 'Tuits sobre la vaga de fam',
+       subtitle = 'Freqüència de tuits amb les paraules "vaga de fam"*',
+       caption = '\nFont: Dades recollides del API REST de Twitter via rtweet a 2018-12-18 per @joethebrew.\n*Inclou les expressions "vaga de fam", "vagadefam", "#vagadefam", "huelga de hambre", "hunger strike".') +
   geom_area(fill = 'black', alpha = 0.3) +
   theme(plot.subtitle = element_text(size = 18),
-        plot.title = element_text(size = 34))
+        plot.title = element_text(size = 34)) 
 ggsave('~/Desktop/vaga.png')
 
 
