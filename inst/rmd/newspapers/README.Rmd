@@ -4,6 +4,8 @@ output: github_document
 ---
 
 
+
+
 ```{r setup, include=FALSE, echo = FALSE}
 # Basic knitr options
 library(knitr)
@@ -34,10 +36,71 @@ library(tldextract)
 source('get_tweets.R')
 ```
 
+
+# The question
+
+Politicians often tweet about newspapers, either by directly linking to a story or by re-tweeting a newspaper's tweet of a story. But politicians tend to link to stories favorable to their worldview. What is the distribution of newspaper article retweets/links among politicians 
+
+# The methods
+
+We gathered `r nrow(tl)` tweets from `r length(unique(tl$username))` well-known Catalan and Spanish politicians. We algorithmically identified references to `r length(sort(unique(df$newspaper)))` newspapers, and calculated the percentage of references to each for each politician. 
+
+
+# Results
+
+## By politician
+
+The below shows the top 10 newspaper re-tweets for each politician.
+
+
 ```{r}
+politics <- sort(unique(df$username))
+politics <- politics[!is.na(politics)]
+for(i in 1:length(politics)){
+  this_politic <- politics[i]
+  print(create_plot(username = this_politic, n = 10))
+}
+```
+
+## By newspaper
+
+The below shows the top 10 re-tweeters for each newspaper (relative to each person's overall tweet-load).
+
+```{r}
+newspapers <- sort(unique(df$newspaper))
+newspapers <- newspapers[!is.na(newspapers)]
+for(i in 1:length(newspapers)){
+  this_politic <- newspapers[i]
+  print(create_plot_newspaper(newspapers = this_politic, n = 10))
+}
+```
+
+# Charts in Catalan
 
 
+## By politician
+
+The below shows the top 10 newspaper re-tweets for each politician.
 
 
+```{r}
+politics <- sort(unique(df$username))
+politics <- politics[!is.na(politics)]
+for(i in 1:length(politics)){
+  this_politic <- politics[i]
+  print(create_plot(username = this_politic, n = 10, language = 'ca'))
+}
+```
 
+## By newspaper
+
+The below shows the top 10 re-tweeters for each newspaper (relative to each person's overall tweet-load).
+
+```{r}
+newspapers <- sort(unique(df$newspaper))
+newspapers <- newspapers[!is.na(newspapers)]
+for(i in 1:length(newspapers)){
+  this_politic <- newspapers[i]
+  print(create_plot_newspaper(newspapers = this_politic, n = 10, language = 'ca'))
+}
 ```
