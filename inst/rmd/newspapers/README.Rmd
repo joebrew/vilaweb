@@ -27,15 +27,14 @@ library(tidyverse)
 library(databrew)
 library(qdapRegex)
 library(httr)
-# devtools::install_github('jayjacobs/tldextract')
-library(tldextract)
+library(tldextract) # devtools::install_github('jayjacobs/tldextract')
 ```
 
 ```{r, eval = TRUE}
 # Set up
 source('get_tweets.R')
 
-# # 
+# # Write some csvs of who/what is in the datas
 # people <- sort(unique(df$username))
 # people_df <- data_frame(username = people,
 #                         category = '')
