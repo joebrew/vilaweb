@@ -35,12 +35,17 @@ library(tldextract)
 # Set up
 source('get_tweets.R')
 
-# 
-people <- sort(unique(df$username))
-people_df <- data_frame(username = people,
-                        category = '')
-write_csv(people_df,
-          'people.csv')
+# # 
+# people <- sort(unique(df$username))
+# people_df <- data_frame(username = people,
+#                         category = '')
+# write_csv(people_df,
+#           'people.csv')
+# newspapers <- sort(unique(df$newspaper))
+# newspapers_df <- data_frame(username = newspapers,
+#                         category = '')
+# write_csv(newspapers_df,
+#           'newspapers.csv')
 ```
 
 
@@ -54,6 +59,26 @@ Among Catalan and Spanish politicians, what is the distribution of newspaper art
 
 We gathered `r nrow(tl)` tweets from `r length(unique(tl$username))` well-known Catalan and Spanish politicians. We algorithmically identified references to `r length(sort(unique(df$newspaper)))` newspapers, and calculated the percentage of references to each for each politician. 
 
+```{r}
+pd <- df %>%
+  group_by(person = username,
+           newspaper) %>%
+  tally %>%
+  group_by(person) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup %>%
+  filter(!is.na(newspaper))
+
+ggplot(data = pd,
+       aes(x = person,
+           y = newspaper)) +
+  geom_point(aes(size = p),
+             alpha = 0.8) +
+  ggthemes::theme_fivethirtyeight() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_size_continuous(name = '%',
+                        breaks = c(1, 5, 10, 25))
+```
 
 # Results
 
@@ -64,6 +89,7 @@ We gathered `r nrow(tl)` tweets from `r length(unique(tl$username))` well-known 
 - The cross-over between newspapers of preference for pro-independence politicians was also high: Ara, CCMA, Vilaweb, and local newspapers saw high reference rates from politicians in these groups.
 - El País had the highest overall reference rates (7.48% of all tweets containing any link or tag). 
 - Where unionist and independentist groups overlapped, it was generally politicians of ERC, Comuns and Socialists: for example, with high rates of El Diario and Público.
+
 
 
 ## By politician

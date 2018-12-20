@@ -57,7 +57,8 @@ if('tl.RData' %in% dir()){
               'AlbanoDante76',
               'gabrielrufian',
               'carlescampuzano',
-              'ximopuig', 'monicaoltra', 'compromis', 'enricmorera', 'joanribo', 'joanbaldovi', 'F_Armengol', 'adacolau', 'toninoguera', 'isabelbonig', 'vicentsolerm', 'JeanMarcPujol', 'MESperMallorca', 'MesperMenorca', 'SocialistesVAL', 'CatenComu_Podem', 'GabrielRufian_')
+              'ximopuig', 'monicaoltra', 'compromis', 'enricmorera', 'joanribo', 'joanbaldovi', 'F_Armengol', 'adacolau', 'toninoguera', 'isabelbonig', 'vicentsolerm', 'JeanMarcPujol', 'MESperMallorca', 'MesperMenorca', 'SocialistesVAL', 'CatenComu_Podem', 'GabrielRufian_',
+              'G_Pisarello', 'Jaumeasens', 'Pablo_Iglesias_', 'pnique')
   
   # Get twitter data
   out_list <- list()
@@ -221,6 +222,8 @@ handles <- left_join(handles,
                    keys %>% dplyr::select(newspaper, handle),
                    by = c('host' = 'handle'))
 df <- bind_rows(sites, handles)
+
+# Create a score 
 
 # Create plot
 create_plot <- function(language = 'en',
