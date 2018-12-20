@@ -1,0 +1,133 @@
+---
+title: "Humillación"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+```
+
+```{r, fig.height = 8}
+# Define function for improving timeline
+improve_timeline <- function(tmls){
+  tmls$time_only <- sapply(strsplit(substr(tmls$created_at, 11,19), ":"),
+                           function(x){as.numeric(x) %*% c(3600, 60, 1)})
+  tmls$time_only <- tmls$time_only / 3600
+  tmls$date <- as.Date(cut(tmls$created_at, 'day'))
+  tmls$hour <- as.POSIXct(cut(tmls$created_at, 'hour'))
+  return(tmls)
+}
+# # Get most recent tweets from our people of interest
+people <- 
+  c('Santi_ABASCAL',
+    'Albert_Rivera',
+    'InesArrimadas',
+    'sanchezcastejon',
+    'pablocasado_',
+    'KRLS',
+    'QuimTorraiPla',
+    'perearagones',
+    'ALevySoler',
+    'elsa_artadi',
+    'miqueliceta',
+    'Pablo_Iglesias_')
+
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  tl_list <- list()
+  for(i in 11:length(people)){
+    person <- people[i]
+    message(person)
+    tl_list[[i]] <- get_timeline(person, n = 3200)
+  }
+  tl <- bind_rows(tl_list)
+  save(tl, file = 'tl.RData')  
+}
+
+# Search for the words humiliation
+find_humil <- function(x){
+  grepl('humilla|humilia', tolower(x))
+}
+tl <- tl %>%
+  mutate(humil = find_humil(text))
+
+# Plot data
+pd <- tl %>%
+  group_by(person = screen_name,
+           humil) %>%
+  tally %>%
+  ungroup %>%
+  group_by(person) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup %>%
+  filter(humil)
+left <- expand.grid(person = sort(unique(tl$screen_name)),
+                    humil = sort(unique(tl$humil)))
+pd <- left_join(left, pd)
+pd <- pd %>%
+  arrange(desc(p))
+pd$person <- factor(pd$person, levels = unique(pd$person))
+ggplot(data = pd,
+       aes(x = person,
+           y = p)) +
+  geom_bar(stat = 'identity')
+
+pd <- tl %>%
+  filter(humil) %>%
+  mutate(date = as.Date(cut(created_at, 'month'))) %>%
+  group_by(date, person = screen_name) %>%
+  tally %>%
+  ungroup 
+left <- expand.grid(person = sort(unique(tl$screen_name)),
+                    humil = sort(unique(tl$humil)),
+                    date = sort(unique(pd$date)))
+pd <- left_join(left, pd)
+
+
+ggplot(data = pd,# %>% filter(person %in% c('Albert_Rivera',
+                                          # 'pablocasado_',
+                                          # 'Santi_ABASCAL')),
+       aes(x = date,
+           y = n)) +
+  geom_bar(stat = 'identity',
+           aes(fill = person)) +
+  facet_wrap(~person,
+             ncol = 4) +
+  theme_vilaweb() +
+  labs(x = 'Fecha',
+       y = 'Tweets (mensual)',
+       title = 'Tweets con la palabra "humillación"*',
+       subtitle = 'Feb 1 2018 - Dec 20 2018',
+       caption = 'Incluye "humillar", "humillado", "humiliar", "humiliate", etc. Datos del Twitter API. Gráfico @joethebrew.') +
+  # scale_fill_manual(name = ' ',
+  #                   values = c('darkorange',
+  #                              'blue',
+  #                              'green')) +
+  theme(legend.position = 'none') +
+  scale_x_date(breaks = sort(unique(pd$date)),
+               labels = spanish_date(new_line = FALSE)) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   size = 6))
+ggsave('humiliate.png')
+```
