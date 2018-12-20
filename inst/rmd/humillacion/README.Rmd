@@ -91,7 +91,18 @@ pd$person <- factor(pd$person, levels = unique(pd$person))
 ggplot(data = pd,
        aes(x = person,
            y = p)) +
-  geom_bar(stat = 'identity')
+  geom_bar(stat = 'identity',
+           aes(fill = person)) +
+  theme_vilaweb() +
+      theme(legend.position = 'none') +
+  labs(x = '',
+       y = '%',
+       title = '% de tweets con la palabra "humillación"',
+       subtitle = 'Últimos 3.200 tweets por cada persona',
+       caption = 'Incluye "humillar", "humillado", "humiliar", "humiliate", etc. Datos del Twitter API. Gráfico @joethebrew.') +
+  scale_y_continuous(breaks = seq(0,1, 0.1)) +
+  theme(axis.text.x = element_text(angle = 90))
+
 
 pd <- tl %>%
   filter(humil) %>%
@@ -118,7 +129,7 @@ ggplot(data = pd,# %>% filter(person %in% c('Albert_Rivera',
   labs(x = 'Fecha',
        y = 'Tweets (mensual)',
        title = 'Tweets con la palabra "humillación"*',
-       subtitle = 'Feb 1 2018 - Dec 20 2018',
+       subtitle = 'Últimos 3.200 tweets por cada persona',
        caption = 'Incluye "humillar", "humillado", "humiliar", "humiliate", etc. Datos del Twitter API. Gráfico @joethebrew.') +
   # scale_fill_manual(name = ' ',
   #                   values = c('darkorange',
