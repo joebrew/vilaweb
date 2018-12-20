@@ -249,7 +249,7 @@ df <- df %>%
 
 
 # Create plot
-create_plot <- function(language = 'en',
+create_plot <- function(language = 'ca',
                         usernames = NULL,
                         n = NULL,
                         switch = FALSE){
@@ -279,7 +279,9 @@ create_plot <- function(language = 'en',
                                   levels = plot_data$newspaper)
   }
   if(!is.null(n)){
-    plot_data <- plot_data[1:n,]
+    if(nrow(plot_data) > 10){
+      plot_data <- plot_data[1:n,]
+    }
   }
   
   ny <- max(plot_data$p, na.rm = TRUE) / 30
@@ -306,7 +308,7 @@ create_plot <- function(language = 'en',
     
   }
   subtitle <- ifelse(only_one, paste0('@', plot_data$person[1]), '')
-  y <- 'Percentage'
+  y <- 'Percentage*'
   
   if(switch){
     a <- subtitle
@@ -322,7 +324,8 @@ create_plot <- function(language = 'en',
           plot.caption = element_text(size = 7)) +
     geom_text(aes(label = round(p, digits = 2)),
                nudge_y = ny,
-              alpha = 0.6) +
+              alpha = 0.6,
+              size = 3) +
     theme(axis.text.x = element_text(angle = 90,
                                      vjust = 0.5,
                                      hjust = 1))
@@ -331,7 +334,7 @@ create_plot <- function(language = 'en',
 }
 
 # Create plot
-create_plot_newspaper <- function(language = 'en',
+create_plot_newspaper <- function(language = 'ca',
                         newspapers = NULL,
                         n = NULL,
                         switch = FALSE){
@@ -362,10 +365,15 @@ create_plot_newspaper <- function(language = 'en',
                                   levels = plot_data$person)
   }
   if(!is.null(n)){
-    plot_data <- plot_data[1:n,]
+    if(nrow(plot_data) > 10){
+      plot_data <- plot_data[1:n,]
+    }
+    
   }
   ny <- max(plot_data$p, na.rm = TRUE) / 30
   
+  plot_data <- plot_data %>%
+    filter(!is.na(person))
   g <- ggplot(data = plot_data,
               aes(x = person,
                   y = p)) +
@@ -383,12 +391,12 @@ create_plot_newspaper <- function(language = 'en',
     caption <- paste0('Includes the following twitter accounts only:\n', the_list)
   } else {
     x <- 'Compte twitter'
-    title <- 'Distribució de referencies a diaris (top 10)'
+    title <- 'Distribució de referències a diaris (top 10)'
     caption <- paste0('Només inclou els comptes twitter següents:\n', the_list)
     
   }
   subtitle <- ifelse(only_one, paste0('', plot_data$newspaper[1]), '')
-  y <- 'Percentage'
+  y <- 'Percentage*'
   
   if(switch){
     a <- subtitle
@@ -404,7 +412,7 @@ create_plot_newspaper <- function(language = 'en',
           plot.caption = element_text(size = 7)) +
     geom_text(aes(label = round(p, digits = 2)),
               nudge_y = ny,
-              alpha = 0.6) +
+              alpha = 0.6, size = 3) +
     theme(axis.text.x = element_text(angle = 90,
                                      vjust = 0.5,
                                      hjust = 1))

@@ -3,6 +3,7 @@ title: "Newspapers"
 output: github_document
 ---
 
+Vicent Partal and Joe Brew
 
 
 
@@ -48,16 +49,6 @@ source('get_tweets.R')
 ```
 
 
-# The question
-
-Politicians often tweet about newspapers, either by directly linking to a story or by re-tweeting a newspaper's tweet of a story. Knowing which newspapers politicians link to gives insight both into (a) what they read and (b) their worldview. For example, Donald Trump is well-known for tweeting stories from Fox News, a right-wing news outlet. 
-
-Among Catalan and Spanish politicians, what is the distribution of newspaper articles?
-
-# The methods
-
-We gathered `r nrow(tl)` tweets from `r length(unique(tl$username))` well-known Catalan and Spanish politicians. We algorithmically identified references to `r length(sort(unique(df$newspaper)))` newspapers, and calculated the percentage of references to each for each politician. 
-
 ```{r, fig.height = 7}
 pd <- df %>%
   group_by(
@@ -77,8 +68,58 @@ pd <- df %>%
   ungroup %>%
   filter(!is.na(newspaper))
 
+ncols <- length(sort(unique(pd$party)))
+cols <- databrew::make_colors(n = ncols)
+ggplot(data = pd,
+       aes(x = person,
+           y = newspaper)) +
+  geom_point(aes(size = p),
+             alpha = 0.8) +
+  ggthemes::theme_fivethirtyeight() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1,
+                                   size = 8)) +
+  scale_size_continuous(name = '%',
+                        breaks = c(1, 5, 10, 25)) +
+  theme(axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8)) 
+```
+
+
+# The question
+
+Politicians often tweet about newspapers, either by directly linking to a story or by re-tweeting a newspaper's tweet of a story. Knowing which newspapers politicians link to gives insight both into (a) what they read and (b) their worldview. For example, Donald Trump is well-known for tweeting stories from Fox News, a right-wing news outlet. 
+
+Among Catalan and Spanish politicians, what is the distribution of newspaper articles?
+
+# The methods
+
+We gathered `r nrow(tl)` tweets from `r length(unique(tl$username))` well-known Catalan and Spanish politicians. We algorithmically identified references to `r length(sort(unique(df$newspaper)))` newspapers, and calculated the percentage of references to each for each politician. 
+
+
+# Results
+
+
+```{r, fig.height = 7}
+pd <- df %>%
+  group_by(
+    # People vars
+    person = username,
+    party,
+           # eix_indepe_unio,
+    # eix_esquerra_dreta,
+    # Newspaper vars
+           newspaper,
+    eix_vell_nou,
+    eix_sobiranista_espanyolista,
+           eix_esquerra_dreta_diari) %>%
+  tally %>%
+  group_by(person,party) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup %>%
+  filter(!is.na(newspaper))
+
 pd <- pd %>%
-  arrange(eix_indepe_unio)#, 
+  arrange(party)#, 
           #eix_esquerra_dreta)#, #person, )
 
 newspaper_levels <- pd %>%
@@ -102,20 +143,82 @@ ggplot(data = pd,
   theme(axis.text.x = element_text(angle = 90)) +
   scale_size_continuous(name = '%',
                         breaks = c(1, 5, 10, 25)) +
-  theme(axis.text.x = element_text(size = 8),
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1,
+                                     size = 8),
         axis.text.y = element_text(size = 8)) +
   scale_color_manual(name = '',
                     values = cols) +
-  guides(color = guide_legend(ncol = 6))
+  guides(color = guide_legend(ncol = 6)) +
+    theme(legend.text = element_text(size = 15),
+        legend.title = element_text(size = 15)) 
 ```
 
-# Results
 
 Analitzant què piula cada polític crida molt l'atenció el fet que els polítics unionistes tendeixen a fer més piulades de diaris en paper tradicionals espanyols mentre que els polítics sobiranistes tendeixen a piular més premsa digital en català. 
 
-```{r}
-barplot(1:10, main = 'Placeholder: chart will go here.')
+
+```{r, fig.height = 7}
+pd <- df %>%
+  group_by(
+    # People vars
+    person = username,
+    # party,
+           eix_indepe_unio,
+    # Newspaper vars
+    newspaper,
+   eix_digital_paper) %>%
+  tally %>%
+  group_by(person,eix_indepe_unio) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup %>%
+  filter(!is.na(newspaper))
+
+pd <- pd %>%
+  arrange(eix_indepe_unio)#, 
+          #eix_esquerra_dreta)#, #person, )
+
+newspaper_levels <- pd %>%
+  arrange(#eix_vell_nou,
+          # eix_sobiranista_espanyolista,
+          desc(eix_digital_paper)) %>%
+  dplyr::distinct(newspaper) %>%
+  .$newspaper
+pd$person <- factor(pd$person, levels = unique(pd$person))
+pd$newspaper <- factor(pd$newspaper,levels = newspaper_levels)
+
+pd$eix_indepe_unio <- 
+  ifelse(pd$eix_indepe_unio == 'indepe',
+         'Independentista',
+         ifelse(pd$eix_indepe_unio == 'sobiranista',
+                'Sobirarnista',
+                ifelse(pd$eix_indepe_unio == 'unio',
+                       'Unionista', NA)))
+
+
+ncols <- length(sort(unique(pd$eix_indepe_unio)))
+cols <- databrew::make_colors(n = ncols)
+ggplot(data = pd,
+       aes(x = person,
+           y = newspaper)) +
+  geom_point(aes(size = p,
+                 color = eix_indepe_unio),
+             alpha = 0.8) +
+  ggthemes::theme_fivethirtyeight() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_size_continuous(name = '%*',
+                        breaks = c(1, 5, 10, 25)) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1,
+                                     size = 8),
+        axis.text.y = element_text(size = 8)) +
+  scale_color_manual(name = '',
+                    values = cols) +
+  guides(color = guide_legend(ncol = 6)) +
+  theme(legend.text = element_text(size = 20),
+        legend.title = element_text(size = 15)) +
+  labs(caption = 'El % es refereix al % de piulades del compte en qüestió, incloent només les referències als diaris llistats.')
 ```
+
+
 
 En el cas concret del Principat aquesta fractura es pot observar analitzant quins polítics piulen més La Vanguardia i El Periódico, els dos mitjans tradicionals i quins el diari Ara, que també és en paper però té un perfil digital molt actiu o VilaWeb.
 
@@ -177,9 +280,22 @@ g2 <- create_plot(usernames = 'eva_granados', n = 10, switch = TRUE)
 Rmisc::multiplot(g1, g2, cols = 2)
 ```
 
-Curiosament això mateix no passa amb els socialistes valencians i Balears, que repiulen publicacions com VilaWeb, La Veu del País Valencià o diaris locals com Diario de Mallorca i Última Hora. Amb tot El País també encapçala les seves preferències.
+Curiosament això mateix no passa amb els socialistes valencians i Balears, que repiulen publicacions com VilaWeb, La Veu del País Valencià o diaris locals com Diario de Mallorca. 
 
-(WHO ELSE SHOULD BE INCLUDED IN BELOW CHARTS?)
+```{r}
+g1 <- create_plot_newspaper(newspapers = c('Diari la Veu'), 
+                            n = 10, 
+                            language = 'ca',
+                            switch = TRUE)
+g2 <- create_plot_newspaper(newspapers = c('Diario de Mallorca'), 
+                            n = 10, 
+                            language = 'ca',
+                            switch = TRUE)
+Rmisc::multiplot(g1, g2, cols = 2)
+```
+
+Amb tot El País també encapçala les seves preferències.
+
 
 ```{r}
 g1 <- create_plot(usernames = 'compromis', n = 10, switch = TRUE)
@@ -208,7 +324,8 @@ Sorprèn també que La Razón sigui el diari més piulat per la líder valencian
 
 ```{r}
 create_plot(usernames = 'isabelbonig',
-            n = 10)
+            n = 10,
+            switch = TRUE)
 ```
 
 Dins el bloc del 155, finalment, s'ha analitzat també Vox, tot i que encara té una presència limitada. La unanimitat entre el compte oficial del partit i el de Santi Abascal és cridanera. A diferència del que passa amb els partits més tradicionals és un digital Libertad Digital el més piulat amb diferència, seguit d'El Mundo i d'ABC. OK Diario, El Español i El Confidencial també apareixen en una dieta mediàtica que en el cas d'Abascal es tanca amb La Vanguardia i El Periódico.
@@ -219,6 +336,29 @@ g1 <- create_plot(usernames = 'santi_abascal', n = 10, switch = TRUE)
 g2 <- create_plot(usernames = 'vox_es', n = 10, switch = TRUE)
 Rmisc::multiplot(g1, g2, cols = 2)
 ```
+
+Among the 4 major right-wing papers' (ABC, El Español/Crónica Global, OKDiario, El Mundo) main re-tweeters are dominated by PP, Ciudadanos, SCC, and a few Socialists.
+
+```{r}
+g1 <- create_plot_newspaper(newspapers = c('ABC'), 
+                            n = 10, 
+                            language = 'ca',
+                            switch = TRUE)
+g2 <- create_plot_newspaper(newspapers = c('OKDiario'), 
+                            n = 10, 
+                            language = 'ca',
+                            switch = TRUE)
+g3 <- create_plot_newspaper(newspapers = c('El Español'), 
+                            n = 10, 
+                            language = 'ca',
+                            switch = TRUE)
+g4 <- create_plot_newspaper(newspapers = c('El Mundo'), 
+                            n = 10, 
+                            language = 'ca',
+                            switch = TRUE)
+Rmisc::multiplot(g1, g2, g3, g4, cols = 2)
+```
+
 
 ##  El Bloc contra el 155
 
@@ -251,7 +391,8 @@ g1 <- create_plot(usernames = 'enricmorera', n = 10, switch = TRUE)
 g2 <- create_plot(usernames = 'monicaoltra', n = 10, switch = TRUE)
 g3 <- create_plot(usernames = 'joanbaldovi', n = 10, switch = TRUE)
 
-Rmisc::multiplot(g1, g2, g3, cols = 3)
+Rmisc::multiplot(g1, g2, cols = 2)
+g3
 ```
 
 
@@ -274,9 +415,114 @@ Rmisc::multiplot(g1, g2, cols = 2)
 Finalment els nacionalistes mallorquins i menorquins donen preferència al Diari de Balears i al Diari de Mallorca però inclouen entre les seves preferèncues també l'Ara i VilaWeb, així com ElDiario i Público. 
 
 ```{r}
-barplot(1:1, main = 'Placeholder')
+g1 <- create_plot(usernames = 'mespermallorca', n = 10, switch = TRUE)
+g2 <- create_plot(usernames = 'mespermenorca', n = 10, switch = TRUE)
+g3 <- create_plot(usernames = 'toninoguera', n = 10, switch = TRUE)
+
+Rmisc::multiplot(g1, g2, cols = 2)
+g3
 ```
 
+
+## General paper vs. digital trends
+
+The below shows the paper vs. digital divide.
+
+
+```{r,fig.height=8}
+pd <- df %>%
+  filter(!is.na(eix_digital_paper)) %>%
+  mutate(category = paste0(eix_digital_paper)) %>%
+  group_by(person = username, category) %>%
+  tally %>%
+  group_by(person) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup
+
+pd <- pd %>%
+  group_by(person) %>%
+  mutate(arranger = ifelse(length(p[category == 'paper']) == 0,
+                           0,
+                           p[category == 'paper'])) %>%
+  ungroup %>%
+  arrange(arranger)
+pd$person <- factor(pd$person, levels = unique(pd$person))
+cols <- databrew::make_colors(10)[c(2,6)]
+ggplot(data = pd,
+       aes(x = person,
+           y = p,
+           fill = category)) +
+  geom_bar(stat = 'identity',
+           position = position_stack(),
+           width = 0.9) +
+  ggthemes::theme_fivethirtyeight() +
+  theme(axis.text.y = element_text(angle = 0, vjust = 0.5, hjust = 1,
+                                   size = 8)) +
+  scale_fill_manual(name = 'Categoria de mitjà',
+                    values = cols) +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = T))
+```
+
+
+
+## General left-right / sovereigntist-unionist trends
+
+The below shows the left-right / sovereigntist-unionist breakdown, ordered by the % Dreta-unionista.
+
+```{r,fig.height=8}
+pd <- df %>%
+  filter(!is.na(eix_esquerra_dreta_diari)) %>%
+  filter(!is.na(eix_sobiranista_espanyolista)) %>%
+  mutate(category = paste0(eix_esquerra_dreta_diari, ' ', eix_sobiranista_espanyolista)) %>%
+  group_by(person = username, category) %>%
+  tally %>%
+  group_by(person) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup
+pd$category <- factor(pd$category,
+                      levels = c('dreta unio',
+                                 'esquerra unio',
+                                 'esquerra sobiranista'),
+                      labels = c('Dreta unionista',
+                                 'Esquerra unionista',
+                                 'Esquerra sobiranista'))
+pd <- pd %>%
+  group_by(person) %>%
+  mutate(arranger = ifelse(length(p[category == 'Dreta unionista']) == 0,
+                           0,
+                           p[category == 'Dreta unionista'])) %>%
+  ungroup %>%
+  arrange(arranger)
+pd$person <- factor(pd$person, levels = unique(pd$person))
+cols <- databrew::make_colors(10)[c(2,9,6)]
+ggplot(data = pd,
+       aes(x = person,
+           y = p,
+           fill = category)) +
+  geom_bar(stat = 'identity',
+           position = position_stack(),
+           width = 0.9) +
+  ggthemes::theme_fivethirtyeight() +
+  theme(axis.text.y = element_text(angle = 0, vjust = 0.5, hjust = 1,
+                                   size = 8)) +
+  scale_fill_manual(name = 'Categoria de mitjà',
+                    values = cols) +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = T))
+```
+
+
+# Details
+
+## Code
+
+All code for this analysis is openly available at [https://github.com/joebrew/vilaweb/tree/master/inst/rmd/newspapers](https://github.com/joebrew/vilaweb/tree/master/inst/rmd/newspapers).
+
+## Comments
+
+- Percentages are based on the total of tweets from the account in question, filtering only for those tweets which had a reference to any of the mitjans de comunicació examined here. 
+- Data were retrieved on Dec 19, 2018. All publicly available tweets were used, without restrictions on time. This had a biasing effect to some extent, since account ages differ.
 
 
 # Appendix
@@ -308,43 +554,3 @@ for(i in 1:length(newspapers)){
   print(create_plot_newspaper(newspapers = this_politic, n = 10))
 }
 ```
-
-# Charts in Catalan
-
-
-## By politician
-
-The below shows the top 10 newspaper re-tweets for each politician.
-
-
-```{r}
-politics <- sort(unique(df$username))
-politics <- politics[!is.na(politics)]
-for(i in 1:length(politics)){
-  this_politic <- politics[i]
-  print(create_plot(username = this_politic, n = 10, language = 'ca'))
-}
-```
-
-## By newspaper
-
-The below shows the top 10 re-tweeters for each newspaper (relative to each person's overall tweet-load).
-
-```{r}
-newspapers <- sort(unique(df$newspaper))
-newspapers <- newspapers[!is.na(newspapers)]
-for(i in 1:length(newspapers)){
-  this_politic <- newspapers[i]
-  print(create_plot_newspaper(newspapers = this_politic, n = 10, language = 'ca'))
-}
-```
-
-
-
-
-# Details
-
-## Code
-
-All code for this analysis is openly available at [https://github.com/joebrew/vilaweb/tree/master/inst/rmd/newspapers](https://github.com/joebrew/vilaweb/tree/master/inst/rmd/newspapers).
-
