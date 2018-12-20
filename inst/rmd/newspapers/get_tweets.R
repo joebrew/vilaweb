@@ -124,17 +124,20 @@ if('tl.RData' %in% dir()){
   save(tl, file = 'tl.RData')
 }
 
-tl <- tl %>% filter(username != 'xsalaimartin')
+tl <- tl %>% filter(!username %in% c('xsalaimartin', 'jeanmarcpujol', 'gabrielrufian_'))
 tl <- tl %>% filter(!is.na(username))
 
-# Get the highest hosts
-hosts <- tl %>%
-  group_by(host) %>%
-  tally %>%
-  arrange(desc(n)) %>%
-  mutate(p = n / sum(n) * 100)
-
-
+# Read in google sheet with keys
+library(gsheet)
+if(!'goog.RData' %in% dir()){
+  goog_people <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=1425313388')
+  goog_newspapers <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=148951570')
+  save(goog_people,
+       goog_newspapers,
+       file = 'goog.RData')
+} else {
+  load('goog.RData')
+}
 
 make_keys <- function(x,y,z){
   return(data_frame(newspaper = x,
@@ -203,6 +206,13 @@ keys <- keys %>%
                                    'CCMA/324',
                                    newspaper)))
 
+keys <- left_join(keys, goog_newspapers)
+
+# Make a people keys data frame
+people_keys <- 
+  data_frame(username = sort(unique(tl$username))) %>%
+  left_join(goog_people)
+
 # Flag the tweets
 tl$is_site <- !is.na(tl$host) & grepl('.', tl$host, fixed = TRUE)
 tl$is_handle <- !is.na(tl$host) & !grepl('.', tl$host, fixed = TRUE)
@@ -223,12 +233,26 @@ handles <- left_join(handles,
                    by = c('host' = 'handle'))
 df <- bind_rows(sites, handles)
 
-# Create a score 
+# Join the keys
+df <- left_join(df, keys)
+df <- left_join(df, people_keys)
+
+# Take out the radios
+df <- df %>%
+  filter(!newspaper %in% c('Cadana Ser',
+                           'CCMA/324',
+                           'COPE',
+                           'Onda Cero',
+                           'Última hora',
+                           'RTVE'))
+
+
 
 # Create plot
 create_plot <- function(language = 'en',
                         usernames = NULL,
-                        n = NULL){
+                        n = NULL,
+                        switch = FALSE){
   if(!is.null(usernames)){
     plot_data <- 
       df %>%
@@ -284,6 +308,13 @@ create_plot <- function(language = 'en',
   subtitle <- ifelse(only_one, paste0('@', plot_data$person[1]), '')
   y <- 'Percentage'
   
+  if(switch){
+    a <- subtitle
+    b <- title
+    title <- a
+    subtitle <- ''
+    caption <- ''
+  }
   g <- g +
     theme_vilaweb() +
     labs(x = x, y = y, title = title, subtitle = subtitle, caption = caption) +
@@ -302,7 +333,8 @@ create_plot <- function(language = 'en',
 # Create plot
 create_plot_newspaper <- function(language = 'en',
                         newspapers = NULL,
-                        n = NULL){
+                        n = NULL,
+                        switch = FALSE){
   plot_data <- df
   
   plot_data <- plot_data %>%
@@ -358,6 +390,13 @@ create_plot_newspaper <- function(language = 'en',
   subtitle <- ifelse(only_one, paste0('', plot_data$newspaper[1]), '')
   y <- 'Percentage'
   
+  if(switch){
+    a <- subtitle
+    b <- title
+    title <- a
+    subtitle <- ''
+    caption <- ''
+  }
   g <- g +
     theme_vilaweb() +
     labs(x = x, y = y, title = title, subtitle = subtitle, caption = caption) +

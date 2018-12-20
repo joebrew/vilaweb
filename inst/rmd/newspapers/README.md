@@ -11,35 +11,111 @@ Among Catalan and Spanish politicians, what is the distribution of newspaper art
 The methods
 ===========
 
-We gathered 814632 tweets from 58 well-known Catalan and Spanish politicians. We algorithmically identified references to 40 newspapers, and calculated the percentage of references to each for each politician.
+We gathered 811958 tweets from 56 well-known Catalan and Spanish politicians. We algorithmically identified references to 34 newspapers, and calculated the percentage of references to each for each politician.
 
 ![](figures/unnamed-chunk-3-1.png)
 
 Results
 =======
 
-Highlights
-----------
+Analitzant què piula cada polític crida molt l'atenció el fet que els polítics unionistes tendeixen a fer més piulades de diaris en paper tradicionals espanyols mentre que els polítics sobiranistes tendeixen a piular més premsa digital en català.
 
--   ABC is a favorite of the right, but especially Pablo Casado: Pablo Casado % tweeted about ABC articles in 9% of his tweets, followed by España Ciudadana and Societat Civil Catalana.
--   The cross-over between newspapers of preference for the Partido Popular, Ciudadanos and SCC was high: for example, El Confidencial, El Español, El Mundo, E-noticies, OKDiario saw high reference rates from politicians in these groups.
--   The cross-over between newspapers of preference for pro-independence politicians was also high: Ara, CCMA, Vilaweb, and local newspapers saw high reference rates from politicians in these groups.
--   El País had the highest overall reference rates (7.48% of all tweets containing any link or tag).
--   Where unionist and independentist groups overlapped, it was generally politicians of ERC, Comuns and Socialists: for example, with high rates of El Diario and Público.
+![](figures/unnamed-chunk-4-1.png)
+
+En el cas concret del Principat aquesta fractura es pot observar analitzant quins polítics piulen més La Vanguardia i El Periódico, els dos mitjans tradicionals i quins el diari Ara, que també és en paper però té un perfil digital molt actiu o VilaWeb.
+
+Així El Periódico és repiulat sobretot en les tres primeres posicions per Eva Granados (PSC). Xavier Garcia Albiol (PP) i Ines Arrimadas (Ciutadans) i entre els deu polítics que el repiulen més hi ha Sociedad Civil Catalana, dos polítics més del PSC, un de Ciutadans, dos comptes del Comuns i només Gabriel Rufian d'ERC.
+
+De la mateixa manera La Vanguardia és més repiulada per Xavier Garcia Albiol (PP), Inés Arrimadas i Carlos Carrizosa (Ciutadans). I entre els deu comptes polítics que el repiulen més trobem dos comptes dels Comuns (com amb El Periódico). Sociedad Civil Catalana (com amb El Periódico), un compte del PP, un del PSC i després Compromís i Oriol Junqueras d'ERC en darrer lloc.
+
+![](figures/unnamed-chunk-6-1.png)
+
+El contrast d'aquests dos diaris amb l'Ara i VilaWeb és molt gran i les proporcions s'inverteixen. En el cas del diari Ara els tres comptes que el repiulen més són els del vice president Pere Aragonés (ERC) i els dels presidents Puigdemont i Torra (Junts per Catalunya). I entre els deu que repiulen més aquest diari hi ha tres comptes més d'ERC, el del Partit Demòcrata i el de la CUP, el de Catalunya en Comú i només Eva Granados del PSC en darrer lloc.
+
+Pel que fa a VilaWeb els tres primers comptes que més el repiulen són els dels president de la Generalitat de Catalunya Carles Puigdemont i Quim Torra i el del president de les Corts Valencianes Enric Morera. I després hi ha quatre comptes d'ERC, la CUP, el batlle sobiranista de Palma Toni Noguera i el conseller socialista valencià, i històric nacionalista, Vicent Soler.
+
+![](figures/unnamed-chunk-7-1.png)
+
+El Bloc del 155
+---------------
+
+Analitzant per partits dins l'anomenat bloc del 155 es repeteix la pauta. Albert Rivera piula com a primera font molt destacada El País, igual que ho fa Inés Arrimadas. Tots dos inclouen El Mundo, ABC, El Periódico i La Vanguardia en el seu top ten i els digitals més coneguts de la dreta espanyola El Confidencial, El Español i Libertad Digital. Només Arrimadas inclou en el darrer lloc un digital espanyol però d'esquerres ElDiario.es.
+
+![](figures/unnamed-chunk-8-1.png)
+
+Pel que fa als socialistes catalans, El País, El Periódico i La Vanguardia encapçalen les seves preferències. I els digitals que prefereixen són digitals espanyols d'esquerres. especialment El Diario i Público. Tot i això també sorprén la presència de digitals de la dreta espanyola com El Español o El Confidencial i la baixa presència de mitjans sobiranistes, reduïda al diari Ara.
+
+![](figures/unnamed-chunk-9-1.png)
+
+Curiosament això mateix no passa amb els socialistes valencians i Balears, que repiulen publicacions com VilaWeb, La Veu del País Valencià o diaris locals com Diario de Mallorca i Última Hora. Amb tot El País també encapçala les seves preferències.
+
+(WHO ELSE SHOULD BE INCLUDED IN BELOW CHARTS?)
+
+![](figures/unnamed-chunk-10-1.png)
+
+La unanimitat pel que fa a El País arriba també als socialistes espanyols, on el pes d'aquest diari és encara determinant. Amb detalls interessant. Per exemple que Pedro Sánchez repiula com a segon mitjà el digital d'esquerres ElDiario i també repiula Público mentre que el seu ministre d'Afers Estrangers Josep Borrell prefereix els digitals de dreta com El Confidencial o El Español.
+
+![](figures/unnamed-chunk-11-1.png)
+
+En el cas del PP Pablo Casado piula preferentment mitjans tradicionals i els dos digitals que repiula són els més extremistes, Libertad Digital i OK Diario. Diari aquest que és ni més ni menys que el tercer mçes piulat per Xavier Garcia Albiol.
+
+![](figures/unnamed-chunk-12-1.png)
+
+Sorprèn també que La Razón sigui el diari més piulat per la líder valenciana del partit, Isabel Bonig i crida l'atenció en general que no aparegui El Español, segurament perquè el diari de Pedro J. Ramírez és identificat com un diari molt pròxim a Ciutadans.
+
+![](figures/unnamed-chunk-13-1.png)
+
+Dins el bloc del 155, finalment, s'ha analitzat també Vox, tot i que encara té una presència limitada. La unanimitat entre el compte oficial del partit i el de Santi Abascal és cridanera. A diferència del que passa amb els partits més tradicionals és un digital Libertad Digital el més piulat amb diferència, seguit d'El Mundo i d'ABC. OK Diario, El Español i El Confidencial també apareixen en una dieta mediàtica que en el cas d'Abascal es tanca amb La Vanguardia i El Periódico.
+
+![](figures/unnamed-chunk-14-1.png)
+
+El Bloc contra el 155
+---------------------
+
+Pel que fa al bloc contrari al 155, especialment al bloc sobiranista, les tries són molt diferents.
+
+En el cas de Junts per Catalunya, VilaWeb, Ara i La Vanguardia són les preferències del president Puigdemont i Nació Digital, VilaWeb i El Punt Avui del president Torra. Tots dos inclouen entre les seves preferències també El Nacional i ElDiario i en el cas del president Puigdemont Nació Digital.
+
+![](figures/unnamed-chunk-15-1.png)
+
+El compte oficial del Partit Demòcrata i el de Carles Campuzano introdueix matissos clars en aquest panorama. Campuzano, per exemple, inclou El País com la referència principal i repiula en els primers llocs ElDiario, El Periódico i La Vanguardia. El del Partit Demòcrata repiula sobretot el 3/24 i incorpora en els primers llocs RTVE i la Cadena Ser, relegant els digitals catalans VilaWeb, El Nacional i Nació Digital a les darreres posicions del seu top ten. (THIS PHRASE NEEDS TO CHANGE, WE REMOVED RADIOS/TVS) És possible que la diversitat de posicions en l'interior d'aquest espai polític tingui també traducció en la seva dieta mediàtica.
+
+![](figures/unnamed-chunk-16-1.png)
+
+Això es veu molt clarament en el cas de Compromís. A Compromís El País és el mitjà més repiulat però VilaWeb és el segon en el cas del president Enric Morera i està en el top ten del diputat Joan Baldoví i en el compte oficials del partit o en el de la vice presidenta Mònica Oltra el Diari La Veu entra també en la llista dels més repiulats. Al costat d'això destacat El Diario o Público i de fet la graduació de mitjans sembla confirmar la imatge pública de cada personalitat com a més o menys nacionalista.
+
+En general els polítics que exerceixen a Madrid, com és el cas de Joan Baldoví o el de Gabriel Rufian a ERC, també el de Carles Campuzano incorporen més mitjans espanyols, cosa lògica tenint en compte el treball que desenvolupen.
+
+![](figures/unnamed-chunk-17-1.png)
+
+En el cas d'ERC el vice president Oriol Junqueras té com a mitjà preferit de les seves piulades Nació Digital i inclou el 3/24. l'Ara, el Punt Avui, VilaWeb i El Nacional entre els seus favorits, al costat de La Vanguardia, El Periódico i la Cadena Ser. Pel que va al vice president Pere Aragonès l'Ara i VilaWeb són els seus mitjans més habituals i inclou també El Punt Avui, NacioDigital el 3/24 i el Nacional, així com ElDiario.es.
+
+![](figures/unnamed-chunk-18-1.png)
+
+Gabriel Rufian i Joan Tardà inclouen en les seves llistes Nació Digital i El Nacional en el primer cas i VilaWeb, Nació Digital i El Nacional en el segon però incorporen també els digitals d'esquerres espanyols, ElDiario, que de fet és el més repiulat per Gabriel Rufian i Público.
+
+![](figures/unnamed-chunk-19-1.png)
+
+Finalment els nacionalistes mallorquins i menorquins donen preferència al Diari de Balears i al Diari de Mallorca però inclouen entre les seves preferèncues també l'Ara i VilaWeb, així com ElDiario i Público.
+
+![](figures/unnamed-chunk-20-1.png)
+
+Appendix
+========
 
 By politician
 -------------
 
 The below shows the top 10 newspaper re-tweets for each politician.
 
-![](figures/unnamed-chunk-4-1.png)![](figures/unnamed-chunk-4-2.png)![](figures/unnamed-chunk-4-3.png)![](figures/unnamed-chunk-4-4.png)![](figures/unnamed-chunk-4-5.png)![](figures/unnamed-chunk-4-6.png)![](figures/unnamed-chunk-4-7.png)![](figures/unnamed-chunk-4-8.png)![](figures/unnamed-chunk-4-9.png)![](figures/unnamed-chunk-4-10.png)![](figures/unnamed-chunk-4-11.png)![](figures/unnamed-chunk-4-12.png)![](figures/unnamed-chunk-4-13.png)![](figures/unnamed-chunk-4-14.png)![](figures/unnamed-chunk-4-15.png)![](figures/unnamed-chunk-4-16.png)![](figures/unnamed-chunk-4-17.png)![](figures/unnamed-chunk-4-18.png)![](figures/unnamed-chunk-4-19.png)![](figures/unnamed-chunk-4-20.png)![](figures/unnamed-chunk-4-21.png)![](figures/unnamed-chunk-4-22.png)![](figures/unnamed-chunk-4-23.png)![](figures/unnamed-chunk-4-24.png)![](figures/unnamed-chunk-4-25.png)![](figures/unnamed-chunk-4-26.png)![](figures/unnamed-chunk-4-27.png)![](figures/unnamed-chunk-4-28.png)![](figures/unnamed-chunk-4-29.png)![](figures/unnamed-chunk-4-30.png)![](figures/unnamed-chunk-4-31.png)![](figures/unnamed-chunk-4-32.png)![](figures/unnamed-chunk-4-33.png)![](figures/unnamed-chunk-4-34.png)![](figures/unnamed-chunk-4-35.png)![](figures/unnamed-chunk-4-36.png)![](figures/unnamed-chunk-4-37.png)![](figures/unnamed-chunk-4-38.png)![](figures/unnamed-chunk-4-39.png)![](figures/unnamed-chunk-4-40.png)![](figures/unnamed-chunk-4-41.png)![](figures/unnamed-chunk-4-42.png)![](figures/unnamed-chunk-4-43.png)![](figures/unnamed-chunk-4-44.png)![](figures/unnamed-chunk-4-45.png)![](figures/unnamed-chunk-4-46.png)![](figures/unnamed-chunk-4-47.png)![](figures/unnamed-chunk-4-48.png)![](figures/unnamed-chunk-4-49.png)![](figures/unnamed-chunk-4-50.png)![](figures/unnamed-chunk-4-51.png)![](figures/unnamed-chunk-4-52.png)![](figures/unnamed-chunk-4-53.png)![](figures/unnamed-chunk-4-54.png)![](figures/unnamed-chunk-4-55.png)![](figures/unnamed-chunk-4-56.png)![](figures/unnamed-chunk-4-57.png)![](figures/unnamed-chunk-4-58.png)
+![](figures/unnamed-chunk-21-1.png)![](figures/unnamed-chunk-21-2.png)![](figures/unnamed-chunk-21-3.png)![](figures/unnamed-chunk-21-4.png)![](figures/unnamed-chunk-21-5.png)![](figures/unnamed-chunk-21-6.png)![](figures/unnamed-chunk-21-7.png)![](figures/unnamed-chunk-21-8.png)![](figures/unnamed-chunk-21-9.png)![](figures/unnamed-chunk-21-10.png)![](figures/unnamed-chunk-21-11.png)![](figures/unnamed-chunk-21-12.png)![](figures/unnamed-chunk-21-13.png)![](figures/unnamed-chunk-21-14.png)![](figures/unnamed-chunk-21-15.png)![](figures/unnamed-chunk-21-16.png)![](figures/unnamed-chunk-21-17.png)![](figures/unnamed-chunk-21-18.png)![](figures/unnamed-chunk-21-19.png)![](figures/unnamed-chunk-21-20.png)![](figures/unnamed-chunk-21-21.png)![](figures/unnamed-chunk-21-22.png)![](figures/unnamed-chunk-21-23.png)![](figures/unnamed-chunk-21-24.png)![](figures/unnamed-chunk-21-25.png)![](figures/unnamed-chunk-21-26.png)![](figures/unnamed-chunk-21-27.png)![](figures/unnamed-chunk-21-28.png)![](figures/unnamed-chunk-21-29.png)![](figures/unnamed-chunk-21-30.png)![](figures/unnamed-chunk-21-31.png)![](figures/unnamed-chunk-21-32.png)![](figures/unnamed-chunk-21-33.png)![](figures/unnamed-chunk-21-34.png)![](figures/unnamed-chunk-21-35.png)![](figures/unnamed-chunk-21-36.png)![](figures/unnamed-chunk-21-37.png)![](figures/unnamed-chunk-21-38.png)![](figures/unnamed-chunk-21-39.png)![](figures/unnamed-chunk-21-40.png)![](figures/unnamed-chunk-21-41.png)![](figures/unnamed-chunk-21-42.png)![](figures/unnamed-chunk-21-43.png)![](figures/unnamed-chunk-21-44.png)![](figures/unnamed-chunk-21-45.png)![](figures/unnamed-chunk-21-46.png)![](figures/unnamed-chunk-21-47.png)![](figures/unnamed-chunk-21-48.png)![](figures/unnamed-chunk-21-49.png)![](figures/unnamed-chunk-21-50.png)![](figures/unnamed-chunk-21-51.png)![](figures/unnamed-chunk-21-52.png)![](figures/unnamed-chunk-21-53.png)![](figures/unnamed-chunk-21-54.png)![](figures/unnamed-chunk-21-55.png)![](figures/unnamed-chunk-21-56.png)
 
 By newspaper
 ------------
 
 The below shows the top 10 re-tweeters for each newspaper (relative to each person's overall tweet-load).
 
-![](figures/unnamed-chunk-5-1.png)![](figures/unnamed-chunk-5-2.png)![](figures/unnamed-chunk-5-3.png)![](figures/unnamed-chunk-5-4.png)![](figures/unnamed-chunk-5-5.png)![](figures/unnamed-chunk-5-6.png)![](figures/unnamed-chunk-5-7.png)![](figures/unnamed-chunk-5-8.png)![](figures/unnamed-chunk-5-9.png)![](figures/unnamed-chunk-5-10.png)![](figures/unnamed-chunk-5-11.png)![](figures/unnamed-chunk-5-12.png)![](figures/unnamed-chunk-5-13.png)![](figures/unnamed-chunk-5-14.png)![](figures/unnamed-chunk-5-15.png)![](figures/unnamed-chunk-5-16.png)![](figures/unnamed-chunk-5-17.png)![](figures/unnamed-chunk-5-18.png)![](figures/unnamed-chunk-5-19.png)![](figures/unnamed-chunk-5-20.png)![](figures/unnamed-chunk-5-21.png)![](figures/unnamed-chunk-5-22.png)![](figures/unnamed-chunk-5-23.png)![](figures/unnamed-chunk-5-24.png)![](figures/unnamed-chunk-5-25.png)![](figures/unnamed-chunk-5-26.png)![](figures/unnamed-chunk-5-27.png)![](figures/unnamed-chunk-5-28.png)![](figures/unnamed-chunk-5-29.png)![](figures/unnamed-chunk-5-30.png)![](figures/unnamed-chunk-5-31.png)![](figures/unnamed-chunk-5-32.png)![](figures/unnamed-chunk-5-33.png)![](figures/unnamed-chunk-5-34.png)![](figures/unnamed-chunk-5-35.png)![](figures/unnamed-chunk-5-36.png)![](figures/unnamed-chunk-5-37.png)![](figures/unnamed-chunk-5-38.png)![](figures/unnamed-chunk-5-39.png)![](figures/unnamed-chunk-5-40.png)
+![](figures/unnamed-chunk-22-1.png)![](figures/unnamed-chunk-22-2.png)![](figures/unnamed-chunk-22-3.png)![](figures/unnamed-chunk-22-4.png)![](figures/unnamed-chunk-22-5.png)![](figures/unnamed-chunk-22-6.png)![](figures/unnamed-chunk-22-7.png)![](figures/unnamed-chunk-22-8.png)![](figures/unnamed-chunk-22-9.png)![](figures/unnamed-chunk-22-10.png)![](figures/unnamed-chunk-22-11.png)![](figures/unnamed-chunk-22-12.png)![](figures/unnamed-chunk-22-13.png)![](figures/unnamed-chunk-22-14.png)![](figures/unnamed-chunk-22-15.png)![](figures/unnamed-chunk-22-16.png)![](figures/unnamed-chunk-22-17.png)![](figures/unnamed-chunk-22-18.png)![](figures/unnamed-chunk-22-19.png)![](figures/unnamed-chunk-22-20.png)![](figures/unnamed-chunk-22-21.png)![](figures/unnamed-chunk-22-22.png)![](figures/unnamed-chunk-22-23.png)![](figures/unnamed-chunk-22-24.png)![](figures/unnamed-chunk-22-25.png)![](figures/unnamed-chunk-22-26.png)![](figures/unnamed-chunk-22-27.png)![](figures/unnamed-chunk-22-28.png)![](figures/unnamed-chunk-22-29.png)![](figures/unnamed-chunk-22-30.png)![](figures/unnamed-chunk-22-31.png)![](figures/unnamed-chunk-22-32.png)![](figures/unnamed-chunk-22-33.png)![](figures/unnamed-chunk-22-34.png)
 
 Charts in Catalan
 =================
@@ -49,14 +125,14 @@ By politician
 
 The below shows the top 10 newspaper re-tweets for each politician.
 
-![](figures/unnamed-chunk-6-1.png)![](figures/unnamed-chunk-6-2.png)![](figures/unnamed-chunk-6-3.png)![](figures/unnamed-chunk-6-4.png)![](figures/unnamed-chunk-6-5.png)![](figures/unnamed-chunk-6-6.png)![](figures/unnamed-chunk-6-7.png)![](figures/unnamed-chunk-6-8.png)![](figures/unnamed-chunk-6-9.png)![](figures/unnamed-chunk-6-10.png)![](figures/unnamed-chunk-6-11.png)![](figures/unnamed-chunk-6-12.png)![](figures/unnamed-chunk-6-13.png)![](figures/unnamed-chunk-6-14.png)![](figures/unnamed-chunk-6-15.png)![](figures/unnamed-chunk-6-16.png)![](figures/unnamed-chunk-6-17.png)![](figures/unnamed-chunk-6-18.png)![](figures/unnamed-chunk-6-19.png)![](figures/unnamed-chunk-6-20.png)![](figures/unnamed-chunk-6-21.png)![](figures/unnamed-chunk-6-22.png)![](figures/unnamed-chunk-6-23.png)![](figures/unnamed-chunk-6-24.png)![](figures/unnamed-chunk-6-25.png)![](figures/unnamed-chunk-6-26.png)![](figures/unnamed-chunk-6-27.png)![](figures/unnamed-chunk-6-28.png)![](figures/unnamed-chunk-6-29.png)![](figures/unnamed-chunk-6-30.png)![](figures/unnamed-chunk-6-31.png)![](figures/unnamed-chunk-6-32.png)![](figures/unnamed-chunk-6-33.png)![](figures/unnamed-chunk-6-34.png)![](figures/unnamed-chunk-6-35.png)![](figures/unnamed-chunk-6-36.png)![](figures/unnamed-chunk-6-37.png)![](figures/unnamed-chunk-6-38.png)![](figures/unnamed-chunk-6-39.png)![](figures/unnamed-chunk-6-40.png)![](figures/unnamed-chunk-6-41.png)![](figures/unnamed-chunk-6-42.png)![](figures/unnamed-chunk-6-43.png)![](figures/unnamed-chunk-6-44.png)![](figures/unnamed-chunk-6-45.png)![](figures/unnamed-chunk-6-46.png)![](figures/unnamed-chunk-6-47.png)![](figures/unnamed-chunk-6-48.png)![](figures/unnamed-chunk-6-49.png)![](figures/unnamed-chunk-6-50.png)![](figures/unnamed-chunk-6-51.png)![](figures/unnamed-chunk-6-52.png)![](figures/unnamed-chunk-6-53.png)![](figures/unnamed-chunk-6-54.png)![](figures/unnamed-chunk-6-55.png)![](figures/unnamed-chunk-6-56.png)![](figures/unnamed-chunk-6-57.png)![](figures/unnamed-chunk-6-58.png)
+![](figures/unnamed-chunk-23-1.png)![](figures/unnamed-chunk-23-2.png)![](figures/unnamed-chunk-23-3.png)![](figures/unnamed-chunk-23-4.png)![](figures/unnamed-chunk-23-5.png)![](figures/unnamed-chunk-23-6.png)![](figures/unnamed-chunk-23-7.png)![](figures/unnamed-chunk-23-8.png)![](figures/unnamed-chunk-23-9.png)![](figures/unnamed-chunk-23-10.png)![](figures/unnamed-chunk-23-11.png)![](figures/unnamed-chunk-23-12.png)![](figures/unnamed-chunk-23-13.png)![](figures/unnamed-chunk-23-14.png)![](figures/unnamed-chunk-23-15.png)![](figures/unnamed-chunk-23-16.png)![](figures/unnamed-chunk-23-17.png)![](figures/unnamed-chunk-23-18.png)![](figures/unnamed-chunk-23-19.png)![](figures/unnamed-chunk-23-20.png)![](figures/unnamed-chunk-23-21.png)![](figures/unnamed-chunk-23-22.png)![](figures/unnamed-chunk-23-23.png)![](figures/unnamed-chunk-23-24.png)![](figures/unnamed-chunk-23-25.png)![](figures/unnamed-chunk-23-26.png)![](figures/unnamed-chunk-23-27.png)![](figures/unnamed-chunk-23-28.png)![](figures/unnamed-chunk-23-29.png)![](figures/unnamed-chunk-23-30.png)![](figures/unnamed-chunk-23-31.png)![](figures/unnamed-chunk-23-32.png)![](figures/unnamed-chunk-23-33.png)![](figures/unnamed-chunk-23-34.png)![](figures/unnamed-chunk-23-35.png)![](figures/unnamed-chunk-23-36.png)![](figures/unnamed-chunk-23-37.png)![](figures/unnamed-chunk-23-38.png)![](figures/unnamed-chunk-23-39.png)![](figures/unnamed-chunk-23-40.png)![](figures/unnamed-chunk-23-41.png)![](figures/unnamed-chunk-23-42.png)![](figures/unnamed-chunk-23-43.png)![](figures/unnamed-chunk-23-44.png)![](figures/unnamed-chunk-23-45.png)![](figures/unnamed-chunk-23-46.png)![](figures/unnamed-chunk-23-47.png)![](figures/unnamed-chunk-23-48.png)![](figures/unnamed-chunk-23-49.png)![](figures/unnamed-chunk-23-50.png)![](figures/unnamed-chunk-23-51.png)![](figures/unnamed-chunk-23-52.png)![](figures/unnamed-chunk-23-53.png)![](figures/unnamed-chunk-23-54.png)![](figures/unnamed-chunk-23-55.png)![](figures/unnamed-chunk-23-56.png)
 
 By newspaper
 ------------
 
 The below shows the top 10 re-tweeters for each newspaper (relative to each person's overall tweet-load).
 
-![](figures/unnamed-chunk-7-1.png)![](figures/unnamed-chunk-7-2.png)![](figures/unnamed-chunk-7-3.png)![](figures/unnamed-chunk-7-4.png)![](figures/unnamed-chunk-7-5.png)![](figures/unnamed-chunk-7-6.png)![](figures/unnamed-chunk-7-7.png)![](figures/unnamed-chunk-7-8.png)![](figures/unnamed-chunk-7-9.png)![](figures/unnamed-chunk-7-10.png)![](figures/unnamed-chunk-7-11.png)![](figures/unnamed-chunk-7-12.png)![](figures/unnamed-chunk-7-13.png)![](figures/unnamed-chunk-7-14.png)![](figures/unnamed-chunk-7-15.png)![](figures/unnamed-chunk-7-16.png)![](figures/unnamed-chunk-7-17.png)![](figures/unnamed-chunk-7-18.png)![](figures/unnamed-chunk-7-19.png)![](figures/unnamed-chunk-7-20.png)![](figures/unnamed-chunk-7-21.png)![](figures/unnamed-chunk-7-22.png)![](figures/unnamed-chunk-7-23.png)![](figures/unnamed-chunk-7-24.png)![](figures/unnamed-chunk-7-25.png)![](figures/unnamed-chunk-7-26.png)![](figures/unnamed-chunk-7-27.png)![](figures/unnamed-chunk-7-28.png)![](figures/unnamed-chunk-7-29.png)![](figures/unnamed-chunk-7-30.png)![](figures/unnamed-chunk-7-31.png)![](figures/unnamed-chunk-7-32.png)![](figures/unnamed-chunk-7-33.png)![](figures/unnamed-chunk-7-34.png)![](figures/unnamed-chunk-7-35.png)![](figures/unnamed-chunk-7-36.png)![](figures/unnamed-chunk-7-37.png)![](figures/unnamed-chunk-7-38.png)![](figures/unnamed-chunk-7-39.png)![](figures/unnamed-chunk-7-40.png)
+![](figures/unnamed-chunk-24-1.png)![](figures/unnamed-chunk-24-2.png)![](figures/unnamed-chunk-24-3.png)![](figures/unnamed-chunk-24-4.png)![](figures/unnamed-chunk-24-5.png)![](figures/unnamed-chunk-24-6.png)![](figures/unnamed-chunk-24-7.png)![](figures/unnamed-chunk-24-8.png)![](figures/unnamed-chunk-24-9.png)![](figures/unnamed-chunk-24-10.png)![](figures/unnamed-chunk-24-11.png)![](figures/unnamed-chunk-24-12.png)![](figures/unnamed-chunk-24-13.png)![](figures/unnamed-chunk-24-14.png)![](figures/unnamed-chunk-24-15.png)![](figures/unnamed-chunk-24-16.png)![](figures/unnamed-chunk-24-17.png)![](figures/unnamed-chunk-24-18.png)![](figures/unnamed-chunk-24-19.png)![](figures/unnamed-chunk-24-20.png)![](figures/unnamed-chunk-24-21.png)![](figures/unnamed-chunk-24-22.png)![](figures/unnamed-chunk-24-23.png)![](figures/unnamed-chunk-24-24.png)![](figures/unnamed-chunk-24-25.png)![](figures/unnamed-chunk-24-26.png)![](figures/unnamed-chunk-24-27.png)![](figures/unnamed-chunk-24-28.png)![](figures/unnamed-chunk-24-29.png)![](figures/unnamed-chunk-24-30.png)![](figures/unnamed-chunk-24-31.png)![](figures/unnamed-chunk-24-32.png)![](figures/unnamed-chunk-24-33.png)![](figures/unnamed-chunk-24-34.png)
 
 Details
 =======
