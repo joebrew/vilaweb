@@ -190,7 +190,7 @@ pd$eix_indepe_unio <-
   ifelse(pd$eix_indepe_unio == 'indepe',
          'Independentista',
          ifelse(pd$eix_indepe_unio == 'sobiranista',
-                'Sobirarnista',
+                'Sobiranista',
                 ifelse(pd$eix_indepe_unio == 'unio',
                        'Unionista', NA)))
 
