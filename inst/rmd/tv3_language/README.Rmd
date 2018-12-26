@@ -1,0 +1,45 @@
+---
+title: "TV 3 and language"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+```
+
+```{r}
+df <- vilaweb::ceo
+df$date <- paste0(df$ANY, df$MES)
+table(df$P16A_REC)
+x <- df %>%
+  filter(ANY >= 2018) %>%
+  group_by(#tv = P16A_REC,
+           independence = P31,
+           language = C704) %>%
+  summarise(n = sum(PONDERA)) %>%
+  group_by(language) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup
+x %>%
+  filter(independence == 'Sí')
+```

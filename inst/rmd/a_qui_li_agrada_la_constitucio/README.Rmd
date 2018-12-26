@@ -1,9 +1,8 @@
 ---
-title: "Who likes the Constitution??"
+title: "The data are clear: there is a broad consensus among Catalans"
 output: github_document
 ---
 
-### A qui li agrada la Constitució Espanyola?
 
 ```{r setup, include=FALSE, echo = FALSE}
 # Basic knitr options
@@ -26,598 +25,152 @@ library(tidyverse)
 library(databrew)
 library(waffle)
 
-# Functions
-mround <- function(x,base){ 
-  base*round(x/base) 
-} 
-
-round_percent <- function(x) { 
-  x <- x/sum(x)*100  # Standardize result
-  res <- floor(x)    # Find integer bits
-  rsum <- sum(res)   # Find out how much we are missing
-  if(rsum<100) { 
-    # Distribute points based on remainders and a random tie breaker
-    o <- order(x%%1, sample(length(x)), decreasing=TRUE) 
-    res[o[1:(100-rsum)]] <- res[o[1:(100-rsum)]]+1
-  } 
-  res 
-}
-
-# # Read in data manually (until package built)
-# cis_2018_09 <- haven::read_sav('../../../data-raw/cis/monthly/2018-09/3223.sav')
-# cis_2018_09 <- haven::as_factor(cis_2018_09)
-# cis_list <- list('2018-09' = cis_2018_09)
+# Read functions' definitions
+source('functions.R')
 ```
 
-# Overall
+All sides in the Catalonia crisis agree that Spain is facing a constitutional crisis. And though the proximal cause of that crisis is the collective disobedience of Catalonia's citizenry and government in regards to the October 2017 self-determination referendum, the distal cause (ie, "the cause of the cause") of that disobedience is the perceived illegitimacy of the Constitution, and the broad desire for self-determination. In other words, the "criminal" referendum organized by the Catalan government last October came about because the rulebook which prohibited that referendum (the Spanish Constitution) does not receive sufficient support to guarantee compliance in Catalonia. Support for the Spanish Constitution is low - particularly among Catalans - and support for Catalan self-determination is high. 
 
+How low? And how high? Let's dig in.
+
+
+# The questions
+
+How much support is there for the Consitution of 1978 in Spain and Catalonia?
+
+How much support is there among Catalans for a self-determination referendum?
+
+# The data
+
+We'll dive into data from the Barometer of Public Opinion from the Center of Opinion Studies (CEO, Catalonia) and the Center for Sociological Research (CIS, Spain).
+
+# The results
+
+## Satisfaction with the Constitution in Spain
+
+Outside of Catalonia, the overall percentage of Spaniards who are "satisfied" or "very satisfied" with the Spanish Constitution is an absolute majority (51.8%). The unsatisfied minority (the sum of both "not satisfied" and "not at all satisfied") is only 23.4%. In other words, in Spain, the "satisfied" outnumber the "unsatisfied" by a margin of greater than 2 to 1.
 
 ```{r}
-overall_plot <- function(language = 'en',
-                         geo = c('cat', 'esp', 'all'),
-                         return_table = FALSE){
-  
-  cis_data  <- cis_list$`2018-09`
-  
-  if(length(geo) != 1){
-    stop('geo must be one of "cat", "esp", "all"')
-  }
-  
-  if(geo == 'esp'){
-    plot_data <- cis_data %>% filter(CCAA != 'Cataluña')  
-    if(language == 'en'){subtitle <- 'Spain, not counting Catalonia'} else {subtitle <-'Espanya, sense incloure Catalunya'}
-  }
-  if(geo == 'cat'){
-    plot_data <- cis_data %>% filter(CCAA == 'Cataluña')
-    if(language == 'en'){subtitle <- 'Catalonia'} else {subtitle <-'Catalunya'}
-  }
-  if(geo == 'all'){
-    if(language == 'en'){subtitle <- 'Spain, including Catalonia'} else {subtitle <- 'Espanya, incloent Catalonia'}
-    plot_data <- cis_data 
-  }
-   
-  
-  plot_data <- plot_data %>%
-    mutate(P13 = as.character(P13)) %>%
-    # Combine the no answer / not sures, etc.
-    mutate(P13 = ifelse(P13 == 'N.C.',
-                        '(NO LEER) Está en duda, no sabe lo suficiente',
-                        P13)) %>%
-    group_by(es = P13) %>%
-    tally %>%
-    ungroup %>%
-    mutate(es = as.character(es)) %>%
-    mutate(y  = n / sum(n) * 100)
-  right <- 
-    data_frame(
-          # Manually copied from the Sep 2018 CIS avance de resultados
-      # y = c(7.4, 39.9, 17.5, 19.5, 8.2, 7.4),
-      es = c('Muy satisfecho/a',
-            'Bastante satisfecho/a',
-            '(NO LEER) Regular',
-            'Poco satisfecho/a',
-            'Nada satisfecho/a',
-            '(NO LEER) Está en duda, no sabe lo suficiente'),
-      ca = factor(c('Molt satisfet',
-             'Bastant satisfet',
-             'Regular',
-             'Poc satisfet',
-             'Gens satisfet',
-             'NS/NC'),
-             levels = c('Molt satisfet',
-               'Bastant satisfet',
-               'Regular',
-               'NS/NC',
-               'Poc satisfet',
-               'Gens satisfet')),
-      en = factor(c('Very satisfied',
-             'Satisfied',
-             'So-so',
-             'Not satisfied',
-             'Not at all satisfied',
-             'No answer'),
-             levels = c('Very satisfied',
-               'Satisfied',
-               'So-so',
-               'No answer',
-               'Not satisfied',
-               'Not at all satisfied')))
-  plot_data <- left_join(plot_data, right, by = 'es')
-    if(language == 'en'){
-      title <- 'Level of satisfacation with Spanish Constitution'
-      caption <- 'Data from CIS survey, September 2018.\nJoe Brew | @joethebrew.'
-      plot_data$x <- plot_data$en
-    } else {
-      title <- 'Nivell de satisfacció amb la Constitució Espanyola'
-      caption <- 'Dades del CIS, Setembre 2018.\nJoe Brew | @joethebrew.'
-      plot_data$x <- plot_data$ca
-    }
-  
-  bp <- function(x,z){RColorBrewer::brewer.pal(n = 8,name =x)[z]}
-  cols <- c(bp('Blues', 8),
-                bp('Blues', 5),
-            bp('Greys', 3),
-            bp('Greys', 6),
-            bp('Oranges', 5),
-            bp('Oranges', 8))
-  if(return_table){
-    return(plot_data)
-  }
-
-  plot_data <- plot_data %>% arrange(x)
-  x <- plot_data$y
-  names(x) <- plot_data$x
-  x <- round_percent(x)
-  names(x) <- factor(levels(plot_data$x))
-  
-  gg <- waffle(parts = x,
-               rows = 10,
-             colors = cols) +
-  theme_vilaweb() +
-  theme(legend.position = 'right') +
-    scale_x_continuous(expand = c(0, 0)) +
-    scale_y_continuous(expand = c(0, 0)) +
-    coord_equal() +
-    theme(panel.grid = element_blank()) +
-    theme(panel.border = element_blank()) +
-    theme(panel.background = element_blank()) +
-    theme(panel.spacing = unit(0, "null")) +
-    theme(axis.text = element_blank()) +
-    theme(axis.title.x = element_text(size = 10)) +
-    theme(axis.ticks = element_blank()) +
-    theme(axis.line = element_blank()) +
-    theme(axis.ticks.length = unit(0, "null")) +
-    theme(plot.title = element_text(size = 18)) +
-    theme(plot.background = element_blank()) +
-    theme(panel.spacing = unit(c(0, 0, 0, 0), "null")) +
-    guides(fill=guide_legend(ncol=1)) + 
-    theme(legend.text = element_text(size = 14),
-          plot.subtitle = element_text(size = 16))  +
-    labs(title = title,
-         subtitle = subtitle,
-         caption = caption) 
-  
-  return(gg)
-  # sample size 2972
-}
 overall_plot('en', geo = 'esp')
+# overall_plot('en', geo = 'esp', return_table = T)
 ```
 
-Among Catalans
+## Dissatisfaction with the Constitution in Catalonia
+
+If we look just at Catalonia, the opposite pattern emerges. Only 1.75% are "very satisfied" with the Constitution, less than one fourth the rate of high satisfaction in the rest of Spain. And the sum of the "very satisfied" and "satisfied" group rises to only 22.55%. 
+
+The percentage of Catalans who are not satisified with the Constitution is over twice that: 52.1%. 24.3% of Catalans are "not satisfied", and 27.8% are not at all satisfied.
 
 ```{r}
 overall_plot('en', geo = 'cat')
+# overall_plot('en', geo = 'cat', return_table = TRUE)
 ```
 
-Comparison between CCAA
+## Variation in satisfaction with the Constitution in other Autonomous Communities
+
+Of the 17 CCAAs, Catalonia has the highest dissatisfaction rate, exceeding 50%. But it is not the only CCAA where dissatisfaction is greater than satisfaction: in the Basque Country, 41.6% are dissatisfied whereas only 32.9% are satisfied; and in Navarra, 39% are dissatisfied whereas 31.7% are satisfied.
 
 ```{r}
-comparison_plot <- function(language = 'en',
-                         return_table = FALSE){
-  
-  plot_data  <- cis_list$`2018-09`
-  
-   
-  
-  plot_data <- plot_data %>%
-    mutate(P13 = as.character(P13)) %>%
-    # Combine the no answer / not sures, etc.
-    mutate(P13 = ifelse(P13 == 'N.C.',
-                        '(NO LEER) Está en duda, no sabe lo suficiente',
-                        P13)) %>%
-    group_by(es = P13, ccaa = CCAA) %>%
-    tally %>%
-    ungroup %>%
-    mutate(es = as.character(es)) %>%
-    group_by(ccaa) %>%
-    mutate(y  = n / sum(n) * 100) %>%
-    ungroup 
-  right <- 
-    data_frame(
-          # Manually copied from the Sep 2018 CIS avance de resultados
-      # y = c(7.4, 39.9, 17.5, 19.5, 8.2, 7.4),
-      es = c('Muy satisfecho/a',
-            'Bastante satisfecho/a',
-            '(NO LEER) Regular',
-            'Poco satisfecho/a',
-            'Nada satisfecho/a',
-            '(NO LEER) Está en duda, no sabe lo suficiente'),
-      ca = factor(c('Molt satisfet',
-             'Bastant satisfet',
-             'Regular',
-             'Poc satisfet',
-             'Gens satisfet',
-             'NS/NC'),
-             levels = c('Molt satisfet',
-               'Bastant satisfet',
-               'Regular',
-               'NS/NC',
-               'Poc satisfet',
-               'Gens satisfet')),
-      en = factor(c('Very satisfied',
-             'Satisfied',
-             'So-so',
-             'Not satisfied',
-             'Not at all satisfied',
-             'No answer'),
-             levels = c('Very satisfied',
-               'Satisfied',
-               'So-so',
-               'No answer',
-               'Not satisfied',
-               'Not at all satisfied')))
-  plot_data <- left_join(plot_data, right, by = 'es')
-  
-  x <- 'CCAA'
-  y <- 'Percentage'
-    if(language == 'en'){
-      subtitle <- 'By CCAA (autonomous community)'
-      xxx <- 'Not at all satisfied'
-      title <- 'Level of satisfacation with Spanish Constitution'
-      caption <- 'Data from CIS survey, September 2018. | Chart: Joe Brew | @joethebrew.'
-      plot_data$x <- plot_data$en
-    } else {
-      subtitle <- 'Per comunitat autònoma'
-      xxx <- 'Gens satisfet'
-      title <- 'Nivell de satisfacció amb la Constitució Espanyola'
-      caption <- 'Dades del CIS, Setembre 2018. | Elaboració del gràfic: Joe Brew | @joethebrew.'
-      plot_data$x <- plot_data$ca
-    }
-  
-  bp <- function(x,z){RColorBrewer::brewer.pal(n = 8,name =x)[z]}
-  cols <- c(bp('Blues', 8),
-                bp('Blues', 5),
-            bp('Greys', 3),
-            bp('Greys', 6),
-            bp('Oranges', 5),
-            bp('Oranges', 8))
-  if(return_table){
-    return(plot_data)
-  }
-
-  plot_data <- plot_data %>% 
-    filter(!grepl('Ceuta', ccaa),
-           !grepl('Melilla', ccaa)) %>%
-    mutate(ccaa = gsub(' (Principado de)', '', ccaa, fixed = TRUE),
-           ccaa = gsub(' (Comunidad de)', '', ccaa, fixed = TRUE),
-           ccaa = gsub(' (Región de)', '', ccaa, fixed = TRUE),
-           ccaa = gsub(' (Comunidad Foral de)', '', ccaa, fixed = TRUE),
-           ccaa = gsub('unitat', '.', ccaa, fixed = TRUE))
-  plot_data <- plot_data %>% group_by(ccaa) %>% mutate(rangey = max(y[x == xxx], rm.na = TRUE)) %>% arrange(desc(rangey))
-  plot_data$ccaa <- factor(plot_data$ccaa,
-                           levels = unique(plot_data$ccaa))
-  ggplot(data = plot_data,
-         aes(x = ccaa,
-             y = y,
-             fill = x)) +
-    geom_bar(stat = 'identity',
-             position = position_stack(),
-             width = 0.9) +
-    scale_fill_manual(name = '',
-                      values = cols) +
-    theme_vilaweb() +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1,
-                                     vjust = 0.5),
-          legend.text = element_text(size = 13)) +
-    theme(legend.position = 'right') +
-    guides(fill=guide_legend(ncol=1)) +
-    geom_hline(yintercept = 50,
-               lty = 2,
-               alpha = 0.5) +
-    labs(x = x,
-         y = y,
-         title = title,
-         subtitle = subtitle,
-         caption = caption)
-}
 comparison_plot('en')
+# comparison_plot('en', return_table = T)
 ```
 
-## By ideology
+## The opposition to self-determination in Spain
+
+In a national survey in October 2018, Spaniards were asked about their preferences for territorial organization, given 5 choices: (i) a centralized state with no autonomy for the regions, (ii) a state with less autonomy than the current status quo, (iii) status quo, (iv) greater autonomy for the regions, (v) the possibility for regions to become independent. 
+
+A majority of non-Catalan Spaniards (76.4%) want to keep the status quo or _decrease_ the amount of autonomy given to the regions. A full 22.5% want a centralized state with no autonomy for the regions. Only 5% are in favor of granting self-determination to regions.
+
+```{r}
+self_determination_plot(geo = 'esp')
+# self_determination_plot(geo = 'esp', return_table = TRUE)
+```
+
+## The consensus for self-determination in Catalonia
+
+Only 19.1% of Catalans believe that Catalonia does not have a right to a self-determination referendum, whereas 68.4% believe that it does. Removing those who do not answer the question, 78.2% of Catalans believe that Catalonia has a right to a self-determination referendum.
+
+```{r}
+referendum_plot('en')
+# referendum_plot('en', return_table = T)
+```
+
+
+# Qualitative reflection
+
+## "Social fracture" and its causes
+
+A common mantra of the political right in Catalonia is that the drive for self-determination has caused unprecedented "social fracture". But the supposed cause of this social fracture, self-determination, is supported by a large majority of Catalans (including many who are opposed to independence). 
+
+On the other hand, in a hypothetical referendum on the Spanish Constitution, only 17.4% of Catalans say that they would vote "yes". Even if we remove the 25.6% which don't know or don't answer, the percentage who would vote "yes" would be only 23.4% ("no" would be 76.6%).
+
+```{r}
+simple_plot()
+```
+
+## Conclusion: the broad consensus
+
+In a recent address to Congress, Spanish President Pedro Sánchez stated that a "broad consensus" was necessary for a solution to Catalonia's political crisis. But the data are clear: Catalans already share a broad consensus: more than 3/4 are in favor of exercising the right to self-determination, and more than 3/4 are opposed to the Spanish Constitution which prevents them from exercising that right.
+
+
+It is a strange that the 78% consensus in favor of a self-determination referendum is considered "not enough", but the 23% consensus in favor of the Constitution is considered sufficient for the continued governance of Catalonia. It is also strange that mainstream Spanish political parties and politicians continue to treat the broad desire among Catalans for self-determination as a question of criminal law, rather than politics. As long as a broad majority of Catalans favor self-determination, they will continue to elect politicians who pursue it (within or outside of Spanish law). And as long as a broad majority of Catalans are opposed to the Spanish Constitution, they will continue to elect politicians who create laws outside of it.
+
+
+A political solution to the Catalan crisis requires recognition that (a) a broad consensus in favor of self-determination already exists among Catalans, (b) the root problem is not a disagreement among Catalans, but rather a disagreement between Catalan and Spanish visions on self-determination, and (c) governing a territory in which fewer than one quarter of the inhabitants approve of the "rules of the game" (the Constitution) is simply unsustainable. 
+
+
+## Satisfaction with the Constitution
+
+
+Among citizens of all 17 CCAA, a plurality (39.9%) consider themselves "satisfied" with the Constitution, or even "very satisfied" (7.4%). The sum of these two satisfied groups (47.3%) far outsizes the 27.7% who feel opposite (19.5% "not satisfied" and 8.2% "not at all satisfied").
+
+```{r}
+overall_plot('en', geo = 'all')
+# overall_plot('en', geo = 'all', return_table = T)
+```
+
+
+## By ideology 
 
 ### By ideology in Spain
 
+In Spain, satisfaction with the Constitution correlates loosely with right-leaning political ideology. Outside of Catalonia, the satisfaction percentage of Spaniards who self-classify as right-leaning ideologically is 65.1%. The same rate is 55.3% among those in the ideological center, and only 44.9% among those who self-classify as left-leaning. Dissatisfaction with the Spanish Constitution is only 14.9% on the political right, 20.9% in the center, and 34.4% on the left. In Spain, among all three groups, satisfaction is greater than dissatisfaction.
+
 ```{r}
-ideology_spain_plot <- function(language = 'en',
-                         return_table = FALSE){
-  
-  plot_data  <- cis_list$`2018-09`
-
-  plot_data <- plot_data %>%
-    filter(CCAA != 'Cataluña') %>%
-    mutate(P13 = as.character(P13)) %>%
-    # Combine the no answer / not sures, etc.
-    mutate(P13 = ifelse(P13 == 'N.C.',
-                        '(NO LEER) Está en duda, no sabe lo suficiente',
-                        P13)) %>%
-    mutate(axis = P23) %>%
-    mutate(axis = ifelse(axis %in% c('N.S.', 'N.C.'),
-                         'NS/NC',
-                         ifelse(axis %in% '1 Izquierda', as.character('01'),
-                                ifelse(axis %in% '10 Derecha', as.character(10),
-                                       as.character(axis))))) %>%
-    mutate(axis = as.numeric(axis))
-  
-    # Join for the axis translations
-  right <- data_frame(axis = 1:10,
-                      ideology_en = factor(c(rep('Left', 3), rep('Center', 4), rep('Right', 3)),
-                                           levels = c('Left', 'Center', 'Right')),
-                      ideology_ca = factor(c(rep('Esquerra', 3), rep('Centre', 4), rep('Dreta', 3)),
-                      levels = c('Esquerra', 'Centre', 'Dreta')))
-  plot_data <- left_join(plot_data, right, by = 'axis')
-  if(language == 'en'){
-    plot_data$new_axis <- plot_data$ideology_en
-  } else {
-    plot_data$new_axis <- plot_data$ideology_ca
-  }
-  plot_data$axis <- plot_data$new_axis
-  
-  plot_data <- plot_data %>%
-    group_by(es = P13, 
-              # ccaa = ifelse(CCAA == 'Cataluña', 'CAT', 'ESP'),
-             axis) %>%
-    tally %>%
-    ungroup %>%
-    mutate(es = as.character(es)) %>%
-    group_by(#ccaa,
-             axis) %>%
-    mutate(y  = n / sum(n) * 100) %>%
-    ungroup 
-  right <- 
-    data_frame(
-          # Manually copied from the Sep 2018 CIS avance de resultados
-      # y = c(7.4, 39.9, 17.5, 19.5, 8.2, 7.4),
-      es = c('Muy satisfecho/a',
-            'Bastante satisfecho/a',
-            '(NO LEER) Regular',
-            'Poco satisfecho/a',
-            'Nada satisfecho/a',
-            '(NO LEER) Está en duda, no sabe lo suficiente'),
-      ca = factor(c('Molt satisfet',
-             'Bastant satisfet',
-             'Regular',
-             'Poc satisfet',
-             'Gens satisfet',
-             'NS/NC'),
-             levels = c('Molt satisfet',
-               'Bastant satisfet',
-               'Regular',
-               'NS/NC',
-               'Poc satisfet',
-               'Gens satisfet')),
-      en = factor(c('Very satisfied',
-             'Satisfied',
-             'So-so',
-             'Not satisfied',
-             'Not at all satisfied',
-             'No answer'),
-             levels = c('Very satisfied',
-               'Satisfied',
-               'So-so',
-               'No answer',
-               'Not satisfied',
-               'Not at all satisfied')))
-  plot_data <- left_join(plot_data, right, by = 'es')
-  
-
-  
-  x <- 'CCAA'
-  y <- 'Percentage'
-    if(language == 'en'){
-      subtitle <- 'By ideology. All of Spain, not including Catalonia.'
-      xxx <- 'Not at all satisfied'
-      title <- 'Level of satisfacation with Spanish Constitution'
-      caption <- 'Data from CIS survey, September 2018. | Chart: Joe Brew | @joethebrew.\nIdeology: 1-3; left; 4-7: center; 8-10: right.'
-      plot_data$x <- plot_data$en
-    } else {
-      subtitle <- 'Per ideologia. Tota Espanya, sense incloure Catalunya.'
-      xxx <- 'Gens satisfet'
-      title <- 'Nivell de satisfacció amb la Constitució Espanyola'
-      caption <- 'Dades del CIS, Setembre 2018. | Elaboració del gràfic: Joe Brew | @joethebrew.\nIdeologia: 1-3: esquerra; 4-7: centre; 8-10: dreta.'
-      plot_data$x <- plot_data$ca
-    }
-  
-  bp <- function(x,z){RColorBrewer::brewer.pal(n = 8,name =x)[z]}
-  cols <- c(bp('Blues', 8),
-                bp('Blues', 5),
-            bp('Greys', 3),
-            bp('Greys', 6),
-            bp('Oranges', 5),
-            bp('Oranges', 8))
-  if(return_table){
-    return(plot_data)
-  }
-
-  # Remove the ns/nc
-  plot_data <- plot_data %>%
-    filter(axis != 'NS/NC')
-  ggplot(data = plot_data,
-         aes(x = axis,
-             y = y,
-             fill = x)) +
-    geom_bar(stat = 'identity',
-             position = position_stack(),
-             width = 0.9) + 
-    # facet_wrap(~ccaa) +
-    scale_fill_manual(name = '',
-                      values = cols) +
-    theme_vilaweb() +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1,
-                                     vjust = 0.5),
-          legend.text = element_text(size = 13)) +
-    theme(legend.position = 'right') +
-    guides(fill=guide_legend(ncol=1)) +
-    geom_hline(yintercept = 50,
-               lty = 2,
-               alpha = 0.5) +
-    labs(x = x,
-         y = y,
-         title = title,
-         subtitle = subtitle,
-         caption = caption)
-}
-ideology_spain_plot()
+ideology_spain_plot(geo = 'esp')
+# ideology_spain_plot(geo = 'esp', return_table = T) %>%
+#   # filter(en %in% c('Satisfied', 'Very satisfied')) %>%
+#   filter(en %in% c('Not satisfied', 'Not at all satisfied')) %>%
+#   group_by(axis) %>%
+#   summarise(y = sum(y))
 ```
 
 ### By ideology in Catalonia
 
-```{r, fig.height = 7}
-left_right_plot <- function(language = 'en',
-                            return_table = FALSE){
-  if(language == 'en'){
-    
-     x = 'Ideology (self-assessed)'
-     y = 'Percentage'
-     title = 'Support for the Spanish Constitution among Catalans'
-     subtitle = 'If a referendum were to be held today on the current\nSpanish Constitution approved in 1978, as it is now, how would you vote?'
-     caption = 'Data from the Baròmetre d\'Opinió Pública, 3a onada 2018.\nSample size: 1500 residents of Catalonia with Spanish citizenship. Categories codes as follows:\n ideological scale 0-10: 0-1=far left;2-3=left;4-6=center;7-8=right;9-10=far right.\nChart created by Joe Brew | @joethebrew.'
-    
-    new_axis <- 
-      c('Far left',
-         'Far left',
-         'Left',
-         'Left',
-         'Center',
-         'Center',
-         'Center',
-         'Right',
-         'Right',
-         'Far right',
-         'Far right')
-  } else {
-    
-       x = 'Ideologia autoubicada (escala 0-10)'
-       y = 'Percentage'
-       title = 'Suport de la constitució espanyola entre catalans'
-       subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nConstitució espanyola aprovada el 1978, tal com és ara, vostè què faria?'
-       caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1500 residents de Catalunya amb ciutadania espayola. Codificació de categories:\nescala ideòlogica 0-10: 0-1=extrema esquerra;2-3=esquerra;4-6=centre;7-8=dreta;9-10=extrema dreta.\nElaboració del gràfic: Joe Brew | @joethebrew.'
-    new_axis <- 
-      c('Extrema esquerra',
-       'Extrema esquerra',
-       'Esquerra',
-       'Esquerra',
-       'Centre',
-       'Centre',
-       'Centre',
-       'Dreta',
-       'Dreta',
-       'Extrema dreta',
-       'Extrema dreta')
-  }
-  axis_dict <- data_frame(axis = c('Extrema esquerra',
-                                 as.character(1:9),
-                                 'Extrema dreta'),
-                          new_axis) %>%
-  mutate(new_axis = gsub(' ', '\n', new_axis))
-  plot_data <- 
-    vilaweb::ceo %>%
-    filter(MES %in% 10:11,
-           ANY == 2018) %>%
-    dplyr::mutate(axis = P25,
-           constitution = P95) %>%
-      filter(!axis %in% c('No ho sap', 'No contesta')) %>%
-    left_join(axis_dict) %>%
-    dplyr::select(-axis) %>%
-    dplyr::rename(axis = new_axis) %>%
-    mutate(constitution = as.character(constitution))
-  
-  if(language == 'en'){
-    plot_data <- plot_data %>%
-    mutate(constitution = 
-             ifelse(constitution == 'Votaria sí', 'Yes',
-                    ifelse(constitution == 'Votaria no', 'No',
-                           'Not sure/no answer')))
-  } else {
-    plot_data <- plot_data %>%
-    mutate(constitution = ifelse(constitution %in% c('Votaria sí',
-                                                      'Votaria no'),
-                                 constitution,
-                                 'NS/NC/Nul'))
-  }
-  plot_data <- plot_data %>%
-    group_by(axis, constitution)%>%
-    summarise(n = sum(PONDERA)) %>%
-    ungroup %>%
-    group_by(axis) %>%
-    mutate(p = n / sum(n) * 100,
-           number = sum(n),
-           pp = n / sum(n[!constitution %in% c('NS/NC/Nul', 'Not sure/no answer')]) * 100) %>%
-    ungroup
-  
-  if(language == 'en'){
-    plot_data$constitution <-
-    factor(plot_data$constitution,
-           levels = rev(c('Yes',
-                      'Not sure/no answer',
-                      'No')))
-  plot_data$axis <- 
-    factor(plot_data$axis,
-           levels = c('Far\nleft',
-                     'Left',
-                     'Center',
-                     'Right',
-                     'Far\nright'))
-  } else {
-    plot_data$constitution <-
-    factor(plot_data$constitution,
-           levels = rev(c('Votaria sí',
-                      'NS/NC/Nul',
-                      'Votaria no')))
-  plot_data$axis <- 
-    factor(plot_data$axis,
-           levels = c('Extrema\nesquerra',
-                     'Esquerra',
-                     'Centre',
-                     'Dreta',
-                     'Extrema\ndreta'))
-  }
-  
-    
-  bp <- function(x,z){RColorBrewer::brewer.pal(n = 8,name =x)[z]}
-  cols <- rev(c(bp('Blues', 5),
-            bp('Greys', 2),
-            bp('Oranges', 5)))
-  if(return_table){
-    retun(plot_data)
-  }
-  ggplot(data = plot_data,
-         aes(x = axis,
-             y = p,
-             fill = constitution)) +
-    geom_bar(stat = 'identity',
-             # color = 'black',
-             # lwd = 0.2,
-             position = position_stack()) +
-    theme_vilaweb() +
-    labs(x = x,
-         y = y,
-         title = title,
-         subtitle = subtitle,
-         caption = caption) +
-    scale_fill_manual(name = '',
-                      values = cols) +
-    geom_text(aes(label = round(p, digits = 1)),
-              position = position_stack(),
-              vjust = 1.4,
-              size = 3,
-              alpha = 0.6) +
-    theme(plot.title = element_text(size = 16),
-          plot.subtitle = element_text(size = 11),
-          axis.text.x = element_text(size = 15),
-          axis.text.y = element_text(size = 13),
-          legend.text = element_text(size = 20),
-          plot.caption = element_text(size = 10))
+In Catalonia, the left-right association is more pronounced. When asked if how they would vote if there were a referendum on the 1978 Constitution today, only those who self-classify as far right (9 or 10 on a 0-10 ideological scale) would vote "yes" at a greater rate than "no". On the left, the "no" vote would reach 72% and the "yes" vote would only rise to 10.8%.
 
-}
+```{r, fig.height = 7}
+# left_right_plot('en', return_table = T) %>%
+#   filter(axis %in% c('Left', 'Far\nleft')) %>%
+#   group_by(constitution) %>%
+#   summarise(n = sum(n)) %>%
+#   mutate(p = n / sum(n) * 100)
 left_right_plot('en')
 ```
+
+
 
 # Catalan language plots
 
 ```{r}
+overall_plot('ca', geo = 'all')
 overall_plot('ca', geo = 'esp')
 overall_plot('ca', geo = 'cat')
 comparison_plot('ca')
-ideology_spain_plot('ca')
-left_right_plot('ca')
+self_determination_plot(language = 'ca',geo = 'esp')
+
+# ideology_spain_plot('ca')
+# left_right_plot('ca')
+referendum_plot('ca')
+simple_plot('ca')
 ```

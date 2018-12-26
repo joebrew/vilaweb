@@ -28,4 +28,6 @@ Imports:
     extrafont,
     grDevices,
     grid,
-    scales
+    scales,
+    DBI,
+    RPostgreSQL

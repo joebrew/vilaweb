@@ -18,28 +18,39 @@ token <- create_token(
 # z = search_users(q = x[1])
 # y = get_mentions('joethebrew')
 
-violencia_bcn <-
-  rt <- search_tweets(
-    'violencia', 
-    n = 1000000000, 
-    include_rts = F, 
-    retryonratelimit = TRUE,
-    geocode = "41.385,2.173,20mi"
-  )
-violencia_mad <-
-  rt <- search_tweets(
-    'violencia', 
-    n = 1000000000, 
-    include_rts = F, 
-    retryonratelimit = TRUE,
-    geocode = "40.41678,-3.703,20mi"
-  )
-save(violencia_mad, violencia_bcn,
-     file = 'violencia.RData')
+# violencia_bcn <-
+#   rt <- search_tweets(
+#     'violencia', 
+#     n = 1000000000, 
+#     include_rts = F, 
+#     retryonratelimit = TRUE,
+#     geocode = "41.385,2.173,20mi"
+#   )
+# violencia_mad <-
+#   rt <- search_tweets(
+#     'violencia', 
+#     n = 1000000000, 
+#     include_rts = F, 
+#     retryonratelimit = TRUE,
+#     geocode = "40.41678,-3.703,20mi"
+#   )
+# save(violencia_mad, violencia_bcn,
+#      file = 'violencia.RData')
 
-violencia_bcnrt <-
+# violencia_bcnrt <-
+#   rt <- search_tweets(
+#     'violencia', 
+#     n = 1000000000, 
+#     include_rts = T, 
+#     retryonratelimit = TRUE,
+#     geocode = "41.385,2.173,20mi"
+#   )
+# 
+# save(violencia_madrt, violencia_bcnrt,
+#      file = 'violenciart.RData')
+violencia_bcnrt2 <-
   rt <- search_tweets(
-    'violencia', 
+    '"violencia" OR "violència"', 
     n = 1000000000, 
     include_rts = T, 
     retryonratelimit = TRUE,
@@ -47,23 +58,14 @@ violencia_bcnrt <-
   )
 violencia_madrt <-
   rt <- search_tweets(
-    'violencia', 
+    '"violencia" OR "violència"', 
     n = 1000000000, 
     include_rts = T, 
     retryonratelimit = TRUE,
     geocode = "40.41678,-3.703,20mi"
   )
-save(violencia_madrt, violencia_bcnrt,
-     file = 'violenciart.RData')
-violencia_bcnrt2 <-
-  rt <- search_tweets(
-    '"violencia" OR "violència', 
-    n = 1000000000, 
-    include_rts = T, 
-    retryonratelimit = TRUE,
-    geocode = "41.385,2.173,20mi"
-  )
 save(violencia_bcnrt2,
+     violencia_madrt,
      file = 'violencia_bcnrt2.RData')
 df <- bind_rows(violencia_bcnrt2 %>% mutate(city = 'Barcelona'), 
                 violencia_madrt %>% mutate(city = 'Madrid'))
@@ -76,7 +78,7 @@ agg <-
   ungroup
 
 ggplot(data = agg %>% 
-         filter(date <= '2018-12-20 6:00:00'),
+         filter(date >= '2018-12-01 01:00:00'),
        aes(x = date,
            y = n,
            group = city,
@@ -95,6 +97,55 @@ ggplot(data = agg %>%
         plot.title = element_text(size = 20),
         plot.subtitle =  element_text(size = 16))
 ggsave('~/Desktop/violence.png')
+
+
+madrtcdr <-
+  rt <- search_tweets(
+    '"los CDR" OR "els "CDR"', 
+    n = 1000000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE,
+    geocode = "40.41678,-3.703,20mi"
+  )
+bcnrtcdr <- search_tweets(
+  '"los CDR" OR "els "CDR"', 
+  n = 1000000000, 
+  include_rts = T, 
+  retryonratelimit = TRUE,
+  geocode = "41.385,2.173,20mi"
+)
+save(bcnrtcdr, madrtcdr,
+     file = 'cdr.RData')
+df <- bind_rows(bcnrtcdr %>% mutate(city = 'Barcelona'), 
+                madrtcdr %>% mutate(city = 'Madrid'))
+agg <-
+  df %>%
+  mutate(date = cut(created_at, 'hour')) %>%
+  mutate(date = as.POSIXct(date)) %>%
+  group_by(date, city) %>%
+  tally %>%
+  ungroup
+
+ggplot(data = agg %>% 
+         filter(date >= '2018-12-01 6:00:00'),
+       aes(x = date,
+           y = n,
+           group = city,
+           color = city)) +
+  geom_line(size = 1) +
+  databrew::theme_databrew() +
+  scale_color_manual(name = '',
+                     values = c('blue', 'red')) +
+  # geom_smooth() +
+  labs(y = 'Piulades (per hora)',
+       x = 'Hora',
+       title = 'Freqüencia de la paraula "CDR" en piulades',
+       subtitles = 'Piulades geolocalitzades a < 32 km del centre de BCN vs. MAD',
+       caption = 'Dades: API REST de Twitter. Gràfic: Joe Brew.') +
+  theme(legend.text = element_text(size = 30),
+        plot.title = element_text(size = 20),
+        plot.subtitle =  element_text(size = 16))
+
 # 
 # hunger_strike <-
 #   rt <- search_tweets(
