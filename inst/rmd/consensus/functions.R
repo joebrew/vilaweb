@@ -92,11 +92,11 @@ overall_plot <- function(language = 'en',
   plot_data <- left_join(plot_data, right, by = 'es')
   if(language == 'en'){
     title <- 'Level of satisfaction with Spanish Constitution'
-    caption <- 'Data from CIS survey, September 2018.\nJoe Brew | @joethebrew.'
+    caption <- 'Data from CIS survey, September 2018.\nJoe Brew | @joethebrew | www.vilaweb.cat.'
     plot_data$x <- plot_data$en
   } else {
     title <- 'Nivell de satisfacció amb la Constitució Espanyola'
-    caption <- 'Dades del CIS, Setembre 2018.\nJoe Brew | @joethebrew.'
+    caption <- 'Dades del CIS, Setembre 2018.\nJoe Brew | @joethebrew | www.vilaweb.cat.'
     plot_data$x <- plot_data$ca
   }
   
@@ -219,13 +219,13 @@ comparison_plot <- function(language = 'en',
     subtitle <- 'By CCAA (autonomous community)'
     xxx <- 'Not at all satisfied'
     title <- 'Level of satisfacation with Spanish Constitution'
-    caption <- 'Data from CIS survey, September 2018.\nChart: Joe Brew | @joethebrew.'
+    caption <- 'Data from CIS survey, September 2018.\nChart: Joe Brew | @joethebrew | www.vilaweb.cat.'
     plot_data$x <- plot_data$en
   } else {
     subtitle <- 'Per comunitat autònoma'
     xxx <- 'Gens satisfet'
     title <- 'Nivell de satisfacció amb la Constitució Espanyola'
-    caption <- 'Dades del CIS, Setembre 2018.\nElaboració del gràfic: Joe Brew | @joethebrew.'
+    caption <- 'Dades del CIS, Setembre 2018.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
     plot_data$x <- plot_data$ca
   }
   
@@ -372,13 +372,13 @@ ideology_spain_plot <- function(language = 'en',
     subtitle <- 'By ideology. All of Spain, not including Catalonia.'
     xxx <- 'Not at all satisfied'
     title <- 'Level of satisfacation with Spanish Constitution'
-    caption <- 'Data from CIS survey, September 2018.\nChart: Joe Brew | @joethebrew.\nIdeology: 1-3; left; 4-7: center; 8-10: right.'
+    caption <- 'Data from CIS survey, September 2018.\nChart: Joe Brew | @joethebrew | www.vilaweb.cat.\nIdeology: 1-3; left; 4-7: center; 8-10: right.'
     plot_data$x <- plot_data$en
   } else {
     subtitle <- 'Per ideologia. Tota Espanya, sense incloure Catalunya.'
     xxx <- 'Gens satisfet'
     title <- 'Nivell de satisfacció amb la Constitució Espanyola'
-    caption <- 'Dades del CIS, Setembre 2018.\nElaboració del gràfic: Joe Brew | @joethebrew.\nIdeologia: 1-3: esquerra; 4-7: centre; 8-10: dreta.'
+    caption <- 'Dades del CIS, Setembre 2018.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.\nIdeologia: 1-3: esquerra; 4-7: centre; 8-10: dreta.'
     plot_data$x <- plot_data$ca
   }
   
@@ -430,7 +430,7 @@ left_right_plot <- function(language = 'en',
     y = 'Percentage'
     title = 'Support for the Spanish Constitution among Catalans'
     subtitle = 'If a referendum were to be held today on the current\nSpanish Constitution approved in 1978, as it is now, how would you vote?'
-    caption = 'Data from the Baròmetre d\'Opinió Pública, 3a onada 2018.\nSample size: 1500 residents of Catalonia with Spanish citizenship. Categories codes as follows:\n ideological scale 0-10: 0-1=far left;2-3=left;4-6=center;7-8=right;9-10=far right.\nChart created by Joe Brew | @joethebrew.'
+    caption = 'Data from the Baròmetre d\'Opinió Pública, 3a onada 2018.\nSample size: 1500 residents of Catalonia with Spanish citizenship. Categories codes as follows:\n ideological scale 0-10: 0-1=far left;2-3=left;4-6=center;7-8=right;9-10=far right.\nChart created by Joe Brew | @joethebrew | www.vilaweb.cat.'
     
     new_axis <- 
       c('Far left',
@@ -450,7 +450,7 @@ left_right_plot <- function(language = 'en',
     y = 'Percentage'
     title = 'Suport de la constitució espanyola entre catalans'
     subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nConstitució espanyola aprovada el 1978, tal com és ara, vostè què faria?'
-    caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1500 residents de Catalunya amb ciutadania espayola. Codificació de categories:\nescala ideòlogica 0-10: 0-1=extrema esquerra;2-3=esquerra;4-6=centre;7-8=dreta;9-10=extrema dreta.\nElaboració del gràfic: Joe Brew | @joethebrew.'
+    caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1500 residents de Catalunya amb ciutadania espayola. Codificació de categories:\nescala ideòlogica 0-10: 0-1=extrema esquerra;2-3=esquerra;4-6=centre;7-8=dreta;9-10=extrema dreta.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
     new_axis <- 
       c('Extrema esquerra',
         'Extrema esquerra',
@@ -624,7 +624,7 @@ referendum_plot <- function(language = 'en',
     plot_data$x <- plot_data$en
     title <- 'Agreement with following phrase:'
     subtitle <- '"Catalonia does not have a right to celebrate a self-determination referendum"'
-    caption <- 'Data from Barometer of Public Opinion, 2018, round 2.\nChart by Joe Brew | @joethebrew.'
+    caption <- 'Data from Barometer of Public Opinion, 2018, round 2.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'
   } else {
     plot_data$ca <-
       factor(plot_data$ca,
@@ -637,7 +637,7 @@ referendum_plot <- function(language = 'en',
     plot_data$x <- plot_data$ca
     title <- "Grau d'acord amb la frase següent"
     subtitle <- '"Catalunya no té el dret de celebrar un referèndum d’autodeterminació"'
-    caption <- 'Dades del Baròmetre d\'Opinió Públic, 2018, 2 ronda.\nGràfic de Joe Brew | @joethebrew.'
+    caption <- 'Dades del Baròmetre d\'Opinió Públic, 2018, 2 ronda.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'
   }
   if(return_table){
     return(plot_data)
@@ -674,14 +674,14 @@ simple_plot <- function(language = 'en',
     y = 'Percentage'
     title = 'Support for the Spanish Constitution among Catalans'
     subtitle = 'If a referendum were to be held today on the current\nSpanish Constitution approved in 1978, as it is now, how would you vote?'
-    caption = 'Data from the Baròmetre d\'Opinió Pública, 3a onada 2018.\nSample size: 1500 residents of Catalonia with Spanish citizenship.\nChart created by Joe Brew | @joethebrew.'
+    caption = 'Data from the Baròmetre d\'Opinió Pública, 3a onada 2018.\nSample size: 1500 residents of Catalonia with Spanish citizenship.\nChart created by Joe Brew | @joethebrew | www.vilaweb.cat.'
     
   } else {
     
     y = 'Percentage'
     title = 'Suport de la constitució espanyola entre catalans'
     subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nConstitució espanyola aprovada el 1978, tal com és ara, vostè què faria?'
-    caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1500 residents de Catalunya amb ciutadania espayola.\nElaboració del gràfic: Joe Brew | @joethebrew.'
+    caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1500 residents de Catalunya amb ciutadania espayola.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
   }
 
   plot_data <- 
@@ -813,13 +813,13 @@ self_determination_plot <- function(language = 'en',
   if(language == 'en'){
     plot_data$x <- plot_data$en
     title <- 'Preferences for territorial organization'
-    caption <- 'Data from CIS survey, October 2018.\nJoe Brew | @joethebrew.'
+    caption <- 'Data from CIS survey, October 2018.\nJoe Brew | @joethebrew | www.vilaweb.cat.'
     x <- 'Percentage'
     y <- ''
   } else {
     plot_data$x <- plot_data$ca    
     title <- 'Preferències sobre organització territorial'
-    caption <- 'Dades del CIS, Octubre 2018.\nJoe Brew | @joethebrew.'
+    caption <- 'Dades del CIS, Octubre 2018.\nJoe Brew | @joethebrew | www.vilaweb.cat.'
     x <- 'Percentage'
     y <- ''
   }
@@ -945,7 +945,7 @@ referendum_plot_party <- function(language = 'en',
     plot_data$x <- plot_data$en
     title <- 'Agreement with following phrase:'
     subtitle <- '"Catalonia does not have a right to celebrate a self-determination referendum"'
-    caption <- 'Data from Barometer of Public Opinion, 2018, round 2.\nChart by Joe Brew | @joethebrew.'
+    caption <- 'Data from Barometer of Public Opinion, 2018, round 2.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'
   } else {
     plot_data$ca <-
       factor(plot_data$ca,
@@ -958,7 +958,7 @@ referendum_plot_party <- function(language = 'en',
     plot_data$x <- plot_data$ca
     title <- "Grau d'acord amb la frase següent"
     subtitle <- '"Catalunya no té el dret de celebrar un referèndum d’autodeterminació"'
-    caption <- 'Dades del Baròmetre d\'Opinió Públic, 2018, 2 ronda.\nGràfic de Joe Brew | @joethebrew.'
+    caption <- 'Dades del Baròmetre d\'Opinió Públic, 2018, 2 ronda.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'
   }
   if(return_table){
     return(plot_data)

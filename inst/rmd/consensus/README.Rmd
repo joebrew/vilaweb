@@ -133,11 +133,13 @@ A political solution to the Catalan crisis requires recognition of the following
 
 1. A broad consensus in favor of self-determination already exists among Catalans. 
 
-2. The root cause of the current crisis is not a disagreement among Catalans, but rather the prohibition of acting on that broad consensus.
+2. The root cause of the current crisis is not a disagreement among Catalans, but rather the prohibition by Spain of Catalonia acting on that broad consensus.
 
 3. Governing a territory in which fewer than one quarter of the inhabitants approve of the "rules of the game" (the Constitution) is simply unsustainable, and will likely lead to further "illegal" policies voted and approved by Catalan leaders.
 
-Mr. Sánchez is correct that the crisis will "last for years" if Spain is politically incapable of accepting an independence referendum in Catalonia. But a prolonged crisis is neither necessary nor inevitable. The consensus for the solution already exists among Catalans.
+Mr. Sánchez is correct that the crisis will "last for years" if Spain is politically incapable of accepting an independence referendum in Catalonia. But a prolonged crisis is neither necessary nor inevitable. The consensus for the solution already exists among Catalans. Pretending that this consensus does not exist, or describing the political crisis as a "conflict between Catalans" reflects ignorance of reality... or a desire to twist it.
+
+
 
 
 
@@ -145,7 +147,7 @@ Mr. Sánchez is correct that the crisis will "last for years" if Spain is politi
 # Catalan language plots
 
 ```{r}
-overall_plot('ca', geo = 'all')
+# overall_plot('ca', geo = 'all')
 overall_plot('ca', geo = 'esp')
 overall_plot('ca', geo = 'cat')
 comparison_plot('ca')
@@ -155,6 +157,5 @@ self_determination_plot(language = 'ca',geo = 'esp')
 # left_right_plot('ca')
 referendum_plot('ca')
 referendum_plot_party('ca')
-
 simple_plot('ca')
 ```

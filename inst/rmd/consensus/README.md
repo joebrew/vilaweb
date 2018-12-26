@@ -92,13 +92,13 @@ A political solution to the Catalan crisis requires recognition of the following
 
 1.  A broad consensus in favor of self-determination already exists among Catalans.
 
-2.  The root cause of the current crisis is not a disagreement among Catalans, but rather the prohibition of acting on that broad consensus.
+2.  The root cause of the current crisis is not a disagreement among Catalans, but rather the prohibition by Spain of Catalonia acting on that broad consensus.
 
 3.  Governing a territory in which fewer than one quarter of the inhabitants approve of the "rules of the game" (the Constitution) is simply unsustainable, and will likely lead to further "illegal" policies voted and approved by Catalan leaders.
 
-Mr. Sánchez is correct that the crisis will "last for years" if Spain is politically incapable of accepting an independence referendum in Catalonia. But a prolonged crisis is neither necessary nor inevitable. The consensus for the solution already exists among Catalans.
+Mr. Sánchez is correct that the crisis will "last for years" if Spain is politically incapable of accepting an independence referendum in Catalonia. But a prolonged crisis is neither necessary nor inevitable. The consensus for the solution already exists among Catalans. Pretending that this consensus does not exist, or describing the political crisis as a "conflict between Catalans" reflects ignorance of reality... or a desire to twist it.
 
 Catalan language plots
 ======================
 
-![](figures/unnamed-chunk-9-1.png)![](figures/unnamed-chunk-9-2.png)![](figures/unnamed-chunk-9-3.png)![](figures/unnamed-chunk-9-4.png)![](figures/unnamed-chunk-9-5.png)![](figures/unnamed-chunk-9-6.png)![](figures/unnamed-chunk-9-7.png)![](figures/unnamed-chunk-9-8.png)
+![](figures/unnamed-chunk-9-1.png)![](figures/unnamed-chunk-9-2.png)![](figures/unnamed-chunk-9-3.png)![](figures/unnamed-chunk-9-4.png)![](figures/unnamed-chunk-9-5.png)![](figures/unnamed-chunk-9-6.png)![](figures/unnamed-chunk-9-7.png)
