@@ -88,7 +88,7 @@ But the data are clear. Catalans already share a broad consensus: more than 3/4 
 
 It is a strange that in many political sectors, the 78% consensus in favor of a self-determination referendum is considered "not enough", but the 23% consensus in favor of the Constitution is considered sufficient for the continued governance of Catalonia. It is also strange that mainstream Spanish political parties and politicians continue to treat the broad desire among Catalans for self-determination as a question of criminal law, rather than politics. As long as a broad majority of Catalans favor self-determination, they will continue to elect politicians who pursue it (within or outside of Spanish law). And as long as a broad majority of Catalans are opposed to the Spanish Constitution, they will continue to elect politicians who create laws outside of it.
 
-A political solution to the Catalan crisis requires recognition of the following three truths from the data:
+A political solution to the Catalan crisis requires recognition of the following three truths:
 
 1.  A broad consensus in favor of self-determination already exists among Catalans.
 

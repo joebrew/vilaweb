@@ -13,6 +13,10 @@
 
 update_database <- function(people = NULL, get_new = FALSE, delete_duplicates = TRUE){
   
+  require(dplyr)
+  require(RPostgreSQL)
+  require(readr)
+  require(DBI)
   # Connect to the db
   pg = DBI::dbDriver("PostgreSQL")
   con = DBI::dbConnect(pg, dbname="twitter")
@@ -103,4 +107,4 @@ update_database <- function(people = NULL, get_new = FALSE, delete_duplicates = 
   # disconnect from the database
   dbDisconnect(con) 
 } 
-# update_database()
+update_database()
