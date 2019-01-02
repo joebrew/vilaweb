@@ -1,0 +1,75 @@
+---
+title: "Sentiment"
+output: github_document
+---
+
+### Sentiment
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+```
+
+```{r, fig.height = 7}
+# Get most recent tweets from ciudadanos
+tmls <- get_timelines(c('PSOE', 'PPopular', 'CiudadanosCs','vox_es'), n = 400)
+
+key_dict <- data.frame(key= c('cent', 'comandos', 'violencia'),
+                       new_key = c('"155"', '"Comandos"', '"Violencia"'),
+                       stringsAsFactors = FALSE) %>%
+  mutate(new_key = factor(new_key,
+                          levels = c('"Comandos"', '"Violencia"', '"155"')))
+pd <- tmls %>%
+  group_by(date = as.Date(cut(created_at, 'day')),
+           person = screen_name) %>%
+  summarise(cent = length(which(grepl('155', tolower(text), fixed = TRUE))),
+            comandos = length(which(grepl('comando', tolower(text)))),
+            violencia = length(which(grepl('violen', tolower(text)))),
+            separatista = length(which(grepl('separatis', tolower(text)))),
+            n = n()) %>%
+  ungroup %>%
+  gather(key, value, cent:separatista) %>%
+  filter(date>= '2018-11-01') %>%
+         filter(key %in% c('cent')) %>%
+  left_join(key_dict) %>%
+  dplyr::select(-key) %>%
+  dplyr::rename(key = new_key)
+
+ggplot(data = pd,
+       aes(x = date,
+           y = value,
+           fill = person)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~key, ncol = 1) +
+  theme_vilaweb() +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(pd$person)))) +
+  scale_x_date(breaks = sort(unique(pd$date))) +
+  theme(legend.position = 'right') +
+  labs(x = '',
+       y = 'Tuits',
+       title = 'Tuits que contenen les paraules següents',
+       subtitle = '"Comandos" | "Violencia" | "155". Darrers 14 dies.',
+       caption = '"Violencia" inclou també "violenta", "violentos", etc.') +
+  theme(axis.text.x = element_text(angle = 90),
+        strip.text = element_text(size = 20))
+ggsave('fig.png')
+```

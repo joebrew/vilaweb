@@ -1,0 +1,199 @@
+---
+title: "GAAR"
+output: github_document
+---
+
+### GAAR
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+```
+
+
+```{r, fig.height = 7}
+# Define function for improving timeline
+improve_timeline <- function(tmls){
+  tmls$time_only <- sapply(strsplit(substr(tmls$created_at, 11,19), ":"),
+                           function(x){as.numeric(x) %*% c(3600, 60, 1)})
+  tmls$time_only <- tmls$time_only / 3600
+  tmls$date <- as.Date(cut(tmls$created_at, 'day'))
+  tmls$hour <- as.POSIXct(cut(tmls$created_at, 'hour'))
+  return(tmls)
+}
+# # Get most recent tweets from ciudadanos
+# tmls <- get_timelines(c('venciendoen1714'), n = 3200)
+# guy <- lookup_users(users = tmls$user_id[1])
+# tmls <- improve_timeline(tmls)
+# pd <- tmls %>%
+#   mutate(hour = as.POSIXct(cut(created_at, 'hour'))) %>%
+#   group_by(hour) %>%
+#   tally
+# 
+# ggplot(data = pd,
+#        aes(x = hour,
+#            y = n)) +
+#   geom_bar(stat = 'identity') +
+#   theme(axis.text.x = element_text(angle = 90))
+# 
+# library(ggridges)
+# ggplot(data = tmls,
+#        aes(x = time_only,
+#            y = as.factor(date))) +
+#   geom_density_ridges() +
+#   theme_minimal() 
+```
+
+```{r}
+file_name <- 'gaar.RData'
+if(!file_name %in% dir()){
+  rt <- search_tweets(
+    '"GAAR"', 
+    n = 1000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE
+  )
+  save(rt, file = file_name)
+} else {
+  load(file_name)
+}
+ga <- rt
+
+file_name <- 'presos.RData'
+if(!file_name %in% dir()){
+  pp <- search_tweets(
+    '"presos polítics"', 
+    n = 1000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE
+  )
+  save(pp, file = file_name)
+} else {
+  load(file_name)
+}
+
+file_name <- 'vaga.RData'
+if(!file_name %in% dir()){
+  va <- search_tweets(
+    '"vaga de fam"', 
+    n = 1000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE
+  )
+  save(va, file = file_name)
+} else {
+  load(file_name)
+}
+
+if(!'data.RData' %in% dir()){
+  data <- list(ga, pp,  va)
+  data_names <- c('GAAR', 'Presos polítics', 'Vaga de fam')
+  out_list <- list()
+  guys_list <- list()
+  tl_list <- list()
+  for(i in 1:length(data)){
+    message(data_names[i])
+    the_data <- data[[i]]
+    out_list[[i]] <- the_data %>%
+      mutate(source = data_names[i])
+    message('---getting users')
+    bots <- lookup_users(users = unique(the_data$user_id)) %>%
+      mutate(source = data_names[i]) 
+    guys_list[[i]] <- bots
+    bots <- bots %>% filter(followers_count <= 10)
+    # message('---getting tweets')
+    # tls <- get_timelines(bots$screen_name, n = 3200) %>%
+    #   mutate(source = data_names[i])
+    # tl_list[[i]] <- tls
+    
+  }
+  
+  tweets <- bind_rows(out_list)
+  people <- bind_rows(guys_list)
+  # people_tls <- bind_rows(tl_list)
+  save(tweets,
+       people,
+       # people_tls,
+       file = 'data.RData')
+} else {
+  load('data.RData')
+}
+
+
+
+# Keep only relevant languages
+tweets <- tweets %>%
+  filter(lang %in% c('en', 'es', 'ca', 'fr', 'pt'))
+people <- people %>% filter(screen_name %in% tweets$screen_name)
+
+ggplot(data = people %>%
+         filter(account_created_at >= '2018-06-01'),
+       aes(x = account_created_at)) +
+  geom_density(aes(fill = source),
+               alpha = 0.5)
+
+# Tweets and people
+plot_data <- people %>%
+         filter(source %in% c('Presos polítics', 'GAAR'),
+                account_lang %in% c('es', 'ca'),
+                account_created_at >= '2018-07-01') %>%
+  group_by(date = date_truncate(account_created_at, 'week'),
+           source,
+           account_lang) %>%
+  tally %>%
+  ungroup %>%
+  group_by(source) %>%
+  mutate(p = n / sum(n) * 100)
+ggplot(plot_data,
+       aes(x = date,
+           y = n,
+           fill = account_lang)) +
+  geom_bar(stat = 'identity') +
+  # geom_bar(stat = 'identity', alpha = 0.6) +
+  facet_wrap(~source,
+             scales = 'free_y')
+
+
+
+out <- bind_rows()
+guys <- lookup_users(users = unique(cs$user_id))
+# Keep those with fewer than 10 followers
+bots <- guys %>% filter(followers_count < 10)
+# Get the timelines of the bots
+bot_tmls <- get_timelines(bots$screen_name, n = 3200)
+bot_tmls <- improve_timeline(bot_tmls)
+
+ggplot(data = bot_tmls %>%
+         filter(date >= '2017-01-01'),
+       aes(x = time_only,
+           # y = as.factor(date),
+           y = date)) +
+  geom_point(size = 0.2,
+             aes(color = screen_name)) +
+  # geom_density_ridges() +
+  theme_minimal() +
+  theme(legend.position = 'none')
+  # facet_wrap(~screen_name,
+             # scales = 'free')
+
+# Look at created_at, account_lang, 
+# profile_image_url: http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png
+```

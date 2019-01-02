@@ -63,22 +63,24 @@ update_database <- function(people = NULL, get_new = FALSE, delete_duplicates = 
     
     # Read the temp written file
     message('Reading temp file which was written for ', this_person)
-    tl <- read_csv('temp_tweets/tweets.csv')
-    
-    # Ensure no duplicates
-    tl <- tl %>% dplyr::distinct(.keep_all = TRUE) %>%
-      filter(!duplicated(id))
-    
-    # Ensure not already in database
-    already_in <- dbGetQuery(con,
-                             paste0("select distinct id from twitter where username='", this_person, "'"))
-    already_in <- already_in$id
-    
-    tl <- tl %>% filter(!id %in% already_in)
-    
-    # Add rows to the database
-    message('Adding new rows to the database for ', this_person)
-    dbWriteTable(con, "twitter", tl, append = TRUE, row.names = FALSE)
+    if(file.exists('temp_tweets/tweets.csv')){
+      tl <- read_csv('temp_tweets/tweets.csv')
+      
+      # Ensure no duplicates
+      tl <- tl %>% dplyr::distinct(.keep_all = TRUE) %>%
+        filter(!duplicated(id))
+      
+      # Ensure not already in database
+      already_in <- dbGetQuery(con,
+                               paste0("select distinct id from twitter where username='", this_person, "'"))
+      already_in <- already_in$id
+      
+      tl <- tl %>% filter(!id %in% already_in)
+      
+      # Add rows to the database
+      message('Adding new rows to the database for ', this_person)
+      dbWriteTable(con, "twitter", tl, append = TRUE, row.names = FALSE)
+    }
     
     # Rm the temp_tweets file
     file.remove('temp_tweets/tweets.csv')
@@ -107,4 +109,4 @@ update_database <- function(people = NULL, get_new = FALSE, delete_duplicates = 
   # disconnect from the database
   dbDisconnect(con) 
 } 
-update_database()
+# update_database()

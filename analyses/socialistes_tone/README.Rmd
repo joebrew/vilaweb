@@ -1,0 +1,146 @@
+---
+title: "Qui diu 'golpe'"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+
+  
+```
+
+```{r, fig.height = 8}
+# # Get most recent tweets from our people of interest
+people <- 
+  tolower(c('Santi_ABASCAL',
+    'Albert_Rivera',
+    'InesArrimadas',
+    'sanchezcastejon',
+    'pablocasado_',
+    'KRLS',
+    'QuimTorraiPla',
+    'perearagones',
+    'ALevySoler',
+    'elsa_artadi',
+    'miqueliceta',
+    'Pablo_Iglesias_'))
+
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    paste0("SELECT * FROM twitter")
+  )
+  save(tl, file = 'tl.RData')  
+  dbDisconnect(con)
+  }
+
+
+# Search for the words rebeliation
+find_rebel <- function(x){
+  # grepl('lazos amarillos|llaços grocs', tolower(x))
+  grepl('golp', tolower(x))
+}
+tl <- tl %>%
+  mutate(rebel = find_rebel(tweet))
+```
+
+```{r}
+pd <- tl %>%
+  # filter(tolower(username) %in% tolower(people)) %>%
+  # filter(rebel) %>%
+  filter(date >= '2018-01-01',
+         date <= '2018-12-31') %>%
+  # mutate(date = as.Date(cut(date, 'month'))) %>%
+  group_by(rebel,
+           person = username) %>%
+  tally %>%
+  ungroup %>%
+  group_by(person) %>%
+  mutate(all = sum(n)) %>%
+  ungroup %>%
+  filter(rebel) %>%
+  mutate(p = n / all * 100)
+left <- expand.grid(# rebel = sort(unique(tl$rebel)),
+                    # date = seq(min(pd$date),
+                    #            max(pd$date),
+                    #            by = 'month'),
+                    person = sort(unique(tl$username)))
+pd <- left_join(left, pd)
+
+pd$n[is.na(pd$n)] <- 0
+pd$p[is.na(pd$p)] <- 0
+
+make_simple_plot <- function(pz = sort(unique(pd$person))){
+  ppd <- pd %>% dplyr::filter(person %in% pz) %>%
+    mutate(person = paste0('@', person))
+  ppd <- ppd %>% arrange(n) %>%
+    filter(!is.na(n),
+           n > 21,
+           !person %in% congress$user_name)
+  ppd <- ppd %>% 
+    arrange(p)
+  
+  ppd$person <- factor(ppd$person, levels = ppd$person)
+  ggplot(data = ppd,
+       aes(x = person,
+           y = p,
+           # group = person,
+           fill = person)) +
+  geom_bar(stat = 'identity',
+           color = 'black',
+           lwd = 0.1) +
+  theme_databrew() +
+  labs(x = '',
+       y = '%',
+       title = '% de tweets con las palabras "golpe" o "golpista"',
+       # subtitle = '*Incluye también "golpista", "golpistas", etc.',
+       subtitle = 'Año 2018') +
+  theme(legend.position = 'none') +
+  theme(#axis.text.x = element_text(angle = 90,
+         #                          size = 7),
+        plot.title = element_text(size = 21),
+        # plot.subtitle =  element_text(size = 35),
+        strip.text = element_text(size = 25)) +
+    scale_fill_manual(name = '',
+                       values = rev(databrew::make_colors(n = length(unique(ppd$person)), categorical = FALSE))) +
+    geom_text(aes(label = round(p, digits = 1)),
+              alpha = 0.6,
+              size = 3.5,
+              nudge_y = 0.5) +
+    coord_flip() +
+    theme(axis.text.y = element_text(size = 16))
+
+}
+make_simple_plot()
+
+ggsave('~/Desktop/golpe.png')
+```

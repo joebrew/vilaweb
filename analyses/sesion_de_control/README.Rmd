@@ -1,0 +1,1249 @@
+---
+title: "Analysis of congressional speeches"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(waffle)
+library(stringr)
+library(tidyverse)
+library(languageR) #https://www.rdocumentation.org/packages/languageR/versions/1.4.1/topics/compare.richness.fnc
+library(quanteda) # https://www.rdocumentation.org/packages/quanteda/versions/0.9.8.5/topics/lexdiv
+library(readr)
+library(dplyr)
+library(stringr)
+library(lubridate)
+library(tidyr)
+library(tidytext)
+library(quanteda)
+library(ggplot2)
+library(DT)
+```
+
+```{r}
+# Define some functions
+simplify_text <- function(x){
+  x <- gsub("[\r\n]", "", x)
+  x <- str_replace(gsub("\\s+", " ", str_trim(x)), "B", "b")
+  return(x)
+}
+
+clean_text <- function(x){
+  x <- str_replace_all(x, "[[:punct:]]", " ")
+  x <- tolower(x)
+  x <- simplify_text(x)
+  return(x)
+}
+
+make_word_vector <- function(x){
+  x <- clean_text(x)
+  x_parsed <- strsplit(x, " ")
+  x <- unlist(x_parsed)
+}
+
+make_word_df <- function(x){
+  x <- make_word_vector(x)
+  x <- data_frame(word = x)
+  x <- x %>% group_by(word) %>% summarise(freq = n()) %>% arrange(desc(freq)) %>%
+    mutate(cs = cumsum(freq)) %>%
+    mutate(p = freq / sum(freq)) %>%
+    mutate(psc = cs / sum(freq)) %>%
+    filter(! word %in% c('', '\n'))
+  # Calculate type token ratio
+  # (types = total number of DIFFERENT words)
+  # (tokens = total number of words)
+  return(x)
+}
+
+# Define function for stemming
+get_stem <- function(x, lang = NULL){
+  stemmer <- vilaweb::stem
+  if(!is.null(lang)){
+    stemmer <- stemmer %>% filter(language == lang)
+  } else {
+    message('No lang provided. Will scan all languages.')
+  }
+  
+# Keep only the word in question
+  find_stem <- function(y){
+    out <- stemmer %>%
+    filter(tolower(y) == original) %>%
+      .$stem
+    if(length(out) == 0){
+      out <- y
+    }
+    if(length(out) > 1){
+      out <- out[1]
+    }
+    return(out)
+  }
+  
+  # Loop through each element of the vector
+  out_list <- list()
+  for(i in 1:length(x)){
+    message('Finding stems for ', i , ' of ', length(x))
+    # Get separated by spaces
+    x_parsed <- unlist(strsplit(x[i], ' '))
+    x_done <- unlist(lapply(x_parsed, find_stem))
+    x_done <- paste0(x_done, collapse = ' ')
+    out_list[[i]] <- x_done
+  }
+  out <- unlist(out_list)
+  return(out)
+}
+
+
+# Make a score sentiment function
+score_sentiment <- function (x, language = 'es',
+                             valence_only = TRUE) {
+  # Get the afinn and nrc dictionary
+    af <- vilaweb::afinn
+    nr <- vilaweb::nrc
+
+    # Define the column for the right language
+    word <- af %>% dplyr::select_(language)
+    names(word) <- 'word'
+    af$word <- word$word
+    # Define the nr data for the right language
+    if(language == 'en'){
+      nr <- nrc %>% filter(lang == 'english')
+    }
+    if(language == 'ca'){
+      nr <- nrc %>% filter(lang == 'catalan')
+    }
+    if(language == 'es'){
+      nr <- nrc %>% filter(lang == 'spanish')
+    }
+    
+    x <- clean_text(x)
+    # Get stems
+    message('Finding stems')
+    x <- get_stem(x, lang = language)
+    # Split at spaces
+    x_parsed <- strsplit(x, " ")
+    out <- rep(NA, length(x))
+    nr_out <- list()
+    for (i in 1:length(out)) {
+      message('Scoring sentiment for ', i, ' of ', length(out))
+        this_element <- x[i]
+        this_element_parsed <- x_parsed[[i]]
+        # Get af just for this
+        af_small <- af %>% filter(word %in% this_element_parsed)
+        if (nrow(af_small) == 0) {
+            out[i] <- 0
+        }
+        else {
+            out[i] <- mean(af_small$score, na.rm = TRUE)
+        }
+        
+        # Get nr just for this
+        nr_small <- nr %>% filter(word %in% this_element_parsed)
+        nrc_names <- sort(unique(nrc$sentiment))
+        nr_df <- data.frame(matrix(rep(0, length(nrc_names)), nrow = 1))
+        names(nr_df) <- nrc_names
+        if(nrow(nr_small) > 0){
+          nr_scored <- nr_small %>%
+            group_by(sentiment) %>%
+            summarise(value = sum(value)) %>%
+            ungroup
+          for(j in 1:nrow(nr_scored)){
+            nr_df[,nr_scored$sentiment[j]] <- nr_scored$value[j]
+          }
+        } 
+        nr_out[[i]] <- nr_df
+    }
+    nr_out <- bind_rows(nr_out)
+    nr_out$sentiment <- out
+    if(valence_only){
+      return(out)
+    } else {
+      return(nr_out)
+    }
+}
+```
+
+```{r}
+# Read in stopwords
+catalan_spanish_stopwords <- 
+  c(
+    readLines('stopwords/stopwords-ca.txt'),
+    readLines('stopwords/stopwords-es.txt')
+  )
+# Add a few
+catalan_spanish_stopwords <- 
+  c(catalan_spanish_stopwords,
+    c('señor',
+      'señoría',
+      'señorías',
+      'sánchez'))
+# Remove numbers
+numbers <- as.character(c(0:154,156:1935,1937:1977, 1979:2018))
+catalan_spanish_stopwords <- c(catalan_spanish_stopwords, numbers)
+
+file_name <- 'processed_transcript.RData'
+if(!file_name %in% dir()){
+    # Read in transcripts from session de control
+  transcript <- read_csv('data/transcript.csv') %>%
+    dplyr::select(date, source, person, text, qa) %>%
+    # Remove qa
+    filter(!qa) %>%
+    # Keep only relevant speakers
+    filter(person %in% c('Pedro Sánchez',
+                  'Pablo Casado',
+                  'Albert Rivera',
+                  'Pablo Iglesias',
+                  'Joan Tardà',
+                  'Carles Campuzano')) %>%
+    # remove certain terms
+    mutate(text = gsub('(Aplausos)', '', text, fixed = TRUE)) %>%
+    mutate(text = gsub('(Rumores)', '', text, fixed = TRUE)) %>%
+    mutate(text = gsub('(Risas)', '', text, fixed = TRUE)) %>%
+    mutate(text = gsub('(Protestas)', '', text, fixed = TRUE))
+  
+  # Add the sanchez themes
+   # Define the themes
+  make_theme <- function(theme, numbers){
+    return(data_frame(theme = theme,
+                      sentence_number = numbers -1))
+  }
+  theme_df <-
+    bind_rows(
+      make_theme('Misc',c(2:4)),
+      make_theme('Brexit',c(5:7)),
+      make_theme('Catalunya',c(8:14)),
+      make_theme('Balkans',c(15:19)),
+      make_theme('Catalunya',c(20:29)),
+      make_theme('Brexit/Catalunya', c(30:66)),
+      make_theme('Brexit', c(67:105)),
+      make_theme('Europa',c(106:122)),
+      make_theme('Catalunya',c(123:131)),
+      make_theme('Espanya', c(132:156)),
+      # make_theme('Espanya', c(132:156)),
+      make_theme('Catalunya', c(157:178)),
+      make_theme('Brexit/Catalunya', c(179:180)),
+      make_theme('Brexit/Catalunya', c(181:190))
+    )
+  transcript$sentence_number<- 1:nrow(transcript)
+  transcript <- left_join(transcript, theme_df)
+  transcript$sentence_number <- NULL
+  # Get by sentence
+  sentencify <- function(transcript){
+    # Define whether there was an interruption
+    transcript$interruption <- FALSE
+    for(i in 2:nrow(transcript)){
+      if(transcript$person[i] != transcript$person[i-1]){
+        transcript$interruption[i] <- TRUE
+      }
+    }
+    # Use interruptions to get intervention number
+    transcript$intervention_number <- NA
+    counter <- 1
+    for(i in 1:nrow(transcript)){
+      if(transcript$interruption[i]){
+        counter <- counter + 1
+      }
+      transcript$intervention_number[i] <- counter
+    }
+    out_list <- list()
+    for(i in 1:nrow(transcript)){
+      sub_transcript <- transcript[i,]
+      # split by sentence 
+      sub_transcript_split <- unlist(strsplit(sub_transcript$text, split = '.', fixed = TRUE))
+      sub_transcript_split <- trimws(sub_transcript_split)
+      # If greater than 1, larger dataframe
+      if(length(sub_transcript_split) > 1){
+        out <- data_frame(date = sub_transcript$date,
+                          source = sub_transcript$source,
+                          person = sub_transcript$person,
+                          text = sub_transcript_split,
+                          intervention_number = sub_transcript$intervention_number,
+                          theme = sub_transcript$theme)
+      } else {
+        out <- sub_transcript
+      }
+      out_list[[i]] <- out
+    }
+    out <- bind_rows(out_list)
+    # Create a sentence number
+    out <- out %>%
+      mutate(cs = 1) %>%
+      group_by(person) %>%
+      mutate(sentence_number = cumsum(cs)) %>%
+      ungroup %>%
+      dplyr::select(-cs) %>%
+      # Create a sentence %
+      group_by(person) %>%
+      mutate(sentence_percent = sentence_number / max(sentence_number) * 100) %>%
+      ungroup
+    return(out)
+  }
+  
+  # Make transcript a 1 row per person-sentence df
+  transcript <- sentencify(transcript = transcript)
+  
+  # Score the sentiment
+  right <- score_sentiment(transcript$text, language = 'es', valence_only = FALSE)
+  transcript <- bind_cols(transcript, right)
+  save(transcript, file = file_name)
+} else {
+  load(file_name)
+}
+
+
+# Cumulative average polarity
+ma <- function(arr, n=15){
+  res = arr
+  for(i in n:length(arr)){
+    res[i] = mean(arr[(i-n):i])
+  }
+  res[1:n] <- mean(res[1:n])
+  res
+}
+transcript <- transcript %>%
+  group_by(person, intervention_number) %>%
+  mutate(sentiment_cumulative_average = ma(sentiment, 10)) %>%
+  ungroup
+
+# Flag words
+flag_words <- function(x, 
+                       words = c('generalitat', 'catalu', 'govern',
+                   'catala', 'torra', 'independe',
+                   'secioni', 'separat', 'barcelo', 
+                   'carreter')){
+  out <- list()
+  for(i in 1:length(words)){
+    out[[i]] <- grepl(words[i], tolower(x))
+  }
+  z <- data.frame(out, fix.empty.names = FALSE)
+  names(z) <- words
+  z <- as.matrix(z)
+  z <- apply(z, 1, function(x){any(x)})
+  return(z)
+}
+
+# Define word groups
+catalan_words <- c('generalitat', 'catalu',
+                   'catala', 'torra', 'independe', 'puigdemont',
+                   'secioni', 'separat', 'barcelo')
+violence_words <- 
+  c('guerra', 'violen', 'balas', 'bala ', 'odio', 'sufrir', 'golp', 'tanqu', 
+    'kale borroka', 'batasun', ' atac', ' ataque', 'muerto', 'morir', 'escrach', 'terror',
+    'liquidar', 'destruir',
+    'rebel', 'víctima', 'balcan')
+spain_words <- c('constituc', 'españ')
+
+
+# Identify catalan sentences in the data
+transcript$catalan <- flag_words(transcript$text, words = catalan_words)
+transcript$spanish <- flag_words(transcript$text, words = spain_words)
+transcript$violence <- flag_words(transcript$text, words = violence_words)
+
+# Get the independence theme
+transcript <- transcript %>%
+  mutate(theme = ifelse(is.na(theme), NA, ifelse(grepl('independ|unilater|secesi', tolower(text)),
+                          'Independentisme\ncatalà', 
+                          theme)))
+
+# Combine
+combined_df <- transcript %>%
+  group_by(person, intervention_number) %>%
+  summarise(text = paste0(text, collapse = ' ')) %>%
+  ungroup
+
+# Flatten (just one thing per person)
+flattened_df <- 
+  transcript %>%
+  group_by(person) %>%
+  summarise(text = paste0(text, collapse = ' ')) %>%
+  ungroup
+
+
+# PAIR WORDS
+ # break text into bigrams
+bigrams <- transcript %>% 
+  unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
+  separate(bigram, into = c("first","second"), sep = " ", remove = FALSE) %>%
+  # # remove stop words from tidytext package 
+  # anti_join(stop_words, by = c("first" = "word")) %>%
+  # anti_join(stop_words, by = c("second" = "word")) %>%
+  filter(!first %in% catalan_spanish_stopwords,
+         !second %in% catalan_spanish_stopwords) %>%
+  filter(str_detect(first, "[a-z]"),
+         str_detect(second, "[a-z]")) %>%
+  group_by(person) %>%
+  count(bigram) %>%
+  arrange(-n)
+
+bigram_freqs <- bigrams %>% 
+  left_join(bigrams %>% 
+              group_by(person) %>% 
+              summarise(total = sum(n))) %>%
+  mutate(percent = n/total*100) %>%
+  group_by(person)
+
+# get the top bigram for each address
+top_bigrams <- bigram_freqs %>%
+  top_n(10) %>%
+  arrange(-percent)
+
+top_bigram_freqs <- bigram_freqs %>%
+  semi_join(top_bigrams) %>%
+  ungroup() %>%
+  arrange(-percent) 
+```
+
+
+
+
+# Sánchez, Catalunya, and "Negativity"
+
+
+```{r}
+sanchez_df <- flattened_df %>% filter(person == 'Pedro Sánchez')
+corpus_x <- corpus(simplify_text(sanchez_df$text),
+                   docnames = sanchez_df$person)
+docvars(corpus_x, 'Person') <- sanchez_df$person
+# summary(corpus_x)
+# texts(corpus_x)[1]
+## Quick search
+# kwic(corpus_x, "comandos")
+# head(docvars(corpus_x))
+## Extract tokens
+# tokens(corpus_x, remove_numbers = TRUE,  remove_punct = TRUE)
+## Document feature matrix
+
+my_dfm <- dfm(corpus_x,
+              remove_punct = TRUE,
+              remove = catalan_spanish_stopwords)
+# ## See top 20 words
+# topfeatures(my_dfm, 5, groups = 'Person')
+## Wordcloud
+# cols <- c(databrew::make_colors(n = length(unique(dim(my_dfm)[1]))))
+cols <- 'darkblue'
+textplot_wordcloud(my_dfm, min_count = 1, random_order = FALSE,
+                   rotation = 0,#0.25, 
+                   min_size = 0.35,
+                   max_size = 2,
+                   max_words = 1000,
+                   # labelcolor = cols,
+                   # labeloffset = 1,
+                   labelsize = 1.2,
+                   color = cols,
+                   comparison = FALSE)
+
+```
+
+## Introduction
+
+On Wednesday, December 12th, Spanish President Pedro Sánchez delivered an address to the Congreso de los Diputados regarding Brexit and the political situation in Catalonia ([official transcription here](http://www.congreso.es/public_oficiales/L12/CONG/DS/PL/DSCD-12-PL-170.PDF)). The speech has been intepreted by the media as reflecting rising tensions between pro-independence Catalans and the pro-union Sánchez government, marking a sharp break with Sánchez's previous more conciliatory tone towards Catalonia.
+
+## The question
+
+Was Sánchez's tone in regards to Catalonia in general, and the Catalan pro-independence movement in particular, quantifiably "negative"?
+
+Or it perhaps that pro-independence Catalans are interpreting the speech too harshly?
+
+## The methods
+
+We digitized the speech from December 12 into a [machine-readable format](https://github.com/joebrew/vilaweb/blob/master/inst/rmd/sesion_de_control/data/transcript.csv).
+
+We then classified every set of sentences into one of eight themes:
+
+<table style="width:100%">
+  <tr>
+    <td>1. Independentisme català</td>
+    <td>Any sentence referencing Catalonia and the independence movement (identified algorithmically through the phrases "secession", "independentista", "independencia", "unilateralitat")</td>
+  </tr>
+    <tr>
+    <td>2. Balkans</td>
+    <td>Sentences referencing former Yugoslavia</td>
+  </tr>
+  <tr>
+    <td>3. Brexit i Catalunya</td>
+    <td>Sentences in which both Brexit and Catalonia were mentioned</td>
+  </tr>
+  <tr>
+    <td>4. Catalunya</td>
+    <td>Sentences in which only Catalonia-related issues were referenced</td>
+  </tr>
+  <tr>
+    <td>5. Brexit</td>
+    <td>Sentences in which only Brexit-related issues were referenced</td>
+  </tr>
+  <tr>
+    <td>6. Espanya</td>
+    <td>Sentences in which general Spain issues were referenced</td>
+  </tr>
+  <tr>
+    <td>7. Europa</td>
+    <td>Sentences in which general European issues were referenced</td>
+  </tr>
+  <tr>
+    <td>8. Misc</td>
+    <td>Miscellaneous sentences which did not fit the previous categories</td>
+  </tr>
+</table>
+
+
+Finally, we used an algorithm based on the [AFINN library](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010) (a dictionary of words with assigned sentimental polarity) to classify each sentence's average emotional direction. Certain words are categorized as positive or negative, with -5 being the most negative (for example, "bastard", "slut") and +5 being the most positive (for example, "superb" (magnífico) or "thrilled" (encantado)). The majority of words do not have an emotional weight ("to act", "chair", "walk", etc.) and are classified as 0. The average of a sentence's emotionally-weighted words constitute its positivity.
+
+
+The below is an example of how the algorithm works on an actual sentence from Pedro Sánchez's speech. The sentence contained some negative words and some positive words, and was classified as neutral (0).
+
+<table style="width:100%">
+  <tr>
+    <td><img src="img/sanchez2.png" /></td>
+  </tr>
+</table>
+
+```{r}
+# example <- c("Y lealtad entre administraciones, señorías, algo que por desgracia no se construye con declaraciones que se sitúan fuera de toda lógica y apelan a la violencia, como hemos escuchado en algún dirigente de la Generalitat de Cataluña. Que conste en acta por tanto: tiempo, diálogo y lealtad.")
+# example_split <- unlist(strsplit(clean_text(example), ' '))
+# 
+# x <- score_sentiment(example_split, language = 'es',valence_only = TRUE)
+# data.frame(example_split, x)
+```
+
+We ran the algorithm on the entire content of the speech, and analyzed trends in positivity. We also examined overall average sentimentality per each of the above themes.
+
+
+```{r}
+library(ggridges)
+simple_plot <- function(language = 'en',
+                        violin = FALSE){
+ 
+  if(language == 'en'){
+    x <- 'Theme'
+    y <- 'Sentiment'
+    title <- 'Sentimental polarity in speech of Pedro Sánchez'
+    subtitle <- 'Congreso de los Diputados, 12 December 2018'
+    caption <- 'Scale of -5 to 5. 0 = neutral. Less than 0 = negative; More than 0 = positive'
+     y_labels <- c('Very negative', 'Negative', 'Neutral', 'Positive', 'Very positive')
+    
+  } else {
+    x <- 'Tema'
+    y <- 'Sentiment'
+    title <- 'Polaritat sentimental en el discurs de Pedro Sánchez'
+    subtitle <- 'Congreso de los Diputados, 12 desembre 2018'
+    caption <- 'Escala de -5 a 5. 0 = neutral. Menys de 0 = negatiu; Més de 0 = positiu'
+    y_labels <- c('Molt negatiu', 'Negatiu', 'Neutral', 'Positiu', 'Molt positiu')
+  }
+  pd <- transcript %>%
+    filter(!is.na(theme)) %>%
+    mutate(theme = ifelse(grepl('independ|unilater|secesi', tolower(text)),
+                          'Independentisme\ncatalà', 
+                          theme)) %>%
+    mutate(theme = gsub('/',' i\n', theme)) 
+    cols <- databrew::make_colors(n = length(unique(pd$theme)))
+  cols[7] <- 'red'
+  remove_col <- which(unique(pd$theme) == 'Misc')
+  pd <- pd %>%
+    filter(!theme == 'Misc')
+  cols <- cols[cols != remove_col]
+  if(violin){
+    g <- ggplot(data = pd,
+                aes(x = sentiment,
+                    y = theme,
+                    fill = theme)) +
+      ggthemes::theme_fivethirtyeight() +
+      theme(plot.background = element_rect(fill = 'white'),
+            panel.background = element_rect(fill = "white",
+                                colour = "white",
+                                size = 0.5, linetype = "solid"),
+  panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                colour = "white"), 
+  panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                colour = "white")) +
+      geom_density_ridges() +
+      labs(x = y,
+           y = x,
+           title = title,
+           subtitle = subtitle,
+           caption = caption) +
+      scale_fill_manual(name = '', values = cols) +
+      theme(legend.position = 'none',
+            plot.title = element_text(size = 15)) +
+      geom_vline(xintercept = 0,
+                 alpha = 0.5,
+                 lty = 2)
+    # g <- 
+    #   ggplot(data = pd,
+    #          aes(x = theme,
+    #              y = sentiment)) +
+    #   geom_jitter(size = 0.3) +
+    #   geom_violin(fill = NA) +
+    #   theme_vilaweb()
+  } else {
+    plot_data <- pd %>%
+    group_by(theme) %>%
+    summarise(sentiment = mean(sentiment)) 
+    cols <- cols[rev(order(plot_data$sentiment))]
+  plot_data <- plot_data %>% arrange(sentiment)
+    plot_data$theme <- factor(plot_data$theme, levels = plot_data$theme)
+  plot_data <- plot_data %>%
+    mutate(label_location = ifelse(sentiment > 0,
+                                   sentiment - 0.1,
+                                   sentiment + 0.1))
+  g <- ggplot(data = plot_data,
+         aes(x = theme,
+             y = sentiment,
+             fill = theme)) +
+    geom_bar(stat = 'identity',
+             # fill = 'black',
+             color = 'black',
+             size = 0.3) +
+    theme_vilaweb() +
+    geom_text(aes(y = label_location,
+                  label = round(sentiment, digits = 2)),
+              color = 'white') +
+    labs(x = x,
+         y = y,
+         title = title,
+         subtitle = subtitle,
+         caption = caption) +
+        scale_y_continuous(#name = y,
+                           breaks = seq(-1, 1, by = .5),
+                           labels = y_labels) +
+    
+      scale_fill_manual(name = '', values = rev(cols)) +
+      theme(legend.position = 'none',
+            axis.text.x = element_text(size = 9)) 
+  }
+  return(g)
+  }
+library(TTR)
+time_plot <- function(language = 'en'){
+ 
+  if(language == 'en'){
+    x <- 'Sentence'
+    y <- 'Sentiment'
+    title <- 'Sentimental polarity in speech of Pedro Sánchez'
+    subtitle <- 'Congreso de los Diputados, 12 December 2018'
+    caption <- 'Scale of -5 to 5. 0 = neutral. Less than 0 = negative; More than 0 = positive'
+     y_labels <- c('Very negative', 'Negative', 'Neutral', 'Positive', 'Very positive')
+
+  } else {
+    x <- 'Frase'
+    y <- 'Sentiment'
+    title <- 'Polaritat sentimental en el discurs de Pedro Sánchez'
+    subtitle <- 'Congreso de los Diputados, 12 desembre 2018'
+    caption <- 'Escala de -5 a 5. 0 = neutral. Menys de 0 = negatiu; Més de 0 = positiu'
+    y_labels <- c('Molt negatiu', 'Negatiu', 'Neutral', 'Positiu', 'Molt positiu')
+  }
+  
+  pd <- transcript %>%
+    filter(!is.na(theme)) 
+  plot_data <- pd %>%
+    group_by(theme) %>%
+    summarise(sentiment = mean(sentiment)) %>%
+    arrange(sentiment)
+  plot_data$theme <- factor(plot_data$theme, levels = plot_data$theme)
+  
+  pd$theme_group <- 1
+  for(i in 2:nrow(pd)){
+    message(i)
+    pd$theme_group[i] <- pd$theme_group[i-1]
+    if(pd$theme[i] != pd$theme[i-1]){
+      pd$theme_group[i] <- pd$theme_group[i-1] + 1
+    }
+  }
+
+    pd <- pd %>%
+    # group_by(theme_group) %>%
+    mutate(avg = runMean(sentiment, 10))
+  cols <- databrew::make_colors(n = length(unique(pd$theme)))
+  cols[7] <- 'red'
+  ggplot(data = pd,
+         aes(x = sentence_number,
+             y = sentiment,
+             color = theme,
+             group = theme_group)) +
+    geom_point(size = 0.5) +
+    # geom_smooth(span = 0.25) +
+    theme_vilaweb() +
+    geom_line(aes(y = sentiment_cumulative_average)) +
+    scale_color_manual(name = 'Tema',
+                       values = cols) +
+    labs(x = x,
+         y = y,
+         title = title,
+         subtitle = subtitle,
+         caption = caption)
+}
+
+sanchez_freq_plot <- function(language = 'en'){
+  pd <- transcript %>%
+    filter(!is.na(theme)) %>%
+    group_by(person) %>%
+    summarise(text = paste0(text, collapse = ' ')) %>%
+    ungroup 
+  wdf <- make_word_df(x = pd$text) %>%
+    filter(!word %in% catalan_spanish_stopwords,
+           !word %in% c(' ', '   ', '', '    ')) %>%
+    mutate(flag = flag_words(word, words = violence_words)) %>%
+    filter(flag)
+ return(wdf)
+}
+```
+
+
+## Results
+
+### Sentimentality trajectory
+
+
+The below shows the overall sentiment trajectory of the Sánchez speech. The speech begins with discussion of the Balkans and Catalonia, followed by a long comparison between Brexit and Catalan independence, before going into more detail on Brexit, Spain's political situation, and Europe, and then looping back to Catalonia and Brexit. Each dot shows the sentimentality of a sentence, with the solid lines indicating the 15-sentence theme-specific rolling sentimental average. Sentences above 0 are emotionally positive, whereas those below 0 are emotionally negative.
+
+```{r, fig.height = 7}
+time_plot('en')
+```
+
+
+### Sentimentality by theme
+
+We examined average sentence sentimentality for each of the 8 pre-categorized themes. Emotional sentiment was most positive when discussing Europe and most negative when discussing Catalan independence. Oddly, Catalan independence was associated with even greater negative polarity words than sentences related to the Balkans or Brexit.
+
+```{r}
+simple_plot('en')
+```
+
+ALTERNATIVE TO ABOVE VISUALIZATION
+
+```{r}
+simple_plot('en', violin = TRUE)
+```
+
+## Conclusion
+
+Sánchez used significantly more emotionally negative words when referencing the Catalan independence movement than when discussing other themes. 
+
+## Technical details
+
+All code for this analysis is openly available at https://github.com/joebrew/vilaweb/blob/master/inst/rmd/sesion_de_control/README.md.
+
+
+## Catalan language plots
+
+```{r}
+time_plot('ca')
+simple_plot('ca', violin = TRUE)
+simple_plot('ca', violin = FALSE)
+
+```
+
+FIN.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+# More detailed analysis (probably not going to publish)
+
+
+```{r}
+corpus_x <- corpus(simplify_text(flattened_df$text),
+                   docnames = flattened_df$person)
+docvars(corpus_x, 'Person') <- flattened_df$person
+# summary(corpus_x)
+# texts(corpus_x)[1]
+## Quick search
+# kwic(corpus_x, "comandos")
+# head(docvars(corpus_x))
+## Extract tokens
+# tokens(corpus_x, remove_numbers = TRUE,  remove_punct = TRUE)
+## Document feature matrix
+
+my_dfm <- dfm(corpus_x,
+              remove_punct = TRUE,
+              remove = catalan_spanish_stopwords)
+# ## See top 20 words
+# topfeatures(my_dfm, 5, groups = 'Person')
+## Wordcloud
+cols <- c(databrew::make_colors(n = length(unique(dim(my_dfm)[1]))))
+textplot_wordcloud(my_dfm, min_count = 1, random_order = FALSE,
+                   rotation = 0,#0.25, 
+                   min_size = 0.65,
+                   max_size = 2.8,
+                   max_words = 1000,
+                   # labelcolor = cols,
+                   # labeloffset = 1,
+                   labelsize = 1.2,
+                   color = cols,
+                   comparison = TRUE)
+
+```
+
+The following back-and-forth between Sánchez and the leaders of other major Spanish political parties was tense, and marked by repeated references to violence.
+
+What follows is linguistic analysis of the speeches and counter-speeches of 6 politicians:
+
+- Pedro Sánchez (President, PSOE, unionist)
+- Pablo Casado (PP, unionist)
+- Albert Rivera (Ciudadanos, unionist)
+- Pablo Iglesias (Podemos, ambivalent)
+- Carles Campuzano (PDeCat, independentist)
+- Joan Tardà (Catalan Left, independentist)
+
+## The questions
+
+1. Are there differences in "polarity" (postivity-negativity) between the different politicians' speeches?
+
+2. Does polarity change when different subjects are discussed (specifically, Catalonia)?
+
+3. Are there differences in complexity between different politicians' speeches?
+
+## The methods
+
+We digitized the speeches from December 12 into a [machine-readable format](https://github.com/joebrew/vilaweb/blob/master/inst/rmd/sesion_de_control/data/transcript.csv), and then used an algorithm based on the [AFINN library](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010) (a dictionary of words with assigned sentimental polarity) to classify each sentence's average emotional direction, excluding the question and answer section at the end. Certain words are categorized as positive or negative, with -5 being the most negative (for example, "bastard", "slut") and +5 being the most positive (for example, "superb" (magnífico) or "thrilled" (encantado)). The majority of words do not have an emotional weight ("to act", "administration", "aquí", etc.) and are classified as 0. The average of a sentence's emotionally-weighted words constitute its positivity.
+
+The below is an example of how the algorithm works on an actual sentence from Pedro Sánchez's speech. The sentence contained some negative words and some positive words, and was classified as neutral.
+
+<table style="width:100%">
+  <tr>
+    <td><img src="img/sanchez2.png" /></td>
+  </tr>
+</table>
+
+```{r}
+# example <- c("Y lealtad entre administraciones, señorías, algo que por desgracia no se construye con declaraciones que se sitúan fuera de toda lógica y apelan a la violencia, como hemos escuchado en algún dirigente de la Generalitat de Cataluña. Que conste en acta por tanto: tiempo, diálogo y lealtad.")
+# example_split <- unlist(strsplit(clean_text(example), ' '))
+# 
+# x <- score_sentiment(example_split, language = 'es',valence_only = TRUE)
+# data.frame(example_split, x)
+```
+
+We ran the algorithm on the entire content of speeches, and analyzed trends in positivity. We also tabulated word frequencies and associations. Finally, we ran an analysis on lexical diversity (ie, the complexity of each politicians' speech) in an effort to better understand who their messaging targetted.
+
+## The results
+
+### Are there differences in "polarity" (postivity-negativity) between the different politicians' speeches?
+
+Yes.
+
+Of the 6 speakers examined, 4 had generally "negative" speeches, whereas 2 had "positive" speeches.
+
+```{r}
+overall_plot <- function(language = 'en', cat_only = FALSE){
+  
+  plot_data <-
+    transcript
+  if(cat_only){
+    plot_data <- plot_data %>% filter(catalan)
+  }
+  plot_data <- plot_data %>%
+    group_by(person) %>%
+    summarise(sentiment = mean(sentiment),
+              size = n()) %>%
+    ungroup %>%
+    mutate(person = gsub(' ', '\n', person))
+  
+  if(language == 'en'){
+    x = ''
+  y = 'Positivity'
+  if(cat_only){
+    title = 'Catalonia-specific sentimental polarity in speeches'
+  } else {
+    title = 'Overall sentimental polarity in speeches'
+  }
+  
+  subtitle = 'Congreso de los Diputados, 12 December, 2018'
+  caption = ''
+  y_labels <- c('', 'Negative', '', '', 'Neutral')
+  } else { 
+    x = ''
+  y = 'Positivitat'
+  if(cat_only){
+    title = 'Polaritat sentimental especifíca a Catalunya'
+  } else {
+    title = 'Polaritat sentimental general'
+  }
+  
+  subtitle = 'Congreso de los Diputados, 12 de desembre, 2018'
+  caption = ''
+  y_labels <- c('', 'Negatiu', '', '', 'Neutral')
+    }
+  
+  ggplot(data = plot_data,
+         aes(x = person,
+             y = sentiment,
+             fill = person)) +
+    geom_bar(stat = 'identity') +
+    theme_vilaweb() +
+    scale_fill_manual(name = '', 
+                       values = databrew::make_colors(n = length(unique(plot_data$person)))) +
+    labs(x = x,
+         y = y,
+         title = title,
+         subtitle = subtitle,
+         caption = caption) +
+    scale_y_continuous(breaks = seq(-0.4, 0, by = 0.1), labels = y_labels) +
+    geom_text(aes(label = round(sentiment, digits = 2)),
+               nudge_y = -0.02,
+              alpha = 0.8) +
+    theme(legend.position = 'none')
+}
+overall_plot('en')
+```
+
+Since Sánchez delivered a formal written address, it should come as no surprise that his speech was the most positive (generally formal speeches are more positive than the critiques that follow them). And since and Iglesias' Podemos party is the main supporter of the Sánchez government, it should also came as no surprise that his speech was net positive.
+
+### Does polarity change when different subjects are discussed (specifically, Catalonia)?
+
+Yes. 
+
+The previous chart oversimplifies very large changes in positivity throughout each person's interventions. For example, in the below, we can see wide swings in emotionality. About 1/4 through Sánchez's opening speech, for example, he hit his emotional low point. What was he talking about then? Catalonia.
+
+```{r}
+time_series_plot <- function(language = 'en', cat_only = FALSE){
+  plot_data <- transcript
+  if(cat_only){
+    plot_data <- plot_data %>% filter(catalan)
+  }
+  plot_data <- plot_data %>%
+    mutate(cs = 1) %>%
+    mutate(sentence_number_all = cumsum(cs)) 
+  
+  if(language == 'en'){
+    y_labels <- c('Very negative', 'Negative', 'Neutral', 'Positive', 'Very positive')
+    x = 'Sentence'
+    y = 'Positivity'
+    if(cat_only){
+    title = 'Catalonia-specific sentimental polarity in speeches'
+  } else {
+    title = 'Overall sentimental polarity in speeches'
+  }
+    subtitle = 'Congreso de los Diputados, 12 December, 2018'
+  caption = ''
+  } else {
+    y_labels <- c('Molt negatiu', 'Negatiu', 'Neutral', 'Positiu', 'Molt positiu')
+    x = 'Frase'
+    y = 'Positivitat'
+    if(cat_only){
+    title = 'Polaritat sentimental especifíca a Catalunya en discursos'
+  } else {
+    title = 'Polaritat sentimental general en discursos'
+  }
+    subtitle = 'Congreso de los Diputados, 12 de desembre, 2018'
+    caption = ''
+  }
+  
+  g <-  ggplot(data = plot_data,
+         aes(x = sentence_number_all,
+             y = sentiment,
+             color = person,
+             group = intervention_number)) 
+  if(cat_only){
+    g <- g +   geom_smooth(span = 1, 
+              # n = 5,
+              se = FALSE) 
+  } else {
+    g <- g+ geom_line(aes(y = sentiment_cumulative_average),
+              size = 0.7)
+  }
+    g <- g +
+    geom_jitter(size = 0.3) +
+    # geom_smooth(span = 0.2, 
+    #   # n = 200,
+    #             se = FALSE,
+    #             size = 0.7) +
+    scale_color_manual(name = '', 
+                       values = databrew::make_colors(n = length(unique(plot_data$person)))) +
+    theme_vilaweb() +
+    ylim(-3, 3) +
+    labs(x = x,
+         y = y,
+         title = title,
+         subtitle = subtitle,
+         caption = caption) +
+        scale_y_continuous(breaks = c(seq(-3, 3, 1.5)), labels = y_labels) 
+    return(g)
+}
+time_series_plot('en')
+```
+
+In fact, if we filter for only those sentences which contained references to Catalonia*, the emotional polarity values take on a radically different form. If we only examine sentences in which Catalonia is mentioned, we see that all non-independence parties sentimentality becomes more negative, whereas the 2 pro-independence politicians' speech becomes more positive.
+
+```{r}
+overall_plot('en', cat_only = TRUE)
+```
+
+The below shows sentimentality over the course of the speeches, filtering only for sentences in which Catalonia is referenced. Note that the large majority of the sentiment curves are below 0 (ie, negative).
+
+```{r}
+time_series_plot('en', cat_only = TRUE)
+```
+
+
+#### Are there differences in complexity between different politicians' speeches?  
+
+Lexical diversity is a measure of how many different words are used (ie, how often one repeats words). It is a reflection of how complex or advanced a speech is. For example, children have much lower lexical diversity than adults.  
+
+A speech with high lexical diversity generally correlates with a complicated message. A speech with low lexical diversity among politicians does not generally reflect low intelligence (most politicians are smart), but rather an intentional effort to target a specific audience with simplistic, repetitive messaging. Donald Trump, for example, has become infamous for simple, repetive slogans; his speeches, to no surprise, have very low lexical diversity.
+
+TTR (Type-Token Ratio) is a measure of lexical diversity. Here, it refers to the number of unique words used in any given 100 word sequence. For example, if one repeated the same word 100 times, the TTR would be 1. If one said 100 words and did not repeat at all, the TTR would be 100. The higher the TTR, the higher the level and complexity of speech.
+
+The below chart shows TTR for each politician analyzed. 
+
+```{r}
+fn <- 'ttr.RData'
+if(fn %in% dir()){
+  load(fn)
+} else {
+  x <- flattened_df
+  x$text <- clean_text(x$text)
+  results <- data.frame(person = x$person)
+  counter <- 0
+  out_list <- list()
+  for(i in 1:nrow(results)){
+    this_person <- results$person[i]
+    this_text <- x$text[i]
+    this_text_parsed <- unlist(strsplit(this_text, ' '))
+    # this_text_parsed <- this_text_parsed[!this_text_parsed %in% catalan_spanish_stopwords]
+    possible_indices <- 100:length(this_text_parsed) 
+    for(j in 1:1000){
+      message(this_person, '---', j)
+      counter <- counter + 1
+      random_index <- sample(possible_indices, 1)
+      random_words <- this_text_parsed[(random_index-99):(random_index)]
+      out <- data.frame(word = random_words) %>%
+        group_by(word) %>% tally %>% nrow
+      done <- data.frame(person = this_person,
+                         n = out)
+      out_list[[counter]] <- done
+    }
+  }
+  out <- bind_rows(out_list)
+  save(out, file = fn)
+}
+out <- out %>%
+  mutate(person = gsub(' ', '\n', person))
+
+agg <- out %>%
+  group_by(person) %>%
+  summarise(avg = mean(n),
+            q75 = quantile(n, 0.75),
+            q25 = quantile(n, 0.25),
+            q50 = median(n)) %>%
+  ungroup
+
+x = '' 
+y = 'Lexical diversity'
+title = 'Lexical diversity (type-token ratio)'
+subtitle = 'Speeches and counter-speeches, Congreso de los Diputados, 12 December 2018'
+caption = 'Chart by Joe Brew'
+
+# ggplot(data = agg,
+#        aes(x = person,
+#            y = avg)) +
+#   geom_point(size = 2) +
+#   geom_linerange(aes(ymin = q25,
+#                      ymax = q75)) +
+#   theme_vilaweb() +
+#   labs(x = x,
+#        y = y,
+#        title = title,
+#        subtitle = subtitle,
+#        caption = caption)
+cols <- databrew::make_colors(n = length(unique(out$person)))
+ggplot(data = out,
+       aes(x = person,
+           y = n)) +
+  geom_jitter(aes(color = person),
+              size = 0.3) +
+  geom_violin(aes(fill = person,
+                  color = person),
+              alpha = 0.6) +
+  theme_vilaweb() +
+    scale_color_manual(name = '', 
+                     values = cols) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+  theme_vilaweb() +
+  theme(legend.position = 'none') +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption) +
+  geom_errorbar(data = agg,
+                 aes(x = person,
+                     ymin = q25,
+                     y = avg,
+                     ymax = q75)) 
+
+```
+
+The below shows the percentage of 100 word sequences with a very low TTC (below 60). In other words, these are 100 word sequences in which the 40% of the words have already been said.
+
+```{r}
+x = '' 
+y = 'Percent of samples with low lexical diversity'
+title = 'Percent of speech with low lexical diversity (<60 words per 100)'
+subtitle = 'Speeches and counter-speeches, Congreso de los Diputados, 12 December 2018'
+caption = 'Chart by Joe Brew'
+pd <- out %>%
+  group_by(person = gsub(' ', '\n', person)) %>%
+  summarise(y = length(which(n <= 60)) / n() * 100)
+
+ggplot(data = pd,
+       aes(x = person,
+           y = y,
+           fill = person)) +
+  geom_bar(stat = 'identity') +
+   scale_fill_manual(name = '',
+                    values = cols) +
+  theme_vilaweb() +
+  theme(legend.position = 'none') +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption) 
+```
+
+Lexical diversity is lowest among Albert Rivera and Pablo Casado, suggesting a more Trump-like messaging style (ie, targetting a less ophisticated audience and aiming for sound bites).
+
+
+
+
+## Qualitative interpretation 
+
+
+In this analysis we have seen that (a) much of what is said at the Congreso is negative, (b) negativity is higher when speaking about Catalonia than about other topics, and (c) there are drastically different levels of speech complexity among different politicians.
+
+Much of this emotional negativity is attributible to violence-related words. For example, Albert Rivera used the words golpe (4), guerra (1), muertos (2), terrorismo (1), and violencia (1). Pablo Casado took on a similar tone, saying golpe/golpista (3), violencia (2), but adding more evocative, specific words like batasunización (1), balcanizar (1), and kale borroka (1). The irony of violence vocabulary is that once it is injected into the discourse, even those who deny it still end up talking about it. For example, even Joan Tardà used the words golpe (3) and violencia/violentos (2). 
+
+The below chart shows the rate of violence-related words when discussing Catalonia (left) vs. other matters (right). For most politicians, the rate is highest on the left (ie, when discussing Catalonia). The most drastic differences are among Casado and Rivera. 
+
+
+```{r}
+pd <- transcript %>%
+  mutate(#violence = ifelse(violence, 'Violent', 'Not violent'), 
+           catalan = ifelse(catalan, 'Catalan', 'Not Catalan'),
+                            person) %>%
+  group_by(person, catalan) %>%
+  summarise(n = length(which(violence)),
+            d = n())  %>%
+  # group_by(person) %>%
+  mutate(p = n / d * 100)
+cols <- databrew::make_colors(n = length(unique(pd$person)))
+
+
+
+x = ''
+y = 'Tasa'
+title = 'Frequency of violence-related words: Catalonia vs. non-Catalonia sentences'
+subtitle = 'Congreso de los Diputados, 12 December 2018'
+caption = 'Joe Brew'
+
+ggplot(data = pd,
+       aes(x = catalan,
+           y = p,
+           color = person,
+           group = person)) +
+  geom_path() +
+  geom_point() +
+  facet_wrap(~person) +
+  theme_vilaweb() +
+  scale_color_manual(name = '',
+                    values = cols) +
+  theme(legend.position = 'none') +
+  labs(x = x,
+       y = y,
+       title = title,
+       subtitle = subtitle,
+       caption = caption)
+```
+
+Such a high level of talk about violence is clearly not a reflection of reality - there has been no notable increase in violence in recent months, and the much discussed acts of the last weeks in which pro-independence protestors blocked roadways are arguably illegal, but certainly not violent. Rather, the high frequency of violence-related words is an _anticipatory_ violence, creating a mental frame primed to interpret the upcoming protests of December 21 as war-like.
+
+The construction of a mental framework in which Catalonia is at war is equally apparent in the speech data as in the media. Take, for example, the newspaper headlines from Friday December 14:
+
+<table style="width:100%">
+  <tr>
+    <td><img src="img/elpais.jpg" /></td>
+    <td><img src="img/abc.jpg" /></td>
+  </tr>
+  <tr>
+    <td><img src="img/larazon.jpg" /></td>
+    <td><img src="img/elmundo.jpg" /></td>
+  </tr>
+</table>
+
+El País writes about security force increases and includes the line that the CDR (pro-independence protest groups) "llaman a dar batalla" (have called to battle). ABC uses the military words "comandos" and "asaltar" (to assault) to describe next week's planned protests. La Razón takes a similarly military-esque tone with the words "ejército" (army) and "guerrilla". Meanwhile, El Mundo front-pages an interview with former Spanish President Aznar saying that "the intervention in Catalonia should be total and without a time limit". 
+
+Just like in the congressional speeches, the newspapers are not covering real violence (of which there is not), but rather anticipatory violence. This violence, real or perceived, serves to justify both (a) continued imprisonment of political leaders and (b) direct rule over Catalonia from central Spain. It should come as no surprise that those who favor the previous two measures are also the ones most likely to evoke violence in their speeches.
+
+
+
+```{r}
+# Frequency of words related to cat
+people <- sort(unique(transcript$person))
+out_list <- list()
+for(i in 1:length(people)){
+  message(i)
+  this_person <- people[i]
+  this_transcript <- transcript %>% filter(catalan) %>% filter(person == this_person)
+  this_word_df <- make_word_df(this_transcript$text)
+  # Remove stopwords
+  this_word_df <- this_word_df %>%
+    filter(!word %in% catalan_spanish_stopwords)
+  flag <- flag_words(this_word_df$word, words = catalan_words) |
+    flag_words(this_word_df$word, words = spain_words)
+  # this_word_df <- this_word_df[!flag,]
+  # Keep only top 5
+  # this_word_df <- this_word_df[1:5,]
+  out_list[[i]] <- this_word_df %>% mutate(person = this_person)
+}
+plot_data <- bind_rows(out_list)
+# Keep only violence words
+flag <- flag_words(x = plot_data$word, words = violence_words)
+# plot_data <- plot_data[flag,]
+```
+
+## Catalan language plots
+
+```{r}
+overall_plot('ca')
+overall_plot('ca', cat_only = TRUE)
+time_series_plot('ca', cat_only = FALSE)
+time_series_plot('ca', cat_only = TRUE)
+
+```

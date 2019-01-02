@@ -1,0 +1,39 @@
+﻿
+
+
+<html>
+<head>
+<title>Boingo | The Worldwide Leader in Wi-Fi Software and Services</title>
+<meta name="mikrotik-link_login_only" content="https://hotspot.boingohotspot.net/login"/>
+<meta name="mikrotik-link_login" content="https://hotspot.boingohotspot.net/login?dst=http%3A%2F%2Fwww.congreso.es%2Fpublic%5Foficiales%2FL12%2FCONG%2FDS%2FPL%2FDSCD-12-PL-57.PDF"/>
+<meta name="mikrotik-link_logout" content="http://hotspot.boingohotspot.net/logout"/>
+<meta name="mikrotik-link_status" content="http://hotspot.boingohotspot.net/status"/>
+<meta name="mikrotik-hostname" content="hotspot.boingohotspot.net"/>
+<meta name="mikrotik-identity" content="ccg_lgw-hsgw1"/>
+<meta name="mikrotik-ip" content="10.22.11.64"/>
+<meta name="mikrotik-mac" content="E4:A7:A0:C7:F4:D4"/>
+<meta name="mikrotik-server_address" content="10.22.0.1:80"/>
+<meta name="mikrotik-server_name" content="lgw.hotspot1"/>
+<meta name="mikrotik-server_page" content="rlogin.html"/>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<meta http-equiv="refresh" content="0; url=https://hotspot.boingohotspot.net/login?dst=http%3A%2F%2Fwww.congreso.es%2Fpublic%5Foficiales%2FL12%2FCONG%2FDS%2FPL%2FDSCD-12-PL-57.PDF">
+</head>
+<!--
+<?xml version="1.0" encoding="UTF-8"?>
+  <WISPAccessGatewayParam
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://hotspot.boingohotspot.net/xml/WISPAccessGatewayParam.xsd">
+    <Redirect>
+	<AccessProcedure>1.0</AccessProcedure>
+	<AccessLocation>ccg_lgw-hsgw1</AccessLocation>
+	<LocationName>BOINGO:US, LGW Gatwick Airport</LocationName>
+	<LoginURL>https://hotspot.boingohotspot.net/login?dst=http%3A%2F%2Fwww.congreso.es%2Fpublic%5Foficiales%2FL12%2FCONG%2FDS%2FPL%2FDSCD-12-PL-57.PDF</LoginURL>
+	<MessageType>100</MessageType>
+	<ResponseCode>0</ResponseCode>
+    </Redirect>
+  </WISPAccessGatewayParam>
+-->
+<body>
+</body>
+</html>
