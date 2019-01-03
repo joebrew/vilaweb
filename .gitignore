@@ -4,3 +4,4 @@ data-raw/*
 *.Rhistory
 data/cis*
 tweets.csv
+*.sql
