@@ -2,3947 +2,3947 @@
 albert\_rivera 2017-09-20
 -------------------------
 
-#### 17429 22:29:31 CET
+#### 2017-09-20 00:11:34 CET
 
-![](screenshots/1.png)
+![](screenshots/00009.png)
 
-#### 17429 21:30:29 NA
+#### 2017-09-20 16:28:09 CET
 
-![](screenshots/2.png)
+![](screenshots/00008.png)
 
-#### 17429 18:31:22 NA
+#### 2017-09-20 17:02:46 CET
 
-![](screenshots/3.png)
+![](screenshots/00007.png)
 
-#### 17429 18:07:49 NA
+#### 2017-09-20 17:14:39 CET
 
-![](screenshots/4.png)
+![](screenshots/00006.png)
 
-#### 17429 17:34:59 NA
+#### 2017-09-20 17:34:59 CET
 
-![](screenshots/5.png)
+![](screenshots/00005.png)
 
-#### 17429 17:14:39 NA
+#### 2017-09-20 18:07:49 CET
 
-![](screenshots/6.png)
+![](screenshots/00004.png)
 
-#### 17429 17:02:46 NA
+#### 2017-09-20 18:31:22 CET
 
-![](screenshots/7.png)
+![](screenshots/00003.png)
 
-#### 17429 16:28:09 NA
+#### 2017-09-20 21:30:29 CET
 
-![](screenshots/8.png)
+![](screenshots/00002.png)
 
-#### 17429 00:11:34 NA
+#### 2017-09-20 22:29:31 CET
 
-![](screenshots/9.png)
+![](screenshots/00001.png)
 
 albert\_rivera 2017-09-21
 -------------------------
 
-#### 17430 20:47:51 NA
+#### 2017-09-21 08:39:02 CET
 
-![](screenshots/10.png)
+![](screenshots/00025.png)
 
-#### 17430 20:18:41 NA
+#### 2017-09-21 09:18:20 CET
 
-![](screenshots/11.png)
+![](screenshots/00024.png)
 
-#### 17430 19:00:15 NA
+#### 2017-09-21 11:25:54 CET
 
-![](screenshots/12.png)
+![](screenshots/00023.png)
 
-#### 17430 18:57:17 NA
+#### 2017-09-21 11:43:39 CET
 
-![](screenshots/13.png)
+![](screenshots/00022.png)
 
-#### 17430 18:39:21 NA
+#### 2017-09-21 14:52:03 CET
 
-![](screenshots/14.png)
+![](screenshots/00021.png)
 
-#### 17430 18:02:25 NA
+#### 2017-09-21 16:06:49 CET
 
-![](screenshots/15.png)
+![](screenshots/00020.png)
 
-#### 17430 16:52:21 NA
+#### 2017-09-21 16:16:33 CET
 
-![](screenshots/16.png)
+![](screenshots/00019.png)
 
-#### 17430 16:32:11 NA
+#### 2017-09-21 16:24:48 CET
 
-![](screenshots/17.png)
+![](screenshots/00018.png)
 
-#### 17430 16:24:48 NA
+#### 2017-09-21 16:32:11 CET
 
-![](screenshots/18.png)
+![](screenshots/00017.png)
 
-#### 17430 16:16:33 NA
+#### 2017-09-21 16:52:21 CET
 
-![](screenshots/19.png)
+![](screenshots/00016.png)
 
-#### 17430 16:06:49 NA
+#### 2017-09-21 18:02:25 CET
 
-![](screenshots/20.png)
+![](screenshots/00015.png)
 
-#### 17430 14:52:03 NA
+#### 2017-09-21 18:39:21 CET
 
-![](screenshots/21.png)
+![](screenshots/00014.png)
 
-#### 17430 11:43:39 NA
+#### 2017-09-21 18:57:17 CET
 
-![](screenshots/22.png)
+![](screenshots/00013.png)
 
-#### 17430 11:25:54 NA
+#### 2017-09-21 19:00:15 CET
 
-![](screenshots/23.png)
+![](screenshots/00012.png)
 
-#### 17430 09:18:20 NA
+#### 2017-09-21 20:18:41 CET
 
-![](screenshots/24.png)
+![](screenshots/00011.png)
 
-#### 17430 08:39:02 NA
+#### 2017-09-21 20:47:51 CET
 
-![](screenshots/25.png)
+![](screenshots/00010.png)
 
 albert\_rivera 2017-09-22
 -------------------------
 
-#### 17431 23:53:45 NA
+#### 2017-09-22 08:56:35 CET
 
-![](screenshots/26.png)
+![](screenshots/00035.png)
 
-#### 17431 23:16:26 NA
+#### 2017-09-22 09:26:49 CET
 
-![](screenshots/27.png)
+![](screenshots/00034.png)
 
-#### 17431 22:54:42 NA
+#### 2017-09-22 09:45:06 CET
 
-![](screenshots/28.png)
+![](screenshots/00033.png)
 
-#### 17431 20:49:55 NA
+#### 2017-09-22 09:49:54 CET
 
-![](screenshots/29.png)
+![](screenshots/00032.png)
 
-#### 17431 10:43:53 NA
+#### 2017-09-22 10:25:02 CET
 
-![](screenshots/30.png)
+![](screenshots/00031.png)
 
-#### 17431 10:25:02 NA
+#### 2017-09-22 10:43:53 CET
 
-![](screenshots/31.png)
+![](screenshots/00030.png)
 
-#### 17431 09:49:54 NA
+#### 2017-09-22 20:49:55 CET
 
-![](screenshots/32.png)
+![](screenshots/00029.png)
 
-#### 17431 09:45:06 NA
+#### 2017-09-22 22:54:42 CET
 
-![](screenshots/33.png)
+![](screenshots/00028.png)
 
-#### 17431 09:26:49 NA
+#### 2017-09-22 23:16:26 CET
 
-![](screenshots/34.png)
+![](screenshots/00027.png)
 
-#### 17431 08:56:35 NA
+#### 2017-09-22 23:53:45 CET
 
-![](screenshots/35.png)
+![](screenshots/00026.png)
 
 albiol\_xg 2017-09-20
 ---------------------
 
-#### 17429 23:15:45 NA
+#### 2017-09-20 08:43:54 CET
 
-![](screenshots/36.png)
+![](screenshots/00042.png)
 
-#### 17429 21:25:33 NA
+#### 2017-09-20 11:04:34 CET
 
-![](screenshots/37.png)
+![](screenshots/00041.png)
 
-#### 17429 19:44:50 NA
+#### 2017-09-20 13:53:39 CET
 
-![](screenshots/38.png)
+![](screenshots/00040.png)
 
-#### 17429 19:11:33 NA
+#### 2017-09-20 19:11:33 CET
 
-![](screenshots/39.png)
+![](screenshots/00039.png)
 
-#### 17429 13:53:39 NA
+#### 2017-09-20 19:44:50 CET
 
-![](screenshots/40.png)
+![](screenshots/00038.png)
 
-#### 17429 11:04:34 NA
+#### 2017-09-20 21:25:33 CET
 
-![](screenshots/41.png)
+![](screenshots/00037.png)
 
-#### 17429 08:43:54 NA
+#### 2017-09-20 23:15:45 CET
 
-![](screenshots/42.png)
+![](screenshots/00036.png)
 
 albiol\_xg 2017-09-21
 ---------------------
 
-#### 17430 18:16:09 NA
+#### 2017-09-21 10:14:04 CET
 
-![](screenshots/43.png)
+![](screenshots/00046.png)
 
-#### 17430 14:20:16 NA
+#### 2017-09-21 14:16:25 CET
 
-![](screenshots/44.png)
+![](screenshots/00045.png)
 
-#### 17430 14:16:25 NA
+#### 2017-09-21 14:20:16 CET
 
-![](screenshots/45.png)
+![](screenshots/00044.png)
 
-#### 17430 10:14:04 NA
+#### 2017-09-21 18:16:09 CET
 
-![](screenshots/46.png)
+![](screenshots/00043.png)
 
 albiol\_xg 2017-09-22
 ---------------------
 
-#### 17431 22:38:51 NA
+#### 2017-09-22 08:07:43 CET
 
-![](screenshots/47.png)
+![](screenshots/00049.png)
 
-#### 17431 10:16:32 NA
+#### 2017-09-22 10:16:32 CET
 
-![](screenshots/48.png)
+![](screenshots/00048.png)
 
-#### 17431 08:07:43 NA
+#### 2017-09-22 22:38:51 CET
 
-![](screenshots/49.png)
+![](screenshots/00047.png)
 
 alevysoler 2017-09-21
 ---------------------
 
-#### 17430 17:47:47 NA
+#### 2017-09-21 08:56:20 CET
 
-![](screenshots/50.png)
+![](screenshots/00055.png)
 
-#### 17430 11:59:35 NA
+#### 2017-09-21 09:25:44 CET
 
-![](screenshots/51.png)
+![](screenshots/00054.png)
 
-#### 17430 11:55:05 NA
+#### 2017-09-21 11:37:07 CET
 
-![](screenshots/52.png)
+![](screenshots/00053.png)
 
-#### 17430 11:37:07 NA
+#### 2017-09-21 11:55:05 CET
 
-![](screenshots/53.png)
+![](screenshots/00052.png)
 
-#### 17430 09:25:44 NA
+#### 2017-09-21 11:59:35 CET
 
-![](screenshots/54.png)
+![](screenshots/00051.png)
 
-#### 17430 08:56:20 NA
+#### 2017-09-21 17:47:47 CET
 
-![](screenshots/55.png)
+![](screenshots/00050.png)
 
 alevysoler 2017-09-22
 ---------------------
 
-#### 17431 20:15:46 NA
+#### 2017-09-22 13:08:31 CET
 
-![](screenshots/56.png)
+![](screenshots/00059.png)
 
-#### 17431 20:08:25 NA
+#### 2017-09-22 18:00:00 CET
 
-![](screenshots/57.png)
+![](screenshots/00058.png)
 
-#### 17431 18:00:00 NA
+#### 2017-09-22 20:08:25 CET
 
-![](screenshots/58.png)
+![](screenshots/00057.png)
 
-#### 17431 13:08:31 NA
+#### 2017-09-22 20:15:46 CET
 
-![](screenshots/59.png)
+![](screenshots/00056.png)
 
 carrizosacarlos 2017-09-20
 --------------------------
 
-#### 17429 22:58:18 NA
+#### 2017-09-20 00:38:24 CET
 
-![](screenshots/60.png)
+![](screenshots/00063.png)
 
-#### 17429 19:30:21 NA
+#### 2017-09-20 14:30:58 CET
 
-![](screenshots/61.png)
+![](screenshots/00062.png)
 
-#### 17429 14:30:58 NA
+#### 2017-09-20 19:30:21 CET
 
-![](screenshots/62.png)
+![](screenshots/00061.png)
 
-#### 17429 00:38:24 NA
+#### 2017-09-20 22:58:18 CET
 
-![](screenshots/63.png)
+![](screenshots/00060.png)
 
 carrizosacarlos 2017-09-22
 --------------------------
 
-#### 17431 18:49:31 NA
+#### 2017-09-22 18:24:44 CET
 
-![](screenshots/64.png)
+![](screenshots/00065.png)
 
-#### 17431 18:24:44 NA
+#### 2017-09-22 18:49:31 CET
 
-![](screenshots/65.png)
+![](screenshots/00064.png)
 
 ciudadanoscs 2017-09-20
 -----------------------
 
-#### 17429 12:12:53 NA
+#### 2017-09-20 08:10:10 CET
 
-![](screenshots/66.png)
+![](screenshots/00145.png)
 
-#### 17429 12:12:43 NA
+#### 2017-09-20 08:26:16 CET
 
-![](screenshots/67.png)
+![](screenshots/00144.png)
 
-#### 17429 22:40:47 NA
+#### 2017-09-20 08:26:55 CET
 
-![](screenshots/68.png)
+![](screenshots/00143.png)
 
-#### 17429 22:32:19 NA
+#### 2017-09-20 08:28:08 CET
 
-![](screenshots/69.png)
+![](screenshots/00142.png)
 
-#### 17429 22:31:14 NA
+#### 2017-09-20 08:28:46 CET
 
-![](screenshots/70.png)
+![](screenshots/00141.png)
 
-#### 17429 22:30:30 NA
+#### 2017-09-20 08:31:23 CET
 
-![](screenshots/71.png)
+![](screenshots/00140.png)
 
-#### 17429 22:30:18 NA
+#### 2017-09-20 08:31:53 CET
 
-![](screenshots/72.png)
+![](screenshots/00139.png)
 
-#### 17429 19:22:27 NA
+#### 2017-09-20 08:33:57 CET
 
-![](screenshots/73.png)
+![](screenshots/00138.png)
 
-#### 17429 18:57:35 NA
+#### 2017-09-20 08:44:15 CET
 
-![](screenshots/74.png)
+![](screenshots/00137.png)
 
-#### 17429 18:53:46 NA
+#### 2017-09-20 08:44:56 CET
 
-![](screenshots/75.png)
+![](screenshots/00136.png)
 
-#### 17429 18:49:31 NA
+#### 2017-09-20 08:46:54 CET
 
-![](screenshots/76.png)
+![](screenshots/00135.png)
 
-#### 17429 12:10:46 NA
+#### 2017-09-20 09:10:29 CET
 
-![](screenshots/77.png)
+![](screenshots/00134.png)
 
-#### 17429 18:29:06 NA
+#### 2017-09-20 09:24:07 CET
 
-![](screenshots/78.png)
+![](screenshots/00133.png)
 
-#### 17429 14:12:30 NA
+#### 2017-09-20 09:25:50 CET
 
-![](screenshots/79.png)
+![](screenshots/00132.png)
 
-#### 17429 14:10:42 NA
+#### 2017-09-20 09:26:40 CET
 
-![](screenshots/80.png)
+![](screenshots/00131.png)
 
-#### 17429 14:10:19 NA
+#### 2017-09-20 09:28:57 CET
 
-![](screenshots/81.png)
+![](screenshots/00130.png)
 
-#### 17429 14:09:56 NA
+#### 2017-09-20 09:29:36 CET
 
-![](screenshots/82.png)
+![](screenshots/00129.png)
 
-#### 17429 14:09:32 NA
+#### 2017-09-20 09:38:37 CET
 
-![](screenshots/83.png)
+![](screenshots/00128.png)
 
-#### 17429 14:09:13 NA
+#### 2017-09-20 10:02:20 CET
 
-![](screenshots/84.png)
+![](screenshots/00127.png)
 
-#### 17429 13:45:54 NA
+#### 2017-09-20 10:09:53 CET
 
-![](screenshots/85.png)
+![](screenshots/00126.png)
 
-#### 17429 13:44:05 NA
+#### 2017-09-20 10:12:03 CET
 
-![](screenshots/86.png)
+![](screenshots/00125.png)
 
-#### 17429 13:42:54 NA
+#### 2017-09-20 10:12:51 CET
 
-![](screenshots/87.png)
+![](screenshots/00124.png)
 
-#### 17429 13:41:40 NA
+#### 2017-09-20 10:13:15 CET
 
-![](screenshots/88.png)
+![](screenshots/00123.png)
 
-#### 17429 13:35:31 NA
+#### 2017-09-20 10:13:32 CET
 
-![](screenshots/89.png)
+![](screenshots/00122.png)
 
-#### 17429 13:28:16 NA
+#### 2017-09-20 10:15:49 CET
 
-![](screenshots/90.png)
+![](screenshots/00121.png)
 
-#### 17429 12:23:15 NA
+#### 2017-09-20 10:16:03 CET
 
-![](screenshots/91.png)
+![](screenshots/00120.png)
 
-#### 17429 12:21:21 NA
+#### 2017-09-20 10:18:12 CET
 
-![](screenshots/92.png)
+![](screenshots/00119.png)
 
-#### 17429 12:20:32 NA
+#### 2017-09-20 10:18:36 CET
 
-![](screenshots/93.png)
+![](screenshots/00118.png)
 
-#### 17429 12:20:12 NA
+#### 2017-09-20 10:20:14 CET
 
-![](screenshots/94.png)
+![](screenshots/00117.png)
 
-#### 17429 12:19:58 NA
+#### 2017-09-20 10:20:28 CET
 
-![](screenshots/95.png)
+![](screenshots/00116.png)
 
-#### 17429 12:19:24 NA
+#### 2017-09-20 10:27:21 CET
 
-![](screenshots/96.png)
+![](screenshots/00115.png)
 
-#### 17429 12:19:10 NA
+#### 2017-09-20 10:33:48 CET
 
-![](screenshots/97.png)
+![](screenshots/00114.png)
 
-#### 17429 12:18:01 NA
+#### 2017-09-20 10:36:14 CET
 
-![](screenshots/98.png)
+![](screenshots/00113.png)
 
-#### 17429 12:17:10 NA
+#### 2017-09-20 10:39:58 CET
 
-![](screenshots/99.png)
+![](screenshots/00112.png)
 
-#### 17429 12:14:12 NA
+#### 2017-09-20 10:40:15 CET
 
-![](screenshots/100.png)
+![](screenshots/00111.png)
 
-#### 17429 12:13:44 NA
+#### 2017-09-20 10:43:05 CET
 
-![](screenshots/101.png)
+![](screenshots/00110.png)
 
-#### 17429 12:10:12 NA
+#### 2017-09-20 10:44:56 CET
 
-![](screenshots/102.png)
+![](screenshots/00109.png)
 
-#### 17429 11:58:55 NA
+#### 2017-09-20 11:43:44 CET
 
-![](screenshots/103.png)
+![](screenshots/00108.png)
 
-#### 17429 11:58:31 NA
+#### 2017-09-20 11:44:49 CET
 
-![](screenshots/104.png)
+![](screenshots/00107.png)
 
-#### 17429 11:53:46 NA
+#### 2017-09-20 11:53:29 CET
 
-![](screenshots/105.png)
+![](screenshots/00106.png)
 
-#### 17429 11:53:29 NA
+#### 2017-09-20 11:53:46 CET
 
-![](screenshots/106.png)
+![](screenshots/00105.png)
 
-#### 17429 11:44:49 NA
+#### 2017-09-20 11:58:31 CET
 
-![](screenshots/107.png)
+![](screenshots/00104.png)
 
-#### 17429 11:43:44 NA
+#### 2017-09-20 11:58:55 CET
 
-![](screenshots/108.png)
+![](screenshots/00103.png)
 
-#### 17429 10:44:56 NA
+#### 2017-09-20 12:10:12 CET
 
-![](screenshots/109.png)
+![](screenshots/00102.png)
 
-#### 17429 10:43:05 NA
+#### 2017-09-20 12:10:46 CET
 
-![](screenshots/110.png)
+![](screenshots/00077.png)
 
-#### 17429 10:40:15 NA
+#### 2017-09-20 12:12:43 CET
 
-![](screenshots/111.png)
+![](screenshots/00067.png)
 
-#### 17429 10:39:58 NA
+#### 2017-09-20 12:12:53 CET
 
-![](screenshots/112.png)
+![](screenshots/00066.png)
 
-#### 17429 10:36:14 NA
+#### 2017-09-20 12:13:44 CET
 
-![](screenshots/113.png)
+![](screenshots/00101.png)
 
-#### 17429 10:33:48 NA
+#### 2017-09-20 12:14:12 CET
 
-![](screenshots/114.png)
+![](screenshots/00100.png)
 
-#### 17429 10:27:21 NA
+#### 2017-09-20 12:17:10 CET
 
-![](screenshots/115.png)
+![](screenshots/00099.png)
 
-#### 17429 10:20:28 NA
+#### 2017-09-20 12:18:01 CET
 
-![](screenshots/116.png)
+![](screenshots/00098.png)
 
-#### 17429 10:20:14 NA
+#### 2017-09-20 12:19:10 CET
 
-![](screenshots/117.png)
+![](screenshots/00097.png)
 
-#### 17429 10:18:36 NA
+#### 2017-09-20 12:19:24 CET
 
-![](screenshots/118.png)
+![](screenshots/00096.png)
 
-#### 17429 10:18:12 NA
+#### 2017-09-20 12:19:58 CET
 
-![](screenshots/119.png)
+![](screenshots/00095.png)
 
-#### 17429 10:16:03 NA
+#### 2017-09-20 12:20:12 CET
 
-![](screenshots/120.png)
+![](screenshots/00094.png)
 
-#### 17429 10:15:49 NA
+#### 2017-09-20 12:20:32 CET
 
-![](screenshots/121.png)
+![](screenshots/00093.png)
 
-#### 17429 10:13:32 NA
+#### 2017-09-20 12:21:21 CET
 
-![](screenshots/122.png)
+![](screenshots/00092.png)
 
-#### 17429 10:13:15 NA
+#### 2017-09-20 12:23:15 CET
 
-![](screenshots/123.png)
+![](screenshots/00091.png)
 
-#### 17429 10:12:51 NA
+#### 2017-09-20 13:28:16 CET
 
-![](screenshots/124.png)
+![](screenshots/00090.png)
 
-#### 17429 10:12:03 NA
+#### 2017-09-20 13:35:31 CET
 
-![](screenshots/125.png)
+![](screenshots/00089.png)
 
-#### 17429 10:09:53 NA
+#### 2017-09-20 13:41:40 CET
 
-![](screenshots/126.png)
+![](screenshots/00088.png)
 
-#### 17429 10:02:20 NA
+#### 2017-09-20 13:42:54 CET
 
-![](screenshots/127.png)
+![](screenshots/00087.png)
 
-#### 17429 09:38:37 NA
+#### 2017-09-20 13:44:05 CET
 
-![](screenshots/128.png)
+![](screenshots/00086.png)
 
-#### 17429 09:29:36 NA
+#### 2017-09-20 13:45:54 CET
 
-![](screenshots/129.png)
+![](screenshots/00085.png)
 
-#### 17429 09:28:57 NA
+#### 2017-09-20 14:09:13 CET
 
-![](screenshots/130.png)
+![](screenshots/00084.png)
 
-#### 17429 09:26:40 NA
+#### 2017-09-20 14:09:32 CET
 
-![](screenshots/131.png)
+![](screenshots/00083.png)
 
-#### 17429 09:25:50 NA
+#### 2017-09-20 14:09:56 CET
 
-![](screenshots/132.png)
+![](screenshots/00082.png)
 
-#### 17429 09:24:07 NA
+#### 2017-09-20 14:10:19 CET
 
-![](screenshots/133.png)
+![](screenshots/00081.png)
 
-#### 17429 09:10:29 NA
+#### 2017-09-20 14:10:42 CET
 
-![](screenshots/134.png)
+![](screenshots/00080.png)
 
-#### 17429 08:46:54 NA
+#### 2017-09-20 14:12:30 CET
 
-![](screenshots/135.png)
+![](screenshots/00079.png)
 
-#### 17429 08:44:56 NA
+#### 2017-09-20 18:29:06 CET
 
-![](screenshots/136.png)
+![](screenshots/00078.png)
 
-#### 17429 08:44:15 NA
+#### 2017-09-20 18:49:31 CET
 
-![](screenshots/137.png)
+![](screenshots/00076.png)
 
-#### 17429 08:33:57 NA
+#### 2017-09-20 18:53:46 CET
 
-![](screenshots/138.png)
+![](screenshots/00075.png)
 
-#### 17429 08:31:53 NA
+#### 2017-09-20 18:57:35 CET
 
-![](screenshots/139.png)
+![](screenshots/00074.png)
 
-#### 17429 08:31:23 NA
+#### 2017-09-20 19:22:27 CET
 
-![](screenshots/140.png)
+![](screenshots/00073.png)
 
-#### 17429 08:28:46 NA
+#### 2017-09-20 22:30:18 CET
 
-![](screenshots/141.png)
+![](screenshots/00072.png)
 
-#### 17429 08:28:08 NA
+#### 2017-09-20 22:30:30 CET
 
-![](screenshots/142.png)
+![](screenshots/00071.png)
 
-#### 17429 08:26:55 NA
+#### 2017-09-20 22:31:14 CET
 
-![](screenshots/143.png)
+![](screenshots/00070.png)
 
-#### 17429 08:26:16 NA
+#### 2017-09-20 22:32:19 CET
 
-![](screenshots/144.png)
+![](screenshots/00069.png)
 
-#### 17429 08:10:10 NA
+#### 2017-09-20 22:40:47 CET
 
-![](screenshots/145.png)
+![](screenshots/00068.png)
 
 ciudadanoscs 2017-09-21
 -----------------------
 
-#### 17430 19:55:37 NA
+#### 2017-09-21 08:01:09 CET
 
-![](screenshots/146.png)
+![](screenshots/00215.png)
 
-#### 17430 19:48:54 NA
+#### 2017-09-21 08:38:28 CET
 
-![](screenshots/147.png)
+![](screenshots/00214.png)
 
-#### 17430 19:35:48 NA
+#### 2017-09-21 08:42:52 CET
 
-![](screenshots/148.png)
+![](screenshots/00213.png)
 
-#### 17430 19:33:08 NA
+#### 2017-09-21 08:44:45 CET
 
-![](screenshots/149.png)
+![](screenshots/00212.png)
 
-#### 17430 19:22:21 NA
+#### 2017-09-21 08:45:29 CET
 
-![](screenshots/150.png)
+![](screenshots/00211.png)
 
-#### 17430 19:14:44 NA
+#### 2017-09-21 08:46:47 CET
 
-![](screenshots/151.png)
+![](screenshots/00210.png)
 
-#### 17430 19:07:35 NA
+#### 2017-09-21 08:47:55 CET
 
-![](screenshots/152.png)
+![](screenshots/00209.png)
 
-#### 17430 19:01:50 NA
+#### 2017-09-21 08:49:06 CET
 
-![](screenshots/153.png)
+![](screenshots/00208.png)
 
-#### 17430 15:16:04 NA
+#### 2017-09-21 08:53:31 CET
 
-![](screenshots/154.png)
+![](screenshots/00207.png)
 
-#### 17430 14:56:32 NA
+#### 2017-09-21 08:54:22 CET
 
-![](screenshots/155.png)
+![](screenshots/00206.png)
 
-#### 17430 14:54:30 NA
+#### 2017-09-21 08:57:21 CET
 
-![](screenshots/156.png)
+![](screenshots/00205.png)
 
-#### 17430 14:51:44 NA
+#### 2017-09-21 08:59:44 CET
 
-![](screenshots/157.png)
+![](screenshots/00204.png)
 
-#### 17430 14:36:50 NA
+#### 2017-09-21 09:22:01 CET
 
-![](screenshots/158.png)
+![](screenshots/00203.png)
 
-#### 17430 14:35:51 NA
+#### 2017-09-21 09:23:53 CET
 
-![](screenshots/159.png)
+![](screenshots/00202.png)
 
-#### 17430 14:35:41 NA
+#### 2017-09-21 09:24:40 CET
 
-![](screenshots/160.png)
+![](screenshots/00201.png)
 
-#### 17430 14:35:16 NA
+#### 2017-09-21 09:26:25 CET
 
-![](screenshots/161.png)
+![](screenshots/00200.png)
 
-#### 17430 14:33:12 NA
+#### 2017-09-21 09:26:49 CET
 
-![](screenshots/162.png)
+![](screenshots/00199.png)
 
-#### 17430 14:32:43 NA
+#### 2017-09-21 09:27:13 CET
 
-![](screenshots/163.png)
+![](screenshots/00198.png)
 
-#### 17430 14:32:04 NA
+#### 2017-09-21 09:28:09 CET
 
-![](screenshots/164.png)
+![](screenshots/00197.png)
 
-#### 17430 14:31:30 NA
+#### 2017-09-21 09:28:37 CET
 
-![](screenshots/165.png)
+![](screenshots/00196.png)
 
-#### 17430 14:30:09 NA
+#### 2017-09-21 09:30:18 CET
 
-![](screenshots/166.png)
+![](screenshots/00195.png)
 
-#### 17430 14:29:27 NA
+#### 2017-09-21 09:33:10 CET
 
-![](screenshots/167.png)
+![](screenshots/00194.png)
 
-#### 17430 14:28:35 NA
+#### 2017-09-21 10:46:47 CET
 
-![](screenshots/168.png)
+![](screenshots/00193.png)
 
-#### 17430 14:25:09 NA
+#### 2017-09-21 11:23:46 CET
 
-![](screenshots/169.png)
+![](screenshots/00192.png)
 
-#### 17430 14:24:32 NA
+#### 2017-09-21 11:24:09 CET
 
-![](screenshots/170.png)
+![](screenshots/00191.png)
 
-#### 17430 14:18:37 NA
+#### 2017-09-21 11:24:26 CET
 
-![](screenshots/171.png)
+![](screenshots/00190.png)
 
-#### 17430 14:15:51 NA
+#### 2017-09-21 11:24:53 CET
 
-![](screenshots/172.png)
+![](screenshots/00189.png)
 
-#### 17430 14:08:27 NA
+#### 2017-09-21 11:25:49 CET
 
-![](screenshots/173.png)
+![](screenshots/00188.png)
 
-#### 17430 14:05:21 NA
+#### 2017-09-21 11:26:41 CET
 
-![](screenshots/174.png)
+![](screenshots/00187.png)
 
-#### 17430 13:59:04 NA
+#### 2017-09-21 11:27:04 CET
 
-![](screenshots/175.png)
+![](screenshots/00186.png)
 
-#### 17430 13:56:28 NA
+#### 2017-09-21 11:27:17 CET
 
-![](screenshots/176.png)
+![](screenshots/00185.png)
 
-#### 17430 13:44:08 NA
+#### 2017-09-21 11:27:41 CET
 
-![](screenshots/177.png)
+![](screenshots/00184.png)
 
-#### 17430 13:43:29 NA
+#### 2017-09-21 11:27:52 CET
 
-![](screenshots/178.png)
+![](screenshots/00183.png)
 
-#### 17430 13:25:34 NA
+#### 2017-09-21 12:03:37 CET
 
-![](screenshots/179.png)
+![](screenshots/00182.png)
 
-#### 17430 13:16:31 NA
+#### 2017-09-21 13:13:02 CET
 
-![](screenshots/180.png)
+![](screenshots/00181.png)
 
-#### 17430 13:13:02 NA
+#### 2017-09-21 13:16:31 CET
 
-![](screenshots/181.png)
+![](screenshots/00180.png)
 
-#### 17430 12:03:37 NA
+#### 2017-09-21 13:25:34 CET
 
-![](screenshots/182.png)
+![](screenshots/00179.png)
 
-#### 17430 11:27:52 NA
+#### 2017-09-21 13:43:29 CET
 
-![](screenshots/183.png)
+![](screenshots/00178.png)
 
-#### 17430 11:27:41 NA
+#### 2017-09-21 13:44:08 CET
 
-![](screenshots/184.png)
+![](screenshots/00177.png)
 
-#### 17430 11:27:17 NA
+#### 2017-09-21 13:56:28 CET
 
-![](screenshots/185.png)
+![](screenshots/00176.png)
 
-#### 17430 11:27:04 NA
+#### 2017-09-21 13:59:04 CET
 
-![](screenshots/186.png)
+![](screenshots/00175.png)
 
-#### 17430 11:26:41 NA
+#### 2017-09-21 14:05:21 CET
 
-![](screenshots/187.png)
+![](screenshots/00174.png)
 
-#### 17430 11:25:49 NA
+#### 2017-09-21 14:08:27 CET
 
-![](screenshots/188.png)
+![](screenshots/00173.png)
 
-#### 17430 11:24:53 NA
+#### 2017-09-21 14:15:51 CET
 
-![](screenshots/189.png)
+![](screenshots/00172.png)
 
-#### 17430 11:24:26 NA
+#### 2017-09-21 14:18:37 CET
 
-![](screenshots/190.png)
+![](screenshots/00171.png)
 
-#### 17430 11:24:09 NA
+#### 2017-09-21 14:24:32 CET
 
-![](screenshots/191.png)
+![](screenshots/00170.png)
 
-#### 17430 11:23:46 NA
+#### 2017-09-21 14:25:09 CET
 
-![](screenshots/192.png)
+![](screenshots/00169.png)
 
-#### 17430 10:46:47 NA
+#### 2017-09-21 14:28:35 CET
 
-![](screenshots/193.png)
+![](screenshots/00168.png)
 
-#### 17430 09:33:10 NA
+#### 2017-09-21 14:29:27 CET
 
-![](screenshots/194.png)
+![](screenshots/00167.png)
 
-#### 17430 09:30:18 NA
+#### 2017-09-21 14:30:09 CET
 
-![](screenshots/195.png)
+![](screenshots/00166.png)
 
-#### 17430 09:28:37 NA
+#### 2017-09-21 14:31:30 CET
 
-![](screenshots/196.png)
+![](screenshots/00165.png)
 
-#### 17430 09:28:09 NA
+#### 2017-09-21 14:32:04 CET
 
-![](screenshots/197.png)
+![](screenshots/00164.png)
 
-#### 17430 09:27:13 NA
+#### 2017-09-21 14:32:43 CET
 
-![](screenshots/198.png)
+![](screenshots/00163.png)
 
-#### 17430 09:26:49 NA
+#### 2017-09-21 14:33:12 CET
 
-![](screenshots/199.png)
+![](screenshots/00162.png)
 
-#### 17430 09:26:25 NA
+#### 2017-09-21 14:35:16 CET
 
-![](screenshots/200.png)
+![](screenshots/00161.png)
 
-#### 17430 09:24:40 NA
+#### 2017-09-21 14:35:41 CET
 
-![](screenshots/201.png)
+![](screenshots/00160.png)
 
-#### 17430 09:23:53 NA
+#### 2017-09-21 14:35:51 CET
 
-![](screenshots/202.png)
+![](screenshots/00159.png)
 
-#### 17430 09:22:01 NA
+#### 2017-09-21 14:36:50 CET
 
-![](screenshots/203.png)
+![](screenshots/00158.png)
 
-#### 17430 08:59:44 NA
+#### 2017-09-21 14:51:44 CET
 
-![](screenshots/204.png)
+![](screenshots/00157.png)
 
-#### 17430 08:57:21 NA
+#### 2017-09-21 14:54:30 CET
 
-![](screenshots/205.png)
+![](screenshots/00156.png)
 
-#### 17430 08:54:22 NA
+#### 2017-09-21 14:56:32 CET
 
-![](screenshots/206.png)
+![](screenshots/00155.png)
 
-#### 17430 08:53:31 NA
+#### 2017-09-21 15:16:04 CET
 
-![](screenshots/207.png)
+![](screenshots/00154.png)
 
-#### 17430 08:49:06 NA
+#### 2017-09-21 19:01:50 CET
 
-![](screenshots/208.png)
+![](screenshots/00153.png)
 
-#### 17430 08:47:55 NA
+#### 2017-09-21 19:07:35 CET
 
-![](screenshots/209.png)
+![](screenshots/00152.png)
 
-#### 17430 08:46:47 NA
+#### 2017-09-21 19:14:44 CET
 
-![](screenshots/210.png)
+![](screenshots/00151.png)
 
-#### 17430 08:45:29 NA
+#### 2017-09-21 19:22:21 CET
 
-![](screenshots/211.png)
+![](screenshots/00150.png)
 
-#### 17430 08:44:45 NA
+#### 2017-09-21 19:33:08 CET
 
-![](screenshots/212.png)
+![](screenshots/00149.png)
 
-#### 17430 08:42:52 NA
+#### 2017-09-21 19:35:48 CET
 
-![](screenshots/213.png)
+![](screenshots/00148.png)
 
-#### 17430 08:38:28 NA
+#### 2017-09-21 19:48:54 CET
 
-![](screenshots/214.png)
+![](screenshots/00147.png)
 
-#### 17430 08:01:09 NA
+#### 2017-09-21 19:55:37 CET
 
-![](screenshots/215.png)
+![](screenshots/00146.png)
 
 ciudadanoscs 2017-09-22
 -----------------------
 
-#### 17431 21:12:06 NA
+#### 2017-09-22 08:40:38 CET
 
-![](screenshots/216.png)
+![](screenshots/00237.png)
 
-#### 17431 19:31:53 NA
+#### 2017-09-22 09:53:02 CET
 
-![](screenshots/217.png)
+![](screenshots/00236.png)
 
-#### 17431 17:48:09 NA
+#### 2017-09-22 12:11:38 CET
 
-![](screenshots/218.png)
+![](screenshots/00235.png)
 
-#### 17431 14:09:03 NA
+#### 2017-09-22 12:41:35 CET
 
-![](screenshots/219.png)
+![](screenshots/00234.png)
 
-#### 17431 13:34:32 NA
+#### 2017-09-22 12:42:19 CET
 
-![](screenshots/220.png)
+![](screenshots/00233.png)
 
-#### 17431 13:02:00 NA
+#### 2017-09-22 12:44:12 CET
 
-![](screenshots/221.png)
+![](screenshots/00232.png)
 
-#### 17431 13:01:21 NA
+#### 2017-09-22 12:45:05 CET
 
-![](screenshots/222.png)
+![](screenshots/00231.png)
 
-#### 17431 12:54:10 NA
+#### 2017-09-22 12:47:10 CET
 
-![](screenshots/223.png)
+![](screenshots/00230.png)
 
-#### 17431 12:54:07 NA
+#### 2017-09-22 12:48:41 CET
 
-![](screenshots/224.png)
+![](screenshots/00229.png)
 
-#### 17431 12:52:32 NA
+#### 2017-09-22 12:49:06 CET
 
-![](screenshots/225.png)
+![](screenshots/00228.png)
 
-#### 17431 12:52:22 NA
+#### 2017-09-22 12:50:42 CET
 
-![](screenshots/226.png)
+![](screenshots/00227.png)
 
-#### 17431 12:50:42 NA
+#### 2017-09-22 12:52:22 CET
 
-![](screenshots/227.png)
+![](screenshots/00226.png)
 
-#### 17431 12:49:06 NA
+#### 2017-09-22 12:52:32 CET
 
-![](screenshots/228.png)
+![](screenshots/00225.png)
 
-#### 17431 12:48:41 NA
+#### 2017-09-22 12:54:07 CET
 
-![](screenshots/229.png)
+![](screenshots/00224.png)
 
-#### 17431 12:47:10 NA
+#### 2017-09-22 12:54:10 CET
 
-![](screenshots/230.png)
+![](screenshots/00223.png)
 
-#### 17431 12:45:05 NA
+#### 2017-09-22 13:01:21 CET
 
-![](screenshots/231.png)
+![](screenshots/00222.png)
 
-#### 17431 12:44:12 NA
+#### 2017-09-22 13:02:00 CET
 
-![](screenshots/232.png)
+![](screenshots/00221.png)
 
-#### 17431 12:42:19 NA
+#### 2017-09-22 13:34:32 CET
 
-![](screenshots/233.png)
+![](screenshots/00220.png)
 
-#### 17431 12:41:35 NA
+#### 2017-09-22 14:09:03 CET
 
-![](screenshots/234.png)
+![](screenshots/00219.png)
 
-#### 17431 12:11:38 NA
+#### 2017-09-22 17:48:09 CET
 
-![](screenshots/235.png)
+![](screenshots/00218.png)
 
-#### 17431 09:53:02 NA
+#### 2017-09-22 19:31:53 CET
 
-![](screenshots/236.png)
+![](screenshots/00217.png)
 
-#### 17431 08:40:38 NA
+#### 2017-09-22 21:12:06 CET
 
-![](screenshots/237.png)
+![](screenshots/00216.png)
 
 ciutadanscs 2017-09-20
 ----------------------
 
-#### 17429 18:46:39 NA
+#### 2017-09-20 00:00:49 CET
 
-![](screenshots/238.png)
+![](screenshots/00295.png)
 
-#### 17429 15:00:28 NA
+#### 2017-09-20 08:25:57 CET
 
-![](screenshots/239.png)
+![](screenshots/00294.png)
 
-#### 17429 18:42:36 NA
+#### 2017-09-20 09:04:40 CET
 
-![](screenshots/240.png)
+![](screenshots/00293.png)
 
-#### 17429 22:50:00 NA
+#### 2017-09-20 09:08:36 CET
 
-![](screenshots/241.png)
+![](screenshots/00292.png)
 
-#### 17429 21:42:17 NA
+#### 2017-09-20 09:09:21 CET
 
-![](screenshots/242.png)
+![](screenshots/00291.png)
 
-#### 17429 21:38:10 NA
+#### 2017-09-20 09:10:38 CET
 
-![](screenshots/243.png)
+![](screenshots/00290.png)
 
-#### 17429 21:37:37 NA
+#### 2017-09-20 09:11:15 CET
 
-![](screenshots/244.png)
+![](screenshots/00289.png)
 
-#### 17429 21:36:35 NA
+#### 2017-09-20 11:06:41 CET
 
-![](screenshots/245.png)
+![](screenshots/00288.png)
 
-#### 17429 19:57:35 NA
+#### 2017-09-20 11:09:34 CET
 
-![](screenshots/246.png)
+![](screenshots/00287.png)
 
-#### 17429 19:51:03 NA
+#### 2017-09-20 11:11:50 CET
 
-![](screenshots/247.png)
+![](screenshots/00286.png)
 
-#### 17429 19:37:07 NA
+#### 2017-09-20 11:12:48 CET
 
-![](screenshots/248.png)
+![](screenshots/00285.png)
 
-#### 17429 19:27:05 NA
+#### 2017-09-20 11:14:33 CET
 
-![](screenshots/249.png)
+![](screenshots/00284.png)
 
-#### 17429 18:56:44 NA
+#### 2017-09-20 11:15:26 CET
 
-![](screenshots/250.png)
+![](screenshots/00283.png)
 
-#### 17429 18:54:10 NA
+#### 2017-09-20 11:56:24 CET
 
-![](screenshots/251.png)
+![](screenshots/00282.png)
 
-#### 17429 18:48:08 NA
+#### 2017-09-20 12:22:07 CET
 
-![](screenshots/252.png)
+![](screenshots/00281.png)
 
-#### 17429 18:25:35 NA
+#### 2017-09-20 12:30:34 CET
 
-![](screenshots/253.png)
+![](screenshots/00280.png)
 
-#### 17429 18:22:16 NA
+#### 2017-09-20 12:32:49 CET
 
-![](screenshots/254.png)
+![](screenshots/00279.png)
 
-#### 17429 18:21:11 NA
+#### 2017-09-20 12:38:05 CET
 
-![](screenshots/255.png)
+![](screenshots/00278.png)
 
-#### 17429 18:19:03 NA
+#### 2017-09-20 12:40:13 CET
 
-![](screenshots/256.png)
+![](screenshots/00277.png)
 
-#### 17429 18:14:46 NA
+#### 2017-09-20 12:41:18 CET
 
-![](screenshots/257.png)
+![](screenshots/00276.png)
 
-#### 17429 18:13:47 NA
+#### 2017-09-20 12:43:08 CET
 
-![](screenshots/258.png)
+![](screenshots/00275.png)
 
-#### 17429 18:13:12 NA
+#### 2017-09-20 12:47:35 CET
 
-![](screenshots/259.png)
+![](screenshots/00274.png)
 
-#### 17429 18:04:44 NA
+#### 2017-09-20 12:49:32 CET
 
-![](screenshots/260.png)
+![](screenshots/00273.png)
 
-#### 17429 16:40:26 NA
+#### 2017-09-20 12:51:45 CET
 
-![](screenshots/261.png)
+![](screenshots/00272.png)
 
-#### 17429 16:34:18 NA
+#### 2017-09-20 13:57:02 CET
 
-![](screenshots/262.png)
+![](screenshots/00271.png)
 
-#### 17429 15:10:32 NA
+#### 2017-09-20 14:05:16 CET
 
-![](screenshots/263.png)
+![](screenshots/00270.png)
 
-#### 17429 15:05:21 NA
+#### 2017-09-20 14:06:32 CET
 
-![](screenshots/264.png)
+![](screenshots/00269.png)
 
-#### 17429 14:44:30 NA
+#### 2017-09-20 14:08:47 CET
 
-![](screenshots/265.png)
+![](screenshots/00268.png)
 
-#### 17429 14:11:43 NA
+#### 2017-09-20 14:10:48 CET
 
-![](screenshots/266.png)
+![](screenshots/00267.png)
 
-#### 17429 14:10:48 NA
+#### 2017-09-20 14:11:43 CET
 
-![](screenshots/267.png)
+![](screenshots/00266.png)
 
-#### 17429 14:08:47 NA
+#### 2017-09-20 14:44:30 CET
 
-![](screenshots/268.png)
+![](screenshots/00265.png)
 
-#### 17429 14:06:32 NA
+#### 2017-09-20 15:00:28 CET
 
-![](screenshots/269.png)
+![](screenshots/00239.png)
 
-#### 17429 14:05:16 NA
+#### 2017-09-20 15:05:21 CET
 
-![](screenshots/270.png)
+![](screenshots/00264.png)
 
-#### 17429 13:57:02 NA
+#### 2017-09-20 15:10:32 CET
 
-![](screenshots/271.png)
+![](screenshots/00263.png)
 
-#### 17429 12:51:45 NA
+#### 2017-09-20 16:34:18 CET
 
-![](screenshots/272.png)
+![](screenshots/00262.png)
 
-#### 17429 12:49:32 NA
+#### 2017-09-20 16:40:26 CET
 
-![](screenshots/273.png)
+![](screenshots/00261.png)
 
-#### 17429 12:47:35 NA
+#### 2017-09-20 18:04:44 CET
 
-![](screenshots/274.png)
+![](screenshots/00260.png)
 
-#### 17429 12:43:08 NA
+#### 2017-09-20 18:13:12 CET
 
-![](screenshots/275.png)
+![](screenshots/00259.png)
 
-#### 17429 12:41:18 NA
+#### 2017-09-20 18:13:47 CET
 
-![](screenshots/276.png)
+![](screenshots/00258.png)
 
-#### 17429 12:40:13 NA
+#### 2017-09-20 18:14:46 CET
 
-![](screenshots/277.png)
+![](screenshots/00257.png)
 
-#### 17429 12:38:05 NA
+#### 2017-09-20 18:19:03 CET
 
-![](screenshots/278.png)
+![](screenshots/00256.png)
 
-#### 17429 12:32:49 NA
+#### 2017-09-20 18:21:11 CET
 
-![](screenshots/279.png)
+![](screenshots/00255.png)
 
-#### 17429 12:30:34 NA
+#### 2017-09-20 18:22:16 CET
 
-![](screenshots/280.png)
+![](screenshots/00254.png)
 
-#### 17429 12:22:07 NA
+#### 2017-09-20 18:25:35 CET
 
-![](screenshots/281.png)
+![](screenshots/00253.png)
 
-#### 17429 11:56:24 NA
+#### 2017-09-20 18:42:36 CET
 
-![](screenshots/282.png)
+![](screenshots/00240.png)
 
-#### 17429 11:15:26 NA
+#### 2017-09-20 18:46:39 CET
 
-![](screenshots/283.png)
+![](screenshots/00238.png)
 
-#### 17429 11:14:33 NA
+#### 2017-09-20 18:48:08 CET
 
-![](screenshots/284.png)
+![](screenshots/00252.png)
 
-#### 17429 11:12:48 NA
+#### 2017-09-20 18:54:10 CET
 
-![](screenshots/285.png)
+![](screenshots/00251.png)
 
-#### 17429 11:11:50 NA
+#### 2017-09-20 18:56:44 CET
 
-![](screenshots/286.png)
+![](screenshots/00250.png)
 
-#### 17429 11:09:34 NA
+#### 2017-09-20 19:27:05 CET
 
-![](screenshots/287.png)
+![](screenshots/00249.png)
 
-#### 17429 11:06:41 NA
+#### 2017-09-20 19:37:07 CET
 
-![](screenshots/288.png)
+![](screenshots/00248.png)
 
-#### 17429 09:11:15 NA
+#### 2017-09-20 19:51:03 CET
 
-![](screenshots/289.png)
+![](screenshots/00247.png)
 
-#### 17429 09:10:38 NA
+#### 2017-09-20 19:57:35 CET
 
-![](screenshots/290.png)
+![](screenshots/00246.png)
 
-#### 17429 09:09:21 NA
+#### 2017-09-20 21:36:35 CET
 
-![](screenshots/291.png)
+![](screenshots/00245.png)
 
-#### 17429 09:08:36 NA
+#### 2017-09-20 21:37:37 CET
 
-![](screenshots/292.png)
+![](screenshots/00244.png)
 
-#### 17429 09:04:40 NA
+#### 2017-09-20 21:38:10 CET
 
-![](screenshots/293.png)
+![](screenshots/00243.png)
 
-#### 17429 08:25:57 NA
+#### 2017-09-20 21:42:17 CET
 
-![](screenshots/294.png)
+![](screenshots/00242.png)
 
-#### 17429 00:00:49 NA
+#### 2017-09-20 22:50:00 CET
 
-![](screenshots/295.png)
+![](screenshots/00241.png)
 
 ciutadanscs 2017-09-21
 ----------------------
 
-#### 17430 22:37:32 NA
+#### 2017-09-21 00:18:34 CET
 
-![](screenshots/296.png)
+![](screenshots/00340.png)
 
-#### 17430 22:15:39 NA
+#### 2017-09-21 00:20:47 CET
 
-![](screenshots/297.png)
+![](screenshots/00339.png)
 
-#### 17430 22:00:55 NA
+#### 2017-09-21 00:21:59 CET
 
-![](screenshots/298.png)
+![](screenshots/00338.png)
 
-#### 17430 21:54:53 NA
+#### 2017-09-21 00:24:20 CET
 
-![](screenshots/299.png)
+![](screenshots/00337.png)
 
-#### 17430 21:40:02 NA
+#### 2017-09-21 10:34:23 CET
 
-![](screenshots/300.png)
+![](screenshots/00336.png)
 
-#### 17430 21:37:23 NA
+#### 2017-09-21 11:48:04 CET
 
-![](screenshots/301.png)
+![](screenshots/00335.png)
 
-#### 17430 21:33:02 NA
+#### 2017-09-21 11:49:09 CET
 
-![](screenshots/302.png)
+![](screenshots/00334.png)
 
-#### 17430 21:29:20 NA
+#### 2017-09-21 11:49:39 CET
 
-![](screenshots/303.png)
+![](screenshots/00333.png)
 
-#### 17430 21:22:51 NA
+#### 2017-09-21 11:50:33 CET
 
-![](screenshots/304.png)
+![](screenshots/00332.png)
 
-#### 17430 20:57:43 NA
+#### 2017-09-21 11:51:37 CET
 
-![](screenshots/305.png)
+![](screenshots/00331.png)
 
-#### 17430 20:55:37 NA
+#### 2017-09-21 11:53:09 CET
 
-![](screenshots/306.png)
+![](screenshots/00330.png)
 
-#### 17430 20:54:27 NA
+#### 2017-09-21 11:54:30 CET
 
-![](screenshots/307.png)
+![](screenshots/00329.png)
 
-#### 17430 20:49:45 NA
+#### 2017-09-21 11:55:35 CET
 
-![](screenshots/308.png)
+![](screenshots/00328.png)
 
-#### 17430 20:49:02 NA
+#### 2017-09-21 11:57:20 CET
 
-![](screenshots/309.png)
+![](screenshots/00327.png)
 
-#### 17430 20:26:09 NA
+#### 2017-09-21 11:58:41 CET
 
-![](screenshots/310.png)
+![](screenshots/00326.png)
 
-#### 17430 19:30:00 NA
+#### 2017-09-21 12:33:00 CET
 
-![](screenshots/311.png)
+![](screenshots/00325.png)
 
-#### 17430 19:24:00 NA
+#### 2017-09-21 13:05:03 CET
 
-![](screenshots/312.png)
+![](screenshots/00324.png)
 
-#### 17430 19:19:04 NA
+#### 2017-09-21 13:06:51 CET
 
-![](screenshots/313.png)
+![](screenshots/00323.png)
 
-#### 17430 19:11:06 NA
+#### 2017-09-21 13:08:31 CET
 
-![](screenshots/314.png)
+![](screenshots/00322.png)
 
-#### 17430 19:04:22 NA
+#### 2017-09-21 13:13:58 CET
 
-![](screenshots/315.png)
+![](screenshots/00321.png)
 
-#### 17430 18:03:00 NA
+#### 2017-09-21 13:36:20 CET
 
-![](screenshots/316.png)
+![](screenshots/00320.png)
 
-#### 17430 14:40:04 NA
+#### 2017-09-21 14:33:51 CET
 
-![](screenshots/317.png)
+![](screenshots/00319.png)
 
-#### 17430 14:38:18 NA
+#### 2017-09-21 14:38:18 CET
 
-![](screenshots/318.png)
+![](screenshots/00318.png)
 
-#### 17430 14:33:51 NA
+#### 2017-09-21 14:40:04 CET
 
-![](screenshots/319.png)
+![](screenshots/00317.png)
 
-#### 17430 13:36:20 NA
+#### 2017-09-21 18:03:00 CET
 
-![](screenshots/320.png)
+![](screenshots/00316.png)
 
-#### 17430 13:13:58 NA
+#### 2017-09-21 19:04:22 CET
 
-![](screenshots/321.png)
+![](screenshots/00315.png)
 
-#### 17430 13:08:31 NA
+#### 2017-09-21 19:11:06 CET
 
-![](screenshots/322.png)
+![](screenshots/00314.png)
 
-#### 17430 13:06:51 NA
+#### 2017-09-21 19:19:04 CET
 
-![](screenshots/323.png)
+![](screenshots/00313.png)
 
-#### 17430 13:05:03 NA
+#### 2017-09-21 19:24:00 CET
 
-![](screenshots/324.png)
+![](screenshots/00312.png)
 
-#### 17430 12:33:00 NA
+#### 2017-09-21 19:30:00 CET
 
-![](screenshots/325.png)
+![](screenshots/00311.png)
 
-#### 17430 11:58:41 NA
+#### 2017-09-21 20:26:09 CET
 
-![](screenshots/326.png)
+![](screenshots/00310.png)
 
-#### 17430 11:57:20 NA
+#### 2017-09-21 20:49:02 CET
 
-![](screenshots/327.png)
+![](screenshots/00309.png)
 
-#### 17430 11:55:35 NA
+#### 2017-09-21 20:49:45 CET
 
-![](screenshots/328.png)
+![](screenshots/00308.png)
 
-#### 17430 11:54:30 NA
+#### 2017-09-21 20:54:27 CET
 
-![](screenshots/329.png)
+![](screenshots/00307.png)
 
-#### 17430 11:53:09 NA
+#### 2017-09-21 20:55:37 CET
 
-![](screenshots/330.png)
+![](screenshots/00306.png)
 
-#### 17430 11:51:37 NA
+#### 2017-09-21 20:57:43 CET
 
-![](screenshots/331.png)
+![](screenshots/00305.png)
 
-#### 17430 11:50:33 NA
+#### 2017-09-21 21:22:51 CET
 
-![](screenshots/332.png)
+![](screenshots/00304.png)
 
-#### 17430 11:49:39 NA
+#### 2017-09-21 21:29:20 CET
 
-![](screenshots/333.png)
+![](screenshots/00303.png)
 
-#### 17430 11:49:09 NA
+#### 2017-09-21 21:33:02 CET
 
-![](screenshots/334.png)
+![](screenshots/00302.png)
 
-#### 17430 11:48:04 NA
+#### 2017-09-21 21:37:23 CET
 
-![](screenshots/335.png)
+![](screenshots/00301.png)
 
-#### 17430 10:34:23 NA
+#### 2017-09-21 21:40:02 CET
 
-![](screenshots/336.png)
+![](screenshots/00300.png)
 
-#### 17430 00:24:20 NA
+#### 2017-09-21 21:54:53 CET
 
-![](screenshots/337.png)
+![](screenshots/00299.png)
 
-#### 17430 00:21:59 NA
+#### 2017-09-21 22:00:55 CET
 
-![](screenshots/338.png)
+![](screenshots/00298.png)
 
-#### 17430 00:20:47 NA
+#### 2017-09-21 22:15:39 CET
 
-![](screenshots/339.png)
+![](screenshots/00297.png)
 
-#### 17430 00:18:34 NA
+#### 2017-09-21 22:37:32 CET
 
-![](screenshots/340.png)
+![](screenshots/00296.png)
 
 ciutadanscs 2017-09-22
 ----------------------
 
-#### 17431 13:13:50 NA
+#### 2017-09-22 09:36:00 CET
 
-![](screenshots/341.png)
+![](screenshots/00365.png)
 
-#### 17431 13:04:50 NA
+#### 2017-09-22 09:37:53 CET
 
-![](screenshots/342.png)
+![](screenshots/00364.png)
 
-#### 17431 12:43:06 NA
+#### 2017-09-22 09:40:02 CET
 
-![](screenshots/343.png)
+![](screenshots/00363.png)
 
-#### 17431 12:41:29 NA
+#### 2017-09-22 09:41:36 CET
 
-![](screenshots/344.png)
+![](screenshots/00362.png)
 
-#### 17431 12:36:04 NA
+#### 2017-09-22 09:45:11 CET
 
-![](screenshots/345.png)
+![](screenshots/00361.png)
 
-#### 17431 12:35:01 NA
+#### 2017-09-22 09:46:26 CET
 
-![](screenshots/346.png)
+![](screenshots/00360.png)
 
-#### 17431 12:34:06 NA
+#### 2017-09-22 09:47:27 CET
 
-![](screenshots/347.png)
+![](screenshots/00359.png)
 
-#### 17431 12:33:10 NA
+#### 2017-09-22 09:53:54 CET
 
-![](screenshots/348.png)
+![](screenshots/00358.png)
 
-#### 17431 12:30:27 NA
+#### 2017-09-22 11:23:59 CET
 
-![](screenshots/349.png)
+![](screenshots/00357.png)
 
-#### 17431 12:29:47 NA
+#### 2017-09-22 12:12:57 CET
 
-![](screenshots/350.png)
+![](screenshots/00356.png)
 
-#### 17431 12:29:11 NA
+#### 2017-09-22 12:20:12 CET
 
-![](screenshots/351.png)
+![](screenshots/00355.png)
 
-#### 17431 12:27:12 NA
+#### 2017-09-22 12:20:49 CET
 
-![](screenshots/352.png)
+![](screenshots/00354.png)
 
-#### 17431 12:22:05 NA
+#### 2017-09-22 12:22:05 CET
 
-![](screenshots/353.png)
+![](screenshots/00353.png)
 
-#### 17431 12:20:49 NA
+#### 2017-09-22 12:27:12 CET
 
-![](screenshots/354.png)
+![](screenshots/00352.png)
 
-#### 17431 12:20:12 NA
+#### 2017-09-22 12:29:11 CET
 
-![](screenshots/355.png)
+![](screenshots/00351.png)
 
-#### 17431 12:12:57 NA
+#### 2017-09-22 12:29:47 CET
 
-![](screenshots/356.png)
+![](screenshots/00350.png)
 
-#### 17431 11:23:59 NA
+#### 2017-09-22 12:30:27 CET
 
-![](screenshots/357.png)
+![](screenshots/00349.png)
 
-#### 17431 09:53:54 NA
+#### 2017-09-22 12:33:10 CET
 
-![](screenshots/358.png)
+![](screenshots/00348.png)
 
-#### 17431 09:47:27 NA
+#### 2017-09-22 12:34:06 CET
 
-![](screenshots/359.png)
+![](screenshots/00347.png)
 
-#### 17431 09:46:26 NA
+#### 2017-09-22 12:35:01 CET
 
-![](screenshots/360.png)
+![](screenshots/00346.png)
 
-#### 17431 09:45:11 NA
+#### 2017-09-22 12:36:04 CET
 
-![](screenshots/361.png)
+![](screenshots/00345.png)
 
-#### 17431 09:41:36 NA
+#### 2017-09-22 12:41:29 CET
 
-![](screenshots/362.png)
+![](screenshots/00344.png)
 
-#### 17431 09:40:02 NA
+#### 2017-09-22 12:43:06 CET
 
-![](screenshots/363.png)
+![](screenshots/00343.png)
 
-#### 17431 09:37:53 NA
+#### 2017-09-22 13:04:50 CET
 
-![](screenshots/364.png)
+![](screenshots/00342.png)
 
-#### 17431 09:36:00 NA
+#### 2017-09-22 13:13:50 CET
 
-![](screenshots/365.png)
+![](screenshots/00341.png)
 
 eva\_granados 2017-09-21
 ------------------------
 
-#### 17430 20:26:32 NA
+#### 2017-09-21 07:29:07 CET
 
-![](screenshots/366.png)
+![](screenshots/00369.png)
 
-#### 17430 19:37:27 NA
+#### 2017-09-21 19:30:16 CET
 
-![](screenshots/367.png)
+![](screenshots/00368.png)
 
-#### 17430 19:30:16 NA
+#### 2017-09-21 19:37:27 CET
 
-![](screenshots/368.png)
+![](screenshots/00367.png)
 
-#### 17430 07:29:07 NA
+#### 2017-09-21 20:26:32 CET
 
-![](screenshots/369.png)
+![](screenshots/00366.png)
 
 eva\_granados 2017-09-22
 ------------------------
 
-#### 17431 09:05:51 NA
+#### 2017-09-22 09:05:51 CET
 
-![](screenshots/370.png)
+![](screenshots/00370.png)
 
 inesarrimadas 2017-09-20
 ------------------------
 
-#### 17429 20:58:46 NA
+#### 2017-09-20 01:31:43 CET
 
-![](screenshots/371.png)
+![](screenshots/00375.png)
 
-#### 17429 17:21:59 NA
+#### 2017-09-20 11:48:33 CET
 
-![](screenshots/372.png)
+![](screenshots/00374.png)
 
-#### 17429 14:40:29 NA
+#### 2017-09-20 14:40:29 CET
 
-![](screenshots/373.png)
+![](screenshots/00373.png)
 
-#### 17429 11:48:33 NA
+#### 2017-09-20 17:21:59 CET
 
-![](screenshots/374.png)
+![](screenshots/00372.png)
 
-#### 17429 01:31:43 NA
+#### 2017-09-20 20:58:46 CET
 
-![](screenshots/375.png)
+![](screenshots/00371.png)
 
 inesarrimadas 2017-09-21
 ------------------------
 
-#### 17430 20:50:18 NA
+#### 2017-09-21 00:10:33 CET
 
-![](screenshots/376.png)
+![](screenshots/00379.png)
 
-#### 17430 16:06:06 NA
+#### 2017-09-21 12:22:18 CET
 
-![](screenshots/377.png)
+![](screenshots/00378.png)
 
-#### 17430 12:22:18 NA
+#### 2017-09-21 16:06:06 CET
 
-![](screenshots/378.png)
+![](screenshots/00377.png)
 
-#### 17430 00:10:33 NA
+#### 2017-09-21 20:50:18 CET
 
-![](screenshots/379.png)
+![](screenshots/00376.png)
 
 inesarrimadas 2017-09-22
 ------------------------
 
-#### 17431 21:26:43 NA
+#### 2017-09-22 21:18:12 CET
 
-![](screenshots/380.png)
+![](screenshots/00382.png)
 
-#### 17431 21:21:26 NA
+#### 2017-09-22 21:21:26 CET
 
-![](screenshots/381.png)
+![](screenshots/00381.png)
 
-#### 17431 21:18:12 NA
+#### 2017-09-22 21:26:43 CET
 
-![](screenshots/382.png)
+![](screenshots/00380.png)
 
 j\_zaragoza\_ 2017-09-21
 ------------------------
 
-#### 17430 20:55:20 NA
+#### 2017-09-21 20:55:20 545
 
-![](screenshots/383.png)
+![](screenshots/00383.png)
 
 j\_zaragoza\_ 2017-09-22
 ------------------------
 
-#### 17431 03:30:55 NA
+#### 2017-09-22 03:30:55 545
 
-![](screenshots/384.png)
+![](screenshots/00384.png)
 
 marianorajoy 2017-09-20
 -----------------------
 
-#### 17429 10:25:18 NA
+#### 2017-09-20 09:16:58 CET
 
-![](screenshots/385.png)
+![](screenshots/00400.png)
 
-#### 17429 23:40:40 NA
+#### 2017-09-20 09:22:07 CET
 
-![](screenshots/386.png)
+![](screenshots/00399.png)
 
-#### 17429 22:17:53 NA
+#### 2017-09-20 09:29:46 CET
 
-![](screenshots/387.png)
+![](screenshots/00398.png)
 
-#### 17429 21:55:46 NA
+#### 2017-09-20 09:41:25 CET
 
-![](screenshots/388.png)
+![](screenshots/00397.png)
 
-#### 17429 21:51:47 NA
+#### 2017-09-20 10:25:18 CET
 
-![](screenshots/389.png)
+![](screenshots/00385.png)
 
-#### 17429 21:47:39 NA
+#### 2017-09-20 19:35:01 CET
 
-![](screenshots/390.png)
+![](screenshots/00396.png)
 
-#### 17429 21:43:37 NA
+#### 2017-09-20 21:19:34 CET
 
-![](screenshots/391.png)
+![](screenshots/00395.png)
 
-#### 17429 21:31:56 NA
+#### 2017-09-20 21:23:35 CET
 
-![](screenshots/392.png)
+![](screenshots/00394.png)
 
-#### 17429 21:27:17 NA
+#### 2017-09-20 21:27:17 CET
 
-![](screenshots/393.png)
+![](screenshots/00393.png)
 
-#### 17429 21:23:35 NA
+#### 2017-09-20 21:31:56 CET
 
-![](screenshots/394.png)
+![](screenshots/00392.png)
 
-#### 17429 21:19:34 NA
+#### 2017-09-20 21:43:37 CET
 
-![](screenshots/395.png)
+![](screenshots/00391.png)
 
-#### 17429 19:35:01 NA
+#### 2017-09-20 21:47:39 CET
 
-![](screenshots/396.png)
+![](screenshots/00390.png)
 
-#### 17429 09:41:25 NA
+#### 2017-09-20 21:51:47 CET
 
-![](screenshots/397.png)
+![](screenshots/00389.png)
 
-#### 17429 09:29:46 NA
+#### 2017-09-20 21:55:46 CET
 
-![](screenshots/398.png)
+![](screenshots/00388.png)
 
-#### 17429 09:22:07 NA
+#### 2017-09-20 22:17:53 CET
 
-![](screenshots/399.png)
+![](screenshots/00387.png)
 
-#### 17429 09:16:58 NA
+#### 2017-09-20 23:40:40 CET
 
-![](screenshots/400.png)
+![](screenshots/00386.png)
 
 marianorajoy 2017-09-22
 -----------------------
 
-#### 17431 16:23:50 NA
+#### 2017-09-22 16:23:50 CET
 
-![](screenshots/401.png)
+![](screenshots/00401.png)
 
 meritxell\_batet 2017-09-20
 ---------------------------
 
-#### 17429 09:45:48 NA
+#### 2017-09-20 09:45:48 CET
 
-![](screenshots/402.png)
+![](screenshots/00402.png)
 
 meritxell\_batet 2017-09-21
 ---------------------------
 
-#### 17430 08:57:50 NA
+#### 2017-09-21 08:46:47 CET
 
-![](screenshots/403.png)
+![](screenshots/00411.png)
 
-#### 17430 17:44:47 NA
+#### 2017-09-21 08:50:49 CET
 
-![](screenshots/404.png)
+![](screenshots/00410.png)
 
-#### 17430 08:59:46 NA
+#### 2017-09-21 08:53:56 CET
 
-![](screenshots/405.png)
+![](screenshots/00409.png)
 
-#### 17430 20:32:37 NA
+#### 2017-09-21 08:57:50 CET
 
-![](screenshots/406.png)
+![](screenshots/00403.png)
 
-#### 17430 17:49:48 NA
+#### 2017-09-21 08:59:46 CET
 
-![](screenshots/407.png)
+![](screenshots/00405.png)
 
-#### 17430 17:47:33 NA
+#### 2017-09-21 17:44:47 CET
 
-![](screenshots/408.png)
+![](screenshots/00404.png)
 
-#### 17430 08:53:56 NA
+#### 2017-09-21 17:47:33 CET
 
-![](screenshots/409.png)
+![](screenshots/00408.png)
 
-#### 17430 08:50:49 NA
+#### 2017-09-21 17:49:48 CET
 
-![](screenshots/410.png)
+![](screenshots/00407.png)
 
-#### 17430 08:46:47 NA
+#### 2017-09-21 20:32:37 CET
 
-![](screenshots/411.png)
+![](screenshots/00406.png)
 
 meritxell\_batet 2017-09-22
 ---------------------------
 
-#### 17431 19:31:38 NA
+#### 2017-09-22 00:00:01 CET
 
-![](screenshots/412.png)
+![](screenshots/00414.png)
 
-#### 17431 08:32:07 NA
+#### 2017-09-22 08:32:07 CET
 
-![](screenshots/413.png)
+![](screenshots/00413.png)
 
-#### 17431 00:00:01 NA
+#### 2017-09-22 19:31:38 CET
 
-![](screenshots/414.png)
+![](screenshots/00412.png)
 
 miqueliceta 2017-09-20
 ----------------------
 
-#### 17429 19:44:56 NA
+#### 2017-09-20 13:56:12 CET
 
-![](screenshots/415.png)
+![](screenshots/00420.png)
 
-#### 17429 19:35:38 NA
+#### 2017-09-20 14:26:53 CET
 
-![](screenshots/416.png)
+![](screenshots/00419.png)
 
-#### 17429 19:20:26 NA
+#### 2017-09-20 17:42:27 CET
 
-![](screenshots/417.png)
+![](screenshots/00418.png)
 
-#### 17429 17:42:27 NA
+#### 2017-09-20 19:20:26 CET
 
-![](screenshots/418.png)
+![](screenshots/00417.png)
 
-#### 17429 14:26:53 NA
+#### 2017-09-20 19:35:38 CET
 
-![](screenshots/419.png)
+![](screenshots/00416.png)
 
-#### 17429 13:56:12 NA
+#### 2017-09-20 19:44:56 CET
 
-![](screenshots/420.png)
+![](screenshots/00415.png)
 
 miqueliceta 2017-09-21
 ----------------------
 
-#### 17430 17:37:41 NA
+#### 2017-09-21 10:11:08 CET
 
-![](screenshots/421.png)
+![](screenshots/00432.png)
 
-#### 17430 16:49:35 NA
+#### 2017-09-21 10:49:15 CET
 
-![](screenshots/422.png)
+![](screenshots/00431.png)
 
-#### 17430 13:59:37 NA
+#### 2017-09-21 10:52:09 CET
 
-![](screenshots/423.png)
+![](screenshots/00430.png)
 
-#### 17430 13:51:59 NA
+#### 2017-09-21 10:57:27 CET
 
-![](screenshots/424.png)
+![](screenshots/00429.png)
 
-#### 17430 11:04:11 NA
+#### 2017-09-21 10:58:48 CET
 
-![](screenshots/425.png)
+![](screenshots/00428.png)
 
-#### 17430 11:02:59 NA
+#### 2017-09-21 11:01:25 CET
 
-![](screenshots/426.png)
+![](screenshots/00427.png)
 
-#### 17430 11:01:25 NA
+#### 2017-09-21 11:02:59 CET
 
-![](screenshots/427.png)
+![](screenshots/00426.png)
 
-#### 17430 10:58:48 NA
+#### 2017-09-21 11:04:11 CET
 
-![](screenshots/428.png)
+![](screenshots/00425.png)
 
-#### 17430 10:57:27 NA
+#### 2017-09-21 13:51:59 CET
 
-![](screenshots/429.png)
+![](screenshots/00424.png)
 
-#### 17430 10:52:09 NA
+#### 2017-09-21 13:59:37 CET
 
-![](screenshots/430.png)
+![](screenshots/00423.png)
 
-#### 17430 10:49:15 NA
+#### 2017-09-21 16:49:35 CET
 
-![](screenshots/431.png)
+![](screenshots/00422.png)
 
-#### 17430 10:11:08 NA
+#### 2017-09-21 17:37:41 CET
 
-![](screenshots/432.png)
+![](screenshots/00421.png)
 
 miqueliceta 2017-09-22
 ----------------------
 
-#### 17431 23:43:45 NA
+#### 2017-09-22 09:12:32 CET
 
-![](screenshots/433.png)
+![](screenshots/00442.png)
 
-#### 17431 23:38:56 NA
+#### 2017-09-22 09:39:37 CET
 
-![](screenshots/434.png)
+![](screenshots/00441.png)
 
-#### 17431 17:25:28 NA
+#### 2017-09-22 10:00:24 CET
 
-![](screenshots/435.png)
+![](screenshots/00440.png)
 
-#### 17431 11:17:39 NA
+#### 2017-09-22 10:01:34 CET
 
-![](screenshots/436.png)
+![](screenshots/00439.png)
 
-#### 17431 11:03:53 NA
+#### 2017-09-22 10:55:21 CET
 
-![](screenshots/437.png)
+![](screenshots/00438.png)
 
-#### 17431 10:55:21 NA
+#### 2017-09-22 11:03:53 CET
 
-![](screenshots/438.png)
+![](screenshots/00437.png)
 
-#### 17431 10:01:34 NA
+#### 2017-09-22 11:17:39 CET
 
-![](screenshots/439.png)
+![](screenshots/00436.png)
 
-#### 17431 10:00:24 NA
+#### 2017-09-22 17:25:28 CET
 
-![](screenshots/440.png)
+![](screenshots/00435.png)
 
-#### 17431 09:39:37 NA
+#### 2017-09-22 23:38:56 CET
 
-![](screenshots/441.png)
+![](screenshots/00434.png)
 
-#### 17431 09:12:32 NA
+#### 2017-09-22 23:43:45 CET
 
-![](screenshots/442.png)
+![](screenshots/00433.png)
 
 pablo\_iglesias\_ 2017-09-20
 ----------------------------
 
-#### 17429 17:50:09 NA
+#### 2017-09-20 09:09:19 CET
 
-![](screenshots/443.png)
+![](screenshots/00453.png)
 
-#### 17429 17:01:55 NA
+#### 2017-09-20 09:28:55 CET
 
-![](screenshots/444.png)
+![](screenshots/00452.png)
 
-#### 17429 16:43:27 NA
+#### 2017-09-20 09:44:27 CET
 
-![](screenshots/445.png)
+![](screenshots/00451.png)
 
-#### 17429 15:01:10 NA
+#### 2017-09-20 10:34:09 CET
 
-![](screenshots/446.png)
+![](screenshots/00450.png)
 
-#### 17429 13:59:27 NA
+#### 2017-09-20 12:14:08 CET
 
-![](screenshots/447.png)
+![](screenshots/00449.png)
 
-#### 17429 12:50:34 NA
+#### 2017-09-20 12:50:34 CET
 
-![](screenshots/448.png)
+![](screenshots/00448.png)
 
-#### 17429 12:14:08 NA
+#### 2017-09-20 13:59:27 CET
 
-![](screenshots/449.png)
+![](screenshots/00447.png)
 
-#### 17429 10:34:09 NA
+#### 2017-09-20 15:01:10 CET
 
-![](screenshots/450.png)
+![](screenshots/00446.png)
 
-#### 17429 09:44:27 NA
+#### 2017-09-20 16:43:27 CET
 
-![](screenshots/451.png)
+![](screenshots/00445.png)
 
-#### 17429 09:28:55 NA
+#### 2017-09-20 17:01:55 CET
 
-![](screenshots/452.png)
+![](screenshots/00444.png)
 
-#### 17429 09:09:19 NA
+#### 2017-09-20 17:50:09 CET
 
-![](screenshots/453.png)
+![](screenshots/00443.png)
 
 pablo\_iglesias\_ 2017-09-21
 ----------------------------
 
-#### 17430 21:58:34 NA
+#### 2017-09-21 08:57:01 CET
 
-![](screenshots/454.png)
+![](screenshots/00458.png)
 
-#### 17430 18:55:30 NA
+#### 2017-09-21 10:35:41 CET
 
-![](screenshots/455.png)
+![](screenshots/00457.png)
 
-#### 17430 13:20:09 NA
+#### 2017-09-21 13:20:09 CET
 
-![](screenshots/456.png)
+![](screenshots/00456.png)
 
-#### 17430 10:35:41 NA
+#### 2017-09-21 18:55:30 CET
 
-![](screenshots/457.png)
+![](screenshots/00455.png)
 
-#### 17430 08:57:01 NA
+#### 2017-09-21 21:58:34 CET
 
-![](screenshots/458.png)
+![](screenshots/00454.png)
 
 pablo\_iglesias\_ 2017-09-22
 ----------------------------
 
-#### 17431 19:11:14 NA
+#### 2017-09-22 14:56:48 CET
 
-![](screenshots/459.png)
+![](screenshots/00461.png)
 
-#### 17431 17:53:12 NA
+#### 2017-09-22 17:53:12 CET
 
-![](screenshots/460.png)
+![](screenshots/00460.png)
 
-#### 17431 14:56:48 NA
+#### 2017-09-22 19:11:14 CET
 
-![](screenshots/461.png)
+![](screenshots/00459.png)
 
 pablocasado\_ 2017-09-20
 ------------------------
 
-#### 17429 23:01:43 NA
+#### 2017-09-20 08:03:52 CET
 
-![](screenshots/462.png)
+![](screenshots/00464.png)
 
-#### 17429 12:07:36 NA
+#### 2017-09-20 12:07:36 CET
 
-![](screenshots/463.png)
+![](screenshots/00463.png)
 
-#### 17429 08:03:52 NA
+#### 2017-09-20 23:01:43 CET
 
-![](screenshots/464.png)
+![](screenshots/00462.png)
 
 pablocasado\_ 2017-09-21
 ------------------------
 
-#### 17430 22:36:40 NA
+#### 2017-09-21 09:36:36 CET
 
-![](screenshots/465.png)
+![](screenshots/00471.png)
 
-#### 17430 22:26:32 NA
+#### 2017-09-21 11:37:53 CET
 
-![](screenshots/466.png)
+![](screenshots/00470.png)
 
-#### 17430 14:32:42 NA
+#### 2017-09-21 13:18:27 CET
 
-![](screenshots/467.png)
+![](screenshots/00469.png)
 
-#### 17430 14:05:08 NA
+#### 2017-09-21 14:05:08 CET
 
-![](screenshots/468.png)
+![](screenshots/00468.png)
 
-#### 17430 13:18:27 NA
+#### 2017-09-21 14:32:42 CET
 
-![](screenshots/469.png)
+![](screenshots/00467.png)
 
-#### 17430 11:37:53 NA
+#### 2017-09-21 22:26:32 CET
 
-![](screenshots/470.png)
+![](screenshots/00466.png)
 
-#### 17430 09:36:36 NA
+#### 2017-09-21 22:36:40 CET
 
-![](screenshots/471.png)
+![](screenshots/00465.png)
 
 pablocasado\_ 2017-09-22
 ------------------------
 
-#### 17431 21:35:36 NA
+#### 2017-09-22 13:28:11 CET
 
-![](screenshots/472.png)
+![](screenshots/00475.png)
 
-#### 17431 17:23:54 NA
+#### 2017-09-22 13:33:11 CET
 
-![](screenshots/473.png)
+![](screenshots/00474.png)
 
-#### 17431 13:33:11 NA
+#### 2017-09-22 17:23:54 CET
 
-![](screenshots/474.png)
+![](screenshots/00473.png)
 
-#### 17431 13:28:11 NA
+#### 2017-09-22 21:35:36 CET
 
-![](screenshots/475.png)
+![](screenshots/00472.png)
 
 pnique 2017-09-20
 -----------------
 
-#### 17429 21:59:46 NA
+#### 2017-09-20 08:28:57 CET
 
-![](screenshots/476.png)
+![](screenshots/00483.png)
 
-#### 17429 18:22:36 NA
+#### 2017-09-20 10:08:21 CET
 
-![](screenshots/477.png)
+![](screenshots/00482.png)
 
-#### 17429 15:49:15 NA
+#### 2017-09-20 14:06:25 CET
 
-![](screenshots/478.png)
+![](screenshots/00481.png)
 
-#### 17429 15:46:29 NA
+#### 2017-09-20 15:07:04 CET
 
-![](screenshots/479.png)
+![](screenshots/00480.png)
 
-#### 17429 15:07:04 NA
+#### 2017-09-20 15:46:29 CET
 
-![](screenshots/480.png)
+![](screenshots/00479.png)
 
-#### 17429 14:06:25 NA
+#### 2017-09-20 15:49:15 CET
 
-![](screenshots/481.png)
+![](screenshots/00478.png)
 
-#### 17429 10:08:21 NA
+#### 2017-09-20 18:22:36 CET
 
-![](screenshots/482.png)
+![](screenshots/00477.png)
 
-#### 17429 08:28:57 NA
+#### 2017-09-20 21:59:46 CET
 
-![](screenshots/483.png)
+![](screenshots/00476.png)
 
 pnique 2017-09-21
 -----------------
 
-#### 17430 20:04:47 NA
+#### 2017-09-21 07:07:28 CET
 
-![](screenshots/484.png)
+![](screenshots/00495.png)
 
-#### 17430 19:36:05 NA
+#### 2017-09-21 09:05:46 CET
 
-![](screenshots/485.png)
+![](screenshots/00494.png)
 
-#### 17430 18:36:36 NA
+#### 2017-09-21 09:07:49 CET
 
-![](screenshots/486.png)
+![](screenshots/00493.png)
 
-#### 17430 16:29:54 NA
+#### 2017-09-21 09:09:25 CET
 
-![](screenshots/487.png)
+![](screenshots/00492.png)
 
-#### 17430 15:30:48 NA
+#### 2017-09-21 10:07:30 CET
 
-![](screenshots/488.png)
+![](screenshots/00491.png)
 
-#### 17430 11:56:05 NA
+#### 2017-09-21 11:26:47 CET
 
-![](screenshots/489.png)
+![](screenshots/00490.png)
 
-#### 17430 11:26:47 NA
+#### 2017-09-21 11:56:05 CET
 
-![](screenshots/490.png)
+![](screenshots/00489.png)
 
-#### 17430 10:07:30 NA
+#### 2017-09-21 15:30:48 CET
 
-![](screenshots/491.png)
+![](screenshots/00488.png)
 
-#### 17430 09:09:25 NA
+#### 2017-09-21 16:29:54 CET
 
-![](screenshots/492.png)
+![](screenshots/00487.png)
 
-#### 17430 09:07:49 NA
+#### 2017-09-21 18:36:36 CET
 
-![](screenshots/493.png)
+![](screenshots/00486.png)
 
-#### 17430 09:05:46 NA
+#### 2017-09-21 19:36:05 CET
 
-![](screenshots/494.png)
+![](screenshots/00485.png)
 
-#### 17430 07:07:28 NA
+#### 2017-09-21 20:04:47 CET
 
-![](screenshots/495.png)
+![](screenshots/00484.png)
 
 pnique 2017-09-22
 -----------------
 
-#### 17431 18:40:05 NA
+#### 2017-09-22 09:20:35 CET
 
-![](screenshots/496.png)
+![](screenshots/00502.png)
 
-#### 17431 17:07:01 NA
+#### 2017-09-22 10:30:27 CET
 
-![](screenshots/497.png)
+![](screenshots/00501.png)
 
-#### 17431 14:35:42 NA
+#### 2017-09-22 13:30:16 CET
 
-![](screenshots/498.png)
+![](screenshots/00500.png)
 
-#### 17431 14:16:34 NA
+#### 2017-09-22 14:16:34 CET
 
-![](screenshots/499.png)
+![](screenshots/00499.png)
 
-#### 17431 13:30:16 NA
+#### 2017-09-22 14:35:42 CET
 
-![](screenshots/500.png)
+![](screenshots/00498.png)
 
-#### 17431 10:30:27 NA
+#### 2017-09-22 17:07:01 CET
 
-![](screenshots/501.png)
+![](screenshots/00497.png)
 
-#### 17431 09:20:35 NA
+#### 2017-09-22 18:40:05 CET
 
-![](screenshots/502.png)
+![](screenshots/00496.png)
 
 ppcatalunya 2017-09-20
 ----------------------
 
-#### 17429 14:19:05 NA
+#### 2017-09-20 12:38:28 CET
 
-![](screenshots/503.png)
+![](screenshots/00533.png)
 
-#### 17429 23:01:38 NA
+#### 2017-09-20 13:59:07 CET
 
-![](screenshots/504.png)
+![](screenshots/00532.png)
 
-#### 17429 21:27:23 NA
+#### 2017-09-20 14:16:38 CET
 
-![](screenshots/505.png)
+![](screenshots/00531.png)
 
-#### 17429 21:16:48 NA
+#### 2017-09-20 14:17:38 CET
 
-![](screenshots/506.png)
+![](screenshots/00530.png)
 
-#### 17429 21:15:34 NA
+#### 2017-09-20 14:18:11 CET
 
-![](screenshots/507.png)
+![](screenshots/00529.png)
 
-#### 17429 21:15:09 NA
+#### 2017-09-20 14:19:05 CET
 
-![](screenshots/508.png)
+![](screenshots/00503.png)
 
-#### 17429 21:14:05 NA
+#### 2017-09-20 14:20:05 CET
 
-![](screenshots/509.png)
+![](screenshots/00528.png)
 
-#### 17429 21:13:01 NA
+#### 2017-09-20 19:14:41 CET
 
-![](screenshots/510.png)
+![](screenshots/00527.png)
 
-#### 17429 21:10:57 NA
+#### 2017-09-20 19:37:23 CET
 
-![](screenshots/511.png)
+![](screenshots/00526.png)
 
-#### 17429 21:09:51 NA
+#### 2017-09-20 19:37:49 CET
 
-![](screenshots/512.png)
+![](screenshots/00525.png)
 
-#### 17429 21:09:09 NA
+#### 2017-09-20 19:38:44 CET
 
-![](screenshots/513.png)
+![](screenshots/00524.png)
 
-#### 17429 21:08:29 NA
+#### 2017-09-20 19:40:21 CET
 
-![](screenshots/514.png)
+![](screenshots/00523.png)
 
-#### 17429 20:54:03 NA
+#### 2017-09-20 19:41:36 CET
 
-![](screenshots/515.png)
+![](screenshots/00522.png)
 
-#### 17429 20:52:48 NA
+#### 2017-09-20 19:42:44 CET
 
-![](screenshots/516.png)
+![](screenshots/00521.png)
 
-#### 17429 20:50:36 NA
+#### 2017-09-20 20:46:14 CET
 
-![](screenshots/517.png)
+![](screenshots/00520.png)
 
-#### 17429 20:49:20 NA
+#### 2017-09-20 20:48:11 CET
 
-![](screenshots/518.png)
+![](screenshots/00519.png)
 
-#### 17429 20:48:11 NA
+#### 2017-09-20 20:49:20 CET
 
-![](screenshots/519.png)
+![](screenshots/00518.png)
 
-#### 17429 20:46:14 NA
+#### 2017-09-20 20:50:36 CET
 
-![](screenshots/520.png)
+![](screenshots/00517.png)
 
-#### 17429 19:42:44 NA
+#### 2017-09-20 20:52:48 CET
 
-![](screenshots/521.png)
+![](screenshots/00516.png)
 
-#### 17429 19:41:36 NA
+#### 2017-09-20 20:54:03 CET
 
-![](screenshots/522.png)
+![](screenshots/00515.png)
 
-#### 17429 19:40:21 NA
+#### 2017-09-20 21:08:29 CET
 
-![](screenshots/523.png)
+![](screenshots/00514.png)
 
-#### 17429 19:38:44 NA
+#### 2017-09-20 21:09:09 CET
 
-![](screenshots/524.png)
+![](screenshots/00513.png)
 
-#### 17429 19:37:49 NA
+#### 2017-09-20 21:09:51 CET
 
-![](screenshots/525.png)
+![](screenshots/00512.png)
 
-#### 17429 19:37:23 NA
+#### 2017-09-20 21:10:57 CET
 
-![](screenshots/526.png)
+![](screenshots/00511.png)
 
-#### 17429 19:14:41 NA
+#### 2017-09-20 21:13:01 CET
 
-![](screenshots/527.png)
+![](screenshots/00510.png)
 
-#### 17429 14:20:05 NA
+#### 2017-09-20 21:14:05 CET
 
-![](screenshots/528.png)
+![](screenshots/00509.png)
 
-#### 17429 14:18:11 NA
+#### 2017-09-20 21:15:09 CET
 
-![](screenshots/529.png)
+![](screenshots/00508.png)
 
-#### 17429 14:17:38 NA
+#### 2017-09-20 21:15:34 CET
 
-![](screenshots/530.png)
+![](screenshots/00507.png)
 
-#### 17429 14:16:38 NA
+#### 2017-09-20 21:16:48 CET
 
-![](screenshots/531.png)
+![](screenshots/00506.png)
 
-#### 17429 13:59:07 NA
+#### 2017-09-20 21:27:23 CET
 
-![](screenshots/532.png)
+![](screenshots/00505.png)
 
-#### 17429 12:38:28 NA
+#### 2017-09-20 23:01:38 CET
 
-![](screenshots/533.png)
+![](screenshots/00504.png)
 
 ppcatalunya 2017-09-21
 ----------------------
 
-#### 17430 11:42:49 NA
+#### 2017-09-21 00:40:36 CET
 
-![](screenshots/534.png)
+![](screenshots/00562.png)
 
-#### 17430 11:42:15 NA
+#### 2017-09-21 00:41:22 CET
 
-![](screenshots/535.png)
+![](screenshots/00561.png)
 
-#### 17430 11:43:34 NA
+#### 2017-09-21 00:43:03 CET
 
-![](screenshots/536.png)
+![](screenshots/00560.png)
 
-#### 17430 10:39:57 NA
+#### 2017-09-21 00:45:59 CET
 
-![](screenshots/537.png)
+![](screenshots/00559.png)
 
-#### 17430 18:12:19 NA
+#### 2017-09-21 00:49:02 CET
 
-![](screenshots/538.png)
+![](screenshots/00558.png)
 
-#### 17430 12:01:58 NA
+#### 2017-09-21 01:02:15 CET
 
-![](screenshots/539.png)
+![](screenshots/00557.png)
 
-#### 17430 12:00:54 NA
+#### 2017-09-21 01:13:18 CET
 
-![](screenshots/540.png)
+![](screenshots/00556.png)
 
-#### 17430 11:59:41 NA
+#### 2017-09-21 01:27:28 CET
 
-![](screenshots/541.png)
+![](screenshots/00555.png)
 
-#### 17430 11:58:49 NA
+#### 2017-09-21 01:38:23 CET
 
-![](screenshots/542.png)
+![](screenshots/00554.png)
 
-#### 17430 11:56:12 NA
+#### 2017-09-21 01:46:25 CET
 
-![](screenshots/543.png)
+![](screenshots/00553.png)
 
-#### 17430 11:55:11 NA
+#### 2017-09-21 02:01:36 CET
 
-![](screenshots/544.png)
+![](screenshots/00552.png)
 
-#### 17430 11:49:20 NA
+#### 2017-09-21 02:15:28 CET
 
-![](screenshots/545.png)
+![](screenshots/00551.png)
 
-#### 17430 11:47:40 NA
+#### 2017-09-21 10:39:57 CET
 
-![](screenshots/546.png)
+![](screenshots/00537.png)
 
-#### 17430 11:46:51 NA
+#### 2017-09-21 11:42:15 CET
 
-![](screenshots/547.png)
+![](screenshots/00535.png)
 
-#### 17430 11:46:18 NA
+#### 2017-09-21 11:42:49 CET
 
-![](screenshots/548.png)
+![](screenshots/00534.png)
 
-#### 17430 11:45:32 NA
+#### 2017-09-21 11:43:34 CET
 
-![](screenshots/549.png)
+![](screenshots/00536.png)
 
-#### 17430 11:44:02 NA
+#### 2017-09-21 11:44:02 CET
 
-![](screenshots/550.png)
+![](screenshots/00550.png)
 
-#### 17430 02:15:28 NA
+#### 2017-09-21 11:45:32 CET
 
-![](screenshots/551.png)
+![](screenshots/00549.png)
 
-#### 17430 02:01:36 NA
+#### 2017-09-21 11:46:18 CET
 
-![](screenshots/552.png)
+![](screenshots/00548.png)
 
-#### 17430 01:46:25 NA
+#### 2017-09-21 11:46:51 CET
 
-![](screenshots/553.png)
+![](screenshots/00547.png)
 
-#### 17430 01:38:23 NA
+#### 2017-09-21 11:47:40 CET
 
-![](screenshots/554.png)
+![](screenshots/00546.png)
 
-#### 17430 01:27:28 NA
+#### 2017-09-21 11:49:20 CET
 
-![](screenshots/555.png)
+![](screenshots/00545.png)
 
-#### 17430 01:13:18 NA
+#### 2017-09-21 11:55:11 CET
 
-![](screenshots/556.png)
+![](screenshots/00544.png)
 
-#### 17430 01:02:15 NA
+#### 2017-09-21 11:56:12 CET
 
-![](screenshots/557.png)
+![](screenshots/00543.png)
 
-#### 17430 00:49:02 NA
+#### 2017-09-21 11:58:49 CET
 
-![](screenshots/558.png)
+![](screenshots/00542.png)
 
-#### 17430 00:45:59 NA
+#### 2017-09-21 11:59:41 CET
 
-![](screenshots/559.png)
+![](screenshots/00541.png)
 
-#### 17430 00:43:03 NA
+#### 2017-09-21 12:00:54 CET
 
-![](screenshots/560.png)
+![](screenshots/00540.png)
 
-#### 17430 00:41:22 NA
+#### 2017-09-21 12:01:58 CET
 
-![](screenshots/561.png)
+![](screenshots/00539.png)
 
-#### 17430 00:40:36 NA
+#### 2017-09-21 18:12:19 CET
 
-![](screenshots/562.png)
+![](screenshots/00538.png)
 
 ppcatalunya 2017-09-22
 ----------------------
 
-#### 17431 13:31:30 NA
+#### 2017-09-22 10:07:20 CET
 
-![](screenshots/563.png)
+![](screenshots/00570.png)
 
-#### 17431 11:59:53 NA
+#### 2017-09-22 11:17:02 CET
 
-![](screenshots/564.png)
+![](screenshots/00569.png)
 
-#### 17431 11:58:49 NA
+#### 2017-09-22 11:39:22 CET
 
-![](screenshots/565.png)
+![](screenshots/00568.png)
 
-#### 17431 11:56:21 NA
+#### 2017-09-22 11:48:59 CET
 
-![](screenshots/566.png)
+![](screenshots/00567.png)
 
-#### 17431 11:48:59 NA
+#### 2017-09-22 11:56:21 CET
 
-![](screenshots/567.png)
+![](screenshots/00566.png)
 
-#### 17431 11:39:22 NA
+#### 2017-09-22 11:58:49 CET
 
-![](screenshots/568.png)
+![](screenshots/00565.png)
 
-#### 17431 11:17:02 NA
+#### 2017-09-22 11:59:53 CET
 
-![](screenshots/569.png)
+![](screenshots/00564.png)
 
-#### 17431 10:07:20 NA
+#### 2017-09-22 13:31:30 CET
 
-![](screenshots/570.png)
+![](screenshots/00563.png)
 
 ppopular 2017-09-20
 -------------------
 
-#### 17429 22:25:35 NA
+#### 2017-09-20 08:00:05 CET
 
-![](screenshots/571.png)
+![](screenshots/00608.png)
 
-#### 17429 22:22:20 NA
+#### 2017-09-20 08:59:44 CET
 
-![](screenshots/572.png)
+![](screenshots/00607.png)
 
-#### 17429 22:18:42 NA
+#### 2017-09-20 09:09:19 CET
 
-![](screenshots/573.png)
+![](screenshots/00606.png)
 
-#### 17429 22:16:39 NA
+#### 2017-09-20 09:15:12 CET
 
-![](screenshots/574.png)
+![](screenshots/00605.png)
 
-#### 17429 22:14:26 NA
+#### 2017-09-20 09:16:29 CET
 
-![](screenshots/575.png)
+![](screenshots/00604.png)
 
-#### 17429 21:20:44 NA
+#### 2017-09-20 09:20:32 CET
 
-![](screenshots/576.png)
+![](screenshots/00603.png)
 
-#### 17429 21:13:41 NA
+#### 2017-09-20 09:30:25 CET
 
-![](screenshots/577.png)
+![](screenshots/00602.png)
 
-#### 17429 21:10:49 NA
+#### 2017-09-20 10:39:52 CET
 
-![](screenshots/578.png)
+![](screenshots/00601.png)
 
-#### 17429 19:51:55 NA
+#### 2017-09-20 11:05:48 CET
 
-![](screenshots/579.png)
+![](screenshots/00600.png)
 
-#### 17429 19:49:55 NA
+#### 2017-09-20 11:46:59 CET
 
-![](screenshots/580.png)
+![](screenshots/00599.png)
 
-#### 17429 19:48:13 NA
+#### 2017-09-20 12:12:56 CET
 
-![](screenshots/581.png)
+![](screenshots/00598.png)
 
-#### 17429 19:46:23 NA
+#### 2017-09-20 13:33:36 CET
 
-![](screenshots/582.png)
+![](screenshots/00597.png)
 
-#### 17429 19:44:43 NA
+#### 2017-09-20 14:01:45 CET
 
-![](screenshots/583.png)
+![](screenshots/00596.png)
 
-#### 17429 19:24:42 NA
+#### 2017-09-20 14:05:58 CET
 
-![](screenshots/584.png)
+![](screenshots/00595.png)
 
-#### 17429 18:12:16 NA
+#### 2017-09-20 14:08:54 CET
 
-![](screenshots/585.png)
+![](screenshots/00594.png)
 
-#### 17429 16:19:39 NA
+#### 2017-09-20 14:12:00 CET
 
-![](screenshots/586.png)
+![](screenshots/00593.png)
 
-#### 17429 14:47:27 NA
+#### 2017-09-20 14:40:50 CET
 
-![](screenshots/587.png)
+![](screenshots/00592.png)
 
-#### 17429 14:46:45 NA
+#### 2017-09-20 14:42:26 CET
 
-![](screenshots/588.png)
+![](screenshots/00591.png)
 
-#### 17429 14:45:41 NA
+#### 2017-09-20 14:44:33 CET
 
-![](screenshots/589.png)
+![](screenshots/00590.png)
 
-#### 17429 14:44:33 NA
+#### 2017-09-20 14:45:41 CET
 
-![](screenshots/590.png)
+![](screenshots/00589.png)
 
-#### 17429 14:42:26 NA
+#### 2017-09-20 14:46:45 CET
 
-![](screenshots/591.png)
+![](screenshots/00588.png)
 
-#### 17429 14:40:50 NA
+#### 2017-09-20 14:47:27 CET
 
-![](screenshots/592.png)
+![](screenshots/00587.png)
 
-#### 17429 14:12:00 NA
+#### 2017-09-20 16:19:39 CET
 
-![](screenshots/593.png)
+![](screenshots/00586.png)
 
-#### 17429 14:08:54 NA
+#### 2017-09-20 18:12:16 CET
 
-![](screenshots/594.png)
+![](screenshots/00585.png)
 
-#### 17429 14:05:58 NA
+#### 2017-09-20 19:24:42 CET
 
-![](screenshots/595.png)
+![](screenshots/00584.png)
 
-#### 17429 14:01:45 NA
+#### 2017-09-20 19:44:43 CET
 
-![](screenshots/596.png)
+![](screenshots/00583.png)
 
-#### 17429 13:33:36 NA
+#### 2017-09-20 19:46:23 CET
 
-![](screenshots/597.png)
+![](screenshots/00582.png)
 
-#### 17429 12:12:56 NA
+#### 2017-09-20 19:48:13 CET
 
-![](screenshots/598.png)
+![](screenshots/00581.png)
 
-#### 17429 11:46:59 NA
+#### 2017-09-20 19:49:55 CET
 
-![](screenshots/599.png)
+![](screenshots/00580.png)
 
-#### 17429 11:05:48 NA
+#### 2017-09-20 19:51:55 CET
 
-![](screenshots/600.png)
+![](screenshots/00579.png)
 
-#### 17429 10:39:52 NA
+#### 2017-09-20 21:10:49 CET
 
-![](screenshots/601.png)
+![](screenshots/00578.png)
 
-#### 17429 09:30:25 NA
+#### 2017-09-20 21:13:41 CET
 
-![](screenshots/602.png)
+![](screenshots/00577.png)
 
-#### 17429 09:20:32 NA
+#### 2017-09-20 21:20:44 CET
 
-![](screenshots/603.png)
+![](screenshots/00576.png)
 
-#### 17429 09:16:29 NA
+#### 2017-09-20 22:14:26 CET
 
-![](screenshots/604.png)
+![](screenshots/00575.png)
 
-#### 17429 09:15:12 NA
+#### 2017-09-20 22:16:39 CET
 
-![](screenshots/605.png)
+![](screenshots/00574.png)
 
-#### 17429 09:09:19 NA
+#### 2017-09-20 22:18:42 CET
 
-![](screenshots/606.png)
+![](screenshots/00573.png)
 
-#### 17429 08:59:44 NA
+#### 2017-09-20 22:22:20 CET
 
-![](screenshots/607.png)
+![](screenshots/00572.png)
 
-#### 17429 08:00:05 NA
+#### 2017-09-20 22:25:35 CET
 
-![](screenshots/608.png)
+![](screenshots/00571.png)
 
 ppopular 2017-09-21
 -------------------
 
-#### 17430 17:46:25 NA
+#### 2017-09-21 08:00:03 CET
 
-![](screenshots/609.png)
+![](screenshots/00644.png)
 
-#### 17430 15:50:27 NA
+#### 2017-09-21 08:10:25 CET
 
-![](screenshots/610.png)
+![](screenshots/00643.png)
 
-#### 17430 14:10:11 NA
+#### 2017-09-21 08:17:49 CET
 
-![](screenshots/611.png)
+![](screenshots/00642.png)
 
-#### 17430 13:51:30 NA
+#### 2017-09-21 08:18:58 CET
 
-![](screenshots/612.png)
+![](screenshots/00641.png)
 
-#### 17430 13:48:35 NA
+#### 2017-09-21 08:19:58 CET
 
-![](screenshots/613.png)
+![](screenshots/00640.png)
 
-#### 17430 13:46:43 NA
+#### 2017-09-21 08:21:13 CET
 
-![](screenshots/614.png)
+![](screenshots/00639.png)
 
-#### 17430 13:43:41 NA
+#### 2017-09-21 08:26:23 CET
 
-![](screenshots/615.png)
+![](screenshots/00638.png)
 
-#### 17430 12:31:56 NA
+#### 2017-09-21 08:35:02 CET
 
-![](screenshots/616.png)
+![](screenshots/00637.png)
 
-#### 17430 12:16:29 NA
+#### 2017-09-21 08:54:47 CET
 
-![](screenshots/617.png)
+![](screenshots/00636.png)
 
-#### 17430 11:30:18 NA
+#### 2017-09-21 08:56:12 CET
 
-![](screenshots/618.png)
+![](screenshots/00635.png)
 
-#### 17430 11:28:43 NA
+#### 2017-09-21 09:14:28 CET
 
-![](screenshots/619.png)
+![](screenshots/00634.png)
 
-#### 17430 11:26:53 NA
+#### 2017-09-21 09:16:13 CET
 
-![](screenshots/620.png)
+![](screenshots/00633.png)
 
-#### 17430 11:12:30 NA
+#### 2017-09-21 09:17:37 CET
 
-![](screenshots/621.png)
+![](screenshots/00632.png)
 
-#### 17430 10:55:58 NA
+#### 2017-09-21 09:20:11 CET
 
-![](screenshots/622.png)
+![](screenshots/00631.png)
 
-#### 17430 10:47:10 NA
+#### 2017-09-21 09:21:14 CET
 
-![](screenshots/623.png)
+![](screenshots/00630.png)
 
-#### 17430 10:29:07 NA
+#### 2017-09-21 09:50:46 CET
 
-![](screenshots/624.png)
+![](screenshots/00629.png)
 
-#### 17430 09:55:47 NA
+#### 2017-09-21 09:51:38 CET
 
-![](screenshots/625.png)
+![](screenshots/00628.png)
 
-#### 17430 09:55:12 NA
+#### 2017-09-21 09:53:50 CET
 
-![](screenshots/626.png)
+![](screenshots/00627.png)
 
-#### 17430 09:53:50 NA
+#### 2017-09-21 09:55:12 CET
 
-![](screenshots/627.png)
+![](screenshots/00626.png)
 
-#### 17430 09:51:38 NA
+#### 2017-09-21 09:55:47 CET
 
-![](screenshots/628.png)
+![](screenshots/00625.png)
 
-#### 17430 09:50:46 NA
+#### 2017-09-21 10:29:07 CET
 
-![](screenshots/629.png)
+![](screenshots/00624.png)
 
-#### 17430 09:21:14 NA
+#### 2017-09-21 10:47:10 CET
 
-![](screenshots/630.png)
+![](screenshots/00623.png)
 
-#### 17430 09:20:11 NA
+#### 2017-09-21 10:55:58 CET
 
-![](screenshots/631.png)
+![](screenshots/00622.png)
 
-#### 17430 09:17:37 NA
+#### 2017-09-21 11:12:30 CET
 
-![](screenshots/632.png)
+![](screenshots/00621.png)
 
-#### 17430 09:16:13 NA
+#### 2017-09-21 11:26:53 CET
 
-![](screenshots/633.png)
+![](screenshots/00620.png)
 
-#### 17430 09:14:28 NA
+#### 2017-09-21 11:28:43 CET
 
-![](screenshots/634.png)
+![](screenshots/00619.png)
 
-#### 17430 08:56:12 NA
+#### 2017-09-21 11:30:18 CET
 
-![](screenshots/635.png)
+![](screenshots/00618.png)
 
-#### 17430 08:54:47 NA
+#### 2017-09-21 12:16:29 CET
 
-![](screenshots/636.png)
+![](screenshots/00617.png)
 
-#### 17430 08:35:02 NA
+#### 2017-09-21 12:31:56 CET
 
-![](screenshots/637.png)
+![](screenshots/00616.png)
 
-#### 17430 08:26:23 NA
+#### 2017-09-21 13:43:41 CET
 
-![](screenshots/638.png)
+![](screenshots/00615.png)
 
-#### 17430 08:21:13 NA
+#### 2017-09-21 13:46:43 CET
 
-![](screenshots/639.png)
+![](screenshots/00614.png)
 
-#### 17430 08:19:58 NA
+#### 2017-09-21 13:48:35 CET
 
-![](screenshots/640.png)
+![](screenshots/00613.png)
 
-#### 17430 08:18:58 NA
+#### 2017-09-21 13:51:30 CET
 
-![](screenshots/641.png)
+![](screenshots/00612.png)
 
-#### 17430 08:17:49 NA
+#### 2017-09-21 14:10:11 CET
 
-![](screenshots/642.png)
+![](screenshots/00611.png)
 
-#### 17430 08:10:25 NA
+#### 2017-09-21 15:50:27 CET
 
-![](screenshots/643.png)
+![](screenshots/00610.png)
 
-#### 17430 08:00:03 NA
+#### 2017-09-21 17:46:25 CET
 
-![](screenshots/644.png)
+![](screenshots/00609.png)
 
 ppopular 2017-09-22
 -------------------
 
-#### 17431 17:50:19 NA
+#### 2017-09-22 08:00:05 CET
 
-![](screenshots/645.png)
+![](screenshots/00694.png)
 
-#### 17431 22:12:39 NA
+#### 2017-09-22 09:38:08 CET
 
-![](screenshots/646.png)
+![](screenshots/00693.png)
 
-#### 17431 21:26:40 NA
+#### 2017-09-22 10:09:33 CET
 
-![](screenshots/647.png)
+![](screenshots/00692.png)
 
-#### 17431 21:03:25 NA
+#### 2017-09-22 11:38:05 CET
 
-![](screenshots/648.png)
+![](screenshots/00691.png)
 
-#### 17431 18:41:13 NA
+#### 2017-09-22 11:53:33 CET
 
-![](screenshots/649.png)
+![](screenshots/00690.png)
 
-#### 17431 18:31:24 NA
+#### 2017-09-22 12:09:39 CET
 
-![](screenshots/650.png)
+![](screenshots/00689.png)
 
-#### 17431 17:09:51 NA
+#### 2017-09-22 12:10:52 CET
 
-![](screenshots/651.png)
+![](screenshots/00688.png)
 
-#### 17431 17:03:52 NA
+#### 2017-09-22 12:30:05 CET
 
-![](screenshots/652.png)
+![](screenshots/00687.png)
 
-#### 17431 17:00:44 NA
+#### 2017-09-22 12:33:31 CET
 
-![](screenshots/653.png)
+![](screenshots/00686.png)
 
-#### 17431 16:58:02 NA
+#### 2017-09-22 12:50:24 CET
 
-![](screenshots/654.png)
+![](screenshots/00685.png)
 
-#### 17431 16:56:47 NA
+#### 2017-09-22 12:51:48 CET
 
-![](screenshots/655.png)
+![](screenshots/00684.png)
 
-#### 17431 16:53:33 NA
+#### 2017-09-22 12:52:50 CET
 
-![](screenshots/656.png)
+![](screenshots/00683.png)
 
-#### 17431 16:52:28 NA
+#### 2017-09-22 12:54:31 CET
 
-![](screenshots/657.png)
+![](screenshots/00682.png)
 
-#### 17431 16:50:32 NA
+#### 2017-09-22 12:56:38 CET
 
-![](screenshots/658.png)
+![](screenshots/00681.png)
 
-#### 17431 16:49:46 NA
+#### 2017-09-22 12:58:42 CET
 
-![](screenshots/659.png)
+![](screenshots/00680.png)
 
-#### 17431 16:47:32 NA
+#### 2017-09-22 12:59:56 CET
 
-![](screenshots/660.png)
+![](screenshots/00679.png)
 
-#### 17431 16:46:54 NA
+#### 2017-09-22 13:01:42 CET
 
-![](screenshots/661.png)
+![](screenshots/00678.png)
 
-#### 17431 16:44:44 NA
+#### 2017-09-22 13:02:17 CET
 
-![](screenshots/662.png)
+![](screenshots/00677.png)
 
-#### 17431 16:39:37 NA
+#### 2017-09-22 13:02:38 CET
 
-![](screenshots/663.png)
+![](screenshots/00676.png)
 
-#### 17431 16:32:43 NA
+#### 2017-09-22 13:05:27 CET
 
-![](screenshots/664.png)
+![](screenshots/00675.png)
 
-#### 17431 16:32:43 NA
+#### 2017-09-22 13:05:55 CET
 
-![](screenshots/665.png)
+![](screenshots/00674.png)
 
-#### 17431 16:30:32 NA
+#### 2017-09-22 13:10:09 CET
 
-![](screenshots/666.png)
+![](screenshots/00673.png)
 
-#### 17431 15:50:11 NA
+#### 2017-09-22 13:11:22 CET
 
-![](screenshots/667.png)
+![](screenshots/00672.png)
 
-#### 17431 15:28:46 NA
+#### 2017-09-22 13:30:31 CET
 
-![](screenshots/668.png)
+![](screenshots/00671.png)
 
-#### 17431 14:35:32 NA
+#### 2017-09-22 13:53:23 CET
 
-![](screenshots/669.png)
+![](screenshots/00670.png)
 
-#### 17431 13:53:23 NA
+#### 2017-09-22 14:35:32 CET
 
-![](screenshots/670.png)
+![](screenshots/00669.png)
 
-#### 17431 13:30:31 NA
+#### 2017-09-22 15:28:46 CET
 
-![](screenshots/671.png)
+![](screenshots/00668.png)
 
-#### 17431 13:11:22 NA
+#### 2017-09-22 15:50:11 CET
 
-![](screenshots/672.png)
+![](screenshots/00667.png)
 
-#### 17431 13:10:09 NA
+#### 2017-09-22 16:30:32 CET
 
-![](screenshots/673.png)
+![](screenshots/00666.png)
 
-#### 17431 13:05:55 NA
+#### 2017-09-22 16:32:43 CET
 
-![](screenshots/674.png)
+![](screenshots/00664.png)
 
-#### 17431 13:05:27 NA
+#### 2017-09-22 16:32:43 CET
 
-![](screenshots/675.png)
+![](screenshots/00665.png)
 
-#### 17431 13:02:38 NA
+#### 2017-09-22 16:39:37 CET
 
-![](screenshots/676.png)
+![](screenshots/00663.png)
 
-#### 17431 13:02:17 NA
+#### 2017-09-22 16:44:44 CET
 
-![](screenshots/677.png)
+![](screenshots/00662.png)
 
-#### 17431 13:01:42 NA
+#### 2017-09-22 16:46:54 CET
 
-![](screenshots/678.png)
+![](screenshots/00661.png)
 
-#### 17431 12:59:56 NA
+#### 2017-09-22 16:47:32 CET
 
-![](screenshots/679.png)
+![](screenshots/00660.png)
 
-#### 17431 12:58:42 NA
+#### 2017-09-22 16:49:46 CET
 
-![](screenshots/680.png)
+![](screenshots/00659.png)
 
-#### 17431 12:56:38 NA
+#### 2017-09-22 16:50:32 CET
 
-![](screenshots/681.png)
+![](screenshots/00658.png)
 
-#### 17431 12:54:31 NA
+#### 2017-09-22 16:52:28 CET
 
-![](screenshots/682.png)
+![](screenshots/00657.png)
 
-#### 17431 12:52:50 NA
+#### 2017-09-22 16:53:33 CET
 
-![](screenshots/683.png)
+![](screenshots/00656.png)
 
-#### 17431 12:51:48 NA
+#### 2017-09-22 16:56:47 CET
 
-![](screenshots/684.png)
+![](screenshots/00655.png)
 
-#### 17431 12:50:24 NA
+#### 2017-09-22 16:58:02 CET
 
-![](screenshots/685.png)
+![](screenshots/00654.png)
 
-#### 17431 12:33:31 NA
+#### 2017-09-22 17:00:44 CET
 
-![](screenshots/686.png)
+![](screenshots/00653.png)
 
-#### 17431 12:30:05 NA
+#### 2017-09-22 17:03:52 CET
 
-![](screenshots/687.png)
+![](screenshots/00652.png)
 
-#### 17431 12:10:52 NA
+#### 2017-09-22 17:09:51 CET
 
-![](screenshots/688.png)
+![](screenshots/00651.png)
 
-#### 17431 12:09:39 NA
+#### 2017-09-22 17:50:19 CET
 
-![](screenshots/689.png)
+![](screenshots/00645.png)
 
-#### 17431 11:53:33 NA
+#### 2017-09-22 18:31:24 CET
 
-![](screenshots/690.png)
+![](screenshots/00650.png)
 
-#### 17431 11:38:05 NA
+#### 2017-09-22 18:41:13 CET
 
-![](screenshots/691.png)
+![](screenshots/00649.png)
 
-#### 17431 10:09:33 NA
+#### 2017-09-22 21:03:25 CET
 
-![](screenshots/692.png)
+![](screenshots/00648.png)
 
-#### 17431 09:38:08 NA
+#### 2017-09-22 21:26:40 CET
 
-![](screenshots/693.png)
+![](screenshots/00647.png)
 
-#### 17431 08:00:05 NA
+#### 2017-09-22 22:12:39 CET
 
-![](screenshots/694.png)
+![](screenshots/00646.png)
 
 psoe 2017-09-20
 ---------------
 
-#### 17429 19:38:34 NA
+#### 2017-09-20 08:30:13 CET
 
-![](screenshots/695.png)
+![](screenshots/00712.png)
 
-#### 17429 19:37:43 NA
+#### 2017-09-20 09:00:40 CET
 
-![](screenshots/696.png)
+![](screenshots/00711.png)
 
-#### 17429 19:36:30 NA
+#### 2017-09-20 09:05:06 CET
 
-![](screenshots/697.png)
+![](screenshots/00710.png)
 
-#### 17429 19:35:18 NA
+#### 2017-09-20 09:35:29 CET
 
-![](screenshots/698.png)
+![](screenshots/00709.png)
 
-#### 17429 19:33:52 NA
+#### 2017-09-20 14:56:56 CET
 
-![](screenshots/699.png)
+![](screenshots/00708.png)
 
-#### 17429 19:33:28 NA
+#### 2017-09-20 19:26:14 CET
 
-![](screenshots/700.png)
+![](screenshots/00707.png)
 
-#### 17429 19:33:01 NA
+#### 2017-09-20 19:28:15 CET
 
-![](screenshots/701.png)
+![](screenshots/00706.png)
 
-#### 17429 19:32:49 NA
+#### 2017-09-20 19:28:32 CET
 
-![](screenshots/702.png)
+![](screenshots/00705.png)
 
-#### 17429 19:31:48 NA
+#### 2017-09-20 19:31:23 CET
 
-![](screenshots/703.png)
+![](screenshots/00704.png)
 
-#### 17429 19:31:23 NA
+#### 2017-09-20 19:31:48 CET
 
-![](screenshots/704.png)
+![](screenshots/00703.png)
 
-#### 17429 19:28:32 NA
+#### 2017-09-20 19:32:49 CET
 
-![](screenshots/705.png)
+![](screenshots/00702.png)
 
-#### 17429 19:28:15 NA
+#### 2017-09-20 19:33:01 CET
 
-![](screenshots/706.png)
+![](screenshots/00701.png)
 
-#### 17429 19:26:14 NA
+#### 2017-09-20 19:33:28 CET
 
-![](screenshots/707.png)
+![](screenshots/00700.png)
 
-#### 17429 14:56:56 NA
+#### 2017-09-20 19:33:52 CET
 
-![](screenshots/708.png)
+![](screenshots/00699.png)
 
-#### 17429 09:35:29 NA
+#### 2017-09-20 19:35:18 CET
 
-![](screenshots/709.png)
+![](screenshots/00698.png)
 
-#### 17429 09:05:06 NA
+#### 2017-09-20 19:36:30 CET
 
-![](screenshots/710.png)
+![](screenshots/00697.png)
 
-#### 17429 09:00:40 NA
+#### 2017-09-20 19:37:43 CET
 
-![](screenshots/711.png)
+![](screenshots/00696.png)
 
-#### 17429 08:30:13 NA
+#### 2017-09-20 19:38:34 CET
 
-![](screenshots/712.png)
+![](screenshots/00695.png)
 
 psoe 2017-09-21
 ---------------
 
-#### 17430 22:19:41 NA
+#### 2017-09-21 01:30:16 CET
 
-![](screenshots/713.png)
+![](screenshots/00735.png)
 
-#### 17430 22:18:22 NA
+#### 2017-09-21 08:00:26 CET
 
-![](screenshots/714.png)
+![](screenshots/00734.png)
 
-#### 17430 22:17:50 NA
+#### 2017-09-21 09:04:21 CET
 
-![](screenshots/715.png)
+![](screenshots/00733.png)
 
-#### 17430 22:16:31 NA
+#### 2017-09-21 09:17:05 CET
 
-![](screenshots/716.png)
+![](screenshots/00732.png)
 
-#### 17430 21:45:07 NA
+#### 2017-09-21 09:17:50 CET
 
-![](screenshots/717.png)
+![](screenshots/00731.png)
 
-#### 17430 18:01:47 NA
+#### 2017-09-21 09:19:09 CET
 
-![](screenshots/718.png)
+![](screenshots/00730.png)
 
-#### 17430 17:27:35 NA
+#### 2017-09-21 09:19:29 CET
 
-![](screenshots/719.png)
+![](screenshots/00729.png)
 
-#### 17430 14:15:08 NA
+#### 2017-09-21 09:24:50 CET
 
-![](screenshots/720.png)
+![](screenshots/00728.png)
 
-#### 17430 12:45:10 NA
+#### 2017-09-21 09:29:55 CET
 
-![](screenshots/721.png)
+![](screenshots/00727.png)
 
-#### 17430 12:12:47 NA
+#### 2017-09-21 09:34:09 CET
 
-![](screenshots/722.png)
+![](screenshots/00726.png)
 
-#### 17430 09:39:29 NA
+#### 2017-09-21 09:37:02 CET
 
-![](screenshots/723.png)
+![](screenshots/00725.png)
 
-#### 17430 09:38:03 NA
+#### 2017-09-21 09:38:03 CET
 
-![](screenshots/724.png)
+![](screenshots/00724.png)
 
-#### 17430 09:37:02 NA
+#### 2017-09-21 09:39:29 CET
 
-![](screenshots/725.png)
+![](screenshots/00723.png)
 
-#### 17430 09:34:09 NA
+#### 2017-09-21 12:12:47 CET
 
-![](screenshots/726.png)
+![](screenshots/00722.png)
 
-#### 17430 09:29:55 NA
+#### 2017-09-21 12:45:10 CET
 
-![](screenshots/727.png)
+![](screenshots/00721.png)
 
-#### 17430 09:24:50 NA
+#### 2017-09-21 14:15:08 CET
 
-![](screenshots/728.png)
+![](screenshots/00720.png)
 
-#### 17430 09:19:29 NA
+#### 2017-09-21 17:27:35 CET
 
-![](screenshots/729.png)
+![](screenshots/00719.png)
 
-#### 17430 09:19:09 NA
+#### 2017-09-21 18:01:47 CET
 
-![](screenshots/730.png)
+![](screenshots/00718.png)
 
-#### 17430 09:17:50 NA
+#### 2017-09-21 21:45:07 CET
 
-![](screenshots/731.png)
+![](screenshots/00717.png)
 
-#### 17430 09:17:05 NA
+#### 2017-09-21 22:16:31 CET
 
-![](screenshots/732.png)
+![](screenshots/00716.png)
 
-#### 17430 09:04:21 NA
+#### 2017-09-21 22:17:50 CET
 
-![](screenshots/733.png)
+![](screenshots/00715.png)
 
-#### 17430 08:00:26 NA
+#### 2017-09-21 22:18:22 CET
 
-![](screenshots/734.png)
+![](screenshots/00714.png)
 
-#### 17430 01:30:16 NA
+#### 2017-09-21 22:19:41 CET
 
-![](screenshots/735.png)
+![](screenshots/00713.png)
 
 psoe 2017-09-22
 ---------------
 
-#### 17431 15:28:59 NA
+#### 2017-09-22 09:15:08 CET
 
-![](screenshots/736.png)
+![](screenshots/00740.png)
 
-#### 17431 12:27:57 NA
+#### 2017-09-22 10:36:42 CET
 
-![](screenshots/737.png)
+![](screenshots/00739.png)
 
-#### 17431 11:40:15 NA
+#### 2017-09-22 11:40:15 CET
 
-![](screenshots/738.png)
+![](screenshots/00738.png)
 
-#### 17431 10:36:42 NA
+#### 2017-09-22 12:27:57 CET
 
-![](screenshots/739.png)
+![](screenshots/00737.png)
 
-#### 17431 09:15:08 NA
+#### 2017-09-22 15:28:59 CET
 
-![](screenshots/740.png)
+![](screenshots/00736.png)
 
 sanchezcastejon 2017-09-20
 --------------------------
 
-#### 17429 22:17:35 NA
+#### 2017-09-20 22:17:35 CET
 
-![](screenshots/741.png)
+![](screenshots/00741.png)
 
 sanchezcastejon 2017-09-21
 --------------------------
 
-#### 17430 22:22:57 NA
+#### 2017-09-21 11:29:22 CET
 
-![](screenshots/742.png)
+![](screenshots/00746.png)
 
-#### 17430 17:59:13 NA
+#### 2017-09-21 12:28:36 CET
 
-![](screenshots/743.png)
+![](screenshots/00745.png)
 
-#### 17430 14:08:55 NA
+#### 2017-09-21 14:08:55 CET
 
-![](screenshots/744.png)
+![](screenshots/00744.png)
 
-#### 17430 12:28:36 NA
+#### 2017-09-21 17:59:13 CET
 
-![](screenshots/745.png)
+![](screenshots/00743.png)
 
-#### 17430 11:29:22 NA
+#### 2017-09-21 22:22:57 CET
 
-![](screenshots/746.png)
+![](screenshots/00742.png)
 
 sanchezcastejon 2017-09-22
 --------------------------
 
-#### 17431 10:28:37 NA
+#### 2017-09-22 10:28:37 CET
 
-![](screenshots/747.png)
+![](screenshots/00747.png)
 
 santi\_abascal 2017-09-20
 -------------------------
 
-#### 17429 10:06:30 NA
+#### 2017-09-20 09:14:26 CET
 
-![](screenshots/748.png)
+![](screenshots/00749.png)
 
-#### 17429 09:14:26 NA
+#### 2017-09-20 10:06:30 CET
 
-![](screenshots/749.png)
+![](screenshots/00748.png)
 
-#### 17429 19:09:16 NA
+#### 2017-09-20 10:16:20 CET
 
-![](screenshots/750.png)
+![](screenshots/00758.png)
 
-#### 17429 17:33:12 NA
+#### 2017-09-20 10:27:30 CET
 
-![](screenshots/751.png)
+![](screenshots/00757.png)
 
-#### 17429 17:11:53 NA
+#### 2017-09-20 12:47:58 CET
 
-![](screenshots/752.png)
+![](screenshots/00756.png)
 
-#### 17429 15:56:08 NA
+#### 2017-09-20 12:51:29 CET
 
-![](screenshots/753.png)
+![](screenshots/00755.png)
 
-#### 17429 15:47:48 NA
+#### 2017-09-20 15:47:48 CET
 
-![](screenshots/754.png)
+![](screenshots/00754.png)
 
-#### 17429 12:51:29 NA
+#### 2017-09-20 15:56:08 CET
 
-![](screenshots/755.png)
+![](screenshots/00753.png)
 
-#### 17429 12:47:58 NA
+#### 2017-09-20 17:11:53 CET
 
-![](screenshots/756.png)
+![](screenshots/00752.png)
 
-#### 17429 10:27:30 NA
+#### 2017-09-20 17:33:12 CET
 
-![](screenshots/757.png)
+![](screenshots/00751.png)
 
-#### 17429 10:16:20 NA
+#### 2017-09-20 19:09:16 CET
 
-![](screenshots/758.png)
+![](screenshots/00750.png)
 
 santi\_abascal 2017-09-21
 -------------------------
 
-#### 17430 22:17:00 NA
+#### 2017-09-21 00:12:22 CET
 
-![](screenshots/759.png)
+![](screenshots/00771.png)
 
-#### 17430 20:42:13 NA
+#### 2017-09-21 00:49:07 CET
 
-![](screenshots/760.png)
+![](screenshots/00770.png)
 
-#### 17430 19:36:10 NA
+#### 2017-09-21 11:50:28 CET
 
-![](screenshots/761.png)
+![](screenshots/00769.png)
 
-#### 17430 16:19:34 NA
+#### 2017-09-21 12:24:29 CET
 
-![](screenshots/762.png)
+![](screenshots/00768.png)
 
-#### 17430 16:00:03 NA
+#### 2017-09-21 12:50:57 CET
 
-![](screenshots/763.png)
+![](screenshots/00767.png)
 
-#### 17430 14:53:03 NA
+#### 2017-09-21 12:55:05 CET
 
-![](screenshots/764.png)
+![](screenshots/00766.png)
 
-#### 17430 13:16:03 NA
+#### 2017-09-21 13:16:03 CET
 
-![](screenshots/765.png)
+![](screenshots/00765.png)
 
-#### 17430 12:55:05 NA
+#### 2017-09-21 14:53:03 CET
 
-![](screenshots/766.png)
+![](screenshots/00764.png)
 
-#### 17430 12:50:57 NA
+#### 2017-09-21 16:00:03 CET
 
-![](screenshots/767.png)
+![](screenshots/00763.png)
 
-#### 17430 12:24:29 NA
+#### 2017-09-21 16:19:34 CET
 
-![](screenshots/768.png)
+![](screenshots/00762.png)
 
-#### 17430 11:50:28 NA
+#### 2017-09-21 19:36:10 CET
 
-![](screenshots/769.png)
+![](screenshots/00761.png)
 
-#### 17430 00:49:07 NA
+#### 2017-09-21 20:42:13 CET
 
-![](screenshots/770.png)
+![](screenshots/00760.png)
 
-#### 17430 00:12:22 NA
+#### 2017-09-21 22:17:00 CET
 
-![](screenshots/771.png)
+![](screenshots/00759.png)
 
 santi\_abascal 2017-09-22
 -------------------------
 
-#### 17431 19:40:08 NA
+#### 2017-09-22 09:57:36 CET
 
-![](screenshots/772.png)
+![](screenshots/00776.png)
 
-#### 17431 13:30:03 NA
+#### 2017-09-22 10:20:52 CET
 
-![](screenshots/773.png)
+![](screenshots/00775.png)
 
-#### 17431 12:47:01 NA
+#### 2017-09-22 12:47:01 CET
 
-![](screenshots/774.png)
+![](screenshots/00774.png)
 
-#### 17431 10:20:52 NA
+#### 2017-09-22 13:30:03 CET
 
-![](screenshots/775.png)
+![](screenshots/00773.png)
 
-#### 17431 09:57:36 NA
+#### 2017-09-22 19:40:08 CET
 
-![](screenshots/776.png)
+![](screenshots/00772.png)
 
 socialistes\_cat 2017-09-20
 ---------------------------
 
-#### 17429 22:40:36 NA
+#### 2017-09-20 12:34:33 CET
 
-![](screenshots/777.png)
+![](screenshots/00807.png)
 
-#### 17429 22:28:46 NA
+#### 2017-09-20 13:22:31 CET
 
-![](screenshots/778.png)
+![](screenshots/00806.png)
 
-#### 17429 22:18:26 NA
+#### 2017-09-20 13:23:59 CET
 
-![](screenshots/779.png)
+![](screenshots/00805.png)
 
-#### 17429 21:57:38 NA
+#### 2017-09-20 13:25:15 CET
 
-![](screenshots/780.png)
+![](screenshots/00804.png)
 
-#### 17429 21:55:41 NA
+#### 2017-09-20 13:27:37 CET
 
-![](screenshots/781.png)
+![](screenshots/00803.png)
 
-#### 17429 21:49:16 NA
+#### 2017-09-20 13:29:15 CET
 
-![](screenshots/782.png)
+![](screenshots/00802.png)
 
-#### 17429 21:49:05 NA
+#### 2017-09-20 13:30:34 CET
 
-![](screenshots/783.png)
+![](screenshots/00801.png)
 
-#### 17429 21:47:20 NA
+#### 2017-09-20 13:35:06 CET
 
-![](screenshots/784.png)
+![](screenshots/00800.png)
 
-#### 17429 21:45:52 NA
+#### 2017-09-20 13:47:29 CET
 
-![](screenshots/785.png)
+![](screenshots/00799.png)
 
-#### 17429 21:44:46 NA
+#### 2017-09-20 14:01:27 CET
 
-![](screenshots/786.png)
+![](screenshots/00798.png)
 
-#### 17429 21:35:59 NA
+#### 2017-09-20 14:07:34 CET
 
-![](screenshots/787.png)
+![](screenshots/00797.png)
 
-#### 17429 20:39:10 NA
+#### 2017-09-20 14:28:39 CET
 
-![](screenshots/788.png)
+![](screenshots/00796.png)
 
-#### 17429 20:38:09 NA
+#### 2017-09-20 15:28:42 CET
 
-![](screenshots/789.png)
+![](screenshots/00795.png)
 
-#### 17429 20:36:58 NA
+#### 2017-09-20 18:10:59 CET
 
-![](screenshots/790.png)
+![](screenshots/00794.png)
 
-#### 17429 20:35:48 NA
+#### 2017-09-20 20:16:31 CET
 
-![](screenshots/791.png)
+![](screenshots/00793.png)
 
-#### 17429 20:33:28 NA
+#### 2017-09-20 20:33:28 CET
 
-![](screenshots/792.png)
+![](screenshots/00792.png)
 
-#### 17429 20:16:31 NA
+#### 2017-09-20 20:35:48 CET
 
-![](screenshots/793.png)
+![](screenshots/00791.png)
 
-#### 17429 18:10:59 NA
+#### 2017-09-20 20:36:58 CET
 
-![](screenshots/794.png)
+![](screenshots/00790.png)
 
-#### 17429 15:28:42 NA
+#### 2017-09-20 20:38:09 CET
 
-![](screenshots/795.png)
+![](screenshots/00789.png)
 
-#### 17429 14:28:39 NA
+#### 2017-09-20 20:39:10 CET
 
-![](screenshots/796.png)
+![](screenshots/00788.png)
 
-#### 17429 14:07:34 NA
+#### 2017-09-20 21:35:59 CET
 
-![](screenshots/797.png)
+![](screenshots/00787.png)
 
-#### 17429 14:01:27 NA
+#### 2017-09-20 21:44:46 CET
 
-![](screenshots/798.png)
+![](screenshots/00786.png)
 
-#### 17429 13:47:29 NA
+#### 2017-09-20 21:45:52 CET
 
-![](screenshots/799.png)
+![](screenshots/00785.png)
 
-#### 17429 13:35:06 NA
+#### 2017-09-20 21:47:20 CET
 
-![](screenshots/800.png)
+![](screenshots/00784.png)
 
-#### 17429 13:30:34 NA
+#### 2017-09-20 21:49:05 CET
 
-![](screenshots/801.png)
+![](screenshots/00783.png)
 
-#### 17429 13:29:15 NA
+#### 2017-09-20 21:49:16 CET
 
-![](screenshots/802.png)
+![](screenshots/00782.png)
 
-#### 17429 13:27:37 NA
+#### 2017-09-20 21:55:41 CET
 
-![](screenshots/803.png)
+![](screenshots/00781.png)
 
-#### 17429 13:25:15 NA
+#### 2017-09-20 21:57:38 CET
 
-![](screenshots/804.png)
+![](screenshots/00780.png)
 
-#### 17429 13:23:59 NA
+#### 2017-09-20 22:18:26 CET
 
-![](screenshots/805.png)
+![](screenshots/00779.png)
 
-#### 17429 13:22:31 NA
+#### 2017-09-20 22:28:46 CET
 
-![](screenshots/806.png)
+![](screenshots/00778.png)
 
-#### 17429 12:34:33 NA
+#### 2017-09-20 22:40:36 CET
 
-![](screenshots/807.png)
+![](screenshots/00777.png)
 
 socialistes\_cat 2017-09-21
 ---------------------------
 
-#### 17430 23:50:20 NA
+#### 2017-09-21 00:28:04 CET
 
-![](screenshots/808.png)
+![](screenshots/00829.png)
 
-#### 17430 22:18:19 NA
+#### 2017-09-21 00:30:38 CET
 
-![](screenshots/809.png)
+![](screenshots/00828.png)
 
-#### 17430 21:25:11 NA
+#### 2017-09-21 00:34:54 CET
 
-![](screenshots/810.png)
+![](screenshots/00816.png)
 
-#### 17430 20:27:39 NA
+#### 2017-09-21 08:52:17 CET
 
-![](screenshots/811.png)
+![](screenshots/00827.png)
 
-#### 17430 19:11:53 NA
+#### 2017-09-21 08:53:55 CET
 
-![](screenshots/812.png)
+![](screenshots/00826.png)
 
-#### 17430 17:57:47 NA
+#### 2017-09-21 08:54:52 CET
 
-![](screenshots/813.png)
+![](screenshots/00825.png)
 
-#### 17430 14:29:27 NA
+#### 2017-09-21 09:53:11 CET
 
-![](screenshots/814.png)
+![](screenshots/00824.png)
 
-#### 17430 13:00:31 NA
+#### 2017-09-21 11:08:40 CET
 
-![](screenshots/815.png)
+![](screenshots/00823.png)
 
-#### 17430 00:34:54 NA
+#### 2017-09-21 11:30:24 CET
 
-![](screenshots/816.png)
+![](screenshots/00822.png)
 
-#### 17430 12:59:09 NA
+#### 2017-09-21 12:52:50 CET
 
-![](screenshots/817.png)
+![](screenshots/00821.png)
 
-#### 17430 12:56:45 NA
+#### 2017-09-21 12:54:44 CET
 
-![](screenshots/818.png)
+![](screenshots/00820.png)
 
-#### 17430 12:55:56 NA
+#### 2017-09-21 12:55:56 CET
 
-![](screenshots/819.png)
+![](screenshots/00819.png)
 
-#### 17430 12:54:44 NA
+#### 2017-09-21 12:56:45 CET
 
-![](screenshots/820.png)
+![](screenshots/00818.png)
 
-#### 17430 12:52:50 NA
+#### 2017-09-21 12:59:09 CET
 
-![](screenshots/821.png)
+![](screenshots/00817.png)
 
-#### 17430 11:30:24 NA
+#### 2017-09-21 13:00:31 CET
 
-![](screenshots/822.png)
+![](screenshots/00815.png)
 
-#### 17430 11:08:40 NA
+#### 2017-09-21 14:29:27 CET
 
-![](screenshots/823.png)
+![](screenshots/00814.png)
 
-#### 17430 09:53:11 NA
+#### 2017-09-21 17:57:47 CET
 
-![](screenshots/824.png)
+![](screenshots/00813.png)
 
-#### 17430 08:54:52 NA
+#### 2017-09-21 19:11:53 CET
 
-![](screenshots/825.png)
+![](screenshots/00812.png)
 
-#### 17430 08:53:55 NA
+#### 2017-09-21 20:27:39 CET
 
-![](screenshots/826.png)
+![](screenshots/00811.png)
 
-#### 17430 08:52:17 NA
+#### 2017-09-21 21:25:11 CET
 
-![](screenshots/827.png)
+![](screenshots/00810.png)
 
-#### 17430 00:30:38 NA
+#### 2017-09-21 22:18:19 CET
 
-![](screenshots/828.png)
+![](screenshots/00809.png)
 
-#### 17430 00:28:04 NA
+#### 2017-09-21 23:50:20 CET
 
-![](screenshots/829.png)
+![](screenshots/00808.png)
 
 socialistes\_cat 2017-09-22
 ---------------------------
 
-#### 17431 14:13:16 NA
+#### 2017-09-22 07:45:28 CET
 
-![](screenshots/830.png)
+![](screenshots/00847.png)
 
-#### 17431 12:51:32 NA
+#### 2017-09-22 09:03:28 CET
 
-![](screenshots/831.png)
+![](screenshots/00846.png)
 
-#### 17431 12:44:49 NA
+#### 2017-09-22 11:24:30 CET
 
-![](screenshots/832.png)
+![](screenshots/00845.png)
 
-#### 17431 12:40:45 NA
+#### 2017-09-22 11:25:38 CET
 
-![](screenshots/833.png)
+![](screenshots/00844.png)
 
-#### 17431 12:37:38 NA
+#### 2017-09-22 11:30:11 CET
 
-![](screenshots/834.png)
+![](screenshots/00843.png)
 
-#### 17431 12:16:58 NA
+#### 2017-09-22 11:31:23 CET
 
-![](screenshots/835.png)
+![](screenshots/00842.png)
 
-#### 17431 11:48:31 NA
+#### 2017-09-22 11:32:16 CET
 
-![](screenshots/836.png)
+![](screenshots/00841.png)
 
-#### 17431 11:45:50 NA
+#### 2017-09-22 11:34:37 CET
 
-![](screenshots/837.png)
+![](screenshots/00840.png)
 
-#### 17431 11:44:17 NA
+#### 2017-09-22 11:37:26 CET
 
-![](screenshots/838.png)
+![](screenshots/00839.png)
 
-#### 17431 11:37:26 NA
+#### 2017-09-22 11:44:17 CET
 
-![](screenshots/839.png)
+![](screenshots/00838.png)
 
-#### 17431 11:34:37 NA
+#### 2017-09-22 11:45:50 CET
 
-![](screenshots/840.png)
+![](screenshots/00837.png)
 
-#### 17431 11:32:16 NA
+#### 2017-09-22 11:48:31 CET
 
-![](screenshots/841.png)
+![](screenshots/00836.png)
 
-#### 17431 11:31:23 NA
+#### 2017-09-22 12:16:58 CET
 
-![](screenshots/842.png)
+![](screenshots/00835.png)
 
-#### 17431 11:30:11 NA
+#### 2017-09-22 12:37:38 CET
 
-![](screenshots/843.png)
+![](screenshots/00834.png)
 
-#### 17431 11:25:38 NA
+#### 2017-09-22 12:40:45 CET
 
-![](screenshots/844.png)
+![](screenshots/00833.png)
 
-#### 17431 11:24:30 NA
+#### 2017-09-22 12:44:49 CET
 
-![](screenshots/845.png)
+![](screenshots/00832.png)
 
-#### 17431 09:03:28 NA
+#### 2017-09-22 12:51:32 CET
 
-![](screenshots/846.png)
+![](screenshots/00831.png)
 
-#### 17431 07:45:28 NA
+#### 2017-09-22 14:13:16 CET
 
-![](screenshots/847.png)
+![](screenshots/00830.png)
 
 societatcc 2017-09-20
 ---------------------
 
-#### 17429 20:19:50 NA
+#### 2017-09-20 07:14:46 CET
 
-![](screenshots/848.png)
+![](screenshots/00867.png)
 
-#### 17429 23:23:18 NA
+#### 2017-09-20 07:17:37 CET
 
-![](screenshots/849.png)
+![](screenshots/00866.png)
 
-#### 17429 22:45:28 NA
+#### 2017-09-20 07:47:01 CET
 
-![](screenshots/850.png)
+![](screenshots/00865.png)
 
-#### 17429 22:23:26 NA
+#### 2017-09-20 09:42:49 CET
 
-![](screenshots/851.png)
+![](screenshots/00864.png)
 
-#### 17429 21:43:27 NA
+#### 2017-09-20 16:24:38 CET
 
-![](screenshots/852.png)
+![](screenshots/00863.png)
 
-#### 17429 21:11:13 NA
+#### 2017-09-20 17:09:30 CET
 
-![](screenshots/853.png)
+![](screenshots/00862.png)
 
-#### 17429 21:09:45 NA
+#### 2017-09-20 17:26:55 CET
 
-![](screenshots/854.png)
+![](screenshots/00861.png)
 
-#### 17429 20:57:20 NA
+#### 2017-09-20 17:35:00 CET
 
-![](screenshots/855.png)
+![](screenshots/00860.png)
 
-#### 17429 20:17:31 NA
+#### 2017-09-20 19:28:31 CET
 
-![](screenshots/856.png)
+![](screenshots/00859.png)
 
-#### 17429 19:55:11 NA
+#### 2017-09-20 19:35:31 CET
 
-![](screenshots/857.png)
+![](screenshots/00858.png)
 
-#### 17429 19:35:31 NA
+#### 2017-09-20 19:55:11 CET
 
-![](screenshots/858.png)
+![](screenshots/00857.png)
 
-#### 17429 19:28:31 NA
+#### 2017-09-20 20:17:31 CET
 
-![](screenshots/859.png)
+![](screenshots/00856.png)
 
-#### 17429 17:35:00 NA
+#### 2017-09-20 20:19:50 CET
 
-![](screenshots/860.png)
+![](screenshots/00848.png)
 
-#### 17429 17:26:55 NA
+#### 2017-09-20 20:57:20 CET
 
-![](screenshots/861.png)
+![](screenshots/00855.png)
 
-#### 17429 17:09:30 NA
+#### 2017-09-20 21:09:45 CET
 
-![](screenshots/862.png)
+![](screenshots/00854.png)
 
-#### 17429 16:24:38 NA
+#### 2017-09-20 21:11:13 CET
 
-![](screenshots/863.png)
+![](screenshots/00853.png)
 
-#### 17429 09:42:49 NA
+#### 2017-09-20 21:43:27 CET
 
-![](screenshots/864.png)
+![](screenshots/00852.png)
 
-#### 17429 07:47:01 NA
+#### 2017-09-20 22:23:26 CET
 
-![](screenshots/865.png)
+![](screenshots/00851.png)
 
-#### 17429 07:17:37 NA
+#### 2017-09-20 22:45:28 CET
 
-![](screenshots/866.png)
+![](screenshots/00850.png)
 
-#### 17429 07:14:46 NA
+#### 2017-09-20 23:23:18 CET
 
-![](screenshots/867.png)
+![](screenshots/00849.png)
 
 societatcc 2017-09-21
 ---------------------
 
-#### 17430 22:36:23 NA
+#### 2017-09-21 08:14:23 CET
 
-![](screenshots/868.png)
+![](screenshots/00886.png)
 
-#### 17430 21:47:01 NA
+#### 2017-09-21 08:25:04 CET
 
-![](screenshots/869.png)
+![](screenshots/00885.png)
 
-#### 17430 21:43:35 NA
+#### 2017-09-21 08:37:23 CET
 
-![](screenshots/870.png)
+![](screenshots/00884.png)
 
-#### 17430 21:18:07 NA
+#### 2017-09-21 10:59:45 CET
 
-![](screenshots/871.png)
+![](screenshots/00883.png)
 
-#### 17430 20:51:12 NA
+#### 2017-09-21 11:05:56 CET
 
-![](screenshots/872.png)
+![](screenshots/00882.png)
 
-#### 17430 20:16:14 NA
+#### 2017-09-21 11:30:19 CET
 
-![](screenshots/873.png)
+![](screenshots/00881.png)
 
-#### 17430 19:42:14 NA
+#### 2017-09-21 13:04:43 CET
 
-![](screenshots/874.png)
+![](screenshots/00880.png)
 
-#### 17430 19:41:16 NA
+#### 2017-09-21 13:14:37 CET
 
-![](screenshots/875.png)
+![](screenshots/00879.png)
 
-#### 17430 16:28:04 NA
+#### 2017-09-21 13:17:36 CET
 
-![](screenshots/876.png)
+![](screenshots/00878.png)
 
-#### 17430 13:23:51 NA
+#### 2017-09-21 13:23:51 CET
 
-![](screenshots/877.png)
+![](screenshots/00877.png)
 
-#### 17430 13:17:36 NA
+#### 2017-09-21 16:28:04 CET
 
-![](screenshots/878.png)
+![](screenshots/00876.png)
 
-#### 17430 13:14:37 NA
+#### 2017-09-21 19:41:16 CET
 
-![](screenshots/879.png)
+![](screenshots/00875.png)
 
-#### 17430 13:04:43 NA
+#### 2017-09-21 19:42:14 CET
 
-![](screenshots/880.png)
+![](screenshots/00874.png)
 
-#### 17430 11:30:19 NA
+#### 2017-09-21 20:16:14 CET
 
-![](screenshots/881.png)
+![](screenshots/00873.png)
 
-#### 17430 11:05:56 NA
+#### 2017-09-21 20:51:12 CET
 
-![](screenshots/882.png)
+![](screenshots/00872.png)
 
-#### 17430 10:59:45 NA
+#### 2017-09-21 21:18:07 CET
 
-![](screenshots/883.png)
+![](screenshots/00871.png)
 
-#### 17430 08:37:23 NA
+#### 2017-09-21 21:43:35 CET
 
-![](screenshots/884.png)
+![](screenshots/00870.png)
 
-#### 17430 08:25:04 NA
+#### 2017-09-21 21:47:01 CET
 
-![](screenshots/885.png)
+![](screenshots/00869.png)
 
-#### 17430 08:14:23 NA
+#### 2017-09-21 22:36:23 CET
 
-![](screenshots/886.png)
+![](screenshots/00868.png)
 
 societatcc 2017-09-22
 ---------------------
 
-#### 17431 08:52:25 NA
+#### 2017-09-22 08:52:25 CET
 
-![](screenshots/887.png)
+![](screenshots/00887.png)
 
-#### 17431 23:11:14 NA
+#### 2017-09-22 09:00:23 CET
 
-![](screenshots/888.png)
+![](screenshots/00914.png)
 
-#### 17431 22:24:17 NA
+#### 2017-09-22 09:06:09 CET
 
-![](screenshots/889.png)
+![](screenshots/00913.png)
 
-#### 17431 21:24:30 NA
+#### 2017-09-22 09:08:27 CET
 
-![](screenshots/890.png)
+![](screenshots/00912.png)
 
-#### 17431 20:17:05 NA
+#### 2017-09-22 09:15:37 CET
 
-![](screenshots/891.png)
+![](screenshots/00911.png)
 
-#### 17431 19:59:09 NA
+#### 2017-09-22 09:33:35 CET
 
-![](screenshots/892.png)
+![](screenshots/00910.png)
 
-#### 17431 19:34:16 NA
+#### 2017-09-22 09:37:31 CET
 
-![](screenshots/893.png)
+![](screenshots/00909.png)
 
-#### 17431 18:40:19 NA
+#### 2017-09-22 09:41:24 CET
 
-![](screenshots/894.png)
+![](screenshots/00908.png)
 
-#### 17431 18:15:48 NA
+#### 2017-09-22 10:16:57 CET
 
-![](screenshots/895.png)
+![](screenshots/00907.png)
 
-#### 17431 17:17:57 NA
+#### 2017-09-22 11:10:17 CET
 
-![](screenshots/896.png)
+![](screenshots/00906.png)
 
-#### 17431 16:49:27 NA
+#### 2017-09-22 11:17:55 CET
 
-![](screenshots/897.png)
+![](screenshots/00905.png)
 
-#### 17431 16:40:05 NA
+#### 2017-09-22 11:44:14 CET
 
-![](screenshots/898.png)
+![](screenshots/00904.png)
 
-#### 17431 13:25:31 NA
+#### 2017-09-22 11:44:29 CET
 
-![](screenshots/899.png)
+![](screenshots/00903.png)
 
-#### 17431 12:43:13 NA
+#### 2017-09-22 11:46:49 CET
 
-![](screenshots/900.png)
+![](screenshots/00902.png)
 
-#### 17431 12:28:06 NA
+#### 2017-09-22 12:28:06 CET
 
-![](screenshots/901.png)
+![](screenshots/00901.png)
 
-#### 17431 11:46:49 NA
+#### 2017-09-22 12:43:13 CET
 
-![](screenshots/902.png)
+![](screenshots/00900.png)
 
-#### 17431 11:44:29 NA
+#### 2017-09-22 13:25:31 CET
 
-![](screenshots/903.png)
+![](screenshots/00899.png)
 
-#### 17431 11:44:14 NA
+#### 2017-09-22 16:40:05 CET
 
-![](screenshots/904.png)
+![](screenshots/00898.png)
 
-#### 17431 11:17:55 NA
+#### 2017-09-22 16:49:27 CET
 
-![](screenshots/905.png)
+![](screenshots/00897.png)
 
-#### 17431 11:10:17 NA
+#### 2017-09-22 17:17:57 CET
 
-![](screenshots/906.png)
+![](screenshots/00896.png)
 
-#### 17431 10:16:57 NA
+#### 2017-09-22 18:15:48 CET
 
-![](screenshots/907.png)
+![](screenshots/00895.png)
 
-#### 17431 09:41:24 NA
+#### 2017-09-22 18:40:19 CET
 
-![](screenshots/908.png)
+![](screenshots/00894.png)
 
-#### 17431 09:37:31 NA
+#### 2017-09-22 19:34:16 CET
 
-![](screenshots/909.png)
+![](screenshots/00893.png)
 
-#### 17431 09:33:35 NA
+#### 2017-09-22 19:59:09 CET
 
-![](screenshots/910.png)
+![](screenshots/00892.png)
 
-#### 17431 09:15:37 NA
+#### 2017-09-22 20:17:05 CET
 
-![](screenshots/911.png)
+![](screenshots/00891.png)
 
-#### 17431 09:08:27 NA
+#### 2017-09-22 21:24:30 CET
 
-![](screenshots/912.png)
+![](screenshots/00890.png)
 
-#### 17431 09:06:09 NA
+#### 2017-09-22 22:24:17 CET
 
-![](screenshots/913.png)
+![](screenshots/00889.png)
 
-#### 17431 09:00:23 NA
+#### 2017-09-22 23:11:14 CET
 
-![](screenshots/914.png)
+![](screenshots/00888.png)
 
 vox\_es 2017-09-20
 ------------------
 
-#### 17429 20:56:21 NA
+#### 2017-09-20 10:41:42 CET
 
-![](screenshots/915.png)
+![](screenshots/00919.png)
 
-#### 17429 20:27:54 NA
+#### 2017-09-20 12:21:21 CET
 
-![](screenshots/916.png)
+![](screenshots/00918.png)
 
-#### 17429 13:03:22 NA
+#### 2017-09-20 13:03:22 CET
 
-![](screenshots/917.png)
+![](screenshots/00917.png)
 
-#### 17429 12:21:21 NA
+#### 2017-09-20 20:27:54 CET
 
-![](screenshots/918.png)
+![](screenshots/00916.png)
 
-#### 17429 10:41:42 NA
+#### 2017-09-20 20:56:21 CET
 
-![](screenshots/919.png)
+![](screenshots/00915.png)
 
 vox\_es 2017-09-21
 ------------------
 
-#### 17430 23:52:59 NA
+#### 2017-09-21 11:52:08 CET
 
-![](screenshots/920.png)
+![](screenshots/00933.png)
 
-#### 17430 23:25:46 NA
+#### 2017-09-21 12:50:13 CET
 
-![](screenshots/921.png)
+![](screenshots/00932.png)
 
-#### 17430 23:14:22 NA
+#### 2017-09-21 18:49:17 CET
 
-![](screenshots/922.png)
+![](screenshots/00931.png)
 
-#### 17430 23:12:44 NA
+#### 2017-09-21 20:27:14 CET
 
-![](screenshots/923.png)
+![](screenshots/00930.png)
 
-#### 17430 23:12:25 NA
+#### 2017-09-21 20:34:45 CET
 
-![](screenshots/924.png)
+![](screenshots/00929.png)
 
-#### 17430 23:11:14 NA
+#### 2017-09-21 21:20:23 CET
 
-![](screenshots/925.png)
+![](screenshots/00928.png)
 
-#### 17430 22:07:44 NA
+#### 2017-09-21 21:42:09 CET
 
-![](screenshots/926.png)
+![](screenshots/00927.png)
 
-#### 17430 21:42:09 NA
+#### 2017-09-21 22:07:44 CET
 
-![](screenshots/927.png)
+![](screenshots/00926.png)
 
-#### 17430 21:20:23 NA
+#### 2017-09-21 23:11:14 CET
 
-![](screenshots/928.png)
+![](screenshots/00925.png)
 
-#### 17430 20:34:45 NA
+#### 2017-09-21 23:12:25 CET
 
-![](screenshots/929.png)
+![](screenshots/00924.png)
 
-#### 17430 20:27:14 NA
+#### 2017-09-21 23:12:44 CET
 
-![](screenshots/930.png)
+![](screenshots/00923.png)
 
-#### 17430 18:49:17 NA
+#### 2017-09-21 23:14:22 CET
 
-![](screenshots/931.png)
+![](screenshots/00922.png)
 
-#### 17430 12:50:13 NA
+#### 2017-09-21 23:25:46 CET
 
-![](screenshots/932.png)
+![](screenshots/00921.png)
 
-#### 17430 11:52:08 NA
+#### 2017-09-21 23:52:59 CET
 
-![](screenshots/933.png)
+![](screenshots/00920.png)
 
 vox\_es 2017-09-22
 ------------------
 
-#### 17431 22:53:08 NA
+#### 2017-09-22 00:19:00 CET
 
-![](screenshots/934.png)
+![](screenshots/00939.png)
 
-#### 17431 13:57:47 NA
+#### 2017-09-22 00:22:25 CET
 
-![](screenshots/935.png)
+![](screenshots/00938.png)
 
-#### 17431 00:34:35 NA
+#### 2017-09-22 00:23:33 CET
 
-![](screenshots/936.png)
+![](screenshots/00937.png)
 
-#### 17431 00:23:33 NA
+#### 2017-09-22 00:34:35 CET
 
-![](screenshots/937.png)
+![](screenshots/00936.png)
 
-#### 17431 00:22:25 NA
+#### 2017-09-22 13:57:47 CET
 
-![](screenshots/938.png)
+![](screenshots/00935.png)
 
-#### 17431 00:19:00 NA
+#### 2017-09-22 22:53:08 CET
 
-![](screenshots/939.png)
+![](screenshots/00934.png)

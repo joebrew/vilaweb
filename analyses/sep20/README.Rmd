@@ -135,6 +135,7 @@ if(!dir.exists('screenshots')){
   dir.create('screenshots')
 }
 person_dates <- the_dates <- the_times <- the_timezones <- rep(NA, nrow(people_tweets))
+done <- TRUE
 for(i in 1:nrow(people_tweets)){
   message(i)
   this_person <- people_tweets$username[i]
@@ -144,7 +145,7 @@ for(i in 1:nrow(people_tweets)){
   person_dates[i] <- paste0(this_person, ' ', this_date)
   the_dates[i] <- this_date
   the_times[i] <- as.character(people_tweets$time[i])
-  the_timezones <- as.character(people_tweets$timezone[i])
+  the_timezones[i] <- as.character(people_tweets$timezone[i])
   # webshot(this_url, paste0(i, '.png'), 
   #         cliprect = 'viewport')
   file_name <- 
@@ -162,24 +163,34 @@ for(i in 1:nrow(people_tweets)){
     message('Skipping ', i, ' because file already exists.')
   }
 }
+files <- dir('screenshots/')
+
+picture_df <- 
+  data_frame(file = files,
+             person_dates,
+             the_dates,
+             the_times,
+             the_timezones)
+picture_df <- picture_df %>%
+  arrange(person_dates, the_times) %>%
+  mutate(the_dates = as.character(as.Date(the_dates, origin = '1970-01-01')))
 
 ```
 
 ```{r myfile-1-plot, echo = F, results = 'asis'}
-files <- dir('screenshots/')
-for(i in 1:length(files)){
-  this_file <- files[i]
+for(i in 1:nrow(picture_df)){
+  this_file <- picture_df$file[i]
   new_person <- FALSE
   if(i == 1){
     new_person <- TRUE
-  } else if(person_dates[i] != person_dates[i-1]){
+  } else if(picture_df$person_dates[i] != picture_df$person_dates[i-1]){
     new_person <- TRUE
   }
   if(new_person){
-    cat(paste0('\n## ', person_dates[i], '\n\n'))
+    cat(paste0('\n## ', as.character(picture_df$person_dates[i]), '\n\n'))
   }
-  cat(paste0('\n#### ', the_dates[i], ' ', the_times[i], ' ', the_timezones[i], '\n'))
-  cat(paste0('\n![screenshots/',i,'.png](screenshots/', i, '.png)\n'))
+  cat(paste0('\n#### ', as.character(picture_df$the_dates[i]), ' ', as.character(picture_df$the_times[i]), ' ', as.character(picture_df$the_timezones[i]), '\n'))
+  cat(paste0('\n![screenshots/', picture_df$file[i],'](screenshots/', picture_df$file[i], ')\n'))
 
 }
 ```
