@@ -1,0 +1,185 @@
+---
+title: ""
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+library(webshot)
+# Utility for screenshotting tweets:
+# https://github.com/lukehorvat/screenshot-tweet
+```
+
+```{r, fig.height = 8}
+if('people_tweets.RData' %in% dir()){
+  load('people_tweets.RData')
+} else {
+  
+  # # Get most recent tweets from our people of interest
+  if(file.exists('tl.RData')){
+    load('tl.RData')
+  } else {
+    # Connect to the db
+    pg = DBI::dbDriver("PostgreSQL")
+    con = DBI::dbConnect(pg, dbname="twitter")
+    tl <- RPostgreSQL::dbGetQuery(
+      con,
+      paste0("SELECT * FROM twitter")
+    )
+    save(tl, file = 'tl.RData')  
+    dbDisconnect(con)
+    }
+  # Keep only the 2 week period following 20 sep
+  dates <- seq(as.Date('2017-09-20'),(as.Date('2017-09-20')+13), 1)
+  
+  df <- tl %>% filter(date %in% dates)
+  people <- 
+    tolower(c('Santi_ABASCAL',
+      'Albert_Rivera',
+      'InesArrimadas',
+      'sanchezcastejon',
+      'pablocasado_',
+      'ALevySoler',
+      'miqueliceta',
+      'Pablo_Iglesias_',
+      'albiol_xg',
+      'carrizosacarlos',
+      'ciudadanoscs',
+      'ciutadanscs',
+      'eva_granados',
+      'j_zaragoza_',
+      'marianorajoy',
+      'meritxell_batet',
+      'miqueliceta',
+      'pablocasado_',
+      'ppcatalunya',
+      'pnique',
+      'ppopular',
+      'psoe',
+      'santi_abascal',
+      'sanchezcastejon',
+      'socialistes_cat',
+      'societatcc',
+      'vox_es'))
+  newspapers <- c('cronicaglobal',
+                  'elespanolcom', 
+                  'elmundoespana',
+                  'elconfidencial',
+                  'okdiario',
+                  'elpais_espana',
+                  'lavanguardia',
+                  'elperiodico',
+                  'enoticiescat')
+  df <- df %>%
+    filter(username %in% c(newspapers, people)) %>%
+    mutate(is_newspaper = username %in% newspapers,
+           is_person = username %in% people)
+  
+  
+  # Go through each persons tweet on each day
+  people_tweets <- df %>%
+    filter(is_person) %>%
+    filter(date <= '2017-09-22') %>%
+    arrange(username, date)
+  
+  # Save for later use
+  save(people_tweets,
+       file = 'people_tweets.RData')
+}
+
+#' Prepend zero(s) to a number
+  #' 
+  #' Prepend one or more 0's to a number. Useful for alphabetizing facto levels named with numbers.
+  add_zero <- function(x, n){
+    x <- as.character(x)
+    adders <- n - nchar(x)
+    adders <- ifelse(adders < 0, 0, adders)
+    for (i in 1:length(x)){
+      if(!is.na(x[i])){
+        x[i] <- paste0(
+          paste0(rep('0', adders[i]), collapse = ''),
+          x[i],
+          collapse = '')  
+      } 
+    }
+    return(x)
+  }
+  
+
+
+if(!dir.exists('screenshots')){
+  dir.create('screenshots')
+}
+person_dates <- the_dates <- the_times <- the_timezones <- rep(NA, nrow(people_tweets))
+for(i in 1:nrow(people_tweets)){
+  message(i)
+  this_person <- people_tweets$username[i]
+  this_tweet <- people_tweets$tweet[i]
+  this_url <- people_tweets$link[i]
+  this_date <- people_tweets$date[i]
+  person_dates[i] <- paste0(this_person, ' ', this_date)
+  the_dates[i] <- this_date
+  the_times[i] <- as.character(people_tweets$time[i])
+  the_timezones <- as.character(people_tweets$timezone[i])
+  # webshot(this_url, paste0(i, '.png'), 
+  #         cliprect = 'viewport')
+  file_name <- 
+    paste0("screenshots/",
+    add_zero(i, 5),
+    ".png")
+  if(!file.exists(file_name)){
+    system(paste0(
+    "screenshot-tweet ",
+    this_url,
+    " ",
+    file_name
+  ))
+  } else {
+    message('Skipping ', i, ' because file already exists.')
+  }
+}
+
+```
+
+```{r myfile-1-plot, echo = F, results = 'asis'}
+files <- dir('screenshots/')
+for(i in 1:length(files)){
+  this_file <- files[i]
+  new_person <- FALSE
+  if(i == 1){
+    new_person <- TRUE
+  } else if(person_dates[i] != person_dates[i-1]){
+    new_person <- TRUE
+  }
+  if(new_person){
+    cat(paste0('\n## ', person_dates[i], '\n\n'))
+  }
+  cat(paste0('\n#### ', the_dates[i], ' ', the_times[i], ' ', the_timezones[i], '\n'))
+  cat(paste0('\n![screenshots/',i,'.png](screenshots/', i, '.png)\n'))
+
+}
+```
