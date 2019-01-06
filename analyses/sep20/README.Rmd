@@ -39,47 +39,54 @@ source('prepare_data.R')
 
 # Summary
 
-## The question 
+### The question 
 
-Did Jordi Cuixart organize a "public and violent uprising" against the Spanish State ("alzarse pública y violentamente")? 
+Did Jordi Cuixart organize a public and violent uprising against the Spanish State? 
 
-## The hypothesis
+### The methods 
+
+We explore organically generated data from twitter, google, wikipedia, and newspapers to try to answer the above question.
+
+### The hypothesis of guilt
 
 If Jordi Cuixart committed a public and violent uprising, we expect the following three conditions to be true:
 
-1. Social media chatter about violence and Jordi Cuixart, particularly from the ideological adversaries of Cuixart (politicians opposed to Catalan independence) will be highest in the immediate aftermath of the violence.
+1. **We expect that social media chatter (number of tweets)** mentioning violence and/or Jordi Cuixart, particularly from the ideological adversaries of Cuixart (politicians opposed to Catalan independence) will be highest in the immediate aftermath of the violence. By the same token, his entry into prison will not be surprising (given the severity of the acts committed), and should therefore generate relatively less tweets than the acts themselves.
 
-2. Given the severity of the events, wikipedia and search engine data about Cuixart will be highest in the immediate aftermath of the violence.
+2. **We expect that wikipedia page views and google searches** about Cuixart will be highest in the immediate aftermath of the violence. By the same token, his enty into prison will not be surprising (given the severity of the violent acts committed), and should therefore generate relatively less searches and page views than immediately following the violent acts themselves.
 
-3. Newspaper coverage about Cuixart will be hightest in the immediate aftermath of the violence.
+3. **We expect that newspaper coverage** about Cuixart will be hightest in the immediate aftermath of the violence, since a violent uprising is a very "newsworthy" event. Given the severity of the events, his entry into prison should be unsurprising, and therefore should generate less news coverage than the violent events.
 
-## The results  
+### The results  
 
 1. Hypothesis 1: REJECTED. Social media chatter about violence and Cuixart does not peak immediately after the supposed violent uprising, but rather after the entry into prison.
 
-2. Hypothesis 2: REJECTED. Wikipedia and search engine data about Cuixart does not peak immediately after the supposed violent uprising, but rather after the entry into prison.
+2. Hypothesis 2: REJECTED. Wikipedia page views and google searches about Cuixart do not peak immediately after the supposed violent uprising, but rather after the entry into prison.
 
 3. Hypothesis 3: REJECTED. Newspaper coverage about Cuixart does not peak immediately after the supposed violent uprising, but rather after the entry into prison.
 
-## Conclusion
+### Conclusion
 
-A public and violent uprising, were it to have taken place, would be a major, attention-worthy event. In the case of Jordi Cuixart, however, attention from social media, wikipedia, search engines, and the media did not follow the pattern of normal violent events. 
+A public and violent uprising, were it to have taken place, would be a major, attention-worthy event. In the case of Jordi Cuixart, however, attention from social media, wikipedia, search engines, and traditional Spanish and international media did not follow the pattern of a truly violent event. 
 
-Rather, online attention to Cuixart peaked with the Judiciary's decision to imprison him. In other words, *imprisoning Cuixart was considered more attention-worthy than his supposed crime.* 
+Rather, online attention to Cuixart peaked with the Judiciary's decision to imprison him. In other words, *imprisoning Cuixart was considered more attention-worthy and/or surprising than his supposed crime.* This is inconsistent with an act as severe as rebellion - given the severity of the supposed act, we would reasonably expect the greatest amount of media chatter to take place immediately afterwards, not a month later. Also, given the severity of the act, we would expect the imprisonment of the act's author to be only a minor newsworthy event. Both of these expectations are refuted by the data.
 
-The data regarding the events of September/October 2017 are not consistent with a violent crime. The fact that Mr. Cuixart's imprisonment garnered more attention than his supposed actions are also not suggestive of a violent crime.
+The data regarding the events of September/October 2017 are not consistent with a violent crime. The fact that Mr. Cuixart's imprisonment garnered more attention than his supposed actions are also not suggestive of a violent crime, but rather of disproportionate imprisonment.
 
 
 # Analysis
 
-## Finding 1
+## Finding 1: Twitter data does not indicate violence.
+
+### A. 
+
+_Social media chatter about violence and Jordi Cuixart, even when limited to the ideological adversaries of Cuixart (politicians opposed to Catalan independence) does not peak in the immediate days following the supposed crime._
 
 ```{r}
 n_people <- length(unique(people_tweets$username))
 n_tweets <- nrow(people_tweets)
 ```
 
-_Social media chatter about violence and Jordi Cuixart, even when limited to the ideological adversaries of Cuixart (politicians opposed to Catalan independence) does not peak in the immediate days following the supposed crime._
 
 We harvested tweets from `r n_people` well-known Spanish/Catalan politicians and political parties/groups during the supposed violent uprising organized by Cuixart (September 20th, 2017), as well as the following 2 days (September 21, 2017 and September 22nd, 2017). The list of the `r n_people` politicians was intentionally made up of politicians who are known to be against the independence of Catalonia. The `r n_people` are listed below:
 
@@ -87,7 +94,7 @@ We harvested tweets from `r n_people` well-known Spanish/Catalan politicians and
 cat(paste0(sort(unique(people_tweets$username)), collapse = '\n'))
 ```
 
-During the 3 days analyzed, the `r n_people` accounts generated `r n_tweets` tweets.
+During the 3 days analyzed (Sep 20-22, 2017), the `r n_people` accounts generated `r n_tweets` tweets.
 
 ```{r, results = 'asis'}
 
@@ -98,7 +105,10 @@ pd <- people_tweets %>%
          is_omnium = grepl('omnium', tolower(tweet)),
          is_violence = detect_violence(tolower(tweet)),
          is_rebelion = grepl('rebel', tolower(tweet)),
-         is_sedition = grepl('sedici', tolower(tweet)))
+         is_sedition = grepl('sedici', tolower(tweet)),
+         is_alzamiento = grepl('alzamiento|alzar', tolower(tweet)),
+         is_tumulto = grepl('tumult', tolower(tweet))) %>%
+  mutate(is_rebsed = is_rebelion | is_sedition)
 
 show_screenshots <- function(the_ids,
                              the_data = picture_df){
@@ -119,7 +129,7 @@ Of these `r n_tweets` tweets:
 - `r length(which(pd$is_cuixart))` mentioned the name of Cuixart. 
 
 ```{r, results = 'asis'}
-show_screenshots(the_ids = pd$id[pd$is_cuixart])
+# show_screenshots(the_ids = pd$id[pd$is_cuixart])
 ```
 
 - `r length(which(pd$is_jordis))` mentioned the "Jordis".
@@ -134,27 +144,50 @@ show_screenshots(the_ids = pd$id[pd$is_jordis])
 show_screenshots(the_ids = pd$id[pd$is_omnium])
 ```
 
-- `r length(which(pd$is_violence))` mentioned "violence", "violent", etc.
+
+- `r length(which(pd$is_alzamiento))` mentioned "uprising" (alzamiento), "rise up" (alzar), etc.
 
 ```{r, results = 'asis'}
-show_screenshots(the_ids = pd$id[pd$is_violence])
+show_screenshots(the_ids = pd$id[pd$is_alzamiento])
 ```
 
-- `r length(which(pd$is_rebelion))` mentioned "rebellion", "rebel", etc.
+- `r length(which(pd$is_tumulto))` mentioned "tumultuous" (tumultuoso, tumultuosamente) behavior or "tumults" (tumultos), etc.
 
 ```{r, results = 'asis'}
-show_screenshots(the_ids = pd$id[pd$is_rebelion])
+show_screenshots(the_ids = pd$id[pd$is_tumulto])
 ```
 
-- `r length(which(pd$is_sedition))` mentioned "sedition".
+
+- `r length(which(pd$is_violence))` mentioned "violence", "violent", etc. But none of these tweets mentioning violence were in reference to Cuixart or the events for which he is charged; rather, they were about gender violence, individual violence, and an assault unrelated to the protsts organized by Cuixart. These `r length(which(pd$is_violence))` tweets are below:
+
+```{r}
+kable(pd %>% filter(is_violence) %>% dplyr::select(date, time, username, tweet))
+```
 
 ```{r, results = 'asis'}
-show_screenshots(the_ids = pd$id[pd$is_sedition])
+# show_screenshots(the_ids = pd$id[pd$is_violence])
 ```
 
-### Comparison with actual violent events
 
-#### The "public and violent uprising"
+- `r length(which(pd$is_rebsed))` of the `r n_tweets` mentioned the supposed crimes for which Mr. Cuixart is being charged ("rebellion", "rebel", "sedition", "seditious", etc). However, none of these referenced Cuixart. And only one of referenced the protests which he helped to organize - but that one tweet (issued by Societat Civil Catalana) did not actually talk about the events in question, but rather about la Fiscalía's reaction to them. The `r length(which(pd$is_rebelion))` are below. 
+
+```{r, results = 'asis'}
+# show_screenshots(the_ids = pd$id[pd$is_rebsed])
+```
+
+```{r}
+kable(pd %>% filter(is_rebsed) %>% dplyr::select(date, time, username, tweet))
+```
+
+
+In other words, despite more than 1,000 tweets in the 3 day period from these politicians - who are all very critical of Mr. Cuixart's policy aims - none of them mentioned him participating in, organizing, promoting, or carrying out any violent acts. The only mention of a potential crime related to Cuixart is a news story about the Fiscalía, not about the actual violence in any events which occurred. If there was a violent rebellion, why did none of these politicians mention it? 
+
+
+### B.
+
+_During actual violent events, the use of the words "violent" or "violence" corresponds closely with the actual occurrence of violent events._
+
+The below shows tweets with any word containing the stem "violen" (ie, "violencia", "violento", "violenta", etc.) from the same group of politicians during the period immediately before and after the events for which Mr. Cuixart is being criminally charged. It is clear that there is no significant increase in chatter about violence on or immediately after the dates of the supposed violence. 
 
 ```{r}
 plot_data <- people_tweets_long %>%
@@ -190,10 +223,19 @@ ggplot(data = plot_data,
              lty = 2)
 ```
 
+(The September 28th peak is largely due to tweets about an agreement on gender violence.)
 
-#### Violent protests in United States - August 2017 
+Compare the above with the frequency of these words (in English) during a truly violent event. In August 2017, violent protests took place in Charlottesville, South Carolina (USA). White supremacists marched, and many counter-protestors also convened. There were violent clashes between the two groups and on August 12th a man drove his car into a crowd, killing one person.
 
-In August 2017, violent protests took place in Charlottesville, South Carolina (USA). White supremacists marched, and many counter-protestors also convened. There were violent clashes between the two groups and on August 12th a man drove his car into a crowd, killing one person.
+The below shows the frequency of words with the root "violen" ("violence", "violent", etc.) from a random sample of US politicians (congressmen). The congressmen are listed below:
+
+
+```{r}
+cat(paste0(sort(unique(usa$username)), collapse = '\n'))
+```
+
+
+Note that, unlike in the previous chart, the peak in violence-related chatter corresponds perfectly with the actual date of violent events.
 
 ```{r}
 pd <- usa %>%
@@ -236,11 +278,64 @@ ggplot(data = pd,
 
 ```
 
-## Finding 2
+When true violence occurs, politicians notice. And they tweet about it immediately. Why did none of these politicians tweet about the violence carried out by Mr. Cuixart in the immediate days afterwards?
 
-_Wikipedia and search engine data about Cuixart does not peak immediately after the supposed violent uprising, but rather after the entry into prison._
 
-#### Wikipedia page views after the "uprising"
+### C. 
+
+_Social media chatter about Cuixart was much higher at the time of the entry into prison than at the time of the supposed violent events._
+
+The below shows tweets from the same group of politicians mentioning the name of Mr. Cuixart.
+
+```{r}
+plot_data <- people_tweets_long %>%
+  mutate(is_jordi = grepl('cuixart', tolower(tweet))) %>%
+  filter(is_jordi) %>%
+  group_by(date, username) %>%
+  tally
+left <- expand.grid(date = seq(min(people_tweets_long$date),
+                              max(people_tweets_long$date),
+                              by = 1),
+                   username = sort(unique(people_tweets_long$username)))
+plot_data <- left_join(left, plot_data)
+plot_data <- plot_data %>% filter(date >= '2017-09-10',
+                    date <=' 2017-10-20')
+plot_data$n[is.na(plot_data$n)] <- 0
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by Spanish politicians with the word "Cuixart"',
+       subtitle = 'Red line at date of supposed violence.') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+  geom_vline(xintercept = as.Date('2017-09-20'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+
+```
+
+Clearly, despite him carrying out a rebellion, none of the politicians in question even tweeted his name. Not once. How is it that Mr. Cuixart was able to carry out a "public" and "violent" uprising without any politicians noticing? 
+
+
+## Finding 2: Wikipedia and Google data do not indicate violence
+
+### A.
+
+_Wikipedia data about Cuixart does not peak immediately after the supposed violent uprising, but rather after the entry into prison._
+
+
+In the case of public, violent events, citizens react by searching for information on the perpetrators of the violence. They use search engines (google) and online encyclopedias (wikipedia) to learn more about the criminals.
+
+The below chart shows all wikipedia page views for Jordi Cuixart and Jordi Sànchez in the period immeidately prior to and after the supposed violent uprising. Note that the major increase in views does not come at the time of the events in question, but rather around October 16th - when they are placed in preventive prison. 
 
 
 ```{r}
@@ -279,7 +374,13 @@ ggplot(data = pd,
              lty = 2)
 ```
 
-#### Wikipedia page views after a truly violent event
+In other words, the public did not find the events of September 20-21 to be sufficiently noteworthy to merit much attention. However, they did find the events of October 16 to be notworthy. In other words, there appears to be more interest/surprise in the judicial process than in the actual events for which the judicial process is based. 
+
+### B.
+
+_Wikipedia page views for the organizers of truly violent events increase rapidly in the period immediately after the violence._
+
+Contrast the above with the below chart, showing wikipedia page-views for the organizers of the violent Charlottesville protests in August 2017.
 
 ```{r}
 wiki <- pv_char %>%
@@ -317,7 +418,15 @@ ggplot(data = pd,
              lty = 2)
 ```
 
-#### Google search trends
+In the above chart, the correlation between acts of violence and interest in the organizers of the violent events is very tight. Acts of violence took place on August 12th, and interest in the organizers peaked in the immediate days following these acts of violence. This is significantly different from the interest profile for Mr. Cuixart.
+
+### C. 
+
+_The frequency of Google serches for Cuixart does not peak immediately after the supposed violent uprising, but rather after the entry into prison._
+
+Google is much more frequently used than Wikipedia, and therefore offers a larger sample. The below shows _weekly_ searches for Jordi Cuixart (as a percentage relative to the max interest). The date on the x axis reflects the last day in the week in question.
+
+
 
 ```{r}
 google_chart <- function(person = 'Jordi Cuixart',
@@ -351,12 +460,21 @@ google_chart <- function(person = 'Jordi Cuixart',
 google_chart('Jordi Cuixart', red = '2017-09-23')
 ```
 
+During the week of the supposed uprising, interest in Cuixart was only 4% of the interest during the week of his entry into prison. How could it be that he carried out a violent uprising, but the public did not find him sufficiently interesting to google him?
+
+Incidentally, the interest curve for Jordi Sànchez is very similar. Clearly, the public did not find the events of Sep 20-21 to be sufficiently concerning or worrying to merit much attention.
+
 ```{r}
 google_chart('Jordi Sànchez', red = '2017-09-23')
 ```
 
-#### Google search trends after a truly violent event
+### D.
 
+_Google searches for the organizers of truly violent events increase rapidly in the period immediately after the violence._
+
+Contrast the above - a case of the public being more interested in judicial events than a supposedly violent uprising - with the below (a case of genuine interest in real violent events).
+
+Interest for Jason Kessler, one of the organizers of the Charlottesville protest, peaked during the violence.
 
 ```{r}
 google_chart('Jason Kessler',
@@ -364,13 +482,22 @@ google_chart('Jason Kessler',
                                '2017-09-30')), red = '2017-08-12')
 ```
 
+By the same token, interest for Richard Spencer, another of the organizers, peaked during the violence.
+
 ```{r}
 google_chart('Richard Spencer',
              dates = as.Date(c('2017-07-01',
                                '2017-09-30')), red = '2017-08-12')
 ```
 
-## Finding 3
+The interest curves in the above charts are markedly different for Jordi Cuixart and Jordi Sànchez compared with Jason Kessler and Richard Spencer. In the case of the former two, the events which they organized garnered very little attention from the public. Apparently, the public did not find their events to be interesting, concerning, or newsworthy. On the other hand, interest in the organizers of the Charlottesville protest coincided with the protest themselves. The violence of the protest motivated the public to carry out more searches.
+
+The different in these curves suggests a significant difference in the reality of the events they reflect. The curves for Kessler and Spencer are suggestive of real violence. The curves for Cuixart and Sànchez are not.
+
+
+## Finding 3: Newspaper data does not indicate violence
+
+### A. 
 
 _Newspaper coverage about Cuixart does not peak immediately after the supposed violent uprising, but rather after the entry into prison._
 
@@ -380,15 +507,22 @@ n_papers <- length(newspapers)
 n_international <- length(tolower(news$user_name))
 ```
 
-We harvested tweets and headlines for `r n_papers` Spanish newspapers. We intentionally restricted our analysis only to those newspapers which a known anti-independence editorial position, so as to increase the likelihood of finding a "signal" in the "noise". The newspapers are listed below:
+We harvested tweets and headlines for `r n_papers` Spanish newspapers. We intentionally restricted our analysis only to those newspapers with a known anti-independence editorial position, so as to increase the likelihood of finding a "signal" in the "noise". The newspapers are listed below:
 
 ```{r}
 cat(paste0(sort(unique(newspaper_tweets$username)), collapse = '\n'))
 ```
 
-As a comparison, we also harvested tweets for `r n_international` international newspapers.
+As a comparison, we also harvested tweets for `r n_international` international newspapers, listed below:
+
+```{r}
+cat(paste0(sort(unique(news$user_name)), collapse = '\n'))
+```
+
 
 The below chart shows the use of the words "violent" and "violence" in tweets from the Spanish newspapers. The vertical red line shows the date of the supposed violent uprising organized by Jordi Cuixart and Jordi Sànchez.
+
+Clearly, there is no peak in tweets about violence during or after the events for which Mr. Cuixart is being charged.
 
 ```{r}
 plot_data <- newspaper_tweets %>%
@@ -427,7 +561,66 @@ ggplot(data = plot_data,
              lty = 2)
 ```
 
-The below shows the same time period, but for international news sources.
+We can restrict the analysis further by showing only tweets which contained a violence-related term (violent or violence) AND a mention of Spain, Barcelona, or Catalonia. The below shows this filtering. Again, the mentions of violence are much higher on other dates than on the dates immediately after the protest for which Cuixart is being charged.
+
+
+```{r}
+plot_data <- newspaper_tweets %>%
+  mutate(is_violence = detect_violence(tolower(tweet)) &
+           grepl('españ|espan|catal|barcelon', tolower(tweet))) %>%
+  # filter(is_violence) %>%
+ group_by(date,username) %>%
+  summarise(n = length(which(is_violence)),
+            denom = n())
+left <- expand.grid(date = seq(min(plot_data$date),
+                              max(plot_data$date),
+                              by = 1),
+                   username = sort(unique(plot_data$username)))
+plot_data <- left_join(left, plot_data)
+plot_data <- plot_data %>% filter(date >= '2017-09-10',
+                    date <=' 2017-10-20')
+plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by Spanish newspapers with violence-related words',
+       subtitle = 'Words: "Violence, violent" and Barcelona, Catalonia, or Spain. Red line = 20 September 2018') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2017-09-20'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+```
+
+
+```{r}
+# Show actual tweets
+show <- newspaper_tweets %>%
+  mutate(is_violence = detect_violence(tolower(tweet)) &
+           grepl('españ|espan|catal|barcelon', tolower(tweet))) %>%
+ filter(is_violence) %>% filter(date>='2017-09-20', date<= '2017-09-22')
+```
+
+Furthermore, of the only `r nrow(show)` tweets actually mentioning violence during the 3 day period from Sep 20-22, none specifically reference Cuixart or his protest.
+
+These tweets are shown below.
+
+```{r}
+kable(show %>% dplyr::select(date, time, username, tweet))
+```
+
+
+The below shows the same time period, but for international news sources. Their mentions of violence do not increase during or immediately after the protests carried out by Mr. Cuixart.
 
 ```{r}
 plot_data <- tl %>%
@@ -472,10 +665,194 @@ ggplot(data = plot_data,
              lty = 2)
 ```
 
-The below shows the Spanish newspapers' frequency of tweets with violence-related words during the July 2018 Barcelona taxi strike.
+Since international news sources cover many locations, we can restrict our analysis geographically. The below shows the same time period for international news sources, but restricting only to those tweets with a reference to Spain, Catalonia, or Barcelona. Note that there are no mentoins of violence in the days in question.
+
+```{r}
+plot_data <- tl %>%
+  filter(date >= '2017-09-10',
+         date <= '2017-10-20') %>%
+  filter(username %in% tolower(news$user_name)) %>%
+  mutate(is_violence = detect_violence(tolower(tweet)) &
+           grepl('españ|espan|catal|barcelon', tolower(tweet))) %>%  # filter(is_violence) %>%
+ group_by(date,username) %>%
+  summarise(n = length(which(is_violence)),
+            denom = n())
+left <- expand.grid(date = seq(min(plot_data$date),
+                              max(plot_data$date),
+                              by = 1),
+                   username = sort(unique(plot_data$username)))
+plot_data <- left_join(left, plot_data)
+
+plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by international newspapers with violence-related words',
+       subtitle = 'Words: "Violence, violent" and "Spain", "Catalonia", or "Barcelona". Red line = 24 July 2018') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2018-07-24'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2) +
+  geom_vline(xintercept = as.Date('2017-09-20'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+```
+
+Is it conceivable that a public, violent uprising took place, and neither the Spanish nor international media thought that it was newsworthy? 
+
+
+Could it be that these newspapers simply do not cover violent protest stories? Let's take a look at other violent events and see.
+
+
+### B. 
+
+_During actual violent events, the frequency of violence-related words corresponds chronologically with the violence._
+
+
+If we look only at the use violence-words and a geographic reference to Charlottesville ("Charlottesville, Estados Unidos, EEUU, América"), we say that the newspapers' coverage of violence accurately tracks the real incidence of violent events.
 
 ```{r}
 plot_data <- tl%>%
+  filter(username %in% newspapers) %>%
+  mutate(is_violence = detect_violence(tolower(tweet)) &
+           grepl('charlott|estados unidos|eeuu|américa', tolower(tweet))) %>% 
+ group_by(date,username) %>%
+  summarise(n = length(which(is_violence)),
+            denom = n())
+left <- expand.grid(date = seq(min(plot_data$date),
+                              max(plot_data$date),
+                              by = 1),
+                   username = sort(unique(plot_data$username)))
+plot_data <- left_join(left, plot_data)
+plot_data <- plot_data %>% filter(date >= '2017-08-01',
+                    date <=' 2017-08-30')
+plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by Spanish newspapers with violence-related words',
+       subtitle = 'Words: "Violence, violent" and geo-reference to Charlottesville. Red line = 12 August 2017') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2017-08-12'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+```
+
+
+The above demonstrates that these papers do tweet in a timely fashion on violent protests. Why then, did they not tweet about Mr. Cuixart's protest? Could it be that there was no significant violence?
+
+
+As another point of comparison, the below shows the Spanish newspapers' frequency of tweets with violence-related words during the July 2018 Barcelona taxi strike.
+
+
+```{r}
+plot_data <- tl%>%
+  filter(username %in% newspapers) %>%
+  mutate(is_violence = detect_violence(tolower(tweet))) %>% 
+ group_by(date,username) %>%
+  summarise(n = length(which(is_violence)),
+            denom = n())
+left <- expand.grid(date = seq(min(plot_data$date),
+                              max(plot_data$date),
+                              by = 1),
+                   username = sort(unique(plot_data$username)))
+plot_data <- left_join(left, plot_data)
+plot_data <- plot_data %>% filter(date >= '2018-07-13',
+                    date <=' 2018-08-08')
+plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by Spanish newspapers with violence-related words',
+       subtitle = 'Words: "Violence, violent". Red line = 24 July 2018') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2018-07-24'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+```
+
+
+The below chart is identical to the above, but filtering only for those tweets which contain both a violence word ("violencia", "violento") and a relative geographical tag ("España", "Cataluña", "catalán", "catalana", "Barcelona"). 
+
+```{r}
+plot_data <- tl%>%
+  filter(username %in% newspapers) %>%
+  mutate(is_violence = detect_violence(tolower(tweet)) &
+           grepl('españ|espan|catal|barcelon', tolower(tweet))) %>% 
+ group_by(date,username) %>%
+  summarise(n = length(which(is_violence)),
+            denom = n())
+left <- expand.grid(date = seq(min(plot_data$date),
+                              max(plot_data$date),
+                              by = 1),
+                   username = sort(unique(plot_data$username)))
+plot_data <- left_join(left, plot_data)
+plot_data <- plot_data %>% filter(date >= '2018-07-13',
+                    date <=' 2018-08-08')
+plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by Spanish newspapers with violence-related words',
+       subtitle = 'Words: "Violence, violent". Red line = 24 July 2018') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2018-07-24'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+```
+
+
+It is clear in the above that there is a notable peak in violence words on the date of actual violence. In both the taxi protests, and Charlottesville protests, these newspapers increased the frequency of tweets with violence-words. Why did they not do so after Mr. Cuixart's protest, if it was indeed a "violent" and "public" uprising?
+
+```{r}
+plot_data <- tl %>%
+  filter(date >= '2017-09-01',
+         date <= '2018-07-31') %>%
   filter(username %in% newspapers) %>%
   mutate(is_violence = detect_violence(tolower(tweet))) %>%
   # filter(is_violence) %>%
@@ -486,94 +863,29 @@ left <- expand.grid(date = seq(min(plot_data$date),
                               max(plot_data$date),
                               by = 1),
                    username = sort(unique(plot_data$username)))
-plot_data <- left_join(left, plot_data)
-plot_data <- plot_data %>% filter(date >= '2018-07-13',
-                    date <=' 2018-08-08')
-plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
-ggplot(data = plot_data,
-       aes(x = date,
-           y = n,
-           fill = username)) +
-  geom_bar(stat = 'identity',alpha = 0.9) +
-    # geom_smooth(se = FALSE) +
-  theme_databrew() +
-  theme(axis.text.x = element_text(angle = 90),
-        plot.title = element_text(size = 15)) +
-  scale_x_date(breaks = unique(plot_data$date)) +
-  labs(x = 'Date',
-       y = 'Tweets',
-       title = 'Tweets by international newspapers with violence-related words',
-       subtitle = 'Words: "Violence, violent". Red line = 24 July 2018') +
-  scale_fill_manual(name = '',
-                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
-   geom_vline(xintercept = as.Date('2018-07-24'),
-             color = 'red',
-             alpha = 0.7,
-             lty = 2)
-```
 
-
-The below shows the international newspapers' frequency of tweets with violence-related words during the July 2018 Barcelona taxi strike.
-
-```{r}
-plot_data <- tl%>%
-  filter(username %in% tolower(news$user_name)) %>%
-  mutate(is_violence = detect_violence(tolower(tweet))) %>%
-  # filter(is_violence) %>%
- group_by(date,username) %>%
-  summarise(n = length(which(is_violence)),
-            denom = n())
-left <- expand.grid(date = seq(min(plot_data$date),
-                              max(plot_data$date),
-                              by = 1),
-                   username = sort(unique(plot_data$username)))
-plot_data <- left_join(left, plot_data)
-plot_data <- plot_data %>% filter(date >= '2018-07-13',
-                    date <=' 2018-08-08')
-plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
-ggplot(data = plot_data,
-       aes(x = date,
-           y = n,
-           fill = username)) +
-  geom_bar(stat = 'identity',alpha = 0.9) +
-    # geom_smooth(se = FALSE) +
-  theme_databrew() +
-  theme(axis.text.x = element_text(angle = 90),
-        plot.title = element_text(size = 15)) +
-  scale_x_date(breaks = unique(plot_data$date)) +
-  labs(x = 'Date',
-       y = 'Tweets',
-       title = 'Tweets by international newspapers with violence-related words',
-       subtitle = 'Words: "Violence, violent". Red line = 24 July 2018') +
-  scale_fill_manual(name = '',
-                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
-   geom_vline(xintercept = as.Date('2018-07-24'),
-             color = 'red',
-             alpha = 0.7,
-             lty = 2)
-```
-
-
-```{r}
-n_t <- plot_data %>% group_by(date) %>% summarise(n = sum(n)) %>% filter(date >= '2017-09-20', date <= '2017-09-22') %>% summarise(x = sum(n)) %>% .$x
+n_t <- plot_data %>% group_by(date) %>% summarise(n = sum(n, na.rm = T)) %>% filter(date >= '2017-09-20', date <= '2017-09-22') %>% summarise(x = sum(n)) %>% .$x
 
 # taxis
 n_tt <- plot_data %>% group_by(date) %>% summarise(n = sum(n)) %>% filter(date >= '2018-07-24', date <= '2018-07-26') %>% summarise(x = sum(n)) %>% .$x
 ```
 
-During the three day period from September 20-22 2017, the period during and immediately after the violent public uprising, these 8 newspapers issued only a total of `r n_t` tweets with the words "violent" or "violence".
+```{r}
+# During the three day period from September 20-22 2017, the period during and immediately after the violent public uprising, these 8 newspapers issued only a total of `r n_t` tweets with the words "violent" or "violence".
 
-On the other hand, during the three day period from July 24-July 26, 2018, the period of the Barcelona taxi drivers protest, these 8 newspapers issued `r n_tt` tweets with the words "violent" or "violence".
+# On the other hand, during the three day period from July 24-July 26, 2018, the period of the Barcelona taxi drivers protest, these 8 newspapers issued `r n_tt` tweets with the words "violent" or "violence".
+```
 
-#### Actual violent event: 2016 Turkish coup
+Let's take a look at another case: the 2016 Turkish military coup d'etat attempt. This was very much a violent and public uprising, one more consistent with what the Spanish Penal Code describes as "rebellion".
 
-The below shows international news coverage of the Turkish coup attempt in July 2016.
+The below shows the frequency of the words "violent", or "violence" from international news twitter accounts during the period of the Turkish coup attempt in July 2016 (filtering only for words which contain a relevant geographical tag: "Ankara", "Istanbul", and/or "Turkey"/"Turkish"). Note that, like with Charlottesville protests and Barcelona taxi protests, the increase in tweets coincides with the actual events.
 
 
 ```{r}
 plot_data <- turkey %>%
   filter(is_international) %>%
-  mutate(is_violence = detect_violence(tolower(tweet))) %>%
+  mutate(is_violence = detect_violence(tolower(tweet)) &
+           grepl('turk|ankara|istanbu', tolower(tweet))) %>%
   # filter(is_violence) %>%
  group_by(date,username) %>%
   summarise(n = length(which(is_violence)),
@@ -598,19 +910,23 @@ ggplot(data = plot_data,
   labs(x = 'Date',
        y = 'Tweets',
        title = 'Tweets by international newspapers with violence-related words',
-       subtitle = 'Words: "Violence, violent". Red line = 24 July 2018') +
+       subtitle = 'Words: "Violence, violent" and "Turkey", "Turkish". Red line = 15 July 2016') +
   scale_fill_manual(name = '',
                     values = databrew::make_colors(n = length(unique(plot_data$username)))) +
-   geom_vline(xintercept = as.Date('2018-07-24'),
+   geom_vline(xintercept = as.Date('2016-07-16'),
              color = 'red',
              alpha = 0.7,
              lty = 2)
 ```
 
 
-#### Tweets about Cuixart
+### C.
+
+_Tweets from news sources mentioning "Cuixart" during the "uprising" were low._
 
 As the organizer of a public, violent uprising, we would expect a great deal of media coverage to mention the perpetrator of the crime in the immediate days following the crime. However, this is not the case.
+
+The below shows tweets mentioning the name of Cuixart in the period immediately before and after the supposed violent uprising.
 
 ```{r}
 plot_data <- newspaper_tweets %>%
@@ -647,13 +963,119 @@ ggplot(data = plot_data,
              lty = 2)
 ```
 
-#### Newspaper headlines
+In the above it is clear that Cuixart's behavior did not merit significant media attention in the immediate days following the protests. Rather, the media became more interested in Cuixart one month later, when he was sent to prison. 
+
+What is more interesting? A person carrying out a violent and public uprising? Or a person being sent to prison for it?
+
+Clearly, the former should be more interesting. The latter is only more interesting when it is a surprise, that is, when the actions carried out do not correspond with the public's expectation for the judicial reaction.
+
+### D.
+
+_Tweets from news sources mentioning the author of actual violent events corresponds more closely with the moment of violence._
+
+Let's compare the above chart with tweets mentioning the organizers of a truly violent protest in Charlottesville. In the days following the protest, news outlets tweeted the names of the protest organizers multiple times. 
+
+```{r}
+plot_data <- tl %>%
+  filter(username %in% tolower(news$user_name)) %>%
+  mutate(is_violence = grepl('spencer|kessler', tolower(tweet))) %>%
+    # Adjust for time zone
+  mutate(date = as.numeric(date)) %>%
+  mutate(date = ifelse(as.numeric(substr(time, 1, 2)) <6,
+                       date - 1,
+                       date)) %>%
+  mutate(date = as.Date(date, origin ='1970-01-01')) %>%
+ group_by(date,username) %>%
+  summarise(n = length(which(is_violence)),
+            denom = n()) %>%
+  ungroup %>%
+  filter(date >= '2017-08-01',
+         date <= '2017-08-30')
+left <- expand.grid(date = seq(min(plot_data$date),
+                              max(plot_data$date),
+                              by = 1),
+                   username = sort(unique(tolower(news$user_name))))
+plot_data <- left_join(left, plot_data)
+
+plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by international newspapers with mention\nof "Spencer" and/or "Kessler"') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2016-07-16'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2) +
+  geom_vline(xintercept = as.Date('2017-08-12'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+```
+
+
+### E.
+
+_Newspaper headlines do not reflect the occurrence of an event as attention-worthy as a violent rebellion._
 
 If a public, violent uprising occurred on the night between September 20th and 21st, we would expect that newspaper headlines would discuss this transcendentally important event. Let's examine those headlines.
 
-What follows are headlines for major newspapers on the dates of September 21 and 22. Coverage focused on police operations. There were some mentions of the "protests", but in no case was violence mentioned. The only use of violence-related words in reference to the protests (El Mundo, September 22) is actually a quote of the judiciary: "ataques y presiones", and not an observation of any journalist. In other instances (La Razón, September 22; El Mundo, September 22), the worst language to describe the protestors behavior was "acoso" (harassment).  In no cases is violence mentioned.
+In the appendix are headlines for major newspapers on the dates of September 21 and 22. Coverage focused on police operations. There were some mentions of the "protests", but in no case was violence mentioned. The only use of violence-related words in reference to the protests (El Mundo, September 22) is actually a _direct quote of the judiciary_ ("ataques y presiones"), and not an observation of any journalist. In other instances (La Razón, September 22; El Mundo, September 22), the worst language to describe the protestors behavior was "acoso" (harassment).  In no cases is violence mentioned, nor do any newspapers mention Cuixart as having organized, promoted, carried out, or endorsed any violence.
 
 
+If a violent and public uprising occurred on September 20-21, why did these newspapers report on the events as "movilizaciones" and "protestas"? Why did they not call them "alzamientos" or "ataques"? Why did they report so frequently on Puigdemont, and so infrequently (ie, not at all) on the Jordi Cuixart? Why did they use the words "acoso" instead of "levantamiento"? 
+
+If there was a violent rebellion, why did they not report on the rebels?
+
+
+# Conclusion
+
+Did Jordi Cuixart carry out a public and violent uprising on the night of September 20th, 2017? The data from Twitter, Google, Wikipedia, and newspapers suggest not.
+
+Rebellion is - by definition in the Spanish penal code - violent and public. 
+
+Violence is attention-worthy: when it occurs, politicians (particularly those opposed to the executors of the violence) tweet about it. Violence is news-worthy: when it occurs, newspapers write about it. Violence is interest-worthy: when it occurs, people search about the culprits of the violence on google and wikipedia to learn more.
+
+How is it, then, that Jordi Cuixart managed to carry out a violent and public uprising and almost nobody noticed? 
+
+How is it, then, that in the immediate days after the uprising, the only references to "violence" from Jordi Cuixart's political opponents referred to other events, like simple assaults or gender violence?
+
+How is it, then, that both the national and international media which were present during the protest of Sep 20-21 did not note levels of violence which were newsworthy?
+
+How is it, then, that interest in Jordi Cuixart did not increase until he was sent to prison?
+
+In real violent events, the patterns of social network, news, and search frequencies are similar: they peak rapidly in the immediate aftermath of the violence, and then decline slowly. This is the case for both violent-words ("violence" and "violent"), as well as for the organizers of violence (Kessler and Spencer). This is the case in the Barcelona taxi protests, the failed Turkish military coup, and the violent Charlottesville protests.
+
+But for the events for which Jordi Cuixart is being charged, this is simply not the case. There is no notable peak in references to or searches of him, even by those most opposed to his policital aspirations. On the contrary, the peak does not come until later, when he is sent to prison. In other words, his entry into prison was considered more newsworthy than the supposed violent and public uprising.
+
+Why would a criminal being sent to prison be considered so interesting? Why would the supposed crime be considered so uninteresting to the general public, the media, and politicians?
+
+The data surrounding the events of Mr. Cuixart's protest and entry in to prison show that there was significantly more surprise/interest in the latter event than the former. This is not consistent with a major, violent event. Rather, it is consistent with public surprise at a disproportionate decision to imprison an explicitly pacifist activist for having participated - among many others - in the organization of an explicitly pacifist protest.
+
+The reason there was so little interest in and chatter about Cuixart immediately following the protest was because protest is, simply, normal. And the reason there was so much interest in and chatter about Cuixart immediately following his imprisonment was because imprisoning social activists is, simply, not normal.
+
+Mr. Cuixart is not a violent rebel. 
+
+# Appendix
+
+### Full appendix
+
+https://github.com/joebrew/vilaweb/tree/master/analyses/sep20/appendix.md
+
+### Newpapser headlines: Sep 21-22 2017
+
+
+What follows are newspaper headlines for the period of September 21-22.
 
 ```{r, echo = F, results = 'asis'}
 newspaper_df <- 
@@ -682,16 +1104,3 @@ for(i in 1:nrow(sub_newspapers)){
   cat(paste0('\n![',this_file,'](', this_file, ')\n'))
 }
 ```
-
-
-# Conclusion
-
-Did Jordi Cuixart carry out a public and violent uprising on the night of September 20th, 2017? The data from Twitter, Google, Wikipedia, and newspapers suggest not.
-
-Rebellion is - by definition - violent and public. Violence is attention-worthy: when it occurs, politicians (particularly those opposed to the executors of the violence) tweet about it. Violence is news-worthy: when it occurs, newspapers write about it. Violence is interest-worthy: when it occurs, people search about the culprits of the violence on google and wikipedia to learn more.
-
-How is it, then, that Jordi Cuixart managed to carry out a violent and public uprising and almost nobody noticed? Is it reasonable that Cuixart 
-
-# Appendix
-
-https://github.com/joebrew/vilaweb/tree/master/analyses/sep20/appendix.md
