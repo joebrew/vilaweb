@@ -43,7 +43,7 @@ source('prepare_data.R')
 
 Did Jordi Cuixart organize a "public and violent uprising" against the Spanish State ("alzarse pública y violentamente")? 
 
-# The hypothesis
+## The hypothesis
 
 If Jordi Cuixart committed a public and violent uprising, we expect the following three conditions to be true:
 
@@ -90,9 +90,7 @@ cat(paste0(sort(unique(people_tweets$username)), collapse = '\n'))
 During the 3 days analyzed, the `r n_people` accounts generated `r n_tweets` tweets.
 
 ```{r, results = 'asis'}
-detect_violence <- function(x){
-  grepl('violen|violèn',x)
-}
+
 pd <- people_tweets %>%
   mutate(is_cuixart = grepl('cuixart', tolower(tweet)),
          is_jordis = grepl('jordis', tolower(tweet)) &
@@ -162,18 +160,20 @@ show_screenshots(the_ids = pd$id[pd$is_sedition])
 plot_data <- people_tweets_long %>%
   mutate(is_violence = detect_violence(tolower(tweet))) %>%
   filter(is_violence) %>%
-  group_by(date) %>%
+  group_by(date, username) %>%
   tally
-left <- data_frame(date = seq(min(plot_data$date),
+left <- expand.grid(date = seq(min(plot_data$date),
                               max(plot_data$date),
-                              by = 1))
+                              by = 1),
+                   username = sort(unique(plot_data$username)))
 plot_data <- left_join(left, plot_data)
 plot_data <- plot_data %>% filter(date >= '2017-09-10',
                     date <=' 2017-10-20')
 ggplot(data = plot_data,
        aes(x = date,
-           y = n)) +
-  geom_bar(stat = 'identity',alpha = 0.6) +
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
     # geom_smooth(se = FALSE) +
   theme_databrew() +
   theme(axis.text.x = element_text(angle = 90)) +
@@ -181,8 +181,13 @@ ggplot(data = plot_data,
   labs(x = 'Date',
        y = 'Tweets',
        title = 'Tweets by Spanish politicians with violence-related words',
-       subtitle = '"Violence, violent"')
-
+       subtitle = 'Words: "Violence, violent". Red line at date of supposed violence.') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+  geom_vline(xintercept = as.Date('2017-09-20'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
 ```
 
 
@@ -200,18 +205,20 @@ pd <- usa %>%
                        date - 1,
                        date)) %>%
   mutate(date = as.Date(date, origin ='1970-01-01')) %>%
-  group_by(date) %>%
+  group_by(date,username) %>%
   tally
-left <- data_frame(date = seq(min(pd$date),
+left <- expand.grid(date = seq(min(pd$date),
                               max(pd$date),
-                              by = 1))
+                              by = 1),
+                   username = sort(unique(pd$username)))
 pd <- left_join(left, pd)
 pd <- pd %>% filter(date >= '2017-08-01',
                     date <=' 2017-08-30')
 ggplot(data = pd,
        aes(x = date,
-           y = n)) +
-  geom_bar(stat = 'identity',alpha = 0.6) +
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
   # geom_smooth(se = FALSE) +
   theme_databrew() +
   theme(axis.text.x = element_text(angle = 90)) +
@@ -219,7 +226,13 @@ ggplot(data = pd,
   labs(x = 'Date',
        y = 'Views',
        title = 'Tweets by US Congressmen with violence-related words',
-       subtitle = '"Violence, violent"')
+       subtitle = 'Words: "Violence, violent". Red line at August 12.') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(pd$username)))) +
+  geom_vline(xintercept = as.Date('2017-08-12'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
 
 ```
 
@@ -251,14 +264,19 @@ ggplot(data = pd,
   geom_bar(stat = 'identity',alpha = 0.6) +
   # geom_smooth(se = FALSE) +
   theme_databrew() +
-  theme(axis.text.x = element_text(angle = 90)) +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 16)) +
   scale_x_date(breaks = unique(pd$date)) +
   labs(x = 'Date',
        y = 'Views',
        title = 'Wikipedia page-views for Jordi Cuixart and Jordi Sànchez',
-       subtitle = 'Spanish, Catalan, and English languages') +
+       subtitle = 'Spanish, Catalan, and English languages. Red line at date of supposed violence.') +
   facet_wrap(~person, scales = 'free_y',
-             ncol = 1)
+             ncol = 1) +
+  geom_vline(xintercept = as.Date('2017-09-20'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
 ```
 
 #### Wikipedia page views after a truly violent event
@@ -283,44 +301,58 @@ ggplot(data = pd,
   geom_bar(stat = 'identity',alpha = 0.6) +
   # geom_smooth(se = FALSE) +
   theme_databrew() +
-  theme(axis.text.x = element_text(angle = 90)) +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
   scale_x_date(breaks = unique(pd$date)) +
   labs(x = 'Date',
        y = 'Tweets',
        title = 'Wikipedia page-views for Jason Kessler and Richard Spencer',
-       subtitle = 'Spanish, Catalan, and English languages') +
+       subtitle = 'English language. Red line at date of violence.') +
   facet_wrap(~person,
              scales = 'free_y',
-             ncol = 1)
+             ncol = 1) +
+  geom_vline(xintercept = as.Date('2017-08-12'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
 ```
 
-#### Google search trends after the "uprising" 
+#### Google search trends
 
 ```{r}
 google_chart <- function(person = 'Jordi Cuixart',
-                         dates = c('2017-07-01', '2017-12-30')){
+                         dates = c('2017-07-01', '2017-12-30'),
+                         red = NULL){
   pd <- gt %>%
     filter(keyword == person) %>%
     filter(date >= dates[1],
            date <= dates[2])
-  ggplot(data = pd,
+  g <- ggplot(data = pd,
          aes(x = date,
              y = hits)) +
-    geom_line() +
-    geom_area(alpha =0.6) +
+    # geom_line() +
+    geom_bar(stat = 'identity') +
     theme_databrew() +
     labs(x = 'Week ending on',
          y = 'Relative search load (%)',
          title = paste0('Google search trends for ', person)) +
     scale_x_date(breaks = unique(pd$date)) +
     theme(axis.text.x = element_text(angle = 90))
+  if(!is.null(red)){
+    g <- g + 
+      geom_vline(xintercept = as.Date(red),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+  }
+  return(g)
 }
 
-google_chart('Jordi Cuixart')
+google_chart('Jordi Cuixart', red = '2017-09-23')
 ```
 
 ```{r}
-google_chart('Jordi Sànchez')
+google_chart('Jordi Sànchez', red = '2017-09-23')
 ```
 
 #### Google search trends after a truly violent event
@@ -329,25 +361,42 @@ google_chart('Jordi Sànchez')
 ```{r}
 google_chart('Jason Kessler',
              dates = as.Date(c('2017-07-01',
-                               '2017-09-30')))
+                               '2017-09-30')), red = '2017-08-12')
 ```
 
 ```{r}
 google_chart('Richard Spencer',
              dates = as.Date(c('2017-07-01',
-                               '2017-09-30')))
+                               '2017-09-30')), red = '2017-08-12')
 ```
 
 ## Finding 3
 
 _Newspaper coverage about Cuixart does not peak immediately after the supposed violent uprising, but rather after the entry into prison._
 
+
+```{r}
+n_papers <- length(newspapers)
+n_international <- length(tolower(news$user_name))
+```
+
+We harvested tweets and headlines for `r n_papers` Spanish newspapers. We intentionally restricted our analysis only to those newspapers which a known anti-independence editorial position, so as to increase the likelihood of finding a "signal" in the "noise". The newspapers are listed below:
+
+```{r}
+cat(paste0(sort(unique(newspaper_tweets$username)), collapse = '\n'))
+```
+
+As a comparison, we also harvested tweets for `r n_international` international newspapers.
+
+The below chart shows the use of the words "violent" and "violence" in tweets from the Spanish newspapers. The vertical red line shows the date of the supposed violent uprising organized by Jordi Cuixart and Jordi Sànchez.
+
 ```{r}
 plot_data <- newspaper_tweets %>%
   mutate(is_violence = detect_violence(tolower(tweet))) %>%
-  filter(is_violence) %>%
+  # filter(is_violence) %>%
  group_by(date,username) %>%
-  tally
+  summarise(n = length(which(is_violence)),
+            denom = n())
 left <- expand.grid(date = seq(min(plot_data$date),
                               max(plot_data$date),
                               by = 1),
@@ -360,19 +409,208 @@ ggplot(data = plot_data,
        aes(x = date,
            y = n,
            fill = username)) +
-  geom_bar(stat = 'identity',alpha = 0.6) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
     # geom_smooth(se = FALSE) +
   theme_databrew() +
-  theme(axis.text.x = element_text(angle = 90)) +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
   scale_x_date(breaks = unique(plot_data$date)) +
   labs(x = 'Date',
        y = 'Tweets',
        title = 'Tweets by Spanish newspapers with violence-related words',
-       subtitle = '"Violence, violent"') +
+       subtitle = 'Words: "Violence, violent". Red line = 20 September 2018') +
   scale_fill_manual(name = '',
-                    values = databrew::make_colors(n = length(unique(plot_data$username))))
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2017-09-20'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
 ```
 
+The below shows the same time period, but for international news sources.
+
+```{r}
+plot_data <- tl %>%
+  filter(date >= '2017-09-10',
+         date <= '2017-10-20') %>%
+  filter(username %in% tolower(news$user_name)) %>%
+  mutate(is_violence = detect_violence(tolower(tweet))) %>%
+  # filter(is_violence) %>%
+ group_by(date,username) %>%
+  summarise(n = length(which(is_violence)),
+            denom = n())
+left <- expand.grid(date = seq(min(plot_data$date),
+                              max(plot_data$date),
+                              by = 1),
+                   username = sort(unique(plot_data$username)))
+plot_data <- left_join(left, plot_data)
+
+plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by international newspapers with violence-related words',
+       subtitle = 'Words: "Violence, violent". Red line = 24 July 2018') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2018-07-24'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2) +
+  geom_vline(xintercept = as.Date('2017-09-20'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+```
+
+The below shows the Spanish newspapers' frequency of tweets with violence-related words during the July 2018 Barcelona taxi strike.
+
+```{r}
+plot_data <- tl%>%
+  filter(username %in% newspapers) %>%
+  mutate(is_violence = detect_violence(tolower(tweet))) %>%
+  # filter(is_violence) %>%
+ group_by(date,username) %>%
+  summarise(n = length(which(is_violence)),
+            denom = n())
+left <- expand.grid(date = seq(min(plot_data$date),
+                              max(plot_data$date),
+                              by = 1),
+                   username = sort(unique(plot_data$username)))
+plot_data <- left_join(left, plot_data)
+plot_data <- plot_data %>% filter(date >= '2018-07-13',
+                    date <=' 2018-08-08')
+plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by international newspapers with violence-related words',
+       subtitle = 'Words: "Violence, violent". Red line = 24 July 2018') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2018-07-24'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+```
+
+
+The below shows the international newspapers' frequency of tweets with violence-related words during the July 2018 Barcelona taxi strike.
+
+```{r}
+plot_data <- tl%>%
+  filter(username %in% tolower(news$user_name)) %>%
+  mutate(is_violence = detect_violence(tolower(tweet))) %>%
+  # filter(is_violence) %>%
+ group_by(date,username) %>%
+  summarise(n = length(which(is_violence)),
+            denom = n())
+left <- expand.grid(date = seq(min(plot_data$date),
+                              max(plot_data$date),
+                              by = 1),
+                   username = sort(unique(plot_data$username)))
+plot_data <- left_join(left, plot_data)
+plot_data <- plot_data %>% filter(date >= '2018-07-13',
+                    date <=' 2018-08-08')
+plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by international newspapers with violence-related words',
+       subtitle = 'Words: "Violence, violent". Red line = 24 July 2018') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2018-07-24'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+```
+
+
+```{r}
+n_t <- plot_data %>% group_by(date) %>% summarise(n = sum(n)) %>% filter(date >= '2017-09-20', date <= '2017-09-22') %>% summarise(x = sum(n)) %>% .$x
+
+# taxis
+n_tt <- plot_data %>% group_by(date) %>% summarise(n = sum(n)) %>% filter(date >= '2018-07-24', date <= '2018-07-26') %>% summarise(x = sum(n)) %>% .$x
+```
+
+During the three day period from September 20-22 2017, the period during and immediately after the violent public uprising, these 8 newspapers issued only a total of `r n_t` tweets with the words "violent" or "violence".
+
+On the other hand, during the three day period from July 24-July 26, 2018, the period of the Barcelona taxi drivers protest, these 8 newspapers issued `r n_tt` tweets with the words "violent" or "violence".
+
+#### Actual violent event: 2016 Turkish coup
+
+The below shows international news coverage of the Turkish coup attempt in July 2016.
+
+
+```{r}
+plot_data <- turkey %>%
+  filter(is_international) %>%
+  mutate(is_violence = detect_violence(tolower(tweet))) %>%
+  # filter(is_violence) %>%
+ group_by(date,username) %>%
+  summarise(n = length(which(is_violence)),
+            denom = n())
+left <- expand.grid(date = seq(min(plot_data$date),
+                              max(plot_data$date),
+                              by = 1),
+                   username = sort(unique(plot_data$username)))
+plot_data <- left_join(left, plot_data)
+
+plot_data$n <- ifelse(is.na(plot_data$n), 0, plot_data$n)
+ggplot(data = plot_data,
+       aes(x = date,
+           y = n,
+           fill = username)) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
+    # geom_smooth(se = FALSE) +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 15)) +
+  scale_x_date(breaks = unique(plot_data$date)) +
+  labs(x = 'Date',
+       y = 'Tweets',
+       title = 'Tweets by international newspapers with violence-related words',
+       subtitle = 'Words: "Violence, violent". Red line = 24 July 2018') +
+  scale_fill_manual(name = '',
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+   geom_vline(xintercept = as.Date('2018-07-24'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
+```
+
+
+#### Tweets about Cuixart
+
+As the organizer of a public, violent uprising, we would expect a great deal of media coverage to mention the perpetrator of the crime in the immediate days following the crime. However, this is not the case.
 
 ```{r}
 plot_data <- newspaper_tweets %>%
@@ -392,66 +630,30 @@ ggplot(data = plot_data,
        aes(x = date,
            y = n,
            fill = username)) +
-  geom_bar(stat = 'identity',alpha = 0.6) +
+  geom_bar(stat = 'identity',alpha = 0.9) +
     # geom_smooth(se = FALSE) +
   theme_databrew() +
   theme(axis.text.x = element_text(angle = 90)) +
   scale_x_date(breaks = unique(plot_data$date)) +
   labs(x = 'Date',
        y = 'Tweets',
-       title = 'Tweets by Spanish newspapers about Cuixart') +
+       title = 'Tweets by Spanish newspapers about Cuixart',
+       subtitle = 'Red line: 20 September 2018') +
   scale_fill_manual(name = '',
-                    values = databrew::make_colors(n = length(unique(plot_data$username))))
+                    values = databrew::make_colors(n = length(unique(plot_data$username)))) +
+     geom_vline(xintercept = as.Date('2017-09-20'),
+             color = 'red',
+             alpha = 0.7,
+             lty = 2)
 ```
 
+#### Newspaper headlines
 
-# Conclusion
+If a public, violent uprising occurred on the night between September 20th and 21st, we would expect that newspaper headlines would discuss this transcendentally important event. Let's examine those headlines.
 
-# Appendix
-
-
-## All tweets from politicians, 20-22 September
-
-```{r, echo = F, results = 'asis'}
-for(i in 1:nrow(picture_df)){
-  this_file <- picture_df$file[i]
-  new_person <- FALSE
-  if(i == 1){
-    new_person <- TRUE
-  } else if(picture_df$person_dates[i] != picture_df$person_dates[i-1]){
-    new_person <- TRUE
-  }
-  if(new_person){
-    cat(paste0('\n### ', as.character(picture_df$person_dates[i]), '\n\n'))
-  }
-  cat(paste0('\n##### ', as.character(picture_df$the_dates[i]), ' ', as.character(picture_df$the_times[i]), ' ', as.character(picture_df$the_timezones[i]), '\n'))
-  cat(paste0('\n![screenshots/', picture_df$file[i],'](screenshots/', picture_df$file[i], ')\n'))
-}
-```
+What follows are headlines for major newspapers on the dates of September 21 and 22. Coverage focused on police operations. There were some mentions of the "protests", but in no case was violence mentioned. The only use of violence-related words in reference to the protests (El Mundo, September 22) is actually a quote of the judiciary: "ataques y presiones", and not an observation of any journalist. In other instances (La Razón, September 22; El Mundo, September 22), the worst language to describe the protestors behavior was "acoso" (harassment).  In no cases is violence mentioned.
 
 
-## All tweets from politicians, 16-18 September
-
-```{r, echo = F, results = 'asis'}
-for(i in 1:nrow(picture_df2)){
-  this_file <- picture_df2$file[i]
-  new_person <- FALSE
-  if(i == 1){
-    new_person <- TRUE
-  } else if(picture_df2$person_dates[i] != picture_df2$person_dates[i-1]){
-    new_person <- TRUE
-  }
-  if(new_person){
-    cat(paste0('\n### ', as.character(picture_df2$person_dates[i]), '\n\n'))
-  }
-  cat(paste0('\n##### ', as.character(picture_df2$the_dates[i]), ' ', as.character(picture_df2$the_times[i]), ' ', as.character(picture_df2$the_timezones[i]), '\n'))
-  cat(paste0('\n![screenshots2/', picture_df2$file[i],'](screenshots2/', picture_df2$file[i], ')\n'))
-
-}
-```
-
-
-## All newspaper headlines, 20-22 September
 
 ```{r, echo = F, results = 'asis'}
 newspaper_df <- 
@@ -461,8 +663,8 @@ newspaper_df <-
   mutate(file = paste0('newspaper_headlines/', file))
 
 sub_newspapers <- newspaper_df %>%
-  filter((date >= '2017-09-20'&
-         date <= '2017-09-23'))
+  filter((date >= '2017-09-21'&
+         date <= '2017-09-22'))
 sub_newspapers <- sub_newspapers %>%
   arrange(date, paper)
 for(i in 1:nrow(sub_newspapers)){
@@ -482,33 +684,14 @@ for(i in 1:nrow(sub_newspapers)){
 ```
 
 
-## All newspaper headlines, 16-18 October
+# Conclusion
 
-```{r, echo = F, results = 'asis'}
-newspaper_df <- 
-  data_frame(file = dir('newspaper_headlines')) %>%
-  mutate(paper = unlist(lapply(lapply(strsplit(file, '_'), function(x){x[2]}), function(y){gsub('.jpg', '', y, fixed = T)}))) %>%
-  mutate(date = as.Date(substr(file, 1, 10))) %>%
-  mutate(file = paste0('newspaper_headlines/', file))
+Did Jordi Cuixart carry out a public and violent uprising on the night of September 20th, 2017? The data from Twitter, Google, Wikipedia, and newspapers suggest not.
 
-sub_newspapers <- newspaper_df #%>%
-  filter((date >= '2017-10-16'&
-         date <= '2017-10-18'))
-sub_newspapers <- sub_newspapers %>%
-  arrange(date, paper)
-for(i in 1:nrow(sub_newspapers)){
-   this_file <- sub_newspapers$file[i]
-  new_person <- FALSE
-  if(i == 1){
-    new_person <- TRUE
-  } else if(sub_newspapers$date[i] != sub_newspapers$date[i-1]){
-    new_person <- TRUE
-  }
-  if(new_person){
-    cat(paste0('\n### ', as.character(sub_newspapers$date[i]), '\n\n'))
-  }
-  cat(paste0('\n##### ', as.character(sub_newspapers$date[i]), ', ',   as.character(sub_newspapers$paper[i]), '\n'))
-  cat(paste0('\n![',this_file,'](', this_file, ')\n'))
-}
-```
+Rebellion is - by definition - violent and public. Violence is attention-worthy: when it occurs, politicians (particularly those opposed to the executors of the violence) tweet about it. Violence is news-worthy: when it occurs, newspapers write about it. Violence is interest-worthy: when it occurs, people search about the culprits of the violence on google and wikipedia to learn more.
 
+How is it, then, that Jordi Cuixart managed to carry out a violent and public uprising and almost nobody noticed? Is it reasonable that Cuixart 
+
+# Appendix
+
+https://github.com/joebrew/vilaweb/tree/master/analyses/sep20/appendix.md

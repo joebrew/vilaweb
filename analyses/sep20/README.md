@@ -10,6 +10,7 @@ Jordi Cuixart
     -   [Finding 1](#finding-1)
     -   [Finding 2](#finding-2)
     -   [Finding 3](#finding-3)
+    -   [All newspaper headlines, 21-22 September](#all-newspaper-headlines-21-22-september)
 -   [Conclusion](#conclusion-1)
 -   [Appendix](#appendix)
     -   [All tweets from politicians, 20-22 September](#all-tweets-from-politicians-20-22-september)
@@ -100,51 +101,51 @@ Of these 939 tweets:
 
 -   3 mentioned "violence", "violent", etc.
 
-*13:53:39 CET*
+*2017-09-20 13:53:39 CET*
 
 ![](screenshots/00040.png)
 
-*23:38:56 CET*
+*2017-09-22 23:38:56 CET*
 
 ![](screenshots/00434.png)
 
-*09:38:03 CET*
+*2017-09-21 09:38:03 CET*
 
 ![](screenshots/00724.png)
 
 -   4 mentioned "rebellion", "rebel", etc.
 
-*20:47:51 CET*
+*2017-09-21 20:47:51 CET*
 
 ![](screenshots/00010.png)
 
-*18:55:30 CET*
+*2017-09-21 18:55:30 CET*
 
 ![](screenshots/00455.png)
 
-*12:47:58 CET*
+*2017-09-20 12:47:58 CET*
 
 ![](screenshots/00756.png)
 
-*12:47:01 CET*
+*2017-09-22 12:47:01 CET*
 
 ![](screenshots/00774.png)
 
 -   4 mentioned "sedition".
 
-*12:47:58 CET*
+*2017-09-20 12:47:58 CET*
 
 ![](screenshots/00756.png)
 
-*22:17:00 CET*
+*2017-09-21 22:17:00 CET*
 
 ![](screenshots/00759.png)
 
-*13:14:37 CET*
+*2017-09-21 13:14:37 CET*
 
 ![](screenshots/00879.png)
 
-*16:49:27 CET*
+*2017-09-22 16:49:27 CET*
 
 ![](screenshots/00897.png)
 
@@ -157,6 +158,8 @@ Of these 939 tweets:
 #### Violent protests in United States - August 2017
 
 In August 2017, violent protests took place in Charlottesville, South Carolina (USA). White supremacists marched, and many counter-protestors also convened. There were violent clashes between the two groups and on August 12th a man drove his car into a crowd, killing one person.
+
+    Error: Insufficient values in manual scale. 20 needed but only 16 provided.
 
 ![](figures/unnamed-chunk-12-1.png)
 
@@ -173,7 +176,7 @@ Finding 2
 
 ![](figures/unnamed-chunk-14-1.png)
 
-#### Google search trends after the "uprising"
+#### Google search trends
 
 ![](figures/unnamed-chunk-15-1.png)
 
@@ -190,9 +193,97 @@ Finding 3
 
 *Newspaper coverage about Cuixart does not peak immediately after the supposed violent uprising, but rather after the entry into prison.*
 
-![](figures/unnamed-chunk-19-1.png)
+We harvested tweets and headlines for 6 newspapers. We intentionally restricted our analysis only to those newspapers which a known anti-independence editorial position, so as to increase the likelihood of finding a "signal" in the "noise". The newspapers are listed below:
 
-![](figures/unnamed-chunk-20-1.png)
+    cronicaglobal
+    elconfidencial
+    elespanolcom
+    elmundoespana
+    elpais_espana
+    elperiodico
+    lavanguardia
+    okdiario
+
+The below chart shows the use of the words "violent" and "violence" in tweets from these newspapers. The vertical red line shows the date of the supposed violent uprising organized by Jordi Cuixart and Jordi Sànchez.
+
+![](figures/unnamed-chunk-21-1.png)
+
+The below shows the same newspapers' frequency of tweets with violence-related words during the July 2018 Barcelona taxi strike.
+
+![](figures/unnamed-chunk-22-1.png)
+
+During the three day period from September 20-22 2017, the period during and immediately after the violent public uprising, these 8 newspapers issued only a total of 0 tweets with the words "violent" or "violence".
+
+On the other hand, during the three day period from July 24-July 26, 2018, the period of the Barcelona taxi drivers protest, these 8 newspapers issued 11 tweets with the words "violent" or "violence".
+
+The below shows international news coverage of the Turkish coup attempt in July 2016.
+
+![](figures/unnamed-chunk-24-1.png)
+
+#### Tweets about Cuixart
+
+As the organizer of a public, violent uprising, we would expect a great deal of media coverage to mention the perpetrator of the crime in the immediate days following the crime. However, this is not the case.
+
+![](figures/unnamed-chunk-25-1.png)
+
+#### Newspaper headlines
+
+If a public, violent uprising occurred on the night between September 20th and 21st, we would expect that newspaper headlines would discuss this transcendentally important event. Let's examine those headlines.
+
+All newspaper headlines, 21-22 September
+----------------------------------------
+
+### 2017-09-21
+
+##### 2017-09-21, abc
+
+![](newspaper_headlines/2017-09-21_abc.jpg)
+
+##### 2017-09-21, elmundo
+
+![](newspaper_headlines/2017-09-21_elmundo.jpg)
+
+##### 2017-09-21, elpais
+
+![](newspaper_headlines/2017-09-21_elpais.jpg)
+
+##### 2017-09-21, elperiodico
+
+![](newspaper_headlines/2017-09-21_elperiodico.jpg)
+
+##### 2017-09-21, larazon
+
+![](newspaper_headlines/2017-09-21_larazon.jpg)
+
+##### 2017-09-21, lavanguardia
+
+![](newspaper_headlines/2017-09-21_lavanguardia.jpg)
+
+### 2017-09-22
+
+##### 2017-09-22, abc
+
+![](newspaper_headlines/2017-09-22_abc.jpg)
+
+##### 2017-09-22, elmundo
+
+![](newspaper_headlines/2017-09-22_elmundo.jpg)
+
+##### 2017-09-22, elpais
+
+![](newspaper_headlines/2017-09-22_elpais.jpg)
+
+##### 2017-09-22, elperiodico
+
+![](newspaper_headlines/2017-09-22_elperiodico.jpg)
+
+##### 2017-09-22, larazon
+
+![](newspaper_headlines/2017-09-22_larazon.jpg)
+
+##### 2017-09-22, lavanguardia
+
+![](newspaper_headlines/2017-09-22_lavanguardia.jpg)
 
 Conclusion
 ==========

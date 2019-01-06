@@ -1,0 +1,147 @@
+---
+title: "Appendix"
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+library(webshot)
+source('prepare_data.R')
+# Utility for screenshotting tweets:
+# https://github.com/lukehorvat/screenshot-tweet
+```
+
+
+## Code and methods
+
+The code for the reproduction of this analysis is publicly available at https://github.com/joebrew/vilaweb/tree/master/analyses/sep20.
+
+
+## All tweets from Spanish politicians, 20-22 September
+
+```{r, echo = F, results = 'asis'}
+for(i in 1:nrow(picture_df)){
+  this_file <- picture_df$file[i]
+  new_person <- FALSE
+  if(i == 1){
+    new_person <- TRUE
+  } else if(picture_df$person_dates[i] != picture_df$person_dates[i-1]){
+    new_person <- TRUE
+  }
+  if(new_person){
+    cat(paste0('\n### ', as.character(picture_df$person_dates[i]), '\n\n'))
+  }
+  cat(paste0('\n##### ', as.character(picture_df$the_dates[i]), ' ', as.character(picture_df$the_times[i]), ' ', as.character(picture_df$the_timezones[i]), '\n'))
+  cat(paste0('\n![screenshots/', picture_df$file[i],'](screenshots/', picture_df$file[i], ')\n'))
+}
+```
+
+
+## All tweets from politicians, 16-18 October
+
+```{r, echo = F, results = 'asis'}
+for(i in 1:nrow(picture_df2)){
+  this_file <- picture_df2$file[i]
+  new_person <- FALSE
+  if(i == 1){
+    new_person <- TRUE
+  } else if(picture_df2$person_dates[i] != picture_df2$person_dates[i-1]){
+    new_person <- TRUE
+  }
+  if(new_person){
+    cat(paste0('\n### ', as.character(picture_df2$person_dates[i]), '\n\n'))
+  }
+  cat(paste0('\n##### ', as.character(picture_df2$the_dates[i]), ' ', as.character(picture_df2$the_times[i]), ' ', as.character(picture_df2$the_timezones[i]), '\n'))
+  cat(paste0('\n![screenshots2/', picture_df2$file[i],'](screenshots2/', picture_df2$file[i], ')\n'))
+
+}
+```
+
+
+## All newspaper headlines, 20-22 September
+
+```{r, echo = F, results = 'asis'}
+newspaper_df <- 
+  data_frame(file = dir('newspaper_headlines')) %>%
+  mutate(paper = unlist(lapply(lapply(strsplit(file, '_'), function(x){x[2]}), function(y){gsub('.jpg', '', y, fixed = T)}))) %>%
+  mutate(date = as.Date(substr(file, 1, 10))) %>%
+  mutate(file = paste0('newspaper_headlines/', file))
+
+sub_newspapers <- newspaper_df %>%
+  filter((date >= '2017-09-20'&
+         date <= '2017-09-23'))
+sub_newspapers <- sub_newspapers %>%
+  arrange(date, paper)
+for(i in 1:nrow(sub_newspapers)){
+   this_file <- sub_newspapers$file[i]
+  new_person <- FALSE
+  if(i == 1){
+    new_person <- TRUE
+  } else if(sub_newspapers$date[i] != sub_newspapers$date[i-1]){
+    new_person <- TRUE
+  }
+  if(new_person){
+    cat(paste0('\n### ', as.character(sub_newspapers$date[i]), '\n\n'))
+  }
+  cat(paste0('\n##### ', as.character(sub_newspapers$date[i]), ', ',   as.character(sub_newspapers$paper[i]), '\n'))
+  cat(paste0('\n![',this_file,'](', this_file, ')\n'))
+}
+```
+
+
+## All newspaper headlines, 16-18 October
+
+```{r, echo = F, results = 'asis'}
+newspaper_df <- 
+  data_frame(file = dir('newspaper_headlines')) %>%
+  mutate(paper = unlist(lapply(lapply(strsplit(file, '_'), function(x){x[2]}), function(y){gsub('.jpg', '', y, fixed = T)}))) %>%
+  mutate(date = as.Date(substr(file, 1, 10))) %>%
+  mutate(file = paste0('newspaper_headlines/', file))
+
+sub_newspapers <- newspaper_df #%>%
+  filter((date >= '2017-10-16'&
+         date <= '2017-10-18'))
+sub_newspapers <- sub_newspapers %>%
+  arrange(date, paper)
+for(i in 1:nrow(sub_newspapers)){
+   this_file <- sub_newspapers$file[i]
+  new_person <- FALSE
+  if(i == 1){
+    new_person <- TRUE
+  } else if(sub_newspapers$date[i] != sub_newspapers$date[i-1]){
+    new_person <- TRUE
+  }
+  if(new_person){
+    cat(paste0('\n### ', as.character(sub_newspapers$date[i]), '\n\n'))
+  }
+  cat(paste0('\n##### ', as.character(sub_newspapers$date[i]), ', ',   as.character(sub_newspapers$paper[i]), '\n'))
+  cat(paste0('\n![',this_file,'](', this_file, ')\n'))
+}
+```
+
