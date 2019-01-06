@@ -4,6 +4,10 @@
 #' @param people A character vector of twitter accounts. If null, will do existing people
 #' @param get_new Get new data. If TRUE, will fetch all tweets again.
 #' @param delete_duplicates If TRUE, will export the data to R, remove duplicates, then overwrite the db
+#' @param only_new_people Whether to only fetch people who are NOT yet in the database (ie, automatically filters the people argument)
+#' @param after The date after which tweets should be retrieved. Default to 2000-01-01
+#' @param until The date until which tweets will be retrieved
+#' @param force_old Set to TRUE if retrieving tweets older than what is already in the database (only for exceptional cases)
 #' @return A set up database
 #' @import dplyr
 #' @import RPostgreSQL
@@ -11,7 +15,13 @@
 #' @import DBI
 #' @export
 
-update_database <- function(people = NULL, get_new = FALSE, delete_duplicates = TRUE){
+update_database <- function(people = NULL, 
+                            get_new = FALSE, 
+                            delete_duplicates = TRUE,
+                            only_new_people = FALSE,
+                            after = '2000-01-01',
+                            until = as.character(Sys.Date() +1),
+                            force_old = FALSE){
   
   require(dplyr)
   require(RPostgreSQL)
@@ -27,13 +37,29 @@ update_database <- function(people = NULL, get_new = FALSE, delete_duplicates = 
     people <- sort(unique(tolower(dtab$username)))
   }
   
+  # Make everything lowercase
+  people <- tolower(people)
+  
+  # If only new people, filter
+  if(only_new_people){
+    dtab = RPostgreSQL::dbGetQuery(con, "select distinct username from twitter")
+    already <- sort(unique(tolower(dtab$username)))
+    people <- people[!people %in% already]
+  }
+  # If no people say so
+  if(length(people) == 0){
+    stop('No new people. Consider turning off only_new_people')
+  }
+  
+
+  
   # Loop through each person and get an update
   for(p in 1:length(people)){
     this_person <- people[p]
     this_data <- dbGetQuery(con,
                             paste0("select MAX(date) from twitter where username='", this_person, "'"))
     this_id <- this_data$max
-    
+
     if(is.na(this_id)){
       # No previous data, need to fetch for first time
       get_all <- TRUE
@@ -45,12 +71,24 @@ update_database <- function(people = NULL, get_new = FALSE, delete_duplicates = 
       get_all <- TRUE
     }
     wd <- getwd()
+    
     if(get_all){
       message(toupper(this_person), ': Getting all data')
       system(paste0("python3 ../foreign/twint/Twint.py -u ",
                     this_person,
+                    " --since ",
+                    after,
+                    " --until ", until,
                     " -o ", wd, "/temp_tweets.csv --csv"))
       
+    } else if(force_old){
+      message(toupper(this_person), ': Getting old data')
+      system(paste0("python3 ../foreign/twint/Twint.py -u ",
+                    this_person,
+                    " --since ",
+                    after,
+                    " --until ", until,
+                    " -o ", wd, "/temp_tweets.csv --csv"))
     } else {
       message(toupper(this_person), ': Getting recent data only')
       # Just getting update
@@ -58,6 +96,7 @@ update_database <- function(people = NULL, get_new = FALSE, delete_duplicates = 
                     this_person,
                     " --since ",
                     this_id,
+                    " --until ", until,
                     " -o ", wd, "/temp_tweets.csv --csv"))
     }
     
@@ -83,9 +122,12 @@ update_database <- function(people = NULL, get_new = FALSE, delete_duplicates = 
     }
     
     # Rm the temp_tweets file
-    file.remove('temp_tweets/tweets.csv')
-    file.remove('temp_tweets/users.csv')
-    file.remove('temp_tweets/')
+    suppressWarnings({
+      file.remove('temp_tweets/tweets.csv')
+      file.remove('temp_tweets/users.csv')
+      file.remove('temp_tweets/')
+    })
+    
   }
   # Ensure no duplicate rows in db
   if(delete_duplicates){
@@ -105,8 +147,6 @@ update_database <- function(people = NULL, get_new = FALSE, delete_duplicates = 
     
   }
 
-  
   # disconnect from the database
   dbDisconnect(con) 
 } 
-# update_database()

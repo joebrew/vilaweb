@@ -5,3 +5,4 @@ data-raw/*
 data/cis*
 tweets.csv
 *.sql
+*.html
