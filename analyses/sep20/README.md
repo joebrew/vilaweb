@@ -13,10 +13,6 @@ Jordi Cuixart
     -   [Finding 3: Newspaper data does not indicate violence](#finding-3-newspaper-data-does-not-indicate-violence)
 -   [Conclusion](#conclusion-1)
 -   [Appendix](#appendix)
-    -   [Full appendix](#full-appendix)
-    -   [Newpapser headlines: Sep 21-22 2017](#newpapser-headlines-sep-21-22-2017)
-    -   [2017-09-21](#section)
-    -   [2017-09-22](#section-1)
 
 Summary
 =======
@@ -37,7 +33,7 @@ If Jordi Cuixart committed a public and violent uprising, we expect the followin
 
 2.  **We expect that wikipedia page views and google searches** about Cuixart will be highest in the immediate aftermath of the violence. By the same token, his enty into prison will not be surprising (given the severity of the violent acts committed), and should therefore generate relatively less searches and page views than immediately following the violent acts themselves.
 
-3.  **We expect that newspaper coverage** about Cuixart will be hightest in the immediate aftermath of the violence, since a violent uprising is a very "newsworthy" event. Given the severity of the events, his entry into prison should be unsurprising, and therefore should generate less news coverage than the violent events.
+3.  **We expect that newspaper's tweets** about Cuixart will be hightest in the immediate aftermath of the violence, since a violent uprising is a very "newsworthy" event. Given the severity of the events, his entry into prison should be unsurprising, and therefore should generate less news coverage than the violent events.
 
 ### The results
 
@@ -256,7 +252,7 @@ Finding 3: Newspaper data does not indicate violence
 
 *Newspaper coverage about Cuixart does not peak immediately after the supposed violent uprising, but rather after the entry into prison.*
 
-We harvested tweets and headlines for 8 Spanish newspapers. We intentionally restricted our analysis only to those newspapers with a known anti-independence editorial position, so as to increase the likelihood of finding a "signal" in the "noise". The newspapers are listed below:
+We harvested tweets for 8 Spanish newspapers. We intentionally restricted our analysis only to those newspapers with a known anti-independence editorial position, so as to increase the likelihood of finding a "signal" in the "noise". The newspapers are listed below:
 
     cronicaglobal
     elconfidencial
@@ -323,7 +319,7 @@ The below shows the same time period, but for international news sources. Their 
 
 ![](figures/unnamed-chunk-31-1.png)
 
-Since international news sources cover many locations, we can restrict our analysis geographically. The below shows the same time period for international news sources, but restricting only to those tweets with a reference to Spain, Catalonia, or Barcelona. Note that there are no mentoins of violence in the days in question.
+Since international news sources cover many locations, we can restrict our analysis geographically. The below shows the same time period for international news sources, but restricting only to those tweets with a reference to Spain, Catalonia, or Barcelona. Note that there are no mentions of violence in the days in question.
 
 ![](figures/unnamed-chunk-32-1.png)
 
@@ -341,21 +337,31 @@ If we look only at the use violence-words and a geographic reference to Charlott
 
 The above demonstrates that these papers do tweet in a timely fashion on violent protests. Why then, did they not tweet about Mr. Cuixart's protest? Could it be that there was no significant violence?
 
-As another point of comparison, the below shows the Spanish newspapers' frequency of tweets with violence-related words during the July 2018 Barcelona taxi strike.
+Let's examine the same period, but for international newspapers (those papers which did not tweet about violence in Spain/Catalonia/Barcelona at all from Sep 20-22, 2017). As per the above chart, the below chart shows violence-words which are geo-tagged relevantly (Charlottesville, USA, Virgina). Note that the frequency in violence-related tweets coincides with the actual violent events.
 
 ![](figures/unnamed-chunk-34-1.png)
 
-The below chart is identical to the above, but filtering only for those tweets which contain both a violence word ("violencia", "violento") and a relative geographical tag ("España", "Cataluña", "catalán", "catalana", "Barcelona").
+As another point of comparison, the below shows the Spanish newspapers' frequency of tweets with violence-related words during the July 2018 Barcelona taxi strike.
 
 ![](figures/unnamed-chunk-35-1.png)
 
+The below chart is identical to the above, but filtering only for those tweets which contain both a violence word ("violencia", "violento") and a relative geographical tag ("España", "Cataluña", "catalán", "catalana", "Barcelona").
+
+![](figures/unnamed-chunk-36-1.png)
+
 It is clear in the above that there is a notable peak in violence words on the date of actual violence. In both the taxi protests, and Charlottesville protests, these newspapers increased the frequency of tweets with violence-words. Why did they not do so after Mr. Cuixart's protest, if it was indeed a "violent" and "public" uprising?
+
+As a final point of comparison, let's examine the protests which took place on October 1, 2018 (one year after the referendum). These same newspaper, which tweeted violence-words with a relevant geo-tag only 8 times during the 3 days during/after the period for which Cuixart faces charged, increased the frequency of violent terms significantly. From Oct 1 to Oct 3, 2018, violence-words were tweeted 55 times. Most of these tweets pertained to the protests at the Catalan Parlament (for which nobody is being charged with rebellion or sedition).
+
+![](figures/unnamed-chunk-37-1.png)
+
+If a violent rebellion took place during a protest September 20-21 2017, why was the rate of the word "violence" 700% higher during a protest on October 1-2 2018?
 
 Let's take a look at another case: the 2016 Turkish military coup d'etat attempt. This was very much a violent and public uprising, one more consistent with what the Spanish Penal Code describes as "rebellion".
 
 The below shows the frequency of the words "violent", or "violence" from international news twitter accounts during the period of the Turkish coup attempt in July 2016 (filtering only for words which contain a relevant geographical tag: "Ankara", "Istanbul", and/or "Turkey"/"Turkish"). Note that, like with Charlottesville protests and Barcelona taxi protests, the increase in tweets coincides with the actual events.
 
-![](figures/unnamed-chunk-38-1.png)
+![](figures/unnamed-chunk-40-1.png)
 
 ### C.
 
@@ -365,7 +371,7 @@ As the organizer of a public, violent uprising, we would expect a great deal of 
 
 The below shows tweets mentioning the name of Cuixart in the period immediately before and after the supposed violent uprising.
 
-![](figures/unnamed-chunk-39-1.png)
+![](figures/unnamed-chunk-41-1.png)
 
 In the above it is clear that Cuixart's behavior did not merit significant media attention in the immediate days following the protests. Rather, the media became more interested in Cuixart one month later, when he was sent to prison.
 
@@ -379,44 +385,36 @@ Clearly, the former should be more interesting. The latter is only more interest
 
 Let's compare the above chart with tweets mentioning the organizers of a truly violent protest in Charlottesville. In the days following the protest, news outlets tweeted the names of the protest organizers multiple times.
 
-![](figures/unnamed-chunk-40-1.png)
-
-### E.
-
-*Newspaper headlines do not reflect the occurrence of an event as attention-worthy as a violent rebellion.*
-
-If a public, violent uprising occurred on the night between September 20th and 21st, we would expect that newspaper headlines would discuss this transcendentally important event. Let's examine those headlines.
-
-In the appendix are headlines for major newspapers on the dates of September 21 and 22. Coverage focused on police operations. There were some mentions of the "protests", but in no case was violence mentioned. The only use of violence-related words in reference to the protests (El Mundo, September 22) is actually a *direct quote of the judiciary* ("ataques y presiones"), and not an observation of any journalist. In other instances (La Razón, September 22; El Mundo, September 22), the worst language to describe the protestors behavior was "acoso" (harassment). In no cases is violence mentioned, nor do any newspapers mention Cuixart as having organized, promoted, carried out, or endorsed any violence.
-
-If a violent and public uprising occurred on September 20-21, why did these newspapers report on the events as "movilizaciones" and "protestas"? Why did they not call them "alzamientos" or "ataques"? Why did they report so frequently on Puigdemont, and so infrequently (ie, not at all) on the Jordi Cuixart? Why did they use the words "acoso" instead of "levantamiento"?
-
-If there was a violent rebellion, why did they not report on the rebels?
+![](figures/unnamed-chunk-42-1.png)
 
 Conclusion
 ==========
 
-Did Jordi Cuixart carry out a public and violent uprising on the night of September 20th, 2017? The data from Twitter, Google, Wikipedia, and newspapers suggest not.
+Did Jordi Cuixart carry out a public and violent uprising on the night of September 20th, 2017? According to the data from Twitter, Google, Wikipedia, the answer is unequivocally not.
 
 Rebellion is - by definition in the Spanish penal code - violent and public.
 
-Violence is attention-worthy: when it occurs, politicians (particularly those opposed to the executors of the violence) tweet about it. Violence is news-worthy: when it occurs, newspapers write about it. Violence is interest-worthy: when it occurs, people search about the culprits of the violence on google and wikipedia to learn more.
+Violence is attention-worthy: when it occurs, politicians (particularly those opposed to the executors of the violence) tweet about it. Violence is news-worthy: when it occurs, newspapers write about it. Violence is interest-worthy: when it occurs, people search for the names of its organizers on google and wikipedia to learn more.
 
-How is it, then, that Jordi Cuixart managed to carry out a violent and public uprising and almost nobody noticed?
+How is it, then, that Jordi Cuixart managed to carry out a violent and public uprising and almost nobody noticed at the time?
 
 How is it, then, that in the immediate days after the uprising, the only references to "violence" from Jordi Cuixart's political opponents referred to other events, like simple assaults or gender violence?
 
 How is it, then, that both the national and international media which were present during the protest of Sep 20-21 did not note levels of violence which were newsworthy?
 
+How is it, then, that these same media tweet about violence in a timely fashion and at higher frequencies when violence occurs in other situations, but did not tweet about violence for Jordi Cuixart's supposed uprising?
+
 How is it, then, that interest in Jordi Cuixart did not increase until he was sent to prison?
 
-In real violent events, the patterns of social network, news, and search frequencies are similar: they peak rapidly in the immediate aftermath of the violence, and then decline slowly. This is the case for both violent-words ("violence" and "violent"), as well as for the organizers of violence (Kessler and Spencer). This is the case in the Barcelona taxi protests, the failed Turkish military coup, and the violent Charlottesville protests.
+In real violent events, the patterns of social network, news, and search frequencies are similar: they peak rapidly in the immediate aftermath of the violence, and then decline thereafter This is the case for both violent-words ("violence" and "violent"), as well as for the organizers of violence (Kessler and Spencer). This is the case in the Barcelona taxi protests, the failed Turkish military coup, and the violent Charlottesville protests.
 
 But for the events for which Jordi Cuixart is being charged, this is simply not the case. There is no notable peak in references to or searches of him, even by those most opposed to his policital aspirations. On the contrary, the peak does not come until later, when he is sent to prison. In other words, his entry into prison was considered more newsworthy than the supposed violent and public uprising.
 
-Why would a criminal being sent to prison be considered so interesting? Why would the supposed crime be considered so uninteresting to the general public, the media, and politicians?
+Why would a violent criminal being sent to prison be considered so interesting? Why would the supposed crime be considered so uninteresting to the general public, the media, and politicians?
 
-The data surrounding the events of Mr. Cuixart's protest and entry in to prison show that there was significantly more surprise/interest in the latter event than the former. This is not consistent with a major, violent event. Rather, it is consistent with public surprise at a disproportionate decision to imprison an explicitly pacifist activist for having participated - among many others - in the organization of an explicitly pacifist protest.
+Could it be that the judiciary's actions were considered more shocking than Mr. Cuixart's?
+
+The data surrounding the events of Mr. Cuixart's protest and entry in to prison show that there was significantly more surprise/interest in the latter event than the former. This is not consistent with a major, violent event. Rather, it is consistent with public surprise at a disproportionate decision to imprison an explicitly pacifist activist for having participated - among many others - in the organization of an explicitly protest.
 
 The reason there was so little interest in and chatter about Cuixart immediately following the protest was because protest is, simply, normal. And the reason there was so much interest in and chatter about Cuixart immediately following his imprisonment was because imprisoning social activists is, simply, not normal.
 
@@ -425,62 +423,4 @@ Mr. Cuixart is not a violent rebel.
 Appendix
 ========
 
-### Full appendix
-
 <https://github.com/joebrew/vilaweb/tree/master/analyses/sep20/appendix.md>
-
-### Newpapser headlines: Sep 21-22 2017
-
-What follows are newspaper headlines for the period of September 21-22.
-
-### 2017-09-21
-
-##### 2017-09-21, abc
-
-![](newspaper_headlines/2017-09-21_abc.jpg)
-
-##### 2017-09-21, elmundo
-
-![](newspaper_headlines/2017-09-21_elmundo.jpg)
-
-##### 2017-09-21, elpais
-
-![](newspaper_headlines/2017-09-21_elpais.jpg)
-
-##### 2017-09-21, elperiodico
-
-![](newspaper_headlines/2017-09-21_elperiodico.jpg)
-
-##### 2017-09-21, larazon
-
-![](newspaper_headlines/2017-09-21_larazon.jpg)
-
-##### 2017-09-21, lavanguardia
-
-![](newspaper_headlines/2017-09-21_lavanguardia.jpg)
-
-### 2017-09-22
-
-##### 2017-09-22, abc
-
-![](newspaper_headlines/2017-09-22_abc.jpg)
-
-##### 2017-09-22, elmundo
-
-![](newspaper_headlines/2017-09-22_elmundo.jpg)
-
-##### 2017-09-22, elpais
-
-![](newspaper_headlines/2017-09-22_elpais.jpg)
-
-##### 2017-09-22, elperiodico
-
-![](newspaper_headlines/2017-09-22_elperiodico.jpg)
-
-##### 2017-09-22, larazon
-
-![](newspaper_headlines/2017-09-22_larazon.jpg)
-
-##### 2017-09-22, lavanguardia
-
-![](newspaper_headlines/2017-09-22_lavanguardia.jpg)

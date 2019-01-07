@@ -55,7 +55,7 @@ If Jordi Cuixart committed a public and violent uprising, we expect the followin
 
 2. **We expect that wikipedia page views and google searches** about Cuixart will be highest in the immediate aftermath of the violence. By the same token, his enty into prison will not be surprising (given the severity of the violent acts committed), and should therefore generate relatively less searches and page views than immediately following the violent acts themselves.
 
-3. **We expect that newspaper coverage** about Cuixart will be hightest in the immediate aftermath of the violence, since a violent uprising is a very "newsworthy" event. Given the severity of the events, his entry into prison should be unsurprising, and therefore should generate less news coverage than the violent events.
+3. **We expect that newspaper's tweets** about Cuixart will be hightest in the immediate aftermath of the violence, since a violent uprising is a very "newsworthy" event. Given the severity of the events, his entry into prison should be unsurprising, and therefore should generate less news coverage than the violent events.
 
 ### The results  
 
@@ -1144,52 +1144,33 @@ Mr. Cuixart is not a violent rebel.
 
 # Appendix
 
-### Full appendix
 
 https://github.com/joebrew/vilaweb/tree/master/analyses/sep20/appendix.md
 
-### Side analysis: Newpapser headlines: Sep 21-22 2017
-
-
-_Newspaper headlines do not reflect the occurrence of an event as attention-worthy as a violent rebellion._
-
-If a public, violent uprising occurred on the night between September 20th and 21st, we would expect that newspaper headlines would discuss this transcendentally important event. Let's examine those headlines.
-
-In the appendix are headlines for major newspapers on the dates of September 21 and 22. Coverage focused on police operations. There were some mentions of the "protests", but in no case was violence mentioned. The only use of violence-related words in reference to the protests (El Mundo, September 22) is actually a _direct quote of the judiciary_ ("ataques y presiones"), and not an observation of any journalist. In other instances (La Razón, September 22; El Mundo, September 22), the worst language to describe the protestors behavior was "acoso" (harassment).  In no cases is violence mentioned, nor do any newspapers mention Cuixart as having organized, promoted, carried out, or endorsed any violence.
-
-
-If a violent and public uprising occurred on September 20-21, why did these newspapers report on the events as "movilizaciones" and "protestas"? Why did they not call them "alzamientos" or "ataques"? Why did they report so frequently on Puigdemont, and so infrequently (ie, not at all) on the Jordi Cuixart? Why did they use the words "acoso" instead of "levantamiento"? 
-
-If there was a violent rebellion, why did they not report on the rebels?
-
-
-
-What follows are newspaper headlines for the period of September 21-22.
-
 ```{r, echo = F, results = 'asis'}
-newspaper_df <- 
-  data_frame(file = dir('newspaper_headlines')) %>%
-  mutate(paper = unlist(lapply(lapply(strsplit(file, '_'), function(x){x[2]}), function(y){gsub('.jpg', '', y, fixed = T)}))) %>%
-  mutate(date = as.Date(substr(file, 1, 10))) %>%
-  mutate(file = paste0('newspaper_headlines/', file))
-
-sub_newspapers <- newspaper_df %>%
-  filter((date >= '2017-09-21'&
-         date <= '2017-09-22'))
-sub_newspapers <- sub_newspapers %>%
-  arrange(date, paper)
-for(i in 1:nrow(sub_newspapers)){
-   this_file <- sub_newspapers$file[i]
-  new_person <- FALSE
-  if(i == 1){
-    new_person <- TRUE
-  } else if(sub_newspapers$date[i] != sub_newspapers$date[i-1]){
-    new_person <- TRUE
-  }
-  if(new_person){
-    cat(paste0('\n### ', as.character(sub_newspapers$date[i]), '\n\n'))
-  }
-  cat(paste0('\n##### ', as.character(sub_newspapers$date[i]), ', ',   as.character(sub_newspapers$paper[i]), '\n'))
-  cat(paste0('\n![',this_file,'](', this_file, ')\n'))
-}
+# newspaper_df <- 
+#   data_frame(file = dir('newspaper_headlines')) %>%
+#   mutate(paper = unlist(lapply(lapply(strsplit(file, '_'), function(x){x[2]}), function(y){gsub('.jpg', '', y, fixed = T)}))) %>%
+#   mutate(date = as.Date(substr(file, 1, 10))) %>%
+#   mutate(file = paste0('newspaper_headlines/', file))
+# 
+# sub_newspapers <- newspaper_df %>%
+#   filter((date >= '2017-09-21'&
+#          date <= '2017-09-22'))
+# sub_newspapers <- sub_newspapers %>%
+#   arrange(date, paper)
+# for(i in 1:nrow(sub_newspapers)){
+#    this_file <- sub_newspapers$file[i]
+#   new_person <- FALSE
+#   if(i == 1){
+#     new_person <- TRUE
+#   } else if(sub_newspapers$date[i] != sub_newspapers$date[i-1]){
+#     new_person <- TRUE
+#   }
+#   if(new_person){
+#     cat(paste0('\n### ', as.character(sub_newspapers$date[i]), '\n\n'))
+#   }
+#   cat(paste0('\n##### ', as.character(sub_newspapers$date[i]), ', ',   as.character(sub_newspapers$paper[i]), '\n'))
+#   cat(paste0('\n![',this_file,'](', this_file, ')\n'))
+# }
 ```
