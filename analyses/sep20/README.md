@@ -8,9 +8,9 @@ Jordi Cuixart
     -   [The results](#the-results)
     -   [Conclusion](#conclusion)
 -   [Analysis](#analysis)
-    -   [Finding 1: Twitter data does not indicate violence.](#finding-1-twitter-data-does-not-indicate-violence.)
+    -   [Finding 1: Politicians' Twitter data does not indicate violence.](#finding-1-politicians-twitter-data-does-not-indicate-violence.)
     -   [Finding 2: Wikipedia and Google data do not indicate violence](#finding-2-wikipedia-and-google-data-do-not-indicate-violence)
-    -   [Finding 3: Newspaper data does not indicate violence](#finding-3-newspaper-data-does-not-indicate-violence)
+    -   [Finding 3: Newspaper Twitter data does not indicate violence](#finding-3-newspaper-twitter-data-does-not-indicate-violence)
 -   [Conclusion](#conclusion-1)
 -   [Appendix](#appendix)
 
@@ -54,8 +54,8 @@ The data regarding the events of September/October 2017 are not consistent with 
 Analysis
 ========
 
-Finding 1: Twitter data does not indicate violence.
----------------------------------------------------
+Finding 1: Politicians' Twitter data does not indicate violence.
+----------------------------------------------------------------
 
 ### A.
 
@@ -245,8 +245,8 @@ The interest curves in the above charts are markedly different for Jordi Cuixart
 
 The different in these curves suggests a significant difference in the reality of the events they reflect. The curves for Kessler and Spencer are suggestive of real violence. The curves for Cuixart and Sànchez are not.
 
-Finding 3: Newspaper data does not indicate violence
-----------------------------------------------------
+Finding 3: Newspaper Twitter data does not indicate violence
+------------------------------------------------------------
 
 ### A.
 
