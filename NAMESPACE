@@ -2,6 +2,7 @@
 
 export(catalan_date)
 export(date_truncate)
+export(delete_duplicates_database)
 export(get_timeline_by_date)
 export(spanish_date)
 export(theme_vilaweb)
