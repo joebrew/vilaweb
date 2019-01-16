@@ -163,6 +163,25 @@ sanchez_plot('en',
 
 Like Rivera, Abascal's rate of tweets about Catalonia does not vary much over time, remaining high during the entirety of the period studies.
 
+## Qualitative interpretation
+
+3 interesting findings emerge from this analysis:
+
+1. The right-wing national politicians (Rivera, Abascal, Casado) tweet about Catalonia at a far greater rate than those on the left (Sánchez, Iglesias). 
+
+2. Pablo Casado decreased the frequency about which he tweets about Catalonia drastically after the PP's poor showing in the December 2017 Catalan elections. But, he increased the frequency about which he tweets on Catalonia after becoming leader of the PP.
+
+3. Pedro Sánchez tweeted about Catalonia at a far higher rate _before_ becoming PM than after. 
+
+The third point is perhaps the most interesting. Catalonia was a useful theme for Sánchez during the period prior to the vote of no confidence (moción de censura) of the Rajoy government. Thereafter, however, it became a thorn in his side - something which him made him look weak (to his opponents on the right) and ineffective (to those advocating for Catalan sovereignty). 
+
+Sánchez's approach to Catalonia, as evidenced by the tweet trail, is that of the ostrich burying its head in the sand - the more he pleases those on right, the more alienated Catalan sovereigntists feel by his policies. But if he makes any recognition of the growing consensus among Catalans for self-determination, his opponents on the right (who already tweet far more frequently about Catalonia than him) will use the matter as fuel for their political campaigns.
+
+His response to this dilemna? Silence.
+
+## Details
+
+Code for this analysis is publicly available at https://github.com/joebrew/vilaweb/tree/master/analyses/ja_no_parla_de_cat. 
 
 ## Catalan language plots
 
@@ -188,5 +207,6 @@ sanchez_plot('ca',
              person = 'Santiago Abascal',
              yy = 45)
 ```
+
 
 

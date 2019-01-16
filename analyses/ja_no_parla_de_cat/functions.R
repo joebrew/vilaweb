@@ -139,7 +139,7 @@ combined_plot <- function(language = 'en'){
     theme(axis.text.x = element_text(angle = 90)) +
     scale_color_manual(name = '',
                        values = cols) +
-    theme(legend.text = element_text(size = 10))
+    theme(legend.text = element_text(size = 8))
 }
 
 plot_2018 <- function(language = 'en'){
