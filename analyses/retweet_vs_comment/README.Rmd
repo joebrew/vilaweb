@@ -1,5 +1,5 @@
 ---
-title: "Quantifying the best and worst tweets among Spanish and Catalan politicians"
+title: "The worst tweet. Quantified."
 output: github_document
 ---
 
@@ -441,7 +441,6 @@ make_tern_color <- function(language = 'catalan',
   if(is.null(data)){
     data <- tl
   }
-  tl <- tl %>% filter(eix_indepe_unio != 'sobiranista')
   if(language == 'catalan'){
     x = 'Replies'
        y = 'Retweets'
@@ -470,6 +469,8 @@ make_tern_color <- function(language = 'catalan',
   } else {
     subtitle <- ''
   }
+  
+  data <- data %>% filter(eix_indepe_unio != 'sobiranista')
   g <- ggtern(data = data,
        aes(x = replies_count,
            y = retweets_count,
@@ -516,14 +517,16 @@ make_tern_color <- function(language = 'catalan',
 make_tern_color(alpha = 0.05, size = 0.05)
 ```
 
-Do twitter Ratios really matter? No. But perhaps the issue speaks to an underlying - and only infrequently discussed - subject in Spanish and Catalan politics: _who cares more?_ 
+Do twitter Ratios really matter? No. But perhaps they are relevant insofar as they touch on an underlying - and only infrequently discussed - subject in Spanish and Catalan politics: _who cares more?_ 
 
-In cases of gridlock or 50-50 splits, the eventual victor is not necessarily decided by the marginal changes in majorities/minorities, but rather by the extent to which the constituency is _passionate_ about the topic. In other words, just because the population is split evenly on an issue does not mean that both sides of the split care evenly about that issue. For example, though the Catalan population is divided on independence, [those in favor of independence are _more interested_ in politics than those opposed](https://twitter.com/joethebrew/status/1066744957363474433).
+Much ado is made of the 50-50 union-independence split in Catalonia. But in the case of gridlock, the eventual victor is not necessarily decided by the marginal changes in majorities/minorities, but rather by the extent to which the constituency is _passionate_ about the topic. In other words, just because the population is split evenly on an issue does not mean that both sides of the split care evenly about that issue. In the case of Catalan independence, [those in favor of independence are _more interested_ in politics than those opposed](https://twitter.com/joethebrew/status/1066744957363474433).
 
 ![](img/4.jpeg)
 
 
-The level of interest in or passion about a topic matters. And this analysis, as frivolous as it may seem, is consistent with [survey data](https://twitter.com/joethebrew/status/1066030235823554566) in Catlonia showing that unionist politicians are rated more poorly than their independentist counterparts....
+The level of interest in or passion about a topic matters. And this analysis, as frivolous as it may seem, is consistent with both (a) the higher levels of engagement in politics among independentists and (b) [survey data](https://twitter.com/joethebrew/status/1066030235823554566) in Catlonia showing that unionist politicians are rated more poorly than their independentist counterparts.
+
+So, are Miquel Iceta's tweets so poorly received because they are particularly bad? Probably not. Rather, his tweets get such high rates of replies to retweets because the population which is interested and paying attention is largely opposed to his political views.
 
 
 ### Politician-specific plots

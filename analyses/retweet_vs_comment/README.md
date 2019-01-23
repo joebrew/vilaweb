@@ -1,4 +1,4 @@
-Who is Catalonia's worst tweeter?
+The worst tweet. Quantified.
 ================
 
 The introduction
@@ -41,6 +41,8 @@ The top spots are dominated by members of mainstream Spanish parties: the Popula
 
 Which tweet had the highest total number of interactions in the last 3 years from the politicians in question? That honor goes to Oriol Junqueras whose November 2 2017 (the day he entered prison) tweet garnered 43,096 retweets, 71,033 likes, and 5,950 replies (a total of 120,079 interactions).
 
+![](img/2.png)
+
 ### The most impactful tweeter?
 
 The below chart shows the total number of interactions (retweets + replies + likes) between 2016 and 2018 of all politicians examined. Gabriel Rufian is by far the most impactful, followed by Carles Puigdemont.
@@ -53,18 +55,44 @@ Which tweet had the highest number of replies as a percentage of all interaction
 
 ![](img/1.png)
 
-### A personal note: my worst tweet
+### The "worst" tweeter?
+
+The "honor" of "worst" tweeter (ie, the person whose replies-to-retweets ratio is highest) goes to Miquel Iceta.
+
+![](figures/unnamed-chunk-9-1.png)
 
 Conclusion
 ----------
 
+The "Ratio" is a fun metric to analyze, but of questionable scientific value. It reflects the "badness" of a tweet, but "badness" is a function of both (a) the tweet itself and (b) the engagement of the audience. It is a metric grounded in the "wisdom of crowds", but the extent to which crowds are wise - or not - is not entirely clear.
+
+What is clear from this analysis is that among Spanish and Catalan politicians, unionists' tweets are particularly poorly received. Miquel Iceta had the highest ratio of replies-to-retweets, and his party (the PSC) had the tweet with the highest percentage of replies. Sovereigntists, on the other hand, had the most impactful tweet (Junqeras), the most impactful tweeter (Rufian) and - on average - much lower ratios of replies-to-retweets than unionists.
+
+The unionist-independentist divide is not unlike the republican-democratic divide identified by the analysis team at FiveThirtyEight. The below shows tweets from the two main American political parties.
+
+![](img/3.png)
+
+If we compare this with tweets from Catalan and Spanish politicians, we find a similar pattern: like the American Republican party, Spanish unionists (red) tend to have a higher replies-to-retweets ratio and greater likes than retweets, whereas Catalan independentists (blue) - like the American Democratic party - tend to have a lower ratio of replies-to-retweets and more retweets than likes.
+
+![](figures/unnamed-chunk-10-1.png)
+
+Do twitter Ratios really matter? No. But perhaps they are relevant insofar as they touch on an underlying - and only infrequently discussed - subject in Spanish and Catalan politics: *who cares more?*
+
+Much ado is made of the 50-50 union-independence split in Catalonia. But in the case of gridlock, the eventual victor is not necessarily decided by the marginal changes in majorities/minorities, but rather by the extent to which the constituency is *passionate* about the topic. In other words, just because the population is split evenly on an issue does not mean that both sides of the split care evenly about that issue. In the case of Catalan independence, [those in favor of independence are *more interested* in politics than those opposed](https://twitter.com/joethebrew/status/1066744957363474433).
+
+![](img/4.jpeg)
+
+The level of interest in or passion about a topic matters. And this analysis, as frivolous as it may seem, is consistent with both (a) the higher levels of engagement in politics among independentists and (b) [survey data](https://twitter.com/joethebrew/status/1066030235823554566) in Catlonia showing that unionist politicians are rated more poorly than their independentist counterparts.
+
+So, are Miquel Iceta's tweets so poorly received because they are particularly bad? Probably not. Rather, his tweets get such high rates of replies to retweets because the population which is interested and paying attention is largely opposed to his political views.
+
 ### Politician-specific plots
 
-![](figures/unnamed-chunk-10-1.png)![](figures/unnamed-chunk-10-2.png)![](figures/unnamed-chunk-10-3.png)![](figures/unnamed-chunk-10-4.png)![](figures/unnamed-chunk-10-5.png)![](figures/unnamed-chunk-10-6.png)![](figures/unnamed-chunk-10-7.png)![](figures/unnamed-chunk-10-8.png)![](figures/unnamed-chunk-10-9.png)![](figures/unnamed-chunk-10-10.png)![](figures/unnamed-chunk-10-11.png)![](figures/unnamed-chunk-10-12.png)![](figures/unnamed-chunk-10-13.png)![](figures/unnamed-chunk-10-14.png)![](figures/unnamed-chunk-10-15.png)![](figures/unnamed-chunk-10-16.png)![](figures/unnamed-chunk-10-17.png)![](figures/unnamed-chunk-10-18.png)![](figures/unnamed-chunk-10-19.png)![](figures/unnamed-chunk-10-20.png)![](figures/unnamed-chunk-10-21.png)![](figures/unnamed-chunk-10-22.png)![](figures/unnamed-chunk-10-23.png)![](figures/unnamed-chunk-10-24.png)![](figures/unnamed-chunk-10-25.png)![](figures/unnamed-chunk-10-26.png)![](figures/unnamed-chunk-10-27.png)![](figures/unnamed-chunk-10-28.png)![](figures/unnamed-chunk-10-29.png)![](figures/unnamed-chunk-10-30.png)![](figures/unnamed-chunk-10-31.png)![](figures/unnamed-chunk-10-32.png)![](figures/unnamed-chunk-10-33.png)![](figures/unnamed-chunk-10-34.png)![](figures/unnamed-chunk-10-35.png)![](figures/unnamed-chunk-10-36.png)![](figures/unnamed-chunk-10-37.png)![](figures/unnamed-chunk-10-38.png)![](figures/unnamed-chunk-10-39.png)![](figures/unnamed-chunk-10-40.png)![](figures/unnamed-chunk-10-41.png)![](figures/unnamed-chunk-10-42.png)![](figures/unnamed-chunk-10-43.png)![](figures/unnamed-chunk-10-44.png)![](figures/unnamed-chunk-10-45.png)![](figures/unnamed-chunk-10-46.png)![](figures/unnamed-chunk-10-47.png)![](figures/unnamed-chunk-10-48.png)![](figures/unnamed-chunk-10-49.png)![](figures/unnamed-chunk-10-50.png)![](figures/unnamed-chunk-10-51.png)![](figures/unnamed-chunk-10-52.png)![](figures/unnamed-chunk-10-53.png)![](figures/unnamed-chunk-10-54.png)![](figures/unnamed-chunk-10-55.png)![](figures/unnamed-chunk-10-56.png)![](figures/unnamed-chunk-10-57.png)![](figures/unnamed-chunk-10-58.png)
+![](figures/unnamed-chunk-11-1.png)![](figures/unnamed-chunk-11-2.png)![](figures/unnamed-chunk-11-3.png)![](figures/unnamed-chunk-11-4.png)![](figures/unnamed-chunk-11-5.png)![](figures/unnamed-chunk-11-6.png)![](figures/unnamed-chunk-11-7.png)![](figures/unnamed-chunk-11-8.png)![](figures/unnamed-chunk-11-9.png)![](figures/unnamed-chunk-11-10.png)![](figures/unnamed-chunk-11-11.png)![](figures/unnamed-chunk-11-12.png)![](figures/unnamed-chunk-11-13.png)![](figures/unnamed-chunk-11-14.png)![](figures/unnamed-chunk-11-15.png)![](figures/unnamed-chunk-11-16.png)![](figures/unnamed-chunk-11-17.png)![](figures/unnamed-chunk-11-18.png)![](figures/unnamed-chunk-11-19.png)![](figures/unnamed-chunk-11-20.png)![](figures/unnamed-chunk-11-21.png)![](figures/unnamed-chunk-11-22.png)![](figures/unnamed-chunk-11-23.png)![](figures/unnamed-chunk-11-24.png)![](figures/unnamed-chunk-11-25.png)![](figures/unnamed-chunk-11-26.png)![](figures/unnamed-chunk-11-27.png)![](figures/unnamed-chunk-11-28.png)![](figures/unnamed-chunk-11-29.png)![](figures/unnamed-chunk-11-30.png)![](figures/unnamed-chunk-11-31.png)![](figures/unnamed-chunk-11-32.png)![](figures/unnamed-chunk-11-33.png)![](figures/unnamed-chunk-11-34.png)![](figures/unnamed-chunk-11-35.png)![](figures/unnamed-chunk-11-36.png)![](figures/unnamed-chunk-11-37.png)![](figures/unnamed-chunk-11-38.png)![](figures/unnamed-chunk-11-39.png)![](figures/unnamed-chunk-11-40.png)![](figures/unnamed-chunk-11-41.png)![](figures/unnamed-chunk-11-42.png)![](figures/unnamed-chunk-11-43.png)![](figures/unnamed-chunk-11-44.png)![](figures/unnamed-chunk-11-45.png)![](figures/unnamed-chunk-11-46.png)![](figures/unnamed-chunk-11-47.png)![](figures/unnamed-chunk-11-48.png)![](figures/unnamed-chunk-11-49.png)![](figures/unnamed-chunk-11-50.png)![](figures/unnamed-chunk-11-51.png)![](figures/unnamed-chunk-11-52.png)![](figures/unnamed-chunk-11-53.png)![](figures/unnamed-chunk-11-54.png)![](figures/unnamed-chunk-11-55.png)![](figures/unnamed-chunk-11-56.png)![](figures/unnamed-chunk-11-57.png)
 
 Catalan language plots
 ----------------------
 
-![](figures/unnamed-chunk-11-1.png)![](figures/unnamed-chunk-11-2.png)![](figures/unnamed-chunk-11-3.png)
+![](figures/unnamed-chunk-12-1.png)![](figures/unnamed-chunk-12-2.png)![](figures/unnamed-chunk-12-3.png)![](figures/unnamed-chunk-12-4.png)
 
-![](figures/unnamed-chunk-12-1.png)![](figures/unnamed-chunk-12-2.png)![](figures/unnamed-chunk-12-3.png)![](figures/unnamed-chunk-12-4.png)![](figures/unnamed-chunk-12-5.png)![](figures/unnamed-chunk-12-6.png)![](figures/unnamed-chunk-12-7.png)![](figures/unnamed-chunk-12-8.png)![](figures/unnamed-chunk-12-9.png)![](figures/unnamed-chunk-12-10.png)![](figures/unnamed-chunk-12-11.png)![](figures/unnamed-chunk-12-12.png)![](figures/unnamed-chunk-12-13.png)![](figures/unnamed-chunk-12-14.png)![](figures/unnamed-chunk-12-15.png)![](figures/unnamed-chunk-12-16.png)![](figures/unnamed-chunk-12-17.png)![](figures/unnamed-chunk-12-18.png)![](figures/unnamed-chunk-12-19.png)![](figures/unnamed-chunk-12-20.png)![](figures/unnamed-chunk-12-21.png)![](figures/unnamed-chunk-12-22.png)![](figures/unnamed-chunk-12-23.png)![](figures/unnamed-chunk-12-24.png)![](figures/unnamed-chunk-12-25.png)![](figures/unnamed-chunk-12-26.png)![](figures/unnamed-chunk-12-27.png)![](figures/unnamed-chunk-12-28.png)![](figures/unnamed-chunk-12-29.png)![](figures/unnamed-chunk-12-30.png)![](figures/unnamed-chunk-12-31.png)![](figures/unnamed-chunk-12-32.png)![](figures/unnamed-chunk-12-33.png)![](figures/unnamed-chunk-12-34.png)![](figures/unnamed-chunk-12-35.png)![](figures/unnamed-chunk-12-36.png)![](figures/unnamed-chunk-12-37.png)![](figures/unnamed-chunk-12-38.png)![](figures/unnamed-chunk-12-39.png)![](figures/unnamed-chunk-12-40.png)![](figures/unnamed-chunk-12-41.png)![](figures/unnamed-chunk-12-42.png)![](figures/unnamed-chunk-12-43.png)![](figures/unnamed-chunk-12-44.png)![](figures/unnamed-chunk-12-45.png)![](figures/unnamed-chunk-12-46.png)![](figures/unnamed-chunk-12-47.png)![](figures/unnamed-chunk-12-48.png)![](figures/unnamed-chunk-12-49.png)![](figures/unnamed-chunk-12-50.png)![](figures/unnamed-chunk-12-51.png)![](figures/unnamed-chunk-12-52.png)![](figures/unnamed-chunk-12-53.png)![](figures/unnamed-chunk-12-54.png)![](figures/unnamed-chunk-12-55.png)![](figures/unnamed-chunk-12-56.png)![](figures/unnamed-chunk-12-57.png)![](figures/unnamed-chunk-12-58.png)
+![](figures/unnamed-chunk-13-1.png)![](figures/unnamed-chunk-13-2.png)![](figures/unnamed-chunk-13-3.png)![](figures/unnamed-chunk-13-4.png)![](figures/unnamed-chunk-13-5.png)![](figures/unnamed-chunk-13-6.png)![](figures/unnamed-chunk-13-7.png)![](figures/unnamed-chunk-13-8.png)![](figures/unnamed-chunk-13-9.png)![](figures/unnamed-chunk-13-10.png)![](figures/unnamed-chunk-13-11.png)![](figures/unnamed-chunk-13-12.png)![](figures/unnamed-chunk-13-13.png)![](figures/unnamed-chunk-13-14.png)![](figures/unnamed-chunk-13-15.png)![](figures/unnamed-chunk-13-16.png)![](figures/unnamed-chunk-13-17.png)![](figures/unnamed-chunk-13-18.png)![](figures/unnamed-chunk-13-19.png)![](figures/unnamed-chunk-13-20.png)![](figures/unnamed-chunk-13-21.png)![](figures/unnamed-chunk-13-22.png)![](figures/unnamed-chunk-13-23.png)![](figures/unnamed-chunk-13-24.png)![](figures/unnamed-chunk-13-25.png)![](figures/unnamed-chunk-13-26.png)![](figures/unnamed-chunk-13-27.png)![](figures/unnamed-chunk-13-28.png)![](figures/unnamed-chunk-13-29.png)![](figures/unnamed-chunk-13-30.png)![](figures/unnamed-chunk-13-31.png)![](figures/unnamed-chunk-13-32.png)![](figures/unnamed-chunk-13-33.png)![](figures/unnamed-chunk-13-34.png)![](figures/unnamed-chunk-13-35.png)![](figures/unnamed-chunk-13-36.png)![](figures/unnamed-chunk-13-37.png)![](figures/unnamed-chunk-13-38.png)![](figures/unnamed-chunk-13-39.png)![](figures/unnamed-chunk-13-40.png)![](figures/unnamed-chunk-13-41.png)![](figures/unnamed-chunk-13-42.png)![](figures/unnamed-chunk-13-43.png)![](figures/unnamed-chunk-13-44.png)![](figures/unnamed-chunk-13-45.png)![](figures/unnamed-chunk-13-46.png)![](figures/unnamed-chunk-13-47.png)![](figures/unnamed-chunk-13-48.png)![](figures/unnamed-chunk-13-49.png)![](figures/unnamed-chunk-13-50.png)![](figures/unnamed-chunk-13-51.png)![](figures/unnamed-chunk-13-52.png)![](figures/unnamed-chunk-13-53.png)![](figures/unnamed-chunk-13-54.png)![](figures/unnamed-chunk-13-55.png)![](figures/unnamed-chunk-13-56.png)![](figures/unnamed-chunk-13-57.png)
