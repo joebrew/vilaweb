@@ -88,7 +88,7 @@ In 2017, Esquire Magazine's Luke O'Neil wrote [an article called "How to Know If
 
 FiveThirtyEight, a data journalism group in the United States, did [an analysis of American politicians' twitter ratio](https://fivethirtyeight.com/features/the-worst-tweeter-in-politics-isnt-trump/) in late 2017. They showed that, despite popular belief, there are American politicians who are even more inept at Twitter than Donald Trump. Hard to believe, but true.
 
-Let's explore "The Ratio" among Catalan politicians.
+Let's explore "The Ratio" among Catalan and Spanish politicians.
 
 ## The Question
 
@@ -377,7 +377,7 @@ x <- tl %>%
 
 ### The "worst" tweeter?
 
-The "honor" of "worst" tweeter (ie, the person whose replies-to-retweets ratio is highest) goes to Miquel Iceta.
+The "honor" of "worst" tweeter (ie, the person whose replies-to-retweets ratio is highest) goes to Miquel Iceta. He is followed closely by other unionist politicians (Andrea Levy Soler, Xavier Garcia Albiol, Ines Arrimadas, Pedro Sánchez, Pablo Casado...).
 
 ```{r}
 best_plot <- function(language = 'catalan'){
@@ -524,9 +524,11 @@ Much ado is made of the 50-50 union-independence split in Catalonia. But in the 
 ![](img/4.jpeg)
 
 
-The level of interest in or passion about a topic matters. And this analysis, as frivolous as it may seem, is consistent with both (a) the higher levels of engagement in politics among independentists and (b) [survey data](https://twitter.com/joethebrew/status/1066030235823554566) in Catlonia showing that unionist politicians are rated more poorly than their independentist counterparts.
+The level of interest in or passion about a topic matters. And this analysis, as frivolous as it may seem, is consistent with both (a) the higher levels of [engagement in politics](https://twitter.com/joethebrew/status/1067004922594508800) among independentists and (b) [lower ratings of unionist politicians data](https://twitter.com/joethebrew/status/1066030235823554566) than their independentist counterparts.
 
-So, are Miquel Iceta's tweets so poorly received because they are particularly bad? Probably not. Rather, his tweets get such high rates of replies to retweets because the population which is interested and paying attention is largely opposed to his political views.
+So, are Miquel Iceta's tweets so poorly received because they are particularly bad? Probably not. Rather, his tweets get such high rates of replies to retweets because the population which is interested and paying attention is largely opposed to his political views (and opponents are more likely to reply than to retweet). Those who agree with him (and would retweet) are simply [not paying attention](https://twitter.com/joethebrew/status/1066790073633570817).
+
+![](img/5.jpeg)
 
 
 ### Politician-specific plots
