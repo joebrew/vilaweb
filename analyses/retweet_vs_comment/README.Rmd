@@ -39,6 +39,7 @@ library(ggtern)
 people <- read_csv('people.csv')
 people <- tolower(people$username)
 people <- people[!people == 'gabrielrufian_']
+people <- c(people, 'j_zaragoza_')
 if(file.exists('tl.RData')){
   load('tl.RData')
 } else {
@@ -67,15 +68,17 @@ tl <- tl %>% filter(interactions >= 10)
 library(gsheet)
 if(!'goog.RData' %in% dir()){
   goog_people <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=1425313388')
-  goog_newspapers <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=148951570')
   save(goog_people,
-       goog_newspapers,
        file = 'goog.RData')
 } else {
   load('goog.RData')
 }
 
 tl <- tl %>% filter(username %in% goog_people$username)
+
+# Define the parties to remove
+remove <- c('jeanmarcpujol')
+tl <- tl %>% filter(!username %in% remove)
 
 # Join the google data
 tl <- tl %>%
@@ -92,11 +95,11 @@ Let's explore "The Ratio" among Catalan and Spanish politicians.
 
 ## The Question
 
-Among Catalan and Spanish politicians, who is the "best tweeter" (according to "The Ratio")? And the worst?
+Who are Catalonia and Spain's worst tweets and tweeters?
 
 ## The methods
 
-We gathered tweets for 57 well-known Spanish and Catalan politicians, and calculated tweet-specific reply-to-retweet ratio, as well as a few aggregate statistics. We used all tweets for the three year period from 2016 through 2018, removing those with fewer than 10 retweets.
+We gathered tweets for `r length(unique(tl$username))` well-known Spanish and Catalan politicians, and calculated tweet-specific reply-to-retweet ratio, as well as a few aggregate statistics. We used all tweets for the three year period from 2016 through 2018, removing those with fewer than 10 interactions.
 
 ## The results
 
@@ -116,7 +119,7 @@ make_tern <- function(language = 'catalan',
   if(is.null(data)){
     data <- tl
   }
-  if(language == 'catalan'){
+  if(language == 'english'){
     x = 'Replies'
        y = 'Retweets'
        z = 'Likes'
@@ -143,6 +146,10 @@ make_tern <- function(language = 'catalan',
       label_df <- data[which(order(data$replies_count) %in% 1:2 | order(data$retweets_count) %in% 1:2 | order(data$likes_count) %in% 1:2),]
   } else {
     subtitle <- ''
+    # Jitter
+      data$replies_count <- jitter(data$replies_count)
+  data$retweets_count <- jitter(data$retweets_count)
+  data$likes_count <- jitter(data$likes_count)
   }
   g <- ggtern(data = data,
        aes(x = replies_count,
@@ -204,11 +211,13 @@ percent_plot <- function(language = 'catalan',
   if(language == 'catalan'){
     x = 'Usuari'
        y = 'Percentage'
-       title = 'Percentage of interactions which are replies'
+    title = 'Percentage de interactions que són respostes'
+
   } else {
     x = 'Username'
        y = 'Percentage'
-       title = 'Percentage de interactions que són respostes'
+    title = 'Percentage of interactions which are replies'
+
   }
   
   agg <- data %>%
@@ -227,9 +236,12 @@ percent_plot <- function(language = 'catalan',
   ggplot(data = agg,
          aes(x = person,
              y = p)) +
-    geom_bar(stat = 'identity',
-             alpha = 0.6,
-             fill = 'darkorange') +
+      geom_point() +
+  geom_segment(aes(yend = 0,
+                   xend = person)) +
+    # geom_bar(stat = 'identity',
+    #          alpha = 0.6,
+    #          fill = 'darkorange') +
     theme_vilaweb() +
     labs(x = x,
          y = y,
@@ -316,6 +328,18 @@ x <- tl %>%
 
 ![](img/2.png)
 
+### Top 10 most impactful tweets
+
+The below table shows the 10 tweets from 2016-2018 with the greatest number of interactions.
+
+```{r}
+x <- tl %>% arrange(desc(interactions))
+x <- x[1:10,]
+x$rank <- 1:10
+x <- x %>% dplyr::select(rank, username, date, tweet, interactions, replies_count, retweets_count, likes_count)
+kable(x)
+```
+
 
 ### The most impactful tweeter?
 
@@ -361,7 +385,7 @@ impact_plot(language = 'english')
 
 ### The "worst" tweet?
 
-Which tweet had the highest number of replies as a percentage of all interactions? The honor goes to the Catalan Socialists whose May 2017 tweet called for a choice to be made between ballots and lunch for children. The tweet had 508 replies, with only 58 retweets and 45 likes (a reply-to-retweet ratio of 8.7).
+Which tweet had the highest number of replies as a percentage of all interactions (excluding those with fewer than 500 interactions)? The honor goes to the Catalan Socialists whose May 2017 tweet called for a choice to be made between ballots and lunch for children. The tweet had 508 replies, with only 58 retweets and 45 likes (a reply-to-retweet ratio of 8.7).
 
 ```{r}
 x <- tl %>% 
@@ -375,9 +399,25 @@ x <- tl %>%
 
 ![](img/1.png)
 
+### The top 10 worst tweets
+
+The below table shows the 10 tweets with thehighest number of replies as a percentage of all interactions (excluding those with fewer than 500 interactions).
+
+```{r}
+x <- tl %>%
+    filter(interactions > 500) %>%
+    mutate(p = replies_count / interactions * 100) %>%
+  arrange(desc(p))
+x <- x[1:10,]
+x$rank <- 1:10
+x <- x %>% dplyr::select(rank, username, date, tweet, p, replies_count, interactions) %>%
+  dplyr::rename(`% replies of all interactions` = p)
+kable(x)
+```
+
 ### The "worst" tweeter?
 
-The "honor" of "worst" tweeter (ie, the person whose replies-to-retweets ratio is highest) goes to Miquel Iceta. He is followed closely by other unionist politicians (Andrea Levy Soler, Xavier Garcia Albiol, Ines Arrimadas, Pedro Sánchez, Pablo Casado...).
+The "honor" of "worst" tweeter (ie, the person whose replies-to-retweets ratio is highest) goes to Miquel Iceta. He is followed closely by Andrea Levy Soler, then Xavier Garcia Albiol, Ines Arrimadas, Pedro Sánchez, and Pablo Casado. Though our dataset had nearly as many sovereigntists (26) as unionists (30), the top spots in terms of the Ratio all went to unionists.
 
 ```{r}
 best_plot <- function(language = 'catalan'){
@@ -416,13 +456,17 @@ ggplot(data = xx,
 best_plot(language = 'english')
 ```
 
-## Conclusion
+## Summary
+
+The twitter "Ratio" (the ratio of replies to retweets) is generally higher among pro-union politicians than pro-independence politicians. Socialists and members of the PP have the highest "Ratios" (replies to retweets). The most impactful tweet, as well as the most impactful tweeter, are both members of ERC. Despite having a far smaller base than Spanish national politicians, Catalan-specific and Barcelona politicians dominated the top 10 most "impactful" tweets (measured in terms of total number of interactions).
+
+## Conclusion and interpretation
 
 The "Ratio" is a fun metric to analyze, but of questionable scientific value. It reflects the "badness" of a tweet, but "badness" is a function of both (a) the tweet itself and (b) the engagement of the audience. It is a metric grounded in the "wisdom of crowds", but the extent to which crowds are wise - or not - is not entirely clear.
 
 What is clear from this analysis is that among Spanish and Catalan politicians, unionists' tweets are particularly poorly received. Miquel Iceta had the highest ratio of replies-to-retweets, and his party (the PSC) had the tweet with the highest percentage of replies. Sovereigntists, on the other hand, had the most impactful tweet (Junqeras), the most impactful tweeter (Rufian) and - on average - much lower ratios of replies-to-retweets than unionists. 
 
-The unionist-independentist divide is not unlike the republican-democratic divide identified by the analysis team at FiveThirtyEight. The below shows tweets from the two main American political parties.
+The unionist-independentist divide is not unlike the Republican-Democratic divide identified by the analysis team at FiveThirtyEight. The below shows tweets from the two main American political parties.
 
 ![](img/3.png)
 
@@ -441,7 +485,7 @@ make_tern_color <- function(language = 'catalan',
   if(is.null(data)){
     data <- tl
   }
-  if(language == 'catalan'){
+  if(language == 'english'){
     x = 'Replies'
        y = 'Retweets'
        z = 'Likes'
@@ -471,6 +515,10 @@ make_tern_color <- function(language = 'catalan',
   }
   
   data <- data %>% filter(eix_indepe_unio != 'sobiranista')
+  # Jitter
+  data$replies_count <- jitter(data$replies_count)
+  data$retweets_count <- jitter(data$retweets_count)
+  data$likes_count <- jitter(data$likes_count)
   g <- ggtern(data = data,
        aes(x = replies_count,
            y = retweets_count,
@@ -514,19 +562,22 @@ make_tern_color <- function(language = 'catalan',
   }
   return(g)
 }
-make_tern_color(alpha = 0.05, size = 0.05)
+make_tern_color(alpha = 0.02, size = 0.2,
+                language = 'english',
+                title = 'Unionist (red) and independentist (blue) tweets')
 ```
 
 Do twitter Ratios really matter? No. But perhaps they are relevant insofar as they touch on an underlying - and only infrequently discussed - subject in Spanish and Catalan politics: _who cares more?_ 
 
-Much ado is made of the 50-50 union-independence split in Catalonia. But in the case of gridlock, the eventual victor is not necessarily decided by the marginal changes in majorities/minorities, but rather by the extent to which the constituency is _passionate_ about the topic. In other words, just because the population is split evenly on an issue does not mean that both sides of the split care evenly about that issue. In the case of Catalan independence, [those in favor of independence are _more interested_ in politics than those opposed](https://twitter.com/joethebrew/status/1066744957363474433).
+Much ado is made of the 50-50 union-independence split in Catalonia. But in the case of gridlock, the eventual victor is not necessarily decided by the marginal changes in majorities/minorities, but rather by the extent to which the constituency is _passionate_ about the topic. In other words, just because the population is split evenly on an issue does not mean that both sides of the split care evenly about that issue - and the side that cares more will generally win. 
+
+In the case of Catalan independence, who cares more about the issue - those in favor or those opposed to independence? Measuring "care" is hard, but [those in favor of independence are _more interested_ in politics than those opposed](https://twitter.com/joethebrew/status/1066744957363474433), and interest is a good proxy for care.
 
 ![](img/4.jpeg)
 
+By the same token, those in favor of independence exhibit higher levels of [engagement in politics](https://twitter.com/joethebrew/status/1067004922594508800) than those opposed. These two factors, combined with the fact that unionist politicians in Catalonia receive generally [lower ratings](https://twitter.com/joethebrew/status/1066030235823554566) than their independentist counterparts, suggests that those in favor of independence care about the subject more than those opposed. This may explain why unionists' tweets have such worse "Ratios" than those of independentists.
 
-The level of interest in or passion about a topic matters. And this analysis, as frivolous as it may seem, is consistent with both (a) the higher levels of [engagement in politics](https://twitter.com/joethebrew/status/1067004922594508800) among independentists and (b) [lower ratings of unionist politicians data](https://twitter.com/joethebrew/status/1066030235823554566) than their independentist counterparts.
-
-So, are Miquel Iceta's tweets so poorly received because they are particularly bad? Probably not. Rather, his tweets get such high rates of replies to retweets because the population which is interested and paying attention is largely opposed to his political views (and opponents are more likely to reply than to retweet). Those who agree with him (and would retweet) are simply [not paying attention](https://twitter.com/joethebrew/status/1066790073633570817).
+So, are Miquel Iceta's tweets so poorly received because he is a particularly bad tweeter? Probably not. Rather, his "Ratio" is so high because the population which is interested and paying attention is largely opposed to his political views (and opponents are more likely to reply than to retweet), and the people who agree with him (ie, PSC supporters) themselves say that they [are not very well-informed about what is happening in politics](https://twitter.com/joethebrew/status/1066790073633570817). 
 
 ![](img/5.jpeg)
 
@@ -537,18 +588,19 @@ So, are Miquel Iceta's tweets so poorly received because they are particularly b
 for(i in 1:length(people)){
   this_person <- people[i]
   these_data <- tl %>% filter(username == this_person)
-  print(make_tern(data = these_data, show_density = T, title = this_person, alpha = 0.2, size = 0.2))
+  print(make_tern(data = these_data, show_density = T, title = this_person, alpha = 0.2, size = 0.2, language = 'english'))
 }
 ```
 
 ## Catalan language plots
 
 ```{r}
-make_tern(language = 'catalan')
+make_tern(language = 'catalan', alpha = 0.1, size = 0.4)
 percent_plot(language = 'catalan')
 impact_plot(language = 'catalan')
 best_plot(language = 'catalan')
-
+make_tern_color(language = 'catalan', alpha = 0.02, size = 0.2,
+                title = 'Piulades de independentistes (blau) i unionistes (vermell)')
 ```
 
 
