@@ -40,6 +40,8 @@ people <- read_csv('people.csv')
 people <- tolower(people$username)
 people <- people[!people == 'gabrielrufian_']
 people <- c(people, 'j_zaragoza_')
+people <- c(people, 'miriamnoguerasm')
+people <- sort(people)
 if(file.exists('tl.RData')){
   load('tl.RData')
 } else {
@@ -572,6 +574,7 @@ Do twitter Ratios really matter? No. But perhaps they are relevant insofar as th
 Much ado is made of the 50-50 union-independence split in Catalonia. But in the case of gridlock, the eventual victor is not necessarily decided by the marginal changes in majorities/minorities, but rather by the extent to which the constituency is _passionate_ about the topic. In other words, just because the population is split evenly on an issue does not mean that both sides of the split care evenly about that issue - and the side that cares more will generally win. 
 
 In the case of Catalan independence, who cares more about the issue - those in favor or those opposed to independence? Measuring "care" is hard, but [those in favor of independence are _more interested_ in politics than those opposed](https://twitter.com/joethebrew/status/1066744957363474433), and interest is a good proxy for care.
+
 
 ![](img/4.jpeg)
 
