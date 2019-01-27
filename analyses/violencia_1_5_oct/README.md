@@ -95,15 +95,4 @@ Conclusió
 
 És creïble que hi va haver una rebel-lió violenta duta a terme pels independentistes, i els seus adversaris polítics - que tuitejen les paraules "violència" i "violents" amb freqüencia - no van mencionar la violència d'aquesta rebel-lió fins setmanes (o mesos) més tard?
 
-O és més creïble que aquests polítics no van parlar-ne durant i desprès del referèndum perquè la violència *real* d'aquells dies - la violència d'un Estat exercida en contra de votants - els va provocar un sentiment de desorientació i culpa? Potser no van parlar de la violència durant la "rebel-lió" perquè els seus adversaris polítics (els independentistes) no van ser *autors* de la violència, sino víctimes d'ella? Potser no van parlar de la violència de l'independentisme fins desprès perquè calia temps per reorientar-se i per construir una narrativa que justificava l'acció policial de l'1 d'octubre? Potser no van parlar de la violència durant la rebel-lió perquè hauria semblat simplement absurd, i calia temps per que la gent oblidès del que va realment passar?
-
-Epileg: Reflexió personal
-=========================
-
-Personalment, com observador estranger de la política catalana, no em sorprèn que alguns radicals insisteixen en el relat absurd de "la violència de l'indepenentisme". El Partit Popular, Ciudadanos i Vox tenen una relació "fluixa" amb la veritat, similar a la relació del Donald Trump. [La mentida](https://www.vilaweb.cat/noticies/video-sanchis-descolloca-arrimadas-amb-una-manipulacio-dalbert-rivera-vol-veure-una-mentida/), per aquests partits, és una táctica útil i comun.
-
-El que em sorprèn, honestament, és la complicitat del Partit Socialista, i la seva branca catalana (el PSC). Davant de mentides tan obvies com la de la "rebel-lió", no em sembla suficient dir que l'assumpte està a mans de jutges. Cal dir, també, la veritat.
-
-I la veritat és aquesta: el referèndum de l'1 d'óctubre va ser un intent de votació - no de rebel-lió - i la violència exercida per l'Estat, com tota la violència, és condemnable. També és condemnable l'empresonament dels liders polítics, tot i que siguin els teus adversaris polítics. I és condemnable la judicialització de la política.
-
-Però lo més condemnable de tot és guardar silencia davant del patiment humà.
+O és més creïble que aquests polítics no van parlar-ne durant i desprès del referèndum perquè la violència *real* d'aquells dies - la violència d'un Estat exercida en contra de votants - els va provocar un sentiment de desorientació i culpa? Potser no van parlar de la violència durant la "rebel-lió" perquè els seus adversaris polítics (els independentistes) no van ser *autors* de la violència, sino víctimes d'ella? Potser no van parlar de la violència de l'independentisme fins desprès perquè calia temps per reorientar-se i per construir una narrativa que justificava l'acció policial de l'1 d'octubre? Potser no van parlar de la violència durant la "rebel-lió" perquè hauria semblat simplement absurd, i calia més temps per que la gent oblidès del que va realment passar?
