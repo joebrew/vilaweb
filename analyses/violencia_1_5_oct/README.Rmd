@@ -329,11 +329,11 @@ ggplot(data = pdd,
                                    vjust = 0.5,
                                    size = 14),
         strip.text = element_text(size = 16),
-        plot.caption = element_text(size = 12),
-        plot.title = element_text(size = 16)) +
+        plot.caption = element_text(size = 9),
+        plot.title = element_text(size = 13)) +
   labs(x = '',
        y = 'Piulades',
-       title = 'Piulades amb la paraula "violència", 6 d\'octubre 2017 - 31 desembre 2018',
+       title = 'Piulades amb la paraula "violència", 8 d\'octubre 2017 - 31 desembre 2018',
        caption = '*Inclou variacions en castellà/català: violència, violento, violentos, violents, violentes, etc.\nDades recollides el 27 de gener de 2019. Gràfic: Joe Brew | @joethebrew | www.vilaweb.cat') +
   geom_text(aes(label = n),
                 nudge_y = 5,
