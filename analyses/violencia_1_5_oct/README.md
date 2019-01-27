@@ -41,8 +41,10 @@ Per example, aqui alguns de les piulades mencionant "violència" o "violentos" d
     <td><img src="img/7.png" /></td>
 
 </table>
-Els "rebels violents" empresonats i exiliats
-============================================
+.
+
+Els presos i exiliats
+=====================
 
 Ara mateix hi ha 9 líders polítics i socials catalans a la presó i 7 més a l'exili, acusats de "rebel-lió". Aquesta acusació requereix, segons el Codi Penal Espanyol, l'ús de la violència. Segons la Fiscalía de l'Estat, el Jutge Instructor del cas, i els liders dels principals partits espanyols, els empresonats/exiliats es van "alçar pública i violentament" (definició de rebel-lió) organitzant el referèndum d'autodeterminació l'1 d'octubre de 2017.
 
