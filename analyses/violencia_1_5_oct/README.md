@@ -4,7 +4,7 @@ Per què no van parlar de la violència durant la rebel-lió
 Introducció: la "violència" al twitter
 ======================================
 
-Fès una búsqueda al twitter per les paraules "violencia" o "violentos". És facil. Fès clic [aqui](https://twitter.com/search?q=%22viol%C3%A8ncia%22%20OR%20%22violencia%22%20OR%20%22violentos%22%20OR%20%22violento%22%20OR%20%22violenta%22%20OR%20%22violentas%22&src=typed_query) o simplement escriu "violencia" en la barra de búsqueda. Si vols veure piulades d'un polítics specífic, afegeix "from:" [aixi](https://twitter.com/search?q=from%3AAlbert_Rivera%20violentos&src=typed_query):
+Fès una búsqueda al twitter per les paraules "violencia" o "violentos". És facil. Fès clic [aqui](https://twitter.com/search?q=%22viol%C3%A8ncia%22%20OR%20%22violencia%22%20OR%20%22violentos%22%20OR%20%22violento%22%20OR%20%22violenta%22%20OR%20%22violentas%22&src=typed_query) o simplement escriu "violencia" en la barra de búsqueda. Si vols veure piulades d'una persona específica, afegeix "from:" [aixi](https://twitter.com/search?q=from%3AAlbert_Rivera%20violentos&src=typed_query):
 
     from:Albert_Rivera violentos
 
