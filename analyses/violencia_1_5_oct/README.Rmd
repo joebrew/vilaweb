@@ -237,7 +237,7 @@ g2 <- ggplot(data = pd2,
                                    size = 14)) +
   labs(x = '',
        y = 'Tuits',
-       title = 'Tuits con la palabra "violencia", 1-5 de octubre de 2017',
+       title = 'Tuits con la palabra "violencia", 1-7 de octubre de 2017',
        subtitle = 'Independentistas + Podem(os)',
        caption = '*Incluye variaciones: violència, violento, violentos') +
   geom_text(aes(label = n),
@@ -274,7 +274,7 @@ g <- ggplot(data = pdd,
         plot.title = element_text(size = 20)) +
   labs(x = '',
        y = 'Piulades',
-       title = 'Piulades amb la paraula "violència", 1-5 d\'octubre de 2017',
+       title = 'Piulades amb la paraula "violència", 1-7 d\'octubre de 2017',
        caption = '*Inclou variacions en castellà/català: violència, violento, violentos, violents, violentes, etc.\nDades recollides el 27 de gener de 2019. Gràfic: Joe Brew | @joethebrew | www.vilaweb.cat') +
   geom_text(aes(label = n),
                 nudge_y = 1,
