@@ -6,50 +6,50 @@ library(databrew)
 library(pageviews)
 library(lubridate)
 
-if(!dir.exists('newspaper_headlines')){
-  dir.create('newspaper_headlines')
-}
-# Get newspapers
-newspapers <- c('elpais', 'abc',
-                'elmundo',
-                'larazon',
-                'lavanguardia',
-                'elperiodico')
-dates <- seq(as.Date('2017-09-15'), as.Date('2017-12-24'),by = 1)
-for(i in 1:length(newspapers)){
-  for(j in 1:length(dates)){
-    this_newspaper <- newspapers[i]
-    this_date <- dates[j]
-    formatted_date <- format(this_date, '%Y/%m/%d')
-    this_path <- 
-      paste0("http://img.kiosko.net/",
-             formatted_date,
-             "/es/", 
-             this_newspaper,
-             ".750.jpg")
-    message(this_newspaper, ' - ', this_date)
-    this_file <- paste0('newspaper_headlines/',
-                        this_date,
-                        '_',
-                        this_newspaper,
-                        '.jpg')
-    if(!file.exists(this_file)){
-      message('...Downloading')
-      download.file(url = this_path,
-                    destfile =
-                      this_file)
-      Sys.sleep(1)
-    } else {
-      message('...Skipping')
-    }
-  }
-}
-
-add_month <- function(x){
-  d <- as.Date(x, format = '%Y%m%d00')
-  month(d) <- month(d) + 1
-  format(d, '%Y%m%d00')
-}
+# if(!dir.exists('newspaper_headlines')){
+#   dir.create('newspaper_headlines')
+# }
+# # Get newspapers
+# newspapers <- c('elpais', 'abc',
+#                 'elmundo',
+#                 'larazon',
+#                 'lavanguardia',
+#                 'elperiodico')
+# dates <- seq(as.Date('2017-09-15'), as.Date('2017-12-24'),by = 1)
+# for(i in 1:length(newspapers)){
+#   for(j in 1:length(dates)){
+#     this_newspaper <- newspapers[i]
+#     this_date <- dates[j]
+#     formatted_date <- format(this_date, '%Y/%m/%d')
+#     this_path <- 
+#       paste0("http://img.kiosko.net/",
+#              formatted_date,
+#              "/es/", 
+#              this_newspaper,
+#              ".750.jpg")
+#     message(this_newspaper, ' - ', this_date)
+#     this_file <- paste0('newspaper_headlines/',
+#                         this_date,
+#                         '_',
+#                         this_newspaper,
+#                         '.jpg')
+#     if(!file.exists(this_file)){
+#       message('...Downloading')
+#       download.file(url = this_path,
+#                     destfile =
+#                       this_file)
+#       Sys.sleep(1)
+#     } else {
+#       message('...Skipping')
+#     }
+#   }
+# }
+# 
+# add_month <- function(x){
+#   d <- as.Date(x, format = '%Y%m%d00')
+#   month(d) <- month(d) + 1
+#   format(d, '%Y%m%d00')
+# }
 
 # Get catalan page vies
 if(!'data_ca.RData' %in% dir()){
@@ -114,7 +114,7 @@ if(!'data_ca.RData' %in% dir()){
                           platform = "all",
                           user_type = "all", 
                           start = start_date, 
-                          end = "2018121500", 
+                          end = "2018123100", 
                           reformat = TRUE)
     )
     while(class(res) == 'try-error'){
@@ -127,7 +127,7 @@ if(!'data_ca.RData' %in% dir()){
                           platform = "all",
                           user_type = "all", 
                           start = start_date, 
-                          end = "2018121500", 
+                          end = "2018123100", 
                           reformat = TRUE)
     }
     pv$person <- person
@@ -178,11 +178,11 @@ if(!'data.RData' %in% dir()){
     res <- try(
       pv <- 
         article_pageviews(project = "en.wikipedia",
-                          article = person, 
+                          article = new_person, 
                           platform = "all",
                           user_type = "all", 
                           start = start_date, 
-                          end = "2018121500", 
+                          end = "2018123100", 
                           reformat = TRUE)
     )
     while(class(res) == 'try-error'){
@@ -191,11 +191,11 @@ if(!'data.RData' %in% dir()){
       message('---New date: ', start_date)
       pv <- 
         article_pageviews(project = "en.wikipedia",
-                          article = person, 
+                          article = new_person, 
                           platform = "all",
                           user_type = "all", 
                           start = start_date, 
-                          end = "2018121500", 
+                          end = "2018123100", 
                           reformat = TRUE)
     }
     pv$person <- person
@@ -235,7 +235,7 @@ if(!'data_es.RData' %in% dir()){
               "Xavier García Albiol",
               "Josep Borrell")
   out_list <- list()
-  for(i in 18:length(people)){
+  for(i in 1:length(people)){
     start_date <- "2017010100"
     person <- people[i]
     message(person, '---------')
@@ -246,7 +246,7 @@ if(!'data_es.RData' %in% dir()){
                           platform = "all",
                           user_type = "all", 
                           start = start_date, 
-                          end = "2018121500", 
+                          end = "2018123100", 
                           reformat = TRUE)
     )
     while(class(res) == 'try-error'){
@@ -259,7 +259,7 @@ if(!'data_es.RData' %in% dir()){
                           platform = "all",
                           user_type = "all", 
                           start = start_date, 
-                          end = "2018121500", 
+                          end = "2018123100", 
                           reformat = TRUE)
     }
     pv$person <- person
@@ -374,28 +374,40 @@ cleaner <- data_frame(
 pv <- left_join(pv, cleaner)
 
 make_wiki_plot <- function(language = 'en',
-                           since = '2018-01-01'){
+                           filter_language = c('English', 'Català', 'Español'),
+                           since = '2017-01-01',
+                           return_table = FALSE){
   plot_data <- 
     pv %>%
     filter(date >= since) %>%
     group_by(person, language) %>%
-    summarise(views = sum(views))
+    summarise(views = sum(views)) %>%
+    mutate(language = ifelse(language == 'Catalan',
+                             'Català',
+                             language)) %>%
+    filter(language %in% filter_language)
+  if(return_table){
+    return(plot_data)
+  }
   
   if(language == 'ca'){
     x <- ''
     y <- 'Visites'
-    title <- 'Visites de pàgines Wikipedia, 2018'
+    # title <- 'Visites de pàgines Wikipedia, 2018'
+    caption <- 'Dades de Wikipedia. Gràfic de Joe Brew @joethebrew. | www.vilaweb.cat'
   } else {
     x <- ''
     y <- 'Visits'
-    title <- 'Wikipedia page visits, 2018'
+    # title <- 'Wikipedia page visits, 2018'
+    caption <- 'Data from Wikipedia. Chart by Joe Brew @joethebrew. | www.vilaweb.cat'
   }
   cols <- databrew::make_colors(10)[c(3,5,7)]
   ggplot(data = plot_data,
          aes(x = person,
              y = views,
-             fill = language)) +
-    geom_bar(stat = 'identity') +
+             fill = language,
+             group = language)) +
+    geom_bar(stat = 'identity', position = position_dodge()) +
     theme_vilaweb() +
     theme(axis.text.x = element_text(angle = 90,
                                      vjust = 0.5,
@@ -404,8 +416,201 @@ make_wiki_plot <- function(language = 'en',
                       values = cols) +
     labs(x = x,
          y = y,
-         title = title) +
-    facet_wrap(~language, ncol = 3)
+         caption = caption)
 }
-make_wiki_plot()
-make_wiki_plot('ca')
+# make_wiki_plot()
+# make_wiki_plot('ca')
+
+make_wiki_time_plot <- function(people = NULL,
+                                language = 'en',
+                                since = '2017-01-01'){
+  
+  if(is.null(people)){
+    people <- sort(unique(pv$person))
+  }
+  plot_data <- 
+    pv %>%
+    filter(person %in% people) %>%
+    filter(date >= since) %>%
+    mutate(month = date_truncate(date, 'month')) %>%
+    group_by(month, person, language) %>%
+    summarise(views = sum(views)) %>%
+    mutate(language = ifelse(language == 'Catalan',
+                             'Català',
+                             language))
+  
+  if(language == 'ca'){
+    x <- ''
+    y <- 'Visites'
+    # title <- 'Visites de pàgines Wikipedia, 2018'
+    date_breaks <- gsub('\n', ' ', make_catalan_date(sort(unique(plot_data$month))))
+  } else {
+    x <- ''
+    y <- 'Visits'
+    # title <- 'Wikipedia page visits, 2018'
+    date_breaks <- format(sort(unique(plot_data$month)), '%b %Y')
+  }
+  if(is.null(cols)){
+    if(length(unique(plot_data$person)) == 2){
+      cols <- databrew::make_colors(10)[c(2,5)]
+    } else if(length(unique(plot_data$person)) == 3){
+      cols <- databrew::make_colors(10)[c(2,5,8)]
+    } else {
+      cols <- databrew::make_colors(length(unique(plot_data$person)))
+    }
+  }
+  
+  ggplot(data = plot_data,
+         aes(x = month,
+             y = views,
+             color = person,
+             group = person)) +
+    geom_line(size = 1) +
+    theme_vilaweb() +
+    theme(axis.text.x = element_text(angle = 90,
+                                     vjust = 0.5,
+                                     hjust = 1)) +
+    scale_color_manual(name = '',
+                      values = cols) +
+    labs(x = x,
+         y = y) +
+    facet_wrap(~language, ncol = 1,
+               scales = 'free_y') +
+    scale_x_date(breaks = sort(unique(plot_data$month)),
+                 labels = date_breaks)
+}
+
+# make_wiki_time_plot(people = c('Inés Arrimadas',
+#                                'Carles Puigdemont'))
+
+borrell_plot <- function(language = 'en'){
+  if(language == 'en'){
+    x <- 'Day'
+    y <- 'Visits'
+    title <- 'Wikipedia page views for Josep Borrell'
+    caption <- 'Data from Wikipedia. Chart by Joe Brew. @joethebrew. | www.vilaweb.cat'
+  } else {
+    x <- 'Dia'
+    y <- 'Visites'
+    title <- 'Visites de la pàgina Wikipedia de Josep Borrell'
+    caption <- 'Dades de Wikipedia. Gràfic de Joe Brew @joethebrew. | www.vilaweb.cat'
+  }
+  josep <- pv %>% filter(person == 'Josep Borrell')
+  
+  ggplot(data = josep %>% filter(date >= '2018-01-01',
+                                 language == 'English'),
+         aes(x = date,
+             y = views)) +
+    # geom_point(alpha = 0.3) +
+    # geom_line() +
+    geom_area() +
+    theme_vilaweb() +
+    labs(x = x,
+         y = y,
+         title = title,
+         # subtitle = '2018',
+         caption = caption)
+}
+
+# Ratio plot
+ratio_plot <-function(language = 'en',
+                      since = '2017-01-01',
+                      ratio = FALSE){
+
+  if(language == 'ca'){
+    x <- ''
+    y1 <- 'Llengua'
+    y2 <- 'Visites'
+    # title <- 'Visites de pàgines Wikipedia, 2018'
+    caption <- 'Dades de Wikipedia. Gràfic de Joe Brew @joethebrew. | www.vilaweb.cat'
+    if(ratio){
+      y2 <- 'Ràtio'
+    }
+  } else {
+    x <- ''
+    y1 <- 'Language'
+    y2 <- 'Visits'
+    # title <- 'Wikipedia page visits, 2018'
+    caption <- 'Data from Wikipedia. Chart by Joe Brew @joethebrew. | www.vilaweb.cat'
+    if(ratio){
+      y2 <- 'Ratio'
+    }
+  }
+  
+  # Who geneates most in catalan
+  pd <- make_wiki_plot(since = since, return_table = T) %>%
+    ungroup %>%
+    group_by(person) %>%
+    summarise(catala = sum(views[which(language == 'Català')]),
+              espanol = sum(views[which(language == 'Español')])) %>%
+    mutate(cat_esp_ratio = catala / espanol,
+           esp_cat_ratio = espanol / catala) %>%
+    mutate(ratio = ifelse(catala > espanol, cat_esp_ratio,
+                          esp_cat_ratio * -1)) %>%
+    arrange(desc(cat_esp_ratio))
+  pd$person <- factor(pd$person, levels = pd$person)
+  
+  if(!ratio){
+    ggplot(data = pd,
+           aes(x = person)) +
+      geom_bar(stat = 'identity', aes(y = catala),
+               fill = 'darkorange') +
+      geom_text(aes(y = catala + 150000,
+                    label = catala),
+                angle = 90,
+                alpha = 0.5,
+                size = 2) +
+      geom_bar(stat = 'identity', aes(y = -1 * espanol),
+               fill = 'darkblue') +
+      geom_text(aes(y = (-1*espanol) - 190000,
+                    label = espanol),
+                angle = 90,
+                alpha = 0.5,
+                size = 2) +
+      theme_vilaweb() +
+      theme(axis.text.x = element_text(angle = 90,
+                                       hjust = 1,
+                                       vjust = 0.5)) +
+      scale_y_continuous(name = y1,
+                         breaks = c(-500000, 0, 500000),
+                         labels = c('Español',
+                                    '',
+                                    'Català'),
+                         sec.axis = sec_axis(name = y2, 
+                                             breaks = seq(-750000, 750000, 250000), trans = ~.*1)) +
+      geom_hline(yintercept = 0) +
+      labs(x = x,
+           caption = caption)
+  } else {
+    ggplot(data = pd,
+           aes(x = person)) +
+      geom_point(aes(y = ratio)) +
+      geom_line(aes(y = ratio,
+                    yend = 0,
+                    xend = person)) +
+      geom_text(aes(y = ratio +
+                      ifelse(ratio > 0, 3, -3),
+                    label = round(ratio, digits = 1)),
+                # angle = 90,
+                alpha = 0.5,
+                size = 3) +
+      theme_vilaweb() +
+      theme(axis.text.x = element_text(angle = 90,
+                                       hjust = 1,
+                                       vjust = 0.5)) +
+      scale_y_continuous(name = y1,
+                         breaks = c(-10, 0, 10),
+                         labels = c('Español',
+                                    '',
+                                    'Català'),
+                         sec.axis = sec_axis(name = y2, 
+                                             breaks = seq(-30, 20, 10),
+                                             trans = ~.*1,
+                                             labels = abs(seq(-30, 20, 10))
+                                             )) +
+      geom_hline(yintercept = 0) +
+      labs(x = x,
+           caption = caption)
+  }
+  
+}
