@@ -716,3 +716,6 @@ jp <- function(language = 'Catalan'){
     theme(legend.text = element_text(size = 18))
 }
 
+# Save a csv
+write_csv(pv, 'wiki_data_2017-2018.csv')
+

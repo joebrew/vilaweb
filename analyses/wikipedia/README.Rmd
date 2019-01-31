@@ -275,6 +275,11 @@ In other words, the cause of the high levels of interest among English-speakers 
 Marketing campaigns can only go so far. Until Spain addresses the problematic underlying reality, the world's eyes are likely to remain fixated on Catalonia. 
 
 
+# Technical details
+
+
+Data were gathered from Wikipedia in January 2019 using the `pageviews` R package. The code for this analysis is publicly available [here](https://github.com/joebrew/vilaweb/tree/master/analyses/wikipedia). The already-gathered data is also available [here](https://raw.githubusercontent.com/joebrew/vilaweb/master/analyses/wikipedia/wiki_data_2017-2018.csv). 
+
 
 # Catalan-language plots
 
