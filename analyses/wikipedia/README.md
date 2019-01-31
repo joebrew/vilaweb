@@ -58,7 +58,7 @@ We compared overall page views and views over time between different politicians
 Results
 =======
 
-The below shows the total number of language-specific Wikipedia page-views for each of the 24 people analyzed.
+The below shows the total number of language-specific Wikipedia page-views for 2018 for each of the 24 people analyzed.
 
 ![](figures/unnamed-chunk-4-1.png)
 
@@ -88,7 +88,7 @@ Certain political figures are emblematic of the Spanish-Catalan disconnect. Llu�
 
 At the other end of the spectrum, Catalan unionist politicians' Spanish Wikipedia pages got far more visits than their Catalan counterparts. Xavier García Albiol's Spanish page got 5 times as much traffic as his Catalan page. For every 1 visit to Miquel Iceta's Catalan page, there were more than 7 visits to his Spanish page. For Inés Arrimadas, the ratio of Spanish-to-Catalan visits was 12. Only the very well-known Catalan pro-independence politicians get more views in Spanish than in Catalan.
 
-Clearly, there is a disconnect in interest politicians across different linguistic groups. Spanish Wikipedia pages for exiled and imprisoned Catalan politicians saw very little traffic, whereas the Catalan pages for these politicians saw high levels. By the same token, Catalan-language traffic to unionist politicians' pages was very low.
+Clearly, there is a disconnect in interest in politicians across different linguistic groups. Spanish Wikipedia pages for exiled and imprisoned Catalan politicians saw very little traffic, whereas the Catalan pages for these politicians saw high levels. By the same token, Catalan-language traffic to unionist politicians' pages was very low.
 
 "Internationalization": English page-views
 ------------------------------------------
@@ -170,18 +170,32 @@ Let's examine interest over time in the Catalan and Spanish Presidents. Though E
 
 ![](figures/unnamed-chunk-15-1.png)
 
-If we look at the entirety of 2018, the gap in English-language interest between Puigdemont and Spanish/Catalan unionist politicians is even more striking, even without the peak in interest from the October 2017 referendum. Puigdemont's 433,447 English-language page-views was more than 100 times greater than Miquel Iceta's (4,298), 77 times greater than Xavier García Albiol's (5,659) approximately 10 times greater than Josep Borrell's (40,780), Albert Rivera's (41,435) and Inés Arrimadas' (46,304), 8.5 times greater than Pablo Casado's (50,432), and almost double Pedro Sánchez's (236,733).
+Let's examine a few more comparisons over time. Carme Forcadell, despite being in prison, receives far more English-language page visits than the Catalan representatives of Spain's 2 main political parties: the PP's Xavier García Albiol and the Socialists' Miquel Iceta.
+
+![](figures/unnamed-chunk-16-1.png)
+
+Likewise, Raül Romeva - despite being in prison - consistently gets more attention in English than Josep Borrell.
+
+![](figures/unnamed-chunk-17-1.png)
+
+If we look at the entirety of 2018, the most striking gap in English-language interest between pro-independence and unionist politicians is the case of Puigdemont, even without the peak in interest from the October 2017 referendum. Puigdemont's 433,447 English-language page-views in 2018 was more than 100 times greater than Miquel Iceta's (4,298), 77 times greater than Xavier García Albiol's (5,659) approximately 10 times greater than Josep Borrell's (40,780), Albert Rivera's (41,435) and Inés Arrimadas' (46,304), 8.5 times greater than Pablo Casado's (50,432), and almost double Pedro Sánchez's (236,733).
 
 Conclusion
 ==========
+
+Summary
+-------
 
 In 2018, Carles Puigdemont received more English-language Wikipedia page views than Pedro Sánchez, Pablo Casado, Inés Arrimadas, Albert Rivera, Josep Borrell, Xavier García Albiol, and Miquel Iceta - combined! If one considers Carles Puigdemont to be Spanish, then he is - ironically - Spain's most internationally popular politician.
 
 Analysis of Wikipedia data leads to two interesting findings. First, that language (Catalan vs. Spanish) correlates with drastic differences in interest in certain political figures (Spanish language Wikipedia showing low interest in Catalan political prisoners and exiles, and Catalan-language Wikipedia showing low interest in unionist politicians). Second, that English-language Wikipedia data suggested more interest in Catalan pro-independence figures than Spanish and Catalan unionists.
 
+Personal reflection
+-------------------
+
 In other words, the independentist strategy of "internationalizing" the conflict has been successful.
 
-This success - reflected in high levels of international interest in imprisoned and exiled politicians may explain - at least in part - why Spanish Foreign Minister Josep Borrell is so concerned about [Spain's reputation in anglophone countries](https://www.vilaweb.cat/noticies/borrell-diu-que-la-imatge-exterior-de-lestat-esta-seriosament-danyada-la-propaganda-independentista/). It might also explain why employees of Borrell are engaged in writing to English-speaking news outlets, sometimes [without acknowledging that they are paid by the State](https://www.vilaweb.cat/noticies/josep-borrell-gabriel-colome-judici-1-o/). By the same token, it might also explain the re-branding of Marca España as "Global Spain", a marketing campaign supposedly ["independent of any political ideology"](https://espanaglobal.gob.es/en/about-global-spain) whose Secretary recently said "tiene que haber dinero y lo va a haber por parte del Gobierno" ("there has to be money and there will be money from the Government") to defend against pro-independence global "propaganda".
+This success - reflected in high levels of English-language interest in imprisoned and exiled politicians may explain - at least in part - why Spanish Foreign Minister Josep Borrell is so concerned about [Spain's reputation in anglophone countries](https://www.vilaweb.cat/noticies/borrell-diu-que-la-imatge-exterior-de-lestat-esta-seriosament-danyada-la-propaganda-independentista/). It might also explain why employees of Borrell are engaged in writing to English-speaking news outlets, sometimes [without acknowledging that they are paid by the State](https://www.vilaweb.cat/noticies/josep-borrell-gabriel-colome-judici-1-o/). By the same token, it might also explain the re-branding of Marca España as "Global Spain", a marketing campaign supposedly ["independent of any political ideology"](https://espanaglobal.gob.es/en/about-global-spain) whose Secretary recently said "tiene que haber dinero y lo va a haber por parte del Gobierno" ("there has to be money and there will be money from the Government") to defend against pro-independence global "propaganda".
 
 But is pro-independence "propaganda" the cause of such relatively high levels of interest from English-speakers? Probably not. Even during the application of Article 155, when the Generalitat was officially disbanded (November 2017 - June 2018), English-language interest in Catalan politicians remained high.
 
@@ -191,10 +205,6 @@ Marketing campaigns can only go so far. Until Spain addresses the problematic un
 
 Catalan-language plots
 ======================
-
-![](figures/unnamed-chunk-17-1.png)
-
-![](figures/unnamed-chunk-18-1.png)
 
 ![](figures/unnamed-chunk-19-1.png)
 
@@ -215,3 +225,7 @@ Catalan-language plots
 ![](figures/unnamed-chunk-27-1.png)
 
 ![](figures/unnamed-chunk-28-1.png)
+
+![](figures/unnamed-chunk-29-1.png)
+
+![](figures/unnamed-chunk-30-1.png)
