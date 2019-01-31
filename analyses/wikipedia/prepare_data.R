@@ -423,7 +423,11 @@ make_wiki_plot <- function(language = 'en',
 
 make_wiki_time_plot <- function(people = NULL,
                                 language = 'en',
-                                since = '2017-01-01'){
+                                since = '2017-01-01',
+                                cols = NULL,
+                                alpha = 1,
+                                size = 1,
+                                return_table = FALSE){
   
   if(is.null(people)){
     people <- sort(unique(pv$person))
@@ -434,22 +438,28 @@ make_wiki_time_plot <- function(people = NULL,
     filter(date >= since) %>%
     mutate(month = date_truncate(date, 'month')) %>%
     group_by(month, person, language) %>%
-    summarise(views = sum(views)) %>%
+    summarise(views = sum(views, na.rm = TRUE)) %>%
     mutate(language = ifelse(language == 'Catalan',
                              'Català',
                              language))
+  if(return_table){
+    return(plot_data)
+  }
   
   if(language == 'ca'){
     x <- ''
     y <- 'Visites'
     # title <- 'Visites de pàgines Wikipedia, 2018'
     date_breaks <- gsub('\n', ' ', make_catalan_date(sort(unique(plot_data$month))))
+    caption <- 'Dades de Wikipedia. Gràfic de Joe Brew @joethebrew. | www.vilaweb.cat'
+    
   } else {
     x <- ''
     y <- 'Visits'
     # title <- 'Wikipedia page visits, 2018'
     date_breaks <- format(sort(unique(plot_data$month)), '%b %Y')
-  }
+    caption <- 'Data from Wikipedia. Chart by Joe Brew. @joethebrew. | www.vilaweb.cat'
+  } 
   if(is.null(cols)){
     if(length(unique(plot_data$person)) == 2){
       cols <- databrew::make_colors(10)[c(2,5)]
@@ -465,7 +475,8 @@ make_wiki_time_plot <- function(people = NULL,
              y = views,
              color = person,
              group = person)) +
-    geom_line(size = 1) +
+    geom_line(size = size,
+              alpha = alpha) +
     theme_vilaweb() +
     theme(axis.text.x = element_text(angle = 90,
                                      vjust = 0.5,
@@ -473,7 +484,8 @@ make_wiki_time_plot <- function(people = NULL,
     scale_color_manual(name = '',
                       values = cols) +
     labs(x = x,
-         y = y) +
+         y = y,
+         caption = caption) +
     facet_wrap(~language, ncol = 1,
                scales = 'free_y') +
     scale_x_date(breaks = sort(unique(plot_data$month)),
@@ -515,7 +527,7 @@ borrell_plot <- function(language = 'en'){
 # Ratio plot
 ratio_plot <-function(language = 'en',
                       since = '2017-01-01',
-                      ratio = FALSE){
+                      ratio = FALSE,return_table = FALSE){
 
   if(language == 'ca'){
     x <- ''
@@ -549,6 +561,10 @@ ratio_plot <-function(language = 'en',
                           esp_cat_ratio * -1)) %>%
     arrange(desc(cat_esp_ratio))
   pd$person <- factor(pd$person, levels = pd$person)
+  
+  if(return_table){
+    return(pd)
+  }
   
   if(!ratio){
     ggplot(data = pd,
@@ -612,5 +628,91 @@ ratio_plot <-function(language = 'en',
       labs(x = x,
            caption = caption)
   }
-  
 }
+
+exile_plot <- function(language = 'English'){
+  if(language == 'English'){
+    y <- 'Visits'
+    caption <- 'Data from Wikipedia. Chart by Joe Brew @joethebrew. | www.vilaweb.cat'
+  } else {
+    y <- 'Visites'
+    caption <- 'Dades de Wikipedia. Gràfic de Joe Brew @joethebrew. | www.vilaweb.cat'
+  }
+  
+  x <- pv %>%
+    filter(language == 'English') %>%
+    filter(date >= '2018-01-01') %>%
+    filter(indepe) %>%
+    group_by(person, exile) %>%
+    summarise(n = sum(views)) %>%
+    arrange(exile)
+  if(language != 'English'){
+    x$exile <- ifelse(x$exile == 'Exile', 'Exili',
+                      'Presó')
+  }
+  x$person <- factor(x$person, levels = x$person)
+  ggplot(data = x,
+         aes(x = person,
+             y = n,
+             color = exile)) +
+    geom_point() +
+    geom_segment(aes(yend = 0,
+                     xend = person,
+                     group = person)) +
+    theme_vilaweb() +
+    theme(axis.text.x = element_text(angle = 90,
+                                     hjust = 1,
+                                     vjust = 0.5)) +
+    labs(x = '',
+         y = y,
+         caption = caption) +
+    scale_color_manual(name = '',
+                       values = c('darkorange', 'darkblue')) +
+    theme(legend.text = element_text(size = 18))
+}
+
+jp <- function(language = 'Catalan'){
+  x <- pv %>%
+    filter(language == 'English')%>%
+    filter(person %in% c('Oriol Junqueras',
+                         'Carles Puigdemont')) %>%
+    mutate(before = date <= '2017-11-02') %>%
+    group_by(person, before) %>%
+    summarise(views = mean(views)) %>%
+    group_by(person) %>%
+    mutate(p = views / views[before] * 100) %>%
+    gather(key, value, views:p)
+  if(language == 'Catalan'){
+    x <- x %>%
+      mutate(before = ifelse(before, 'Abans', 'Després'))
+    x$key <- ifelse(x$key == 'p', 'Estandarditzat (%)', 'Visites diaries')
+    x$key <- factor(x$key, levels = c('Visites diaries', 'Estandarditzat (%)'))
+    y <- 'Valor'
+    caption <- 'Dades de Wikipedia. Gràfic de Joe Brew @joethebrew. | www.vilaweb.cat'
+  } else {
+    x <- x %>%
+      mutate(before = ifelse(before, 'Before', 'After'))
+    x$before <- factor(x$before, levels = c('Before', 'After'))
+    x$key <- ifelse(x$key == 'p', 'Standardized (%)', 'Daily visits')
+    x$key <- factor(x$key, levels = c('Daily visits', 'Standardized (%)'))
+    y <- 'Value'
+    caption <- 'Data from Wikipedia. Chart by Joe Brew @joethebrew. | www.vilaweb.cat'
+  }
+  
+  ggplot(data = x,
+         aes(x = before,
+             y = value,
+             group = person,
+             color = person)) +
+    geom_line() +
+    geom_point() +
+    facet_wrap(~key, scales = 'free_y') +
+    theme_vilaweb() +
+    labs(x = '',
+         y = y,
+         caption = caption) +
+    scale_color_manual(name = '',
+                       values = c('darkorange', 'darkblue')) +
+    theme(legend.text = element_text(size = 18))
+}
+

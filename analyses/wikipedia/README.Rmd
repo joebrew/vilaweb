@@ -13,7 +13,8 @@ opts_chunk$set(comment = NA,
                message = FALSE, 
                error = TRUE, 
                cache = FALSE,
-               fig.path = 'figures/')
+               fig.path = 'figures/',
+               fig.height = 6)
 ```
 
 ```{r}
@@ -22,9 +23,9 @@ source('prepare_data.R')
 
 # Introduction
 
-[Wikipedia](https://www.wikipedia.org/), a popular online encyclopedia, makes data on page visits [publicly available](https://tools.wmflabs.org/pageviews/?project=en.wikipedia.org&platform=all-access&agent=user&range=latest-20&pages=Cat|Dog). Wikipedia page view data is very interesting to analysts, since it is a good measure of language-specific interest in a topic or person over time. 
+[Wikipedia](https://www.wikipedia.org/), a popular online encyclopedia, makes data on page visits [publicly available](https://tools.wmflabs.org/pageviews/?project=en.wikipedia.org&platform=all-access&agent=user&range=latest-20&pages=Cat|Dog). Wikipedia page view data is useful to analysts, since it is a good measure of language-specific interest in a topic or person over time. 
 
-For example, if we examine daily English-language views of [Josep Borrell's Wikipedia page](https://en.wikipedia.org/wiki/Josep_Borrell), 3 peaks clearly emerge.
+Let's explore an example. If we examine daily English-language views of [Josep Borrell's Wikipedia page](https://en.wikipedia.org/wiki/Josep_Borrell), 3 peaks clearly emerge.
 
 ```{r}
 borrell_plot()
@@ -48,7 +49,7 @@ We gathered daily page-view data from three Wikipedia language platforms - Engli
 cat(paste0(sort(unique(pv$person)), collapse = '  \n'))
 ```
 
-Of our pool of 24, 17 are sovereigntists, 8 are in exile, and 9 are in prison. All are politicians except Valtònyc, who is a musician.
+Of our pool of 24, 17 are Catalan sovereigntists (all 8 exiled and 9 imprisoned Catalans) and the other 7 are the most well-known unionists. All are politicians except Valtònyc, who is a musician.
 
 We compared overall page views and views over time between different politicians.
 
@@ -61,38 +62,45 @@ make_wiki_plot(since = '2018-01-01') +
   labs(title = '2018 Wikipedia page views')
 ```
 
-There are several interesting dimensions to these data worth highlighting:
+There are several noteworthy factors in the above chart worth highlighting:
 
 1. Pedro Sánchez is the politician who generates most interest in Spanish.  
 2. Carles Puigdemont, however, generates more interest than Sánchez in both English and Catalan.
 
 3. Catalan unionists politicians (Iceta, Arrimadas, García Albiol) generate more interest in Spanish than in Catalan or English.
 
-4. Political figures in prison and exile generate more English-language interest than non-exiled Catalan unionist politicians.
+4. Political figures in prison and exile generate more English-language interest than Catalan unionist politicians.
 
 5. Drastic differences in the ratio of Spanish language and Catalan language searches for certain individuals suggests a "disconnect" for many Spaniards from Catalan politics, and for many Catalans from Spanish politics.
 
-## Catalan vs. Spanish
+## The Catalan-Spanish disconnect
 
-The fifth point merits further explanation. Certain Catalan politicians generate almost no interest in Spanish, whereas certain Spanish politicians generate almost no interest in Catalan. The below chart, for example, shows Spanish vs. Catalan page views
+The last point mentioned above merits further explanation. Certain Catalan politicians generate almost no interest in Spanish, whereas certain Spanish politicians generate almost no interest in Catalan. The below chart, for example, shows Spanish vs. Catalan page views
 
 ```{r}
+x <- ratio_plot(return_table = TRUE)
 ratio_plot() +
-  labs(title = 'Wikipedia page-views, 2017: Catalan vs. Spanish')
+  labs(title = 'Catalan vs. Spanish',
+       subtitle = 'Wikipedia page-views, 2017-2018')
 ```
 
 Another way to view the above data is the ratio of views in Catalan to Spanish (and vice-versa):
 
 ```{r}
 ratio_plot(ratio = T) +
-  labs(title = 'Wikipedia page-views, 2017: Catalan vs. Spanish')
+  labs(title = 'Ratio: Catalan vs. Spanish',
+       subtitle = 'Wikipedia page-views, 2017-2018')
 ```
 
-Pages for the Catalan political prisoners and exiles are viewed much more in Catalan than in Spanish, whereas pages for Catalan unionist politicians (García Albiol, Iceta, Arrimadas, Borrell) are viewed much more in Spanish. Only the very well-known Catalan pro-independence politicians get more views in Spanish than in Catalan.
+Certain political figures are emblematic of the Spanish-Catalan disconnect. Lluís Puig, for example, received only 11,285 visits in Spanish, but 24 times as many (270,118) in Catalan. Josep Rull's Catalan wikipedia page got 6 times more visits than his Spanish page. Valtònyc's Catalan page got 3 times more visits than his Spanish page. These are striking statistics for a language with only 7 million speakers.
 
-## English page-views
+At the other end of the spectrum, Catalan unionist politicians' Spanish Wikipedia pages got far more visits than their Catalan counterparts. Xavier García Albiol's Spanish page got 5 times as much traffic as his Catalan page. For every 1 visit to Miquel Iceta's Catalan page, there were more than 7 visits to his Spanish page. For Inés Arrimadas, the ratio of Spanish-to-Catalan visits was 12. Only the very well-known Catalan pro-independence politicians get more views in Spanish than in Catalan.
 
-One of the most striking findings of this analysis is how much English-language traffic is generated by the Catalan political prisoners and exiles. The below shows the total number 2018 page-views for our sample:
+Clearly, there is a disconnect in interest politicians across different linguistic groups. Spanish Wikipedia pages for exiled and imprisoned Catalan politicians saw very little traffic, whereas the Catalan pages for these politicians saw high levels. By the same token, Catalan-language traffic to unionist politicians' pages was very low.
+
+## "Internationalization": English page-views
+
+One of the most striking aspects of the data is how much English-language traffic is generated by the Catalan political prisoners and exiles. The below shows the total number of 2017-2018 English-language page-views for our sample (note that Josep Rull did not have an English Wikipedia page until July of 2018, which in part explains his low numbers):
 
 ```{r}
 x <- make_wiki_plot(filter_language = 'English', return_table = T)
@@ -108,7 +116,8 @@ Here's the same data in visual format:
 
 ```{r}
 make_wiki_plot(filter_language = 'English') +
-  labs(title = 'Total 2018 Wikipedia page views (English only)') +
+  labs(title = 'Total 2017-2018 Wikipedia page views',
+       subtitle = '(English only)') +
   geom_text(aes(label = views),
             nudge_y = 20000,
             alpha = 0.6,
@@ -118,22 +127,135 @@ make_wiki_plot(filter_language = 'English') +
 
 Here's what's striking about the above:
 
-- Carles Puigdemont, who according to Spain has no political role, got more than 4 times as many English-language page-views as the President of Spain (Pedro Sánchez).  
+- Carles Puigdemont got more than 4 times as many English-language page-views as the President of Spain (Pedro Sánchez).  
 - 2 Catalan political prisoners (Oriol Junqueras and Raül Romeva) received more English-language page-views than several national Spanish politicians (Albert Rivera and Pablo Casado)
 
-Another striking element is the ambiguous effect of prison vs. exile in terms of international (English-language) impact. The below shows English-language page views, colored by exile vs. prison status.
+Another striking element is the ambiguous effect of prison vs. exile in terms of international (English-language) impact. The below shows English-language page views, colored by exile vs. prison status. With the exception of Puigdemont (who was the most well-known even prior to the referendum), there are not notable differences in the number of English-language page-views between pro-independece political figures who chose exile vs. prison.
 
 ```{r}
-barplot(1:10)
+exile_plot() +
+  labs(title = 'English-language page-views of Wikipedia pages',
+       subtitle = 'Exiled and emprisoned Catalan political figures, 2018')
 ```
 
+An examination of the page-views of the most well-known Catalan politicians - Junqueras and Puigdemont - confirms the above. Puigdemont receives far more attention than Junqueras (not surprising, given that one is the President and the other the Vice-President), but page-views for BOTH politicians INCREASED in the period after exile/imprisonment. In fact, the increase was (relatively) slightly greater for Junqueras.
+
+In other words, both exile _and_ prison effectively generated an _increase_ in English-language interest in both Puigdemont and Junqueras:
+
+```{r}
+jp(language = 'English') +
+    labs(title = 'Before and after November 2, 2017',
+       subtitle = 'English-language Wikipedia visits\nBefore = 2017-01-01 - 2017-11-01; After = 2017-11-02 - 2018-12-31')
+```
+
+## Trends over time
+
+The below chart shows the total number of monthly Wikipedia page views for exiled Catalan political figures.
+
+```{r}
+make_wiki_time_plot(people = sort(unique(pv$person[pv$exile == 'Exile'])),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Monthly Wikipedia page-views for exiled Catalans') +
+  theme(plot.title = element_text(size = 14))  +
+  theme(legend.text = element_text(size = 8))
+```
+
+In the above it is clear that Spanish-language interest peaked in October 2017, then remained relatively low therafter. English-language interest also peaked in October, but remained elevated throughout 2018 (for Carles Puigdemont). Catalan language interest peaked in the spring, remains relatively elevated, and (for some) has grown in recent months.
+
+The below chart is the same as the above, but for Catalan political prisoners.
+
+```{r}
+make_wiki_time_plot(people = sort(unique(pv$person[pv$exile == 'Prison'])),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Monthly Wikipedia page-views for Catalan political prisoners')  +
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(size = 14))
+```
+
+In the above, English and Catalan language interest follow a similar pattern (October peak, followed by re-emergence in the spring and elevated interest thereafter), whereas Spanish-language interest never re-emerged after the October 2017 peak.
+
+
+The below shows the same data, but for Catalan and Spanish unionist politicians.
+
+```{r}
+make_wiki_time_plot(people = sort(unique(pv$person[!pv$indepe])),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Monthly Wikipedia visits for unionist politicians') +
+  theme(legend.text = element_text(size = 8))
+```
+
+Two peaks are clear: (a) for Inés Arrimadas leading up to the December 2017 elections and (b) for Pedro Sánchez at the time of becoming President.
+
+However, it is important to take note of the scale and the differences across languages. Inés Arrimadas' peak English-language interest - in December 2017 - was still lower than Carles Puigdemont's that same month. And there has been more English-language interest in Puigdemont than Arrimadas every month in 2018.
+
+```{r}
+make_wiki_time_plot(people = c('Inés Arrimadas', 'Carles Puigdemont'),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Wikipedia page-views: Puigdemont vs. Arrimadas')
+```
+
+Let's examine interest over time in the Catalan and Spanish Presidents. Though English-language page views for Pedro Sánchez surpassed Carles Puigdemont's in June 2018 (the time of the vote of no confidence which brought Sánchez to power), English-language interest since then has been greater in Puigdemont. In the second half of 2018 (July through December), a time during which Pedro Sánchez was President of Spain and Puigdemont remained in exile, Puigdemont's wikipedia page received 22% greater English-language visits than Sánchez's (181,481 and 148,075, respectively). 
+
+```{r}
+make_wiki_time_plot(people = c('Pedro Sánchez', 'Carles Puigdemont'),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Wikipedia page-views: Puigdemont vs. Sánchez')
+
+x <- make_wiki_time_plot(people = c('Pedro Sánchez', 'Carles Puigdemont'), return_table = TRUE) %>%
+  filter(month >= '2018-07-01',
+         language == 'English') %>%
+  group_by(person) %>%
+  summarise(n = sum(views))
+```
+
+If we look at the entirety of 2018, the gap in English-language interest between Puigdemont and Spanish/Catalan unionist politicians is even more striking, even without the peak in interest from the October 2017 referendum. Puigdemont's 433,447 English-language page-views was more than 100 times greater than Miquel Iceta's (4,298), 77 times greater than Xavier García Albiol's (5,659) approximately 10 times greater than Josep Borrell's (40,780), Albert Rivera's (41,435) and Inés Arrimadas' (46,304), 8.5 times greater than Pablo Casado's (50,432), and almost double Pedro Sánchez's (236,733).
+
+
+
+```{r}
+right <- pv %>%
+  filter(!duplicated(person)) %>%
+  dplyr::select(person, indepe)
+x <- make_wiki_time_plot(return_table = TRUE) %>%
+  left_join(right) %>%
+  filter(month >= '2018-01-01',
+         language == 'English') %>%
+  group_by(person, indepe) %>%
+  summarise(n = sum(views)) %>%
+  ungroup %>%
+  mutate(p = n[person == 'Carles Puigdemont'] / n) %>%
+  arrange(desc(p)) %>%
+  filter(!indepe)
+```
+
+# Conclusion
+
+In 2018, Carles Puigdemont received more English-language Wikipedia page views than Pedro Sánchez, Pablo Casado, Inés Arrimadas, Albert Rivera, Josep Borrell, Xavier García Albiol, and Miquel Iceta - combined! If one considers Carles Puigdemont to be Spanish, then he is - ironically - Spain's most internationally popular politician.
+
+Analysis of Wikipedia data leads to two interesting findings. First, that language (Catalan vs. Spanish) correlates with drastic differences in interest in certain political figures (Spanish language Wikipedia showing low interest in Catalan political prisoners and exiles, and Catalan-language Wikipedia showing low interest in unionist politicians). Second, that English-language Wikipedia data suggested more interest in Catalan pro-independence figures than Spanish and Catalan unionists.
+
+In other words, the independentist strategy of "internationalizing" the conflict has been successful. 
+
+This success - reflected in high levels of international interest in imprisoned and exiled politicians may explain - at least in part - why Spanish Foreign Minister Josep Borrell is so concerned about [Spain's reputation in anglophone countries](https://www.vilaweb.cat/noticies/borrell-diu-que-la-imatge-exterior-de-lestat-esta-seriosament-danyada-la-propaganda-independentista/). It might also explain why employees of Borrell are engaged in writing to English-speaking news outlets, sometimes [without acknowledging that they are paid by the State](https://www.vilaweb.cat/noticies/josep-borrell-gabriel-colome-judici-1-o/). By the same token, it might also explain the re-branding of Marca España as "Global Spain", a marketing campaign supposedly ["independent of any political ideology"](https://espanaglobal.gob.es/en/about-global-spain) whose Secretary recently said "tiene que haber dinero y lo va a haber por parte del Gobierno" ("there has to be money and there will be money from the Government") to defend against pro-independence global "propaganda".
+
+But is pro-independence "propaganda" the cause of such relatively high levels of interest from English-speakers? Probably not. Even during the application of Article 155, when the Generalitat was officially disbanded (November 2017 - June 2018), English-language interest in Catalan politicians remained high.
+
+
+In other words, the cause of the high levels of interest among English-speakers in Catalan political figures is not Generalitat-sponsored propaganda, but the fact that they face prison and exile for organizing a referendum, something unprecedented in democracy. Marketing campaigns like "Global Spain" - despite being well-funded - are unlikely to decrease English-language interest in imprisoned and exiled Catalan politicians. The reason why is simple: Interest in figures like Puigdemont is not a function of marketing, but of reality. The reality - democratically elected pacifists in prison and exile, a majority of Catalans wanting a referendum but not being permitted to have one, etc. - is what generates international interest. 
+
+Until Spain addresses the problematic underlying reality, the world's eyes will remain fixated on Catalonia. 
 
 
 
 # Catalan-language plots
 
 ```{r}
-borrell_plot()
+borrell_plot(language = 'Catalan')
 ```
 
 ```{r}
@@ -144,22 +266,82 @@ make_wiki_plot(since = '2018-01-01', language = 'ca') +
 
 ```{r}
 ratio_plot() +
-  labs(title = 'Visites de Wikipedia, 2017: Català vs. Castellà')
+  labs(title = 'Català vs. Castellà',
+       subtitle = 'Visites de Wikipedia, 2017-2018')
 ```
 
 
 ```{r}
 ratio_plot(ratio = T) +
-  labs(title = 'Visites de Wikipedia, 2017: Català vs. Castellà')
+  labs(title = 'Ràtio: Català vs. Castellà',
+       subtitle = 'Visites de Wikipedia, 2017-2018')
 ```
 
 ```{r}
 make_wiki_plot(filter_language = 'English') +
-  labs(title = '2018 visites de pàgines Wikipedia (només anglès)') +
+  labs(title = '2017-2018 visites de pàgines Wikipedia',
+       subtitle = '(Només Anglès)') +
   geom_text(aes(label = views),
             nudge_y = 20000,
             alpha = 0.6,
             size = 2) +
   theme(legend.position = 'none')
 
+```
+
+```{r}
+exile_plot() +
+  labs(title = 'Visites de pàgines Wikipedia',
+       subtitle = 'Exiliats i presos catalans, 2018')
+```
+
+
+```{r}
+jp(language = 'Catalan') +
+  labs(title = 'Abans i després del 2 de novembre',
+       subtitle = 'Visites Wikipedia en anglès\nAbans = 2017-01-01 - 2017-11-01; Després = 2017-11-02 - 2018-12-31')
+```
+
+```{r}
+make_wiki_time_plot(language = 'ca',
+                    people = sort(unique(pv$person[pv$exile == 'Exile'])),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Visites mensuals de pàgines Wikipedia dels exiliats') +
+  theme(legend.text = element_text(size = 8))
+```
+
+
+```{r}
+make_wiki_time_plot(language = 'ca', 
+                    people = sort(unique(pv$person[pv$exile == 'Prison'])),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Visites mensuals de pàgines Wikipedia dels presos')  +
+  theme(legend.text = element_text(size = 8))
+```
+
+
+```{r}
+make_wiki_time_plot(people = sort(unique(pv$person[!pv$indepe])),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Visites mensuals de pàgines Wikipedia de polítics unionistes')  +
+  theme(legend.text = element_text(size = 8))
+```
+
+
+```{r}
+make_wiki_time_plot(people = c('Inés Arrimadas', 'Carles Puigdemont'),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Visites de pàgines Wikipedia: Puigdemont vs. Arrimadas')
+```
+
+
+```{r}
+make_wiki_time_plot(people = c('Pedro Sánchez', 'Carles Puigdemont'),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Visites de pàgines Wikipedia: Puigdemont vs. Sánchez')
 ```
