@@ -229,3 +229,7 @@ Catalan-language plots
 ![](figures/unnamed-chunk-29-1.png)
 
 ![](figures/unnamed-chunk-30-1.png)
+
+![](figures/unnamed-chunk-31-1.png)
+
+![](figures/unnamed-chunk-32-1.png)

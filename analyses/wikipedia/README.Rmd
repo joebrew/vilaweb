@@ -220,7 +220,7 @@ make_wiki_time_plot(people = c('Miquel Iceta', 'Carme Forcadell',
                                'Xavier García Albiol'),
                     alpha = 0.9,
                     size = 0.6) +
-  labs(title = 'Wikipedia page-views: Forcadell vs. Iceta vs. García Albiol')
+  labs(title = 'Wikipedia page-views:\nForcadell vs. Iceta vs. García Albiol')
 ```
 
 Likewise, Raül Romeva - despite being in prison - consistently gets more attention in English than Josep Borrell.
@@ -347,7 +347,8 @@ make_wiki_time_plot(language = 'ca',
 
 
 ```{r}
-make_wiki_time_plot(people = sort(unique(pv$person[!pv$indepe])),
+make_wiki_time_plot(language = 'ca',
+                    people = sort(unique(pv$person[!pv$indepe])),
                     alpha = 0.9,
                     size = 0.6) +
   labs(title = 'Visites mensuals de pàgines Wikipedia de polítics unionistes')  +
@@ -356,7 +357,8 @@ make_wiki_time_plot(people = sort(unique(pv$person[!pv$indepe])),
 
 
 ```{r}
-make_wiki_time_plot(people = c('Inés Arrimadas', 'Carles Puigdemont'),
+make_wiki_time_plot(language = 'ca',
+                    people = c('Inés Arrimadas', 'Carles Puigdemont'),
                     alpha = 0.9,
                     size = 0.6) +
   labs(title = 'Visites de pàgines Wikipedia: Puigdemont vs. Arrimadas')
@@ -364,8 +366,27 @@ make_wiki_time_plot(people = c('Inés Arrimadas', 'Carles Puigdemont'),
 
 
 ```{r}
-make_wiki_time_plot(people = c('Pedro Sánchez', 'Carles Puigdemont'),
+make_wiki_time_plot(language = 'ca',
+                    people = c('Pedro Sánchez', 'Carles Puigdemont'),
                     alpha = 0.9,
                     size = 0.6) +
   labs(title = 'Visites de pàgines Wikipedia: Puigdemont vs. Sánchez')
+```
+
+
+```{r}
+make_wiki_time_plot(language = 'ca',
+                    people = c('Miquel Iceta', 'Carme Forcadell',
+                               'Xavier García Albiol'),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Visites de pàgines Wikipedia:\nForcadell vs. Iceta vs. García Albiol')
+```
+
+```{r}
+make_wiki_time_plot(language = 'ca',
+                    people = c('Raül Romeva', 'Josep Borrell'),
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Visites de pàgines Wikipedia: Romeva vs. Borrell')
 ```
