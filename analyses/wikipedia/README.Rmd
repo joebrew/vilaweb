@@ -356,7 +356,7 @@ make_wiki_time_plot(language = 'ca',
                     people = sort(unique(pv$person[!pv$indepe])),
                     alpha = 0.9,
                     size = 0.6) +
-  labs(title = 'Visites mensuals de pàgines Wikipedia de polítics unionistes')  +
+  labs(title = 'Visites mensuals de pàgines Wikipedia\nde polítics unionistes')  +
   theme(legend.text = element_text(size = 8))
 ```
 
@@ -366,7 +366,7 @@ make_wiki_time_plot(language = 'ca',
                     people = c('Inés Arrimadas', 'Carles Puigdemont'),
                     alpha = 0.9,
                     size = 0.6) +
-  labs(title = 'Visites de pàgines Wikipedia: Puigdemont vs. Arrimadas')
+  labs(title = 'Visites de pàgines Wikipedia:\nPuigdemont vs. Arrimadas')
 ```
 
 
@@ -375,7 +375,7 @@ make_wiki_time_plot(language = 'ca',
                     people = c('Pedro Sánchez', 'Carles Puigdemont'),
                     alpha = 0.9,
                     size = 0.6) +
-  labs(title = 'Visites de pàgines Wikipedia: Puigdemont vs. Sánchez')
+  labs(title = 'Visites de pàgines Wikipedia:\nPuigdemont vs. Sánchez')
 ```
 
 
@@ -393,5 +393,5 @@ make_wiki_time_plot(language = 'ca',
                     people = c('Raül Romeva', 'Josep Borrell'),
                     alpha = 0.9,
                     size = 0.6) +
-  labs(title = 'Visites de pàgines Wikipedia: Romeva vs. Borrell')
+  labs(title = 'Visites de pàgines Wikipedia:\nRomeva vs. Borrell')
 ```
