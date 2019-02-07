@@ -28,23 +28,23 @@ When politicians are placed in preventive prison for *political crimes* (ie, for
 The case of the Catalan prisoners
 ---------------------------------
 
-9 Catalan politicians are currently in pre-trial detention crimes of a political nature. Carme Forcadell is being chared with violent rebellion for having permitted a parliamentary debate and vote; the others - former members of the Catalan government - are being charged for having organized a supposedly illegal (per Spanish law) independence referendum.
+9 Catalan politicians are currently in pre-trial detention for crimes of a political nature. Carme Forcadell is being chared with violent rebellion for having permitted a parliamentary debate and vote; the others - former members of the Catalan government - are being charged for having passed laws to allow a supposedly illegal (per Spanish law) independence referendum.
 
 Whether their imprisonment is a violation of the principle of parliamentary immunity is not the subject of this analysis. Rather, we will explore the political *effect* of their imprisonment, to see if it is consistent with the negative effects of political judicialization which parliamentary immunity is intended to protect against.
 
 The Question
 ============
 
-Has pre-trial detention of Catalan politicians had an "silencing" effect? In other words, has their representativeness or visibility been negatively affected by their placement in prison prior to having been convicted of a crime.
+Has pre-trial detention of Catalan politicians had a "silencing" effect? In other words, has their representativeness or visibility been negatively affected by their placement in prison prior to having been convicted of a crime.
 
 Methods
 =======
 
 We use twitter data because it is an easily quantifiable proxy for reality: people who attract attention in real life, also attract attention on twitter. We examine references to 6 Catalan politicians: Oriol Junqueras (in prison), Carles Puigdemont (in exile), Toni Comín (in exile), Carme Forcadell (in prison), Miquel Iceta (free) and Inés Arrimadas (free). We examine tweets made with mentions of these 6 by both political adversaries and allies.
 
-We examine two different periods: "Before" (the first 9 months of 2017) and "After" (the first 9 months of 2018) the period of imprisonment/exile. We intentionally remove the three months of greatest political turmoil (October and November 2017), since these cloud the rest of the period. We also restrict our analysis to identical periods in the two years so as to reduce bias from external events (seasonality, etc.).
+We examine two different periods: "Before" (the first 9 months of 2017) and "After" (the first 9 months of 2018) the period of imprisonment/exile. For the purpose of stable comparability, we intentionally remove the three months of greatest political turmoil (October through December 2017). We also restrict our analysis to identical periods in the two years so as to reduce bias from external events (seasonality, etc.).
 
-In this analysis, we seek to see whether being in freedom, in exile, or in prison has a differential impact on attention (measured via tweets). We pay special attention to tweets from *adversaries*, since this is the most useful metric for gauging the relevance of a political figure. Politicians who are tweeted about frequently by adversaries are relevant politicians, whereas politicians ignored by their adversaries are ignored because of their lack of relevance.
+In this analysis, we seek to see whether being in freedom, in exile, or in prison has a differential impact on attention (measured via tweets). We pay special attention to tweets from *adversaries*, since this is the most useful metric for gauging the relevance of a political figure. Politicians who are tweeted about frequently by adversaries are relevant politicians, whereas politicians ignored by their adversaries are ignored because of their lack of political relevance.
 
 Our pool of tweets consists of the 701324 tweets during the "before" and "after" periods from the following 44 twitter accounts:
 
@@ -113,7 +113,7 @@ The below chart shows the relative (%) change in the frequency of tweets from 20
 
 Arrimadas and Iceta have gotten the most attention from political adversaries in 2018, relative to 2017. This suggests that they are highly visible and active, since their adversaries feel compelled to talk about them. Puigdemont and Comín, despite coming from political parties that got more votes than Iceta's, saw only a minor increase in attention from adversaries from 2017 to 2018.
 
-What is most striking about the above chart is the reduction in attention from adversaries paid to Forcadell and Junqueras. Forcadell was referenced in only 47.5% as many tweets from her political adversaries in 2018 as in 2017, whereas Junqueras was referenced at a rate of only 26.1% as much as in 2017.
+What is most striking about the above chart is the reduction in attention from adversaries paid to Forcadell and Junqueras. Forcadell was referenced in only 47.5% as many tweets from her political adversaries in 2018 as in 2017, whereas Junqueras was referenced at a rate of only 26.1% as much as in 2017. In other words, the political adversaries of Junqueras and Forcadell are no longer paying much attention to them.
 
 This is the silencing effect of prison. It is partial for those in exile, but extreme for those in prison. When democratic representatives are free to remain in public (Iceta and Arrimadas), their adversaries are forced to talk to and about them. When they are exiled, their adversaries only have to interact with them digitally, and do so at a lower frequency.
 
