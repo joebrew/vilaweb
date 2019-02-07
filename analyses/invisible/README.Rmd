@@ -1,0 +1,510 @@
+---
+title: "L'efecte invisibilitzador de la presó preventiva | The invisibilizing effect of pre-trial imprisonment"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+
+  
+```
+
+```{r}
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    paste0("SELECT * FROM twitter")
+  )
+  save(tl, file = 'tl.RData')  
+  dbDisconnect(con)
+}
+
+
+# Read in google sheet with keys
+library(gsheet)
+if(!'goog.RData' %in% dir()){
+  goog_people <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=1425313388')
+  save(goog_people,
+       file = 'goog.RData')
+} else {
+  load('goog.RData')
+}
+
+# Remove a few who are irrelevant to this analysis
+tl <- tl %>%
+  filter(!username %in% c('jeanmarcpujol',
+                          'f_armengol',
+                          'isabelbonig',
+                          'pnique',
+                          'socialistesval', 
+                          'vicentsolerm',
+                          'marianorajoy'))
+tl <- tl %>% filter(username %in% goog_people$username)
+
+tl <- tl %>%
+    left_join(goog_people) %>%
+  filter(!party %in% c('Compromis', 'MES'))
+
+# Search for the words puigdemontiation
+find_puigdemont <- function(x){
+  # grepl('lazos amarillos|llaços grocs', tolower(x))
+  grepl('puigdemont', tolower(x))
+}
+find_junqueras <- function(x){
+  # grepl('lazos amarillos|llaços grocs', tolower(x))
+  grepl('junqueras', tolower(x))
+}
+find_forcadell <- function(x){
+  # grepl('lazos amarillos|llaços grocs', tolower(x))
+  grepl('forcadell', tolower(x))
+}
+find_comin <- function(x){
+  # grepl('lazos amarillos|llaços grocs', tolower(x))
+  grepl('comín |comin ', tolower(x))
+}
+find_arrimadas <- function(x){
+  # grepl('lazos amarillos|llaços grocs', tolower(x))
+  grepl('arrimadas', tolower(x))
+}
+find_iceta <- function(x){
+  # grepl('lazos amarillos|llaços grocs', tolower(x))
+  grepl('iceta', tolower(x))
+}
+tl <- tl %>%
+  mutate(puigdemont = find_puigdemont(tolower(tweet)),
+         forcadell = find_forcadell(tolower(tweet)),
+         comin = find_comin(tolower(tweet)),
+         arrimadas = find_arrimadas(tolower(tweet)),
+         iceta = find_iceta(tolower(tweet)),
+         junqueras = find_junqueras(tolower(tweet)))
+```
+
+
+```{r}
+pd <- tl %>%
+  # filter(tolower(username) %in% tolower(people)) %>%
+  # filter(puigdemont) %>%
+  # mutate(year = as.numeric(format(date, '%Y'))) %>%
+  mutate(year = ifelse(date >= '2017-01-01' &
+                         date <= '2017-09-30',
+                       'Before',
+                       ifelse(date >= '2018-01-01' &
+                              date <= '2018-09-30',
+                              'After',
+                              NA))) %>%
+  filter(!is.na(year)) %>%
+  # mutate(date = as.Date(cut(date, 'month'))) %>%
+  group_by(person = username,
+           year,
+           party) %>%
+  summarise(n = n(),
+            puigdemont = length(which(puigdemont)),
+            forcadell = length(which(forcadell)),
+            comin = length(which(comin)),
+            arrimadas = length(which(arrimadas)),
+            iceta = length(which(iceta)),
+            junqueras = length(which(junqueras))) %>%
+  ungroup %>%
+  mutate(p_puigdemont = puigdemont / n * 100,
+         p_forcadell = forcadell / n * 100,
+         p_comin = comin / n * 100,
+                  p_arrimadas = arrimadas / n * 100,
+         p_iceta = iceta / n * 100,
+
+         p_junqueras = junqueras / n * 100) 
+pd$year <- factor(pd$year, levels = c('Before', 'After'))
+left <- expand.grid(person = sort(unique(pd$person)),
+                    year = sort(unique(pd$year))) %>%
+  left_join(goog_people,
+            by = c('person' = 'username'))
+left$year <- factor(left$year, levels = c('Before', 'After'))
+pd <- left_join(left, pd)
+
+pd$n[is.na(pd$n)] <- 0
+pd$p_puigdemont[is.na(pd$p_puigdemont)] <- 0
+pd$puigdemont[is.na(pd$puigdemont)] <- 0
+
+pd$p_forcadell[is.na(pd$p_forcadell)] <- 0
+pd$forcadell[is.na(pd$forcadell)] <- 0
+
+pd$p_arrimadas[is.na(pd$p_arrimadas)] <- 0
+pd$arrimadas[is.na(pd$arrimadas)] <- 0
+
+pd$p_iceta[is.na(pd$p_iceta)] <- 0
+pd$iceta[is.na(pd$iceta)] <- 0
+
+
+pd$p_comin[is.na(pd$p_comin)] <- 0
+pd$comin[is.na(pd$comin)] <- 0
+
+pd$p_junqueras[is.na(pd$p_junqueras)] <- 0
+pd$junqueras[is.na(pd$junqueras)] <- 0
+
+# Get relative decrease/increase
+pd <- pd %>%
+  arrange(year) %>%
+  group_by(person, party) %>%
+  mutate(base_puigdemont = dplyr::first(puigdemont),
+         new_puigdemont = dplyr::last(puigdemont),
+         
+         base_arrimadas = dplyr::first(arrimadas),
+         new_arrimadas = dplyr::last(arrimadas),
+         
+         base_iceta = dplyr::first(iceta),
+         new_iceta = dplyr::last(iceta),
+         
+         base_forcadell = dplyr::first(forcadell),
+         new_forcadell = dplyr::last(forcadell),
+         
+         base_comin = dplyr::first(comin),
+         new_comin = dplyr::last(comin),
+         
+         base_junqueras = dplyr::first(junqueras),
+         new_junqueras = dplyr::last(junqueras)) %>%
+  ungroup %>%
+  mutate(#change_puigdemont_absolute = new_puigdemont - base_puigdemont,
+         # change_puigdemont_relative = new_puigdemont / base_puigdemont,
+         # change_junqueras_absolute = new_junqueras - base_junqueras,
+         # change_junqueras_relative = new_junqueras / base_junqueras,
+         puigdemont_relative = puigdemont / base_puigdemont * 100,
+         
+        forcadell_relative = forcadell / base_forcadell * 100,
+        arrimadas_relative = arrimadas / base_arrimadas * 100,
+        iceta_relative = iceta / base_iceta * 100,
+
+                 comin_relative = comin / base_comin * 100,
+
+         junqueras_relative = junqueras / base_junqueras * 100)
+
+unionists <- unique(pd$person[pd$eix_indepe_unio == 'unio'])
+independentists <- unique(pd$person[pd$eix_indepe_unio %in% c('sobiranista', 'indepe')])
+
+overall_data <- function(data = pd,
+                        language = 'en',
+                        people = unionists,
+                        show_people = c('junqueras','puigdemont','arrimadas', 'iceta', 'comin', 'forcadell')){
+  
+  
+  if(language == 'en'){
+    caption <- 'Before: 2017-01-01 - 2017-09-30; After: 2018-01-01 - 2017-09-30.\nJoe Brew | @joethebrew | www.vilaweb.cat'
+  } else {
+    'Abans: 2017-01-01 - 2017-09-30; Després: 2018-01-01 - 2017-09-30.\nJoe Brew | @joethebrew | www.vilaweb.cat'
+    plot_data$year <-
+      ifelse(plot_data$year == 'Before', 'Abans', 'Després')
+  }
+  
+  plot_data <- data %>% filter(person %in% people)
+  
+  abc <- plot_data %>%
+    filter(person %in% people) %>%
+    dplyr::select(person, party, contains('new'), contains('base')) %>%
+    gather(key, value, new_puigdemont: base_junqueras) %>%
+    mutate(about = unlist(lapply(strsplit(key, '_'), function(x){x[2]})),
+           time = unlist(lapply(strsplit(key, '_'), function(x){x[1]}))) %>%
+    group_by(about) %>%
+    summarise(new_time = sum(value[time == 'new'], na.rm = TRUE),
+              old_time = 
+                sum(value[time == 'base'], na.rm = TRUE),
+              adversaries = length(unique(person))) %>%
+    mutate(absolute_difference = new_time - old_time,
+           relative_difference = new_time / old_time * 100) %>%
+    filter(about %in% show_people)
+  return(abc)
+}
+
+
+overall_plot <- function(language = 'en',
+                         return_data = FALSE,
+                         new_only = FALSE){
+  
+  g_data <- bind_rows(
+    overall_data(data = pd,
+                        language = 'en',
+                        people = unionists,
+                        show_people = c('iceta', 'arrimadas')) %>%
+    mutate(by = 'Allies'),
+  overall_data(data = pd,
+                        language = 'en',
+                        people = independentists,
+                        show_people = c('iceta', 'arrimadas')) %>%
+    mutate(by = 'Adversaries'),
+  overall_data(data = pd,
+                        language = 'en',
+                        people = unionists,
+                        show_people = c('junqueras','puigdemont', 'comin', 'forcadell')) %>%
+    mutate(by = 'Adversaries'),
+  overall_data(data = pd,
+                        language = 'en',
+                        people = independentists,
+                        show_people = c('junqueras','puigdemont', 'comin', 'forcadell')) %>%
+    mutate(by = 'Allies')
+  ) %>%
+    mutate(about = Hmisc::capitalize(about)) 
+  
+  if(new_only){
+    if(return_data){
+      return(g_data)
+    } 
+    g_data <- g_data %>% filter(by == 'Adversaries') %>%
+      mutate(p = new_time / adversaries)
+    ggplot(data = g_data,
+           aes(x = about,
+               y = p)) +
+      geom_bar(stat = 'identity',
+               fill = 'darkblue', alpha = 0.6) +
+      theme_vilaweb() +
+      labs(x = '',
+           y = '')
+    
+  } else {
+    g_data <- 
+    bind_rows(g_data %>% mutate(value = relative_difference, time = 'After'),
+              g_data%>% mutate(value = 100, time = 'Before'))
+  g_data$time <- factor(g_data$time,
+                        levels = c('Before','After'),
+                        labels = c('Before\n(2017)', 'After\n(2018)'))
+  if(language == 'ca'){
+    g_data$time <- factor(g_data$time,
+                          labels = c('Abans (2017)', 'Després (2018)'))
+  }
+  if(return_data){
+    return(g_data)
+  }
+
+  library(ggrepel)
+  ggplot(data = g_data %>%
+           filter(by == 'Adversaries'),
+         aes(x = time,
+             y = value,
+             color = about,
+             group = about)) +
+    geom_line(size = 2) +
+    geom_point() +
+    geom_label_repel(data = g_data %>% filter(time == levels(g_data$time)[2],
+                                        by == 'Adversaries'),
+               aes(x = time,
+                   y = value,
+                   color = about,
+                   label = about),
+               show.legend = FALSE) +
+    # facet_wrap(~by) +
+    geom_hline(yintercept = 100, lty = 2, color = 'darkred') +
+    theme_vilaweb() +
+    labs(x = '',
+         y = 'Percentage') +
+    scale_color_manual(name = '',
+                       values = databrew::make_colors(n = length(unique(g_data$about)))) +
+    scale_y_log10() +
+    theme(legend.position = 'none')
+  }
+}
+
+
+make_plot <- function(data = pd,
+                      language = 'en',
+                      who = 'junqueras',
+                      people = unique(pd$person[pd$eix_indepe_unio == 'unio']),
+                      add_at = TRUE){
+  
+  if(language == 'en'){
+    caption <- 'Before: 2017-01-01 - 2017-09-30; After: 2018-01-01 - 2017-09-30.\nJoe Brew | @joethebrew | www.vilaweb.cat'
+  } else {
+    'Abans: 2017-01-01 - 2017-09-30; Després: 2018-01-01 - 2017-09-30.\nJoe Brew | @joethebrew | www.vilaweb.cat'
+    plot_data$year <-
+      ifelse(plot_data$year == 'Before', 'Abans', 'Després')
+  }
+  
+  plot_data <- data %>% filter(person %in% people)
+
+  if(who == 'junqueras'){
+    plot_data$yval <- plot_data$junqueras
+  }
+  if(who == 'puigdemont'){
+    plot_data$yval <- plot_data$puigdemont
+  }
+  if(who == 'forcadell'){
+    plot_data$yval <- plot_data$forcadell
+  }
+  if(who == 'comin'){
+    plot_data$yval <- plot_data$comin
+  }
+  if(who == 'arrimadas'){
+    plot_data$yval <- plot_data$arrimadas
+  }
+  if(who == 'iceta'){
+    plot_data$yval <- plot_data$iceta
+  }
+  
+  if(add_at){
+  plot_data$person <- paste0('@', plot_data$person)  
+  }
+  
+  
+  plot_data <- plot_data %>% group_by(person) %>%
+    filter(max(yval, na.rm = TRUE) >= 1)
+  
+  plot_data <- plot_data %>%
+    group_by(person) %>%
+    mutate(increase = ifelse(yval[2] > yval[1],
+                             'a',
+                             ifelse(yval[2] == yval[1],
+                                    'b',
+                                    'c'))) %>%
+  ungroup
+  
+  if(length(sort(unique(plot_data$increase))) == 2){
+    cols <- c('darkblue', 'darkorange')
+  } else {
+    cols <- rev(c('darkorange', 'grey', 'darkblue'))
+  }
+  plot_data$ypos <-
+    ifelse(plot_data$yval <3, plot_data$yval,
+           plot_data$yval - (0.1 * plot_data$yval))
+  
+    ggplot(data = plot_data,
+       aes(x = year,
+           y = yval,
+           group = person)) +
+      geom_bar(stat = 'identity',
+               alpha = 0.6,
+               aes(fill = increase)) +
+      geom_text(aes(label = yval,
+                    y = ypos),
+                alpha = 0.8,
+                size = 3) +
+  # geom_point() +
+  #     geom_area() +
+  # geom_line() +
+  facet_wrap(~person, scales = 'free') +
+      theme_databrew() +
+      labs(caption = caption) +
+      theme(strip.text = element_text(size = 9)) +
+      scale_fill_manual(name = '',
+                        values = cols) +
+      theme(legend.position = 'none') +
+      theme(axis.text.y = element_blank())
+}
+
+```
+
+
+# Introduction
+
+## The importance of parliamentary immunity
+
+The principle of "parliamentary immunity", according to the [Council of Europe](https://assembly.coe.int/nw/xml/XRef/X2H-Xref-ViewHTML.asp?FileID=10070&lang=EN) is "one of the most ancient parliamentary guarantees in Europe". Its purpose is to "provide specific protection against the accusations to which parliamentarians are more exposed than other citizens", such as crimes of a political nature.
+
+
+The Spanish Constitution is clear on parliamentary immunity: "During the period of their mandate, representatives and senators will have immunity and can only be detained in the case of a flagrant crime. They cannot be charged or indicted without the prior authorization of the respective chamber" [Source](http://noticias.juridicas.com/base_datos/Admin/constitucion.t3.html).
+
+(Text in Spanish: "Durante el período de su mandato los Diputados y Senadores gozarán asimismo de inmunidad y sólo podrán ser detenidos en caso de flagrante delito. No podrán ser inculpados ni procesados sin la previa autorización de la Cámara respectiva.")
+
+The Spanish Supreme Court has previously defended parliamentary immunity as "protecting the personal liberty of popular representatives against detentions and judicial processes which could lead to the deprivation of liberty, thereby avoiding that, for political manipulations, a parlamentarian is prevented from attending chamber meetings and, as a consequence, the composition and functioning of the parlament is altered"  [source](http://www.congreso.es/consti/constitucion/indice/sinopsis/sinopsis.jsp?art=71&tipo=2).
+
+(Text in Spanish: "protege la libertad personal de los representantes populares contra detenciones y procesos judiciales que puedan desembocar en privación de libertad, evitando que, por manipulaciones políticas, se impida al parlamentario asistir a las reuniones de las cámaras y, a consecuencia de ello, se altere indebidamente su composición y funcionamiento")
+
+The Catalan Parlament also has very explicit rules on parliamentary immunity: "During their mandate, MPs have immunity, in the sense that they can not be detained except in the case of a flagrant crime, so as to avoid them being detained for hidden political reasons") [Source](https://www.parlament.cat/pcat/parlament/els-diputats-del-parlament/).
+
+(Text in Catalan: "Durant el seu mandat (els membres del Parlament) gaudeixen també d’immunitat, en el sentit que no poden ser detinguts si no és en cas de delicte flagrant, així s’evita que puguin ser detinguts per motius polítics encoberts")
+
+The Economist [explains clearly](https://www.economist.com/the-economist-explains/2016/05/26/why-politicians-are-granted-immunity-from-prosecution) the need for parliamentary immunity: "lawmakers risk prosecution on politically motivated charges. If left unchecked, the executive would... arrest opposition MPs in order to boost its power and reduce its accountability". Sound familiar?
+
+When politicians are placed in preventive prison for _political crimes_ (ie, for the laws they passed, the opinions the expressed, or the votes they cast), the democratic system of representativeness is violated. In other words, the purpose of parliamentary immunity is to ensure that judicialization is not used as a political weapon. Ensuring the freedom of popular representatives is not a privilege of politicians, but rather a protection for those who voted for them. 
+
+## The case of the Catalan prisoners
+
+9 Catalan politicians are currently in pre-trial detention crimes of a political nature. Carme Forcadell is being chared with violent rebellion for having permitted a parliamentary debate and vote; the others - former members of the Catalan government - are being charged for having organized a supposedly illegal (per Spanish law) independence referendum.
+
+Whether their imprisonment is a violation of the principle of parliamentary immunity is not the subject of this analysis. Rather, we will explore the political _effect_ of their imprisonment, to see if it is consistent with the negative effects of political judicialization which parliamentary immunity is intended to protect against. 
+
+# The Question
+
+Has pre-trial detention of Catalan politicians had an "silencing" effect? In other words, has their representativeness or visibility been negatively affected by their placement in prison prior to having been convicted of a crime.
+
+# Methods
+
+We use twitter data because it is an easily quantifiable proxy for reality: people who attract attention in real life, also attract attention on twitter. We examine references to 6 Catalan politicians: Oriol Junqueras (in prison), Carles Puigdemont (in exile), Toni Comín (in exile), Carme Forcadell (in prison), Miquel Iceta (free) and Inés Arrimadas (free). We examine tweets made with mentions of these 6 by both political adversaries and allies. 
+
+We examine two different periods: "Before" (the first 9 months of 2017) and "After" (the first 9 months of 2018) the period of imprisonment/exile.  We intentionally remove the three months of greatest political turmoil (October and November 2017), since these cloud the rest of the period. We also restrict our analysis to identical periods in the two years so as to reduce bias from external events (seasonality, etc.).
+
+In this analysis, we seek to see whether being in freedom, in exile, or in prison has a differential impact on attention (measured via tweets). We pay special attention to tweets from _adversaries_, since this is the most useful metric for gauging the relevance of a political figure. Politicians who are tweeted about frequently by adversaries are relevant politicians, whereas politicians ignored by their adversaries are ignored because of their lack of relevance. 
+
+Our pool of tweets consists of the `r nrow(tl)` tweets during the "before" and "after" periods from the following `r length(unique(tl$username))` twitter accounts:
+
+```{r, results = 'asis'}
+cat(paste0(sort(unique(tl$username)), collapse = '  \n'))
+```
+
+For the purpose of this analysis, we define two groups for our adversaries-allies framework: (1) those who are pro-independence and pro-referendum (PDeCat, ERC, Podem(os), Crida, etc.) and (2) those who are against a referendum (C's, PP, PSOE, PSC, SCC).
+
+
+# Results
+
+## Overall
+
+The below chart shows the number of tweets each of our 6 analyzed politicians received during the first 9 months of 2018 (per adversary). Puigdemont receives far more attention from his adversaries than other major Catalan politicians.
+
+```{r}
+overall_plot(new_only = T,
+             language = 'en') +
+  labs(x = 'Tweet referencing this person',
+       y = 'Number of tweets per adversary',
+       title = '')
+```
+
+But this has been the case for quite some time. What's most interesting is not to examine absolute differences between politicians, but rather changes over time.
+
+The below chart shows the relative (%) change in the frequency of tweets from 2017 to 2018 from political adversaries for the 6 politicians in question. 100% is the 2017 baseline for each politician. An "After" value of greater than 100% means that adversaries talked about this person _more_ in 2018 than 2017, whereas a less than 100% value means that adversaries paid less attention to this person in 2018.
+
+```{r}
+overall_plot(new_only = F,
+             language = 'en') 
+```
+
+Arrimadas and Iceta have gotten the most attention from political adversaries in 2018, relative to 2017. This suggests that they are highly visible and active, since their adversaries feel compelled to talk about them. Puigdemont and Comín, despite coming from political parties that got more votes than Iceta's, saw only a minor increase in attention from adversaries from 2017 to 2018. 
+
+What is most striking about the above chart is the reduction in attention from adversaries paid to Forcadell and Junqueras. Forcadell was referenced in only 47.5% as many tweets from her political adversaries in 2018 as in 2017, whereas Junqueras was referenced at a rate of only 26.1% as much as in 2017.
+
+This is the silencing effect of prison. It is partial for those in exile, but extreme for those in prison. When democratic representatives are free to remain in public (Iceta and Arrimadas), their adversaries are forced to talk to and about them. When they are exiled, their adversaries only have to interact with them digitally, and do so at a lower frequency. 
+
+But when democratic representatives are imprisoned, they cannot communicate freely. This is the case of Forcadell and Junqueras. Their political adversaries are less compelled to talk about them, respond to their proposed policies, address them publicly, or acknowledge their legitimacy as representatives of those who voted for them. In other words, over time, they are effectively invisibilized.
+
+
+# Conclusion 
+
+Twitter data shows that the pre-trial imprisonment of Oriol Junqueras and Carme Forcadell has had the effect of "invisibilizing" them from public discourse. This invisibilization is only partial - Forcadell and Junqueras' allies continue to tweet about them at a high rate, but their political adversaries have largely ignored them since they became prisoners.
+
+The invisibilizing effect of exile also exists, albeit to a lesser extent. Comín and Puigdemont saw slight increases in attention form adversaries in 2018 relative to 2017, but that increase was less than those of in-country politicians Arrimadas and Iceta, even after adjustment for the pre-judicialization baseline.
+
+Whether the principle of parliamentary immunity was violated when Spanish courts ordered imprisonment for the Catalan leaders is not a subject for this analysis. What is clear from the data, however, is that the effects of the imprisonment are similar in nature to the effects of the kind of political judicialization which the principle of parliamentary immunity is meant to avoid. Junqueras and Forcadell, representatives with ample electoral support, became largely invisible to their adversaries due to their inability to partake in political discourse. 
+
+Whether the Spanish courts convict the Catalan independence leaders of a crime or not, the political punishment - in the form of the effective invisibilization of democratically elected representatives - is already being served.
