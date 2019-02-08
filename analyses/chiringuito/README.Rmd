@@ -1,0 +1,165 @@
+---
+title: ""
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+
+  
+```
+
+```{r, fig.height = 8}
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    paste0("SELECT * FROM twitter")
+  )
+  save(tl, file = 'tl.RData')  
+  dbDisconnect(con)
+  }
+
+
+# Search for the words wordiation
+find_word <- function(x){
+  # grepl('lazos amarillos|llaços grocs', tolower(x))
+  grepl('chiringuito', tolower(x))
+}
+tl <- tl %>%
+  mutate(word = find_word(tweet))
+```
+
+```{r}
+pd <- tl %>%
+  # filter(tolower(username) %in% tolower(people)) %>%
+  filter(word) %>%
+  filter(date >= '2018-01-01',
+         date <= '2018-12-31') %>%
+  group_by(person = username) %>%
+  tally %>%
+  ungroup 
+left <- expand.grid(# word = sort(unique(tl$word)),
+                    # date = seq(min(pd$date),
+                    #            max(pd$date),
+                    #            by = 'month'),
+                    person = sort(unique(tl$username)))
+pd <- left_join(left, pd)
+
+pd$n[is.na(pd$n)] <- 0
+
+
+make_simple_plot <- function(p = sort(unique(pd$person))){
+  ppd <- pd %>% filter(person %in% p) %>%
+    filter(person %in% c('ciudadanoscs',
+                         'ciutadanscs',
+                         'inesarrimadas',
+                         'carrizosacarlos',
+                         'oscar_puente',
+                         'albert_rivera',
+                         'vox_es',
+                         'santi_abascal',
+                         'espciudadana',
+                         'societatcc',
+                          'sanchezcastejon',
+               'rogertorrent',
+               'carmencalvo_',
+               'inesarrimadas',
+               'albert_rivera',
+               'pablo_iglesias_',
+               # 'alevysoler',
+               'j_zaragoza_',
+               'carrizosacarlos',
+               'eva_granados',
+               'ppcatalunya',
+               'alejandrotgn',
+               'albiol_xg',
+               'societatcc',
+               'joantarda',
+               'santi_abascal',
+               'pdemocratacat',
+               'pablo_casado_',
+               'ciudadanoscs',
+               'socialistes_cat',
+               'espciudadana',
+               'pablocasado',
+               'esquerra_erc', 
+               'miqueliceta', 
+               'perearagones',
+               'albanodante76',
+               'quimtorraipla',
+               # 'cupnacional',
+               'krls',
+               'gabrielrufian',
+               'junqueras','rogertorrent',
+               'carlescampuzano',
+               'pablo_iglesias_'
+                         )) %>%
+    mutate(person = paste0('@', person))
+  ppd <- ppd %>% arrange(n) %>%
+    filter(!is.na(n),
+           n > -1,
+           !person %in% congress$user_name)
+  ppd$person <- factor(ppd$person, levels = ppd$person)
+  ggplot(data = ppd,
+       aes(x = person,
+           y = n,
+           # group = person,
+           fill = person)) +
+  geom_bar(stat = 'identity',
+           color = 'black',
+           lwd = 0.1) +
+  theme_databrew() +
+  labs(x = '',
+       y = 'Tweets',
+       title = 'Tweets con la palabra "chiringuito(s)"',
+       # subtitle = '*Incluye también "golpista", "golpistas", etc.',
+       subtitle = 'Año 2018') +
+  theme(legend.position = 'none') +
+  theme(#axis.text.x = element_text(angle = 90,
+         #                          size = 7),
+        plot.title = element_text(size = 24),
+        plot.subtitle =  element_text(size = 24),
+        strip.text = element_text(size = 25)) +
+    scale_fill_manual(name = '',
+                       values = rev(databrew::make_colors(n = length(unique(ppd$person)), r2g=TRUE, categorical = FALSE))) +
+    geom_text(aes(label = n),
+              alpha = 0.6,
+              size = 3.5,
+              nudge_y = 1) +
+    coord_flip() +
+    theme(axis.text.y = element_text(size = 12))
+
+}
+make_simple_plot()
+# 
+# ggsave('~/Desktop/x.png')
+```

@@ -500,7 +500,7 @@ borrell_plot <- function(language = 'en'){
     x <- 'Day'
     y <- 'Visits'
     title <- 'Wikipedia page views for Josep Borrell'
-    caption <- 'Data from Wikipedia. Chart by Joe Brew. @joethebrew. | www.vilaweb.cat'
+    caption <- 'Data from Wikipedia. Chart made lovingly by Joe Brew for @Cristobal1_one.'
   } else {
     x <- 'Dia'
     y <- 'Visites'

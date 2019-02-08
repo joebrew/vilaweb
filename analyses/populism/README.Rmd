@@ -32,7 +32,8 @@ source('functions.R')
 
 # Introduction
 
-Opponents of Catalan independence often characterize the movement as "populist". The intent of this characterization is to highlight similarities between the Catalan indpendence movement and populist movements with generally negative reputations, such as Brexit, Marine Le Pen's National French, Donald Trump's Republican party, the right-wing Spanish party Vox, etc. 
+Opponents of Catalan independence often describe the movement as "populist". The intent of this characterization is to highlight similarities between the Catalan indpendence movement and populist movements with generally negative reputations, such as Brexit, Marine Le Pen's National French, Donald Trump's Republican party, the right-wing Spanish party Vox, Latin American Chavismo, etc. 
+
 
 "Populist" is hard to define, and multiple definitions exist. But an overview of the academic literature regarding populism reveals three general characteristics of modern populism:
 
@@ -44,4 +45,83 @@ Opponents of Catalan independence often characterize the movement as "populist".
 
 4. *Unhappiness*: Populism receives most support from those who are discontent, not only with politics, but with life/society in general [@Spruyt_2016].
 
-Here is some text .
+5. *Authoritarianism*: Populist movements often aspire for more "mano dura" practices, etc. (need more details / references).
+
+## The question
+
+Is the Catalan independence movement "populist"?
+
+## The methods
+
+We'll examine survey data related to the above 5 characteristics in an effort to understand the extent to which it is factually accurate to classify independentism as "populist" or not.
+
+## The results
+
+### Finding 1
+
+```{r}
+df <- vilaweb::ceo 
+income_levels <- levels(df$C900)
+income_dict <-
+  data_frame(C900 = income_levels,
+             ca = c('0', 
+                    '<300',
+                    '301-600',
+                    '601-900',
+                    '901-1000',
+                    '1001-1200',
+                    '1201-1800',
+                    '1801-2000',
+                    '2001-2400',
+                    '2401-3000',
+                    '3001-4000',
+                    '4001-4500',
+                    '4501-5000',
+                    '5001-6000',
+                    '>6000',
+                    'NS/NC',
+                    'NS/NC'),
+             ca_group = c('<600', 
+                    '<600',
+                    '<600',
+                    '601-1200',
+                    '601-1200',
+                    '601-1200',
+                    '1201-2000',
+                    '1201-2000',
+                    '2001-3000',
+                    '2001-3000',
+                    '3001-4000',
+                    '4001-5000',
+                    '4001-5000',
+                    '5001+',
+                    '5001+',
+                    'NS/NC',
+                    'NS/NC'))
+df <- df %>%
+  left_join(income_dict)
+```
+
+### Finding 3: Immigration
+
+```{r}
+x <- df %>%
+  filter(!is.na(P56I), !is.na(P31),
+         !P56I %in% c('No ho sap', 'No contesta'),
+         !P31 %in% c('No ho sap', 'No contesta')) %>%
+  group_by(immigration = P56I,
+           independence = P31) %>%
+  tally %>%
+  ungroup %>%
+  group_by(independence) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup 
+
+ggplot(data = x,
+       aes(x = immigration,
+           y = p,
+           group = independence,
+           color = independence)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~independence)
+```

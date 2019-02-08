@@ -1,7 +1,7 @@
 library(tidyverse)
 # Read in twitter credentials
 library(yaml)
-twitter_credentials <- yaml.load_file('../../../credentials/credentials.yaml')
+twitter_credentials <- yaml.load_file('../../credentials/credentials.yaml')
 ## load rtweet package
 library(rtweet)
 token <- create_token(
@@ -14,6 +14,67 @@ token <- create_token(
 # ## check to see if the token is loaded
 # identical(token, get_token())
 
+
+rt <- search_tweets(
+    '"#GlobalSpain"', 
+    n = 1000000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE
+  )
+rt2 <- search_tweets(
+  '"#ThisIsTheRealSpain"', 
+  n = 1000000000, 
+  include_rts = T, 
+  retryonratelimit = TRUE
+)
+save(rt, rt2,
+     file = 'global_spain.RData')
+agg <-
+  rt %>%
+  mutate(hashtag = '#GlobalSpain') %>%
+  bind_rows(rt2 %>%
+              mutate(hashtag = '#ThisIsTheRealSpain')) %>%
+  mutate(date = cut(created_at, 'hour')) %>%
+  mutate(date = as.POSIXct(date)) %>%
+  group_by(date, hashtag) %>%
+  tally
+
+ggplot(data = agg,
+       aes(x = date,
+           y = n,
+           color = hashtag)) +
+  geom_line(size = 1) +
+  databrew::theme_databrew() +
+  # geom_smooth() +
+  labs(y = 'Piulades (per hora)',
+       x = 'Hora',
+       title = 'Use of hashtags "#GlobalSpain" and "#ThisIsTheRealSpain"',
+       caption = 'Data obtained via Twitter\'s REST API at approx 20:00 CET on Friday, Feb 1, 2019 by Joe Brew | @joethebrew.') +
+  theme(legend.text = element_text(size = 30),
+        plot.title = element_text(size = 20),
+        plot.subtitle =  element_text(size = 16))
+
+
+x = rt2 %>%
+  mutate(location = Hmisc::capitalize(location)) %>%
+  group_by(location) %>% tally %>% ungroup %>% arrange(desc(n)) %>%
+  filter(location != '')
+x$location <- factor(x$location, levels = x$location)
+ggplot(data = x[1:30,],
+       aes(x = location,
+           y = n)) +
+  geom_bar(stat = 'identity',
+           alpha = 0.8,
+           fill = 'darkgreen') +
+  databrew::theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5,
+                                   size = 14)) +
+  labs(x = 'Location (as written by user)',
+       y = 'Number of twitter accounts',
+       title = 'Location of accounts using "#ThisIsTheRealSpain" hashtag',
+       subtitle = 'Locations as written by the user in his/her profile. Excludes accounts with no location.',
+       caption = 'Period from Jan 24 - Feb 1 2019. Data from Twitter API. Data processing and chart by Joe Brew | @joethebrew.')
+ggsave('~/Desktop/realspain.png', height = 7)
 # x = get_friends('joethebrew')
 # z = search_users(q = x[1])
 # y = get_mentions('joethebrew')
@@ -408,3 +469,185 @@ ggplot(data = agg %>%
 #   theme_graph(base_family=font_rc) +
 #   theme(legend.position="none")
 # ```
+
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+library(ggrepel)
+require(DBI)
+library(ggtern)
+
+people <- 'globalspain'
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    paste0("SELECT * FROM twitter WHERE username='", people, "'")
+  )
+  save(tl, file = 'tl.RData')  
+  dbDisconnect(con)
+}
+
+tl <- tl %>%
+  mutate(madrid = grepl('madrid', tolower(tweet)),
+         barcelona = grepl('barcelona', tolower(tweet)),
+         catalonia = grepl('cataluña|catalunya|catalonia|catala', tolower(tweet)),
+         andalucia = grepl('andalu', tolower(tweet)),
+         prado = grepl('prado', tolower(tweet))) 
+x <- tl %>%
+  summarise(madrid = length(which(madrid)),
+            barcelona = length(which(barcelona)),
+            catalonia = length(which(catalonia)),
+            anadalucia = length(which(andalucia)),
+            prado = length(which(prado)))
+x
+y <- tl %>%
+  group_by(month = as.Date(cut(date, 'month'))) %>%
+  summarise(n_mad = length(which(madrid)),
+            n_bcn = length(which(barcelona)),
+            n_cat = length(which(catalonia)),
+            n = n()) %>%
+  ungroup %>%
+  mutate(p_mad = n_mad / n * 100,
+         p_bcn = n_bcn / n * 100,
+         p_cat = n_cat / n * 100)
+yg <- gather(y, key, value, n_mad:p_cat)
+
+g1 <- ggplot(data = yg %>% filter(month < '2019-02-01',
+                            key %in% c('p_bcn', 'p_mad')) %>%
+                              mutate(key = ifelse(key == 'p_bcn',
+                                                  'Barcelona',
+                                                  'Madrid')),
+       aes(x = month,
+           y = value)) + 
+  geom_line(aes(color = key)) +
+  theme_vilaweb() +
+  labs(x = 'Month',
+       y = '% of tweets that month',
+       title = 'Tweets mentioning "Barcelona" and "Madrid"\nby @GlobalSpain',
+       subtitle = 'Monthly percentages') +
+  scale_color_manual(name ='', values = c('darkorange', 'darkblue'))
+
+
+g2 <- ggplot(data = yg %>% filter(month < '2019-02-01',
+                            key %in% c('n_bcn', 'n_mad')) %>%
+         mutate(key = ifelse(key == 'n_bcn',
+                             'Barcelona',
+                             'Madrid')),
+       aes(x = month,
+           y = value)) + 
+  geom_line(aes(color = key)) +
+  theme_vilaweb() +
+  labs(x = 'Month',
+       y = 'Number of tweets',
+       # title = 'Tweets mentioning "Barcelona" and "Madrid" by @GlobalSpain',
+       subtitle = 'Exact number of tweets') +
+  scale_color_manual(name ='', values = c('darkorange', 'darkblue'))
+
+
+
+ggplot(data = yg %>% filter(month < '2019-02-01',
+                            key %in% c('p_cat')),
+       aes(x = month,
+           y = value)) + 
+  geom_line(aes(color = key)) +
+  theme_vilaweb() +
+  labs(x = 'Month',
+       y = '% of tweets that month',
+       title = 'Tweets mentioning "Barcelona" and "Madrid" by @GlobalSpain',
+       subtitle = 'Monthly percentages') 
+
+# LOS GOYA
+goya_bcnrt <-
+  rt <- search_tweets(
+    'goya', 
+    n = 1000000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE,
+    geocode = "41.385,2.173,20mi"
+  )
+goya_madrt <-
+  rt <- search_tweets(
+    'goya', 
+    n = 1000000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE,
+    geocode = "40.41678,-3.703,20mi"
+  )
+save(goya_bcnrt,
+     goya_madrt,
+     file = 'goya_bcnrt.RData')
+
+presos_bcnrt <-
+  rt <- search_tweets(
+    'presos', 
+    n = 1000000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE,
+    geocode = "41.385,2.173,20mi"
+  )
+presos_madrt <-
+  rt <- search_tweets(
+    'presos', 
+    n = 1000000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE,
+    geocode = "40.41678,-3.703,20mi"
+  )
+save(presos_bcnrt,
+     presos_madrt,
+     file = 'presos_bcnrt.RData')
+
+df <- bind_rows(goya_bcnrt %>% mutate(city = 'Barcelona',
+                                      subject = 'Goya'), 
+                goya_madrt %>% mutate(city = 'Madrid',
+                                      subject = 'Goya'),
+                presos_bcnrt %>% mutate(city = 'Barcelona',
+                                      subject = 'Presos'), 
+                presos_madrt %>% mutate(city = 'Madrid',
+                                      subject = 'Presos'))
+agg <-
+  df %>%
+  mutate(date = cut(created_at, 'day')) %>%
+  mutate(date = as.Date(date)) %>%
+  group_by(date, city, subject) %>%
+  tally %>%
+  ungroup
+
+
+date_breaks <- sort(unique(agg$date))
+date_labels <- vilaweb::make_catalan_date(date_breaks)
+ggplot(data = agg,
+       aes(x = date,
+           y = n,
+           group = subject,
+           color = subject)) +
+  xlim(as.Date('2019-01-29'),
+       as.Date('2019-02-05')) +
+  geom_line(size = 1, alpha = 0.8) +
+  facet_grid(~city) +
+  databrew::theme_databrew() +
+  scale_color_manual(name = '',
+                     values = c('blue', 'red')) +
+  # geom_smooth() +
+  labs(y = 'Tuits',
+       x = '',
+       title = 'Freqüencia de paraules "Goya" i "Presos" en tuits',
+       subtitles = 'Tuits geolocalitzats a < 32 km del centre de BCN vs. MAD',
+       caption = 'Dades: API REST de Twitter. Gràfic: Joe Brew | @joethebrew.') +
+  theme(legend.text = element_text(size = 30),
+        plot.title = element_text(size = 21),
+        plot.subtitle =  element_text(size = 16),
+        strip.text = element_text(size = 25),
+        axis.title.y = element_text(size = 20)) 
+ggsave('~/Desktop/goya_vs_presos.png')
+save.image('saved.RData')
