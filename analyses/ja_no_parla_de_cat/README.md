@@ -1,6 +1,8 @@
 Who talks about Catalonia, when, and why
 ================
 
+    [1] TRUE
+
 Introduction
 ------------
 
@@ -22,7 +24,7 @@ We gathered all publicly available tweets from the 5 leaders of the main Spanish
 -   PSOE: Pedro Sánchez (@sanchezcastejon)
 -   Podemos: Pablo Iglesias (@pablo\_iglesias\_)
 
-This was a total of 79112 tweets. We then searched for the following four word-stems within all of these tweets:
+This was a total of 78778 tweets. We then searched for the following four word-stems within all of these tweets:
 
 1.  "separatis" (includes separatista, separatismo, etc.)
 2.  "independ" (includes independentismo, independencia, independentista, etc.)
