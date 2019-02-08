@@ -1,0 +1,243 @@
+---
+title: "Device used"
+output: github_document
+---
+
+### Trolls
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+
+# Define function for improving timeline
+improve_timeline <- function(tmls){
+  tmls$time_only <- sapply(strsplit(substr(tmls$created_at, 11,19), ":"),
+                           function(x){as.numeric(x) %*% c(3600, 60, 1)})
+  tmls$time_only <- tmls$time_only / 3600
+  tmls$date <- as.Date(cut(tmls$created_at, 'day'))
+  tmls$hour <- as.POSIXct(cut(tmls$created_at, 'hour'))
+  return(tmls)
+}
+# Get most recent tweets from rivera
+if('albert_rivera.RData' %in% dir()){
+  load('albert_rivera.RData')
+} else {
+  tmls <- get_timelines(c('albert_rivera'), n = 3200)
+  save(tmls, file = 'albert_rivera.RData')
+}
+if('ines_arrimadas.RData' %in% dir()){
+  load('ines_arrimadas.RData')
+} else {
+  tmls <- get_timelines(c('inesarrimadas'), n = 3200)
+  save(tmls, file = 'ines_arrimadas.RData')
+}
+if('sanchezcastejon.RData' %in% dir()){
+  load('sanchezcastejon.RData')
+} else {
+  tmls <- get_timelines(c('sanchezcastejon'), n = 3200)
+  save(tmls, file = 'sanchezcastejon.RData')
+}
+if('josepborrell.RData' %in% dir()){
+  load('josepborrell.RData')
+} else {
+  tmls <- get_timelines(c('JosepBorrellF'), n = 3200)
+  save(tmls, file = 'josepborrell.RData')
+}
+if('irenelozano.RData' %in% dir()){
+  load('irenelozano.RData')
+} else {
+  tmls <- get_timelines(c('lozanoirene'), n = 3200)
+  save(tmls, file = 'irenelozano.RData')
+}
+if('pablocasado.RData' %in% dir()){
+  load('pablocasado.RData')
+} else {
+  tmls <- get_timelines(c('pablocasado_'), n = 3200)
+  save(tmls, file = 'pablocasado.RData')
+}
+if('jose_zaragoza.RData' %in% dir()){
+  load('jose_zaragoza.RData')
+} else {
+  tmls <- get_timelines(c('J_Zaragoza_'), n = 3200)
+  save(tmls, file = 'jose_zaragoza.RData ')
+}
+if('miqueliceta.RData' %in% dir()){
+  load('miqueliceta.RData')
+} else {
+  tmls <- get_timelines(c('miqueliceta'), n = 3200)
+  save(tmls, file = 'miqueliceta.RData ')
+}
+
+x <- tmls %>%
+  mutate(date = as.Date(created_at)) %>%
+  mutate(month = as.Date(cut(date, 'month'))) %>%
+  group_by(month, source) %>%
+  tally %>%
+  ungroup %>%
+  group_by(month) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup
+
+ggplot(data = x,
+       aes(x = month,
+           y = p)) +
+  geom_bar(stat = 'identity', 
+           aes(fill = source)) +
+  scale_fill_manual(name = 'Device',
+                    values = databrew::make_colors(n = length(unique(x$source))))
+
+View(tmls %>% filter(source == 'Twitter for iPhone'))
+
+# guy <- lookup_users(users = tmls$user_id[1])
+# tmls <- improve_timeline(tmls)
+# pd <- tmls %>%
+#   mutate(hour = as.POSIXct(cut(created_at, 'hour'))) %>%
+#   group_by(hour) %>%
+#   tally
+# 
+# ggplot(data = pd,
+#        aes(x = hour,
+#            y = n)) +
+#   geom_bar(stat = 'identity') +
+#   theme(axis.text.x = element_text(angle = 90))
+# 
+# library(ggridges)
+# ggplot(data = tmls,
+#        aes(x = time_only,
+#            y = as.factor(date))) +
+#   geom_density_ridges() +
+#   theme_minimal() 
+```
+
+```{r}
+file_name <- 'no_hay_presos.RDatas.RData'
+if(!file_name %in% dir()){
+  rt <- search_tweets(
+    '"No hay presos políticos en España"', 
+    n = 1000000, 
+    include_rts = F, 
+    retryonratelimit = TRUE
+  )
+  save(rt, file = file_name)
+} else {
+  load(file_name)
+}
+
+file_name <- 'comandos.RData'
+if(!file_name %in% dir()){
+  cs <- search_tweets(
+    '"comandos separatistas"', 
+    n = 1000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE
+  )
+  save(cs, file = file_name)
+} else {
+  load(file_name)
+}
+
+file_name <- 'presos.RData'
+if(!file_name %in% dir()){
+  pp <- search_tweets(
+    '"presos polítics"', 
+    n = 1000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE
+  )
+  save(pp, file = file_name)
+} else {
+  load(file_name)
+}
+
+file_name <- 'vaga.RData'
+if(!file_name %in% dir()){
+  va <- search_tweets(
+    '"vaga de fam"', 
+    n = 1000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE
+  )
+  save(va, file = file_name)
+} else {
+  load(file_name)
+}
+
+if(!'data.RData' %in% dir()){
+  data <- list(va, cs,  rt)
+  data_names <- c('Vaga de fam', 'Comandos separatistas', 'No hay presos políticos en España')
+  out_list <- list()
+  guys_list <- list()
+  tl_list <- list()
+  for(i in 1:length(data)){
+    message(data_names[i])
+    the_data <- data[[i]]
+    out_list[[i]] <- the_data %>%
+      mutate(source = data_names[i])
+    message('---getting users')
+    bots <- lookup_users(users = unique(the_data$user_id)) %>%
+      mutate(source = data_names[i]) 
+    guys_list[[i]] <- bots
+    bots <- bots %>% filter(followers_count <= 10)
+    message('---getting tweets')
+    # i = 4 here:   
+    # save(bots, the_data, out_list, guys_list, tl_list, file = 'temp.RData')
+
+    tls <- get_timelines(bots$screen_name, n = 3200) %>%
+      mutate(source = data_names[i])
+    tl_list[[i]] <- tls
+  }
+  
+  tweets <- bind_rows(out_list)
+  people <- bind_rows(guys_list)
+  people_tls <- bind_rows(tl_list)
+  save(tweets,
+       people,
+       people_tls,
+       file = 'data.RData')
+} else {
+  load('data.RData')
+}
+
+
+out <- bind_rows()
+guys <- lookup_users(users = unique(cs$user_id))
+# Keep those with fewer than 10 followers
+bots <- guys %>% filter(followers_count < 10)
+# Get the timelines of the bots
+bot_tmls <- get_timelines(bots$screen_name, n = 3200)
+bot_tmls <- improve_timeline(bot_tmls)
+
+ggplot(data = bot_tmls %>%
+         filter(date >= '2017-01-01'),
+       aes(x = time_only,
+           # y = as.factor(date),
+           y = date)) +
+  geom_point(size = 0.2,
+             aes(color = screen_name)) +
+  # geom_density_ridges() +
+  theme_minimal() +
+  theme(legend.position = 'none')
+  # facet_wrap(~screen_name,
+             # scales = 'free')
+
+# Look at created_at, account_lang, 
+# profile_image_url: http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png
+```
