@@ -1,0 +1,177 @@
+---
+title: "Todo mi apoyo"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+library(ggrepel)
+require(DBI)
+library(ggtern)
+  
+```
+
+```{r, fig.height = 8}
+# # Get most recent tweets from our people of interest
+
+keep_names <- c('albert_rivera',
+                'albiol_xg',
+                'alejandro_tgn',
+                'alevysoler',
+                'carmencalvo_',
+                'carrizosacarlos',
+                'ciudadanoscs',
+                'ciutadanscs',
+                'eva_granados',
+                'inesarrimadas',
+                'j_zaragoza_',
+                'josepborrellf',
+                'marianorajoy',
+                'meritxell_batet',
+                'miqueliceta',
+                'pablocasado_',
+                'ppcatalunya',
+                'ppopular',
+                'psoe',
+                'sanchezcastejon',
+                'santi_abascal',
+                'vox_es')
+
+keep_names2 <- c('esquerra_erc',
+                 'pnique',
+                 'pdemocratacat',
+                 'krls',
+                 'adacolau',
+                 'albanodante76',
+                 'carlescampuzano',
+                 'catencomu_podem',
+                 'quimtorraipla',
+                 'cupnacional',
+                 'jaumeasens',
+                 'joantarda',
+                 'junqueras',
+                 'miriamnoguerasm',
+                 'pablo_iglesias_',
+                 'perearagones')
+people <- c(keep_names, keep_names2)
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    paste0("SELECT * FROM twitter")
+  )
+  save(tl, file = 'tl.RData')  
+  dbDisconnect(con)
+  }
+tl_original <- tl
+
+tl <- tl %>% filter(username %in% people)
+
+# Read in google sheet with keys
+library(gsheet)
+if(!'goog.RData' %in% dir()){
+  goog_people <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=1425313388')
+  save(goog_people,
+       file = 'goog.RData')
+} else {
+  load('goog.RData')
+}
+
+tl <- tl %>% filter(username %in% goog_people$username)
+
+# Join the google data
+tl <- tl %>%
+  left_join(goog_people)
+```
+
+```{r}
+# Search for phrase
+tl <- tl %>%
+  mutate(flag = grepl('todo mi apoyo|tot el meu support', tolower(tweet)))
+
+x <- tl %>%
+  filter(date >= '2017-08-01') %>%
+  group_by(username, flag) %>%
+  summarise(n = n()) %>%
+  ungroup %>%
+  group_by(username) %>%
+  summarise(flag = sum(n[flag]),
+         n = sum(n)) %>%
+  ungroup %>%
+  mutate(p = flag / n * 100) %>%
+  arrange(desc(flag))
+
+ciutadans <-
+  tl %>% filter(flag) %>% filter(party %in% "Cs", date >= '2017-01-01', date <= '2018-12-31')
+
+# Loop through each of the tweets and capture a screenshot
+#' Prepend zero(s) to a number
+#' 
+#' Prepend one or more 0's to a number. Useful for alphabetizing facto levels named with numbers.
+add_zero <- function(x, n){
+  x <- as.character(x)
+  adders <- n - nchar(x)
+  adders <- ifelse(adders < 0, 0, adders)
+  for (i in 1:length(x)){
+    if(!is.na(x[i])){
+      x[i] <- paste0(
+        paste0(rep('0', adders[i]), collapse = ''),
+        x[i],
+        collapse = '')  
+    } 
+  }
+  return(x)
+}
+if(!dir.exists('screenshots')){
+  dir.create('sceenshots')
+}
+setwd('screenshots')
+counter <- 0
+for(i in 1:nrow(ciutadans)){
+  counter <- counter + 1
+  this_url <- ciutadans$link[i]
+  file_name <- add_zero(counter, 5)
+  file_name <- paste0(file_name, '.png')
+  ciutadans$file_name <- file_name
+  
+  system(paste0(
+      "screenshot-tweet ",
+      this_url,
+      " ",
+      file_name
+    ))
+}
+setwd('..')
+```
+
+```{r}
+# Make images smaller: mogrify -resize 30x30% *.png
+# Make collage : montage *.png -tile 5x -mode Concatenate out.jpg
+```
