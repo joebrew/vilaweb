@@ -51,8 +51,6 @@ update_database <- function(people = NULL,
     stop('No new people. Consider turning off only_new_people')
   }
   
-
-  
   # Loop through each person and get an update
   for(p in 1:length(people)){
     this_person <- people[p]
@@ -116,9 +114,15 @@ update_database <- function(people = NULL,
       
       tl <- tl %>% filter(!id %in% already_in)
       
-      # Add rows to the database
-      message('Adding new rows to the database for ', this_person)
-      dbWriteTable(con, "twitter", tl, append = TRUE, row.names = FALSE)
+    # Ensure the person is there
+      if(length(unique(tl$username)) == 1 &
+         tl$username[1] %in% people){
+        # Add rows to the database
+        message('Adding new rows to the database for ', this_person)
+        dbWriteTable(con, "twitter", tl, append = TRUE, row.names = FALSE)
+      } else {
+        message('Either too many people in tl, or the person was accidentally gathered.')
+      }
     }
     
     # Rm the temp_tweets file
@@ -138,7 +142,7 @@ update_database <- function(people = NULL,
     #                        FROM   twitter
     #                        GROUP  BY id);')
     tl <- dbReadTable(con, 'twitter')
-    # Flag the duplicates
+      # Flag the duplicates
     flag <- duplicated(tl$id)
     tl <- tl[!flag,]
     message('Overwriting old table')
