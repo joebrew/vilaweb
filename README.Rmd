@@ -14,7 +14,11 @@ knitr::opts_chunk$set(
 
 # vilaweb: The R package of Joe Brew's VilaWeb data analysis
 
+This package contains all the code and data used for reproducing the analyses underlying the articles published in VilaWeb's "La dada d'en Joe Brew" column. It is publicly available for the purposes of reproducibility and transparency.
+
 ## Installation
+
+To install this package, run the below from within the R console.
 
 
 ```r
@@ -51,14 +55,11 @@ library(cism)
 # )
 ```
 
-## About
-
-`vilaweb` is...
 
 
 ## Developer details
 
-In order to reproduce the entire package, raw data will need to be downloaded from various sources
+In order to reproduce the entire package, raw data will need to be downloaded from various sources.  
 
 ### Downloading raw data
 
@@ -79,3 +80,24 @@ Download into `data-raw/icps` the "Sondeig d'opinió Catalunya 2018" data from h
 #### 4. Download sentiment data
 
 Download the following into `data-raw/sentiment`: http://www.saifmohammad.com/WebDocs/NRC-Emotion-Lexicon-v0.92-InManyLanguages-web.xlsx
+
+### Generating R data objects
+
+After downloading the above data, go into the `data-raw` directory and run from the linux command line: `Rscript create_data_files.R`.
+
+### Twitter data
+
+Many of the analyses in this package are based on data from twitter. Data are retrieved from twitter using the python `twint` package. Data are stored locally in a Posgresql database. What follows are instructions for building the database so as to reproduce analyses with twitter data.
+
+1. Create a psql database named `twitter`.  
+2. Within twitter, create a table called `twitter`.
+3. Go through the code in `analyses/set_up_database/set_up_database.R` to get the database set up. 
+4. Within R, run the `update_database()` function specifying the accounts via the `people` argument.
+5. To keep the database updated, run the `update_database()` function.
+6. Generate periodic data dumps for back-up purposes: `pg_dump twitter > backup.sql`
+
+### Building the package
+
+Having done the above, run `Rscript build_package.R` from within the main directory to compile the package.
+
+
