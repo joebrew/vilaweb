@@ -6,3 +6,4 @@ data/cis*
 tweets.csv
 *.sql
 *.html
+analyses/device/*.RData
