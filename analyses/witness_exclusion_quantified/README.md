@@ -96,13 +96,13 @@ The only police officer requested by any of the lawyers who the court did not ac
 The King's absence
 ------------------
 
-The testimony of King Felipe VI was requested by the defense team of Jordi Sànchez, since Felipe de Borbón's words and acts appear in the court documents prepared by Judge Llarena. The court justified not calling him to testify by citing Article 411 of the Criminal Code. The Judiciary also published a [press note](http://www.poderjudicial.es/cgpj/es/Poder-Judicial/Noticias-Judiciales/La-Sala-del-TS-que-enjuiciara-el-caso-del--Proces--notifica-el-auto-de-admision-de-prueba-y-fija-para-el-12-de-febrero-el-inicio-de-la-vista) stating that the King's testimony is "explicitly prohibited" by Article 411.
+The testimony of Felipe de Borbón was requested by the defense team of Jordi Sànchez, since de Borbón's words and acts appear in the court documents prepared by Judge Llarena. The court justified not calling him to testify by citing Article 411 of the Criminal Code. The Judiciary also published a [press note](http://www.poderjudicial.es/cgpj/es/Poder-Judicial/Noticias-Judiciales/La-Sala-del-TS-que-enjuiciara-el-caso-del--Proces--notifica-el-auto-de-admision-de-prueba-y-fija-para-el-12-de-febrero-el-inicio-de-la-vista) stating that since de Borbón is the King his testimony is "explicitly prohibited" by Article 411.
 
-However, Article 411 simply says that the King is exempt from the obligation to testify. It does not "prohibit" the King's testimony.
+However, Article 411 simply says that the King is exempt from the *obligation* to testify. It does not "prohibit" the King's testimony.
 
 ![](king.jpeg)
 
-In other words, it would have been legal to call Felipe de Borbón as a witness, as per the request of the defense team. Borbón could have simply chosen not to come. Whether the court's confusion between "exempt" and "prohibited" is accidental or an intentional attempt to avoid a witness considered important to the defense is unknown.
+In other words, it would have been legal to call Felipe de Borbón as a witness, as per the request of the defense team. Borbón could have simply chosen not to testify, just as a defendant can choose to remain silent. As monarch, he has this privilege, unavailable to the rest of Spaniards. Whether the court's confusion between "exempt" and "prohibited" is accidental or an intentional attempt to avoid a witness considered important to the defense is unknown.
 
 Other notable rejections
 ------------------------
@@ -129,7 +129,7 @@ Personal reflection
 
 The [court's justification](http://datacat.cc/admisiondepruebas.pdf) for which witnesses were accepted and rejected is long (145 pages) and detailed. It provides reasons for the rejection of each of the defense's 39 disqualified witnesses. But the reasons are at times contradictory (as in the case of disqualifying Puigdemont and Rovira, but accepting Trapero), arbitrary (the disqualification of Cosidó) and false (the supposed "prohibition" of Mr. de Borbón's testimony).
 
-The result of these questionable exclusions is a witness pool of `length(unique(df$id[df$accepted]))` accepted witnesses of whom 47% are police officers. Of the 42 rejected witnesses, 93% were proposed by the defense. 13.5% of the defense's proposed witnesses were rejected, including individuals (such as Borbón and Cosidó) who played an important enough role in the events in question to be mentioned in prosecutorial documents.
+The result of these questionable exclusions is a witness pool of 518 accepted witnesses of whom 47% are police officers. Of the 42 rejected witnesses, 93% were proposed by the defense. 13.5% of the defense's proposed witnesses were rejected, including individuals (such as Borbón and Cosidó) who played an important enough role in the events in question to be mentioned in prosecutorial documents.
 
 The European Convention on Human Rights' Article 6 makes clear "that a fair balance be struck between the parties" in terms of the witnesses accepted to give testimony. Given the disproportionate rejection rates of the defense's proposed witnesses, the inconsistent rationale for rejections, and the abnormally high percentage of witnesses who are police officers, it would be hard to argue that the final witness list constitutes "a fair balance".
 
