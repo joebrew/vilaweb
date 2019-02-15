@@ -114,12 +114,12 @@ overall_plot <- function(language = 'ca',
     x <- 'Testimonis'
     title <- 'Acceptació/Rebuig de testimonis'
     subtitle <- 'Acusació vs. Defensa | Judici del procés'
-    caption <- 'Joe Brew | @joethebrew | www.vilaweb.cat'
+    caption <- 'Àlex Solano (@Solanoyan) i Joe Brew (@joethebrew) | www.vilaweb.cat'
   } else {
     x <- 'Witnesses'
     title <- 'Witness acceptance and rejection'
     subtitle <- 'Prosecution vs. Defense | Trial of Catalan independence leaders'
-    caption <- 'Joe Brew | @joethebrew | www.vilaweb.cat'
+    caption <- 'Àlex Solano (@Solanoyan) and Joe Brew (@joethebrew) | www.vilaweb.cat'
   }
   percentages <- percentages %>%
     group_by(defense) %>%
@@ -188,14 +188,14 @@ break_plot <- function(language = 'ca',
     x <- '% de testimonis rebutjats'
     title <- 'Rebuig de testimonis'
     subtitle <- 'Judici del procés'
-    caption <- 'Joe Brew | @joethebrew | www.vilaweb.cat'
+    caption <- 'Àlex Solano (@Solanoyan) i Joe Brew (@joethebrew) | www.vilaweb.cat'
   } else {
     plot_data$defense <-
       translate(plot_data$defense,to_ca = FALSE)
     x <- '% of witnesses rejected by the court'
     title <- 'Witness rejection'
     subtitle <- 'Trial of Catalan independence leaders'
-    caption <- 'Joe Brew | @joethebrew | www.vilaweb.cat'
+    caption <- 'Àlex Solano (@Solanoyan) and Joe Brew (@joethebrew) | www.vilaweb.cat'
   }
   percentages <- percentages %>%
     dplyr::filter(word %in% c('rejected', 'rebutjat')) %>%
@@ -277,12 +277,12 @@ police_plot <- function(language = 'ca',
     x <- 'Testimonis'
     title <- 'Acceptació/Rebuig de testimonis agents de policia'
     subtitle <- 'Acusació vs. Defensa | Judici del procés'
-    caption <- 'Joe Brew | @joethebrew | www.vilaweb.cat'
+    caption <- 'Àlex Solano (@Solanoyan) i Joe Brew (@joethebrew) | www.vilaweb.cat'
   } else {
     x <- 'Witnesses'
     title <- 'Acceptance and rejection of police witnesses'
     subtitle <- 'Prosecution vs. Defense | Trial of Catalan independence leaders'
-    caption <- 'Joe Brew | @joethebrew | www.vilaweb.cat'
+    caption <- 'Àlex Solano (@Solanoyan) and Joe Brew (@joethebrew) | www.vilaweb.cat'
   }
   percentages <- percentages %>%
     group_by(defense) %>%
