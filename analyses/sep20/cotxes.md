@@ -30,4 +30,7 @@ Same as above but including all interactions (tweet + number of retweets + numbe
 Technical details
 =================
 
--   Data scraped from twtiter on February 21, 2019.
+-   Data scraped from twtiter on February 21, 2019 using the python twint library.
+-   Data processed, aggregated, and visualized using R.
+-   The number of retweets and likes are as of date of data retrieval
+-   All code for this analysis at <https://github.com/joebrew/vilaweb/tree/master/analyses/sep20/cotxes.Rmd>
