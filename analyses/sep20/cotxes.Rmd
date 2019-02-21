@@ -1,0 +1,219 @@
+---
+title: "Cotxes"
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.height = 8,
+               fig.path = 'cotxes_figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+library(webshot)
+```
+
+```{r}
+# #Coches dañados
+# system("python3 ../../foreign/twint/Twint.py -s 'coches dañados' --since 2017-09-15 --until 2017-09-25 -o cotxes/coches_danados.csv --csv")
+# # Cotxes danyats
+# system("python3 ../../foreign/twint/Twint.py -s 'cotxes danyats' --since 2017-09-15 --until 2017-09-25 -o cotxes/cotxes_danyats.csv --csv")
+# #Coches destruidos
+# system("python3 ../../foreign/twint/Twint.py -s 'coches destruidos' --since 2017-09-15 --until 2017-09-25 -o cotxes/coches_destruidos.csv --csv")
+# # Cotxes destruits
+# system("python3 ../../foreign/twint/Twint.py -s 'cotxes destruïts' --since 2017-09-15 --until 2017-09-25 -o cotxes/cotxes_destruits.csv --csv")
+# # Vehículos dañados
+# system("python3 ../../foreign/twint/Twint.py -s 'vehículos dañados' --since 2017-09-15 --until 2017-09-25 -o cotxes/vehiculos_danados.csv --csv")
+# # vehicles danyats
+# system("python3 ../../foreign/twint/Twint.py -s 'vehicles danyats' --since 2017-09-15 --until 2017-09-25 -o cotxes/vehicles_danyats.csv --csv")
+# # destrozar coches
+# system("python3 ../../foreign/twint/Twint.py -s 'destrozar coches' --since 2017-09-15 --until 2017-09-25 -o cotxes/destrozar_coches.csv --csv")
+# # destrossar cotxes
+# system("python3 ../../foreign/twint/Twint.py -s 'destrossar cotxes' --since 2017-09-15 --until 2017-09-25 -o cotxes/destrossar_cotxes --csv")
+# 
+# system("python3 ../../foreign/twint/Twint.py -s '\"coches\" AND \"guardia civil\"' --since 2017-09-15 --until 2017-09-25 -o cotxes/x.csv --csv")
+
+# system("python3 ../../foreign/twint/Twint.py -s '(\"coches\" OR \"cotxes\") AND (\"guardia civil\" OR \"dañados\" OR \"danyats\" OR \"destruidos\" OR \"destruïts\" OR \"dañar\" OR \"danyar\" OR \"destrossar\" OR \"destrozar\")' --since 2017-09-15 --until 2017-09-30 -o cotxes/final.csv --csv")
+
+
+cotxes_dir <- dir('cotxes', recursive = TRUE)
+out_list <- list()
+for(i in which(cotxes_dir == 'final/tweets.csv')){
+# for(i in 1:length(cotxes_dir)){
+  file_path <- paste0('cotxes/', cotxes_dir[i])
+  search_string <- unlist(strsplit(file_path, '/'))[1]
+  data <- read_csv(file_path) %>%
+    mutate(search_string = search_string)
+  out_list[[i]] <- data
+}
+
+
+df <- bind_rows(out_list)
+df <- df %>% filter(!duplicated(id))
+
+# Adjust for time zone
+library(lubridate)
+df$date_time <- as.POSIXct(paste0(df$date, ' ', df$time, ' ', '+0', df$timezone))
+Sys.setenv(TZ='CET')
+
+
+# df$date_time <- with_tz(df$date_time, 'CET')
+
+
+agg <- df %>%
+  mutate(hour = as.POSIXct(cut(date_time, 'hour'))) %>%
+  group_by(hour) %>% 
+  summarise(n = n(),
+            retweets = sum(retweets_count, na.rm = TRUE) + 1,
+            likes = sum(likes_count))
+left <- data.frame(hour  = seq(min(agg$hour),
+                               max(agg$hour),
+                               by = 'hour'))
+agg <- left_join(left, agg)
+agg$n[is.na(agg$n)] <- 0
+agg$retweets[is.na(agg$retweets)] <- 0
+agg$likes[is.na(agg$likes)] <- 0
+agg$interactions <- agg$n + agg$retweets + agg$likes
+
+agg <- agg %>%
+  filter(hour >= '2017-09-19',
+         hour <= '2017-09-24')
+
+date_breaks <- data.frame(date_time = sort(unique(agg$hour)))
+date_breaks$date <- as.Date(date_breaks$date_time)
+date_breaks$hour <- as.numeric(substr(date_breaks$date_time, 12, 13))
+keep_breaks <- date_breaks %>%
+  filter(hour %in% seq(0, 24, 4)) %>%
+  dplyr::select(date_time) %>%
+  .$date_time
+```
+
+# Unique tweets
+
+```{r}
+ggplot(data = agg,
+       aes(x = hour,
+           y = n)) +
+  # geom_point() +
+  geom_line() +
+  theme_databrew() +
+  scale_x_datetime(breaks = keep_breaks) +
+  # scale_x_datetime(breaks = sort(unique(agg$hour))) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   size = 10,
+                                   vjust = 0.5),
+        plot.title = element_text(size = 30),
+        plot.subtitle = element_text(size = 25)) +
+  labs(title = 'Hourly tweets',
+       x = 'Hour', y = 'Tweets',
+       subtitle = 'Unique tweets only',
+       caption = paste0('Search string:\n', 
+                        "(\"coches\" OR \"cotxes\") AND (\"guardia civil\" OR \"dañados\" OR \"danyats\" OR \"destruidos\" OR\n\"destruïts\" OR \"dañar\" OR \"danyar\" OR \"destrossar\" OR \"destrozar\")"))
+
+```
+
+# Zoom-in of the above
+
+```{r}
+ggplot(data = agg %>%
+         filter(hour >= '2017-09-20',
+                hour <= '2017-09-22'),
+       aes(x = hour,
+           y = n)) +
+  geom_point() +
+  geom_line() +
+  theme_databrew() +
+  scale_x_datetime(breaks = keep_breaks) +
+  # scale_x_datetime(breaks = sort(unique(agg$hour))) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   size = 15,
+                                   vjust = 0.5),
+        plot.title = element_text(size = 30),
+        plot.subtitle = element_text(size = 25)) +
+  labs(title = 'Hourly tweets',
+       x = 'Hour', y = 'Tweets',
+       subtitle = 'Unique tweets only',
+       caption = paste0('Search string:\n', 
+                        "(\"coches\" OR \"cotxes\") AND (\"guardia civil\" OR \"dañados\" OR \"danyats\" OR \"destruidos\" OR\n\"destruïts\" OR \"dañar\" OR \"danyar\" OR \"destrossar\" OR \"destrozar\")"))
+
+```
+
+
+# Same as above but including retweets
+
+```{r}
+ggplot(data = agg %>%
+         filter(hour >= '2017-09-20',
+                hour <= '2017-09-22'),
+       aes(x = hour,
+           y = retweets)) +
+  geom_point() +
+  geom_line() +
+  theme_databrew() +
+  scale_x_datetime(breaks = keep_breaks) +
+  # scale_x_datetime(breaks = sort(unique(agg$hour))) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   size = 15,
+                                   vjust = 0.5),
+        plot.title = element_text(size = 30),
+        plot.subtitle = element_text(size = 25)) +
+  labs(title = 'Hourly tweets',
+       x = 'Hour', y = 'Tweets',
+       subtitle = 'Including retweets',
+       caption = paste0('Search string:\n', 
+                        "(\"coches\" OR \"cotxes\") AND (\"guardia civil\" OR \"dañados\" OR \"danyats\" OR \"destruidos\" OR\n\"destruïts\" OR \"dañar\" OR \"danyar\" OR \"destrossar\" OR \"destrozar\")"))
+
+```
+
+
+# Same as above but including all interactions (tweet + number of retweets + number of likes)
+
+```{r}
+ggplot(data = agg %>%
+         filter(hour >= '2017-09-20',
+                hour <= '2017-09-22'),
+       aes(x = hour,
+           y = interactions)) +
+  geom_point() +
+  geom_line() +
+  theme_databrew() +
+  scale_x_datetime(breaks = keep_breaks) +
+  # scale_x_datetime(breaks = sort(unique(agg$hour))) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   size = 15,
+                                   vjust = 0.5),
+        plot.title = element_text(size = 30),
+        plot.subtitle = element_text(size = 25)) +
+  labs(title = 'Hourly tweets',
+       x = 'Hour', y = 'Tweets',
+       subtitle = 'All interactions',
+       caption = paste0('Search string:\n', 
+                        "(\"coches\" OR \"cotxes\") AND (\"guardia civil\" OR \"dañados\" OR \"danyats\" OR \"destruidos\" OR\n\"destruïts\" OR \"dañar\" OR \"danyar\" OR \"destrossar\" OR \"destrozar\")"))
+
+```
+
+# Technical details
+
+- Data scraped from twtiter on February 21, 2019. 
