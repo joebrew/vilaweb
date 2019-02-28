@@ -1,0 +1,367 @@
+---
+title: "El Sincomplejómetro"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+
+  
+```
+
+```{r, fig.height = 8}
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    paste0("SELECT * FROM twitter")
+  )
+  save(tl, file = 'tl.RData')  
+  dbDisconnect(con)
+  }
+
+
+# Read in google sheet with keys
+library(gsheet)
+if(!'goog.RData' %in% dir()){
+  goog_people <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=1425313388')
+  save(goog_people,
+       file = 'goog.RData')
+} else {
+  load('goog.RData')
+}
+
+tl <- tl %>%
+  filter(username %in% goog_people$username)
+
+# Exclude more
+exclude <- c('jeanmarcpujol', 'mespermallorca', 'mespermenorca',
+             'socialistesval', 'toninoguera', 'vicentsolerm',
+             'miriamnoguerasm', 'carmencalvo', 'f_armengol',
+             'ximopuig', 'meritxell_batet', 'isabelbonig',
+             'marianorajoy', 'alejandrotgn', 'alevysoler',
+             'alveysoler',
+             unique(goog_people$username[goog_people$party == 'Compromis']))
+tl <- tl %>%
+  filter(!username %in% exclude)
+
+# Search for the words wordiation
+find_word <- function(x){
+  grepl('sin complejos|sense complexos', tolower(x))
+}
+tl <- tl %>%
+  mutate(word = find_word(tweet))
+
+# find other words
+find_destroy <- function(x){
+  grepl('liquidar|destruir|romper|trencar', tolower(x))
+}
+
+find_shame <- function(x){
+  grepl('vergüenza|vergonya', tolower(x))
+}
+
+find_respect <- function(x){
+   grepl('respet|respect', tolower(x))
+}
+
+find_pride <- function(x){
+  grepl('orgull', tolower(x))
+}
+
+find_flag <- function(x){
+  grepl('bandera', tolower(x))
+}
+find_nacion <- function(x){
+  grepl('nación |nació ', tolower(x))
+}
+
+tl <- tl %>%
+  mutate(destroy = find_destroy(tweet),
+         shame = find_shame(tweet),
+         respect = find_respect(tweet),
+         pride = find_pride(tweet),
+         nacion = find_nacion(tweet),
+         flag = find_flag(tweet))
+
+```
+
+
+# Els índexs simples
+
+Des de 1986, el Economist publica el seu ["Big Mac Index"](https://en.wikipedia.org/wiki/Big_Mac_Index), una manera informal de mesurar la precisió de la valoració de diferentes monedes. És una mesura còmicament senzilla, gairebé absurda. Es pren la diferència en preu entre un hamburguesa en un pais i un altre, s'ajusta per el tipus de canvi de les monedes respectives segons el mercat, i la diferència que queda representa la infra o sobravaloració de la moneda en qüestió. Una cosa tan senzill per representar un concepte tan complicat.
+
+I si tinguessim un índex senzill pel posicionament ideològic?  En proposo un.
+
+# El SINCOMPLEJÓMETRO
+
+Les dretes polítiques en molts paisos demostren una obsessió curiosa amb "els complexos". Als Estats-Units, per exemple, el Donald Trump (i el partit Republicà en general) porten anys fent una guerra en contre de la "political correctness". 
+
+<table style="width:100%">
+  <tr>
+    <td><img src="img/trump.png" /></td>
+    <td><img src="img/trump2.png" /></td>
+  </tr>
+</table>
+
+A França, la Marine Le Pen [critica als dirigents](https://twitter.com/MLP_officiel/status/671419369021431809) polítics per "tenir vergonya" de la bandera francesa, i diu als seus seguidors que "ja no cal tenir complexos".
+
+<table style="width:100%">
+  <tr>
+    <td><img src="img/marinelepen.png" /></td>
+    <td><img src="img/marinelepen2.png" /></td>
+  </tr>
+</table>
+
+A Catalunya, Inés Arrimadas té un missatge similar sobre el fet de treure la bandera "amb orgull". I el líder del seu partit (Ciudadanos), Albert Rivera, també comparteix el desig d'expresar l'orgull nacional "sense complexos". 
+
+<table style="width:100%">
+  <tr>
+    <td><img src="img/arrimadas.png" /></td>
+    <td><img src="img/rivera.png" /></td>
+  </tr>
+</table>
+
+Aquesta última frase - "sense complexos" - em va fer pensar. Els polítics d'esquerres també parlen dels "complexos"? O és exclusivament proprietat oratoria de la dreta? Que hi ha darrere la obsessió amb els "complexos" i l'orgull de no tenir-ne? Qui fa servir aquesta frase? I so només és la dreta, pot hi haver una relació qüantitativa - o sigui, quan "menys" complexos, més a la dreta?
+
+Vaig començar a buscar dades al Twitter. Vaig examinar tots els tweets (`r nrow(tl)`) dels `r length(unique(tl$username))` persones i grups polítics que considero més rellevants a la política catalana actual. Vaig buscar la frase "sin complejos/sense complexos". I vaig trobar que, en efecte, la quantitat de tuits amb la frase és una mesura bastant bona del posicionament a l'aix polític esquerra-dreta. Senzill, però bastant precís.
+
+
+```{r}
+pd <- tl %>%
+  # filter(
+  # 
+  #        date >= '2017-01-01',
+  #        date <= '2018-12-31') %>%
+  group_by(username) %>%
+  summarise(tuits = length(which(word)),
+            denominator = n()) %>%
+  ungroup %>%
+  mutate(p = tuits / denominator * 100) %>%
+  arrange(desc(p))
+pd$username <- factor(pd$username, levels = pd$username)
+
+ggplot(data = pd,
+       aes(x = username,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           alpha = 0.7,
+           fill = 'darkblue') +
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 10)) +
+  geom_text(aes(label = round(p, digits = 2)),
+                alpha = 0.7,
+                nudge_y = 0.05,
+            size = 2) +
+  labs(x = '',
+       y = 'Piulets',
+       title = '% de piulets amb la frase "sense complexos"*',
+       caption = 'Inclou la versió en castellà també: "sin complejos".\nJoe Brew (@joethebrew). VilaWeb (www.vilaweb.cat).')
+```
+
+La majoria dels polítics i partits no fan servir la frase gaire. Però, ells que la fan servir, la fan servir molt. Aqui el mateix grafic qu'abans, però en piulets (en lloc de %).
+
+```{r}
+pd <- tl %>%
+  # filter(
+  # 
+  #        date >= '2017-01-01',
+  #        date <= '2018-12-31') %>%
+  group_by(username) %>%
+  summarise(tuits = length(which(word)),
+            denominator = n()) %>%
+  ungroup %>%
+  mutate(p = tuits / denominator * 100) %>%
+  arrange(desc(tuits))
+pd$username <- factor(pd$username, levels = pd$username)
+
+ggplot(data = pd,
+       aes(x = username,
+           y = tuits)) +
+  geom_bar(stat = 'identity',
+           alpha = 0.7,
+           fill = 'darkblue') +
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 10)) +
+  geom_text(aes(label = round(tuits, digits = 2)),
+                alpha = 0.7,
+                nudge_y = 4,
+            size = 2) +
+  labs(x = '',
+       y = 'Piulets',
+       title = 'Piulets amb la frase "sense complexos"*',
+       subtitle = 'Ordenat per % de tots els piulets',
+       caption = 'Inclou la versió en castellà també: "sin complejos".\nJoe Brew (@joethebrew). VilaWeb (www.vilaweb.cat).')
+```
+
+111 "sin complejos" de Ciudadanos! 38 de VOX! 30 de Pablo Casado! Mitja dotzena dels del PSOE, 1 o 2 dels de Convergència, i cap de la CUP. 
+
+Em sembla que el sincomplejómetro funciona.
+
+# Mes exploració
+
+Examinem, al llarg del temps, els polítics més "desacomplejados": els del PP, VOX i Ciudadanos. Si el sincomplejómetro funciona bé, hauriem de poder detectar moviments ideologics.
+
+```{r}
+pdx <- tl %>%
+  left_join(goog_people) %>%
+  filter(party %in% c('Cs', 'PP', 'Vox'),
+         username != 'societatcc',
+         username != 'espciudadana',
+         username != 'ppcatalunya',
+         username != 'albiol_xg',
+         username != 'carrizosacarlos',
+         username != 'ciutadanscs',
+         username != 'santi_abascal')
+
+pd <- pdx %>%
+  # filter(username %in% goog_people$username) %>%
+  group_by(username, date = as.Date(cut(date, 'year'))) %>%
+  summarise(tuits = length(which(word)),
+            denominator = n()) %>%
+  ungroup %>%
+  mutate(p = tuits / denominator * 100) %>%
+  filter(date >= '2011-01-01')
+
+ggplot(data = pd,
+       aes(x = date,
+           y = p)) +
+  facet_wrap(~username, scales = 'free_x') +
+  geom_bar(stat = 'identity',
+           alpha = 0.7,
+           fill = 'darkorange') +
+  theme_vilaweb() +
+  labs(x = '',
+       y = 'Piulets',
+       title = '% de piulets amb la frase "sense complexos"*',
+       caption = 'Inclou la versió en castellà també: "sin complejos".\nJoe Brew (@joethebrew). VilaWeb (www.vilaweb.cat).') +
+  scale_y_continuous(breaks = c(0,1)) +
+  geom_text(aes(label = round(p, digits = 2)),
+            alpha = 0.6,
+            size = 2.5,
+            nudge_y = 0.1)
+```
+
+¡Eureka! Habemus índex. El sincomplejómetro reflecteix (a) la deriva a la dreta de Ciudadanos i els seus líders Albert Rivera i Inés Arrimadas, (b) que Vox és on sempre ha sigut - a la extrema dreta, i (c) com el PP competeix amb els altres dos partits mencionats per mantenir la seva predominancia a l'esfera de la dreta.
+
+Aquest índex serveix per alguna cosa? Potser si. A vegades les eines més senzilles són les més útils. De la mateixa manera que una afirmació racista sol començar amb la frase "no soc racista però...", un polític de dretes sol dir no tenir "complexos". I quan un partit o una persona es reposiciona més a la dreta (com ha sigut el cas del PP i de Ciutadans davant el "reto secesionista"), aquest resposicionament s'acompanya una pujada en la freqüencia de la insistència de no tenir complexos. 
+
+Pel que sembla, tenir "complexos" és d'esquerres. 
+
+
+### Postdata: Complexos i... destrucció?
+
+Els polítics que no tenen "complexos" comparteixen també una fascinació amb les paraules relacionades amb la destrucció: "destruir", "liquidar", "trencar", etc. En el gràfic següent, en el qual cada punt és un polític, es demostra la correlació entre el percentage de piulets amb la frase "sense complexos" i el percentage de piulets cque conté una d'aquestes 3 paraules _destructives_. 
+
+La relació és clara: els que més diuen "sense complexos" (més a la dreta en el gràfic) són els mateixos que més parlen de la destrucció.
+
+```{r}
+pd <- tl %>%
+  left_join(goog_people) %>%
+  # filter(
+  # 
+  #        date >= '2017-01-01',
+  #        date <= '2018-12-31') %>%
+  group_by(username, party) %>%
+  summarise(tuits = length(which(word)),
+            denominator = n(),
+            tuits_destroy = length(which(destroy))) %>%
+  ungroup %>%
+  mutate(p = tuits / denominator * 100,
+         p_destroy = tuits_destroy / denominator * 100) %>%
+  arrange(desc(p))
+pd$username <- factor(pd$username, levels = pd$username)
+
+ggplot(data = pd,
+       aes(x = p,
+           y = p_destroy,
+           # size = denominator,
+           color = party)) +
+  geom_point(
+       size = 7,
+       alpha = 0.8) +
+  theme_vilaweb() +
+  scale_color_manual(name = 'Partit',
+                    values = databrew::make_colors(n = length(unique(pd$party)))) +
+    labs(x = '% de piulets dient "sense complexos"',
+       y = '% de piulets amb la paraula\n"destruir", "liquidar", o "romper"**',
+       title = 'Correlació entre frase "sense complexos"*\n i paraules relacionades amb la destrucció',
+       caption = 'Inclou la versió en castellà també: "sin complejos".\nInclou la versió en català també: "trencar".\nJoe Brew (@joethebrew). VilaWeb (www.vilaweb.cat).') +
+  scale_x_sqrt() +
+  scale_y_sqrt()
+```
+
+
+Si desagreguem les 3 paraules destructives, es pot observar unes diferències interessants entre els polítics: (i) que els polítics sobiranistes fan servir la paraula "destruir" a una freqüencia molt més baixa que els polítics unionistes i (ii) que la paraula "liquidar" és molt més freqüent entre els polítics de Ciudadanos que altres partits.
+
+```{r}
+pd <- tl %>%
+  group_by(username) %>%
+  summarise(denominator = n(),
+            tuits_sin_complejos = length(which(word)),
+            tuits_destruir = length(which(grepl('destruir', tolower(tweet)))),
+            tuits_liquidar = length(which(grepl('liquidar', tolower(tweet)))),
+            tuits_romper = length(which(grepl('destruir|trencar', tolower(tweet))))) %>%
+  mutate(p_destruir = tuits_destruir / denominator * 100,
+         p_sin_complejos = tuits_sin_complejos / denominator * 100,
+         p_liquidar = tuits_liquidar / denominator * 100,
+         p_romper = tuits_romper / denominator * 100)
+
+pdx <- pd %>%
+  gather(key, value, p_destruir:p_romper)
+
+keep <- c('albert_rivera', 'ciudadanoscs', 'inesarrimadas',
+          'pablocasado_', 'ppopular', 'vox_es',
+          'krls', 'miqueliceta', 'quimtorraipla',
+          'junqueras', 'rogertorrent', 'perearagones')
+
+ggplot(data = pdx %>% filter(username %in% keep) %>%
+         mutate(key = gsub('p_', '', key)) %>%
+         mutate(key = gsub('_', '\n', key)) %>%
+       mutate(key = Hmisc::capitalize(key)),
+       aes(x = key,
+           y = value,
+           fill = key)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~username) +
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 0.5),
+        strip.text = element_text(size = 12)) +
+  scale_y_continuous(breaks = seq(0, 1, 0.25)) +
+      labs(x = 'Frase',
+       y = '%',
+       title = 'Freqüencia de certes paraules en piulets',
+       subtitle ='"destruir", "liquidar", "trencar"*, i "sense complexos"**',
+       caption = '**Inclou la versió en castellà també: "sin complejos".\n*Inclou la versió en castellà també: "romper".\nJoe Brew (@joethebrew). VilaWeb (www.vilaweb.cat).') +
+  scale_fill_manual(name = '',
+                    values = RColorBrewer::brewer.pal(n = 8, 'Spectral')[5:8]) +
+  theme(legend.position = 'none')
+```
