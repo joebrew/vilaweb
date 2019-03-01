@@ -61,7 +61,7 @@ Examinem, al llarg del temps, els polítics més 'desacomplejados': els del PP, 
 
 ¡Eureka! Habemus índex. El sincomplejómetro reflecteix (a) la deriva a la dreta de Ciudadanos i els seus líders Albert Rivera i Inés Arrimadas, (b) que Vox és on sempre ha sigut - a la extrema dreta, i (c) com el PP competeix amb els altres dos partits mencionats per mantenir la seva predominancia a l'esfera de la dreta.
 
-Aquest índex serveix per alguna cosa? Potser si. A vegades les eines més senzilles són les més útils. De la mateixa manera que una afirmació racista sol començar amb la frase 'no soc racista però...', un polític de dretes sol dir no tenir 'complexos'. I quan un partit o una persona es reposiciona més a la dreta (com ha sigut el cas del PP i de Ciutadans davant el 'reto separatista'), aquest resposicionament s'acompanya una pujada en la freqüencia de la insistència de no tenir complexos.
+Aquest índex serveix per alguna cosa? Potser si. A vegades les eines més senzilles són les més útils. De la mateixa manera que una afirmació racista sol començar amb la frase 'no soc racista però...', un polític de dretes sol dir no tenir 'complexos'. I quan un partit o una persona es reposiciona més a la dreta (com ha sigut el cas del PP i de Ciutadans davant el 'reto separatista'), aquest resposicionament s'acompanya una pujada en la freqüència de la insistència de no tenir complexos.
 
 Pel que sembla, tenir 'complexos' és d'esquerres.
 
@@ -73,6 +73,6 @@ La relació és clara: els que més diuen 'sense complexos' (més a la dreta en 
 
 ![](figures/unnamed-chunk-6-1.png)
 
-Si desagreguem les 3 paraules destructives, es pot observar unes diferències interessants entre els polítics: (i) que els polítics sobiranistes fan servir la paraula 'destruir' a una freqüencia molt més baixa que els polítics unionistes i (ii) que la paraula 'liquidar' és molt més freqüent entre els polítics de Ciudadanos que altres partits.
+Si desagreguem les 3 paraules destructives, es pot observar unes diferències interessants entre els polítics: (i) que els polítics sobiranistes fan servir la paraula 'destruir' a una freqüència molt més baixa que els polítics unionistes i (ii) que la paraula 'liquidar' és molt més freqüent entre els polítics de Ciudadanos que altres partits.
 
 ![](figures/unnamed-chunk-7-1.png)
