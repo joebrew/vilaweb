@@ -1,0 +1,204 @@
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+library(ggrepel)
+require(DBI)
+library(ggtern)
+  
+```
+
+```{r, fig.height = 8}
+# Gets tweets from policia
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    paste0("SELECT * FROM twitter WHERE username = 'policia'")
+  )
+  tl2 <- RPostgreSQL::dbGetQuery(
+    con,
+    paste0("SELECT * FROM twitter WHERE username = 'guardiacivil'")
+  )
+  
+  save(tl, tl2, file = 'tl.RData')  
+  
+  dbDisconnect(con)
+  }
+```
+
+
+Las fechas/horas en los títulos son zona horaria española (las capturas están en otra zona horaria.).
+
+```{r}
+# Get screenshots for policia
+first_time <- FALSE
+if(first_time){
+add_zero <- function(x, n){
+  x <- as.character(x)
+  adders <- n - nchar(x)
+  adders <- ifelse(adders < 0, 0, adders)
+  for (i in 1:length(x)){
+    if(!is.na(x[i])){
+      x[i] <- paste0(
+        paste0(rep('0', adders[i]), collapse = ''),
+        x[i],
+        collapse = '')  
+    } 
+  }
+  return(x)
+}
+if(!dir.exists('screenshots')){
+  dir.create('screenshots')
+}
+setwd('screenshots')
+counter <- 0
+df <- tl %>% arrange(date, time) %>%
+  filter(date >= '2017-08-01',
+         date <= '2017-10-31')
+for(i in 1:nrow(df)){
+  message(i, ' of ', nrow(df))
+  counter <- counter + 1
+  this_url <- df$link[i]
+  file_name <- paste0(df$date[i], ' ',
+                      df$time[i], ' ',
+                      df$timezone[i])
+  # file_name <- add_zero(counter, 5)
+  file_name <- paste0(file_name, '.png')
+  file_name <- paste0("'", file_name, "'")
+  # df$file_name <- file_name
+  
+  system(paste0(
+      "screenshot-tweet ",
+      this_url,
+      " ",
+      file_name
+    ))
+}
+setwd('..')
+  
+}
+
+
+# Get screenshots for guardiacivil
+first_time <- FALSE
+if(first_time){
+if(!dir.exists('screenshots2')){
+  dir.create('screenshots2')
+}
+setwd('screenshots2')
+counter <- 0
+df <- tl2 %>% arrange(date, time) %>%
+  filter(date >= '2017-09-20',
+         date <= '2017-10-03')
+for(i in 1:nrow(df)){
+  message(i, ' of ', nrow(df))
+  counter <- counter + 1
+  this_url <- df$link[i]
+  file_name <- paste0(df$date[i], ' ',
+                      df$time[i], ' ',
+                      df$timezone[i])
+  # file_name <- add_zero(counter, 5)
+  file_name <- paste0(file_name, '.png')
+  file_name <- paste0("'", file_name, "'")
+  # df$file_name <- file_name
+  
+  system(paste0(
+      "screenshot-tweet ",
+      this_url,
+      " ",
+      file_name
+    ))
+}
+setwd('..')
+  
+}
+
+
+# Make montage
+# montage *.png -tile 17x -mode Concatenate out.jpg
+```
+
+
+# Screenshots: @poliica
+
+```{r, results = 'asis'}
+# Include screenshots
+
+screenshots <- dir('screenshots')
+for(i in 1:length(screenshots)){
+  
+  the_screenshot <- screenshots[i]
+  the_date <- substr(the_screenshot, 1, 10)
+  the_as_date <- as.Date(the_date)
+  the_time <- substr(the_screenshot, 12, 19)
+  
+  if(the_as_date >= '2017-09-20' &
+     the_as_date <= '2017-10-01'){
+    cat(paste0('\n\n### @policia: ',
+               the_date, ' ', the_time,
+               '\n\n![](',
+               'screenshots/',
+               the_screenshot,
+               ')\n\n'))
+     }
+  
+  
+  
+}
+
+```
+
+
+# Screenshots: @guardiacivil
+
+```{r, results = 'asis'}
+# Include screenshots
+
+screenshots <- dir('screenshots2')
+for(i in 1:length(screenshots2)){
+  
+  
+  the_screenshot <- screenshots[i]
+  the_date <- substr(the_screenshot, 1, 10)
+  the_as_date <- as.Date(the_date)
+  the_time <- substr(the_screenshot, 12, 19)
+  
+  if(the_as_date >= '2017-09-20' &
+     the_as_date <= '2017-10-01'){
+    cat(paste0('\n\n### @guardiacivil: ',
+               the_date, ' ', the_time,
+               '\n\n![](',
+               'screenshots2/',
+               the_screenshot,
+               ')\n\n'))
+     }
+}
+
+```
