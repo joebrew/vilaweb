@@ -80,7 +80,7 @@ add_zero <- function(x, n){
 }
 if(!dir.exists('screenshots')){
   dir.create('screenshots')
-}
+
 setwd('screenshots')
 counter <- 0
 df <- tl %>% arrange(date, time) %>%
@@ -106,7 +106,7 @@ for(i in 1:nrow(df)){
     ))
 }
 setwd('..')
-  
+}  
 }
 
 
@@ -150,7 +150,7 @@ setwd('..')
 ```
 
 
-# Screenshots: @poliica
+# Screenshots: @policia
 
 ```{r, results = 'asis'}
 # Include screenshots
@@ -186,7 +186,7 @@ for(i in 1:length(screenshots)){
 # Include screenshots
 
 screenshots <- dir('screenshots2')
-for(i in 1:length(screenshots2)){
+for(i in 1:length(screenshots)){
   
   
   the_screenshot <- screenshots[i]
