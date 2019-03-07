@@ -1,0 +1,886 @@
+---
+title: 'The Catalan independence movement and the left-right division'
+output: github_document
+---
+
+(Alternative title: "Is the Catalan independence movement right-wing?")
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(tidyverse)
+library(databrew)
+source('functions.R')
+```
+
+# Introduction
+
+"Their only support comes from far right nationalists" tweeted Inés Arrimadas (of the pro-Spain Ciudadanos party) about the Catalan independence movement ("Sus únicos apoyos son nacionalistas-extrema derecha"). "An ultranationalist, right-wing supremacist" is how socialist Eva Granados described pro-independence Catalan President Quim Torra ("un ultranacionalista supremacista de derechas"). "A servile right-winger" is how her socalist colleague, José Zaragoza, described Torra ("un derechista servil"). "PDCat is a right-wing party: neither social, nor progressive", wrote anti-independence Catalan jurist Argelia Queralt, in reference to one of the largest Catalan independence parties ("PDCat és un partit de dretes. Ni social, ni progre").
+
+
+<table style="width:100%">
+  <tr>
+    <td><img src="tweets/0.png" /></td>
+    <td><img src="tweets/4.png" /></td>
+  </tr>
+    <tr>
+    <td><img src="tweets/6.png" /></td>
+    <td><img src="tweets/8.png" /></td>
+  </tr>
+</table>
+
+If one read only the words of the opponents of Catalan independence, (s)he would reasonably conclude that the Catalan independence movement is a right-wing movement, like British nationalism in the form of Brexit, French nationalism in the form of Marine Le Pen's National Front, or the American nationalism embedded into Donald Trump's branch of the Republican party.
+
+But is it? Is the Catalan independence movement "right-wing"? Let's explore the data.
+
+
+## The question
+
+What is the relationship between the left-right ideological scale and positions on the independence of Catalonia?
+
+## The methods
+
+We'll examine survey data - both from Catalonia and Spain - to uncover the relationship between both the left-right poltical spectrum and favorability of the independenceof Catalonia. The terms "left" and "right" are notoriously slippery. For our purposes, we'll examine the following areas:
+
+- Left vs. right positioning on the self-assessed ideological scale  
+- Favorability towards social justice via wealth redistribution vs. favorability towards free markets  
+- Hositility towards immigration  
+- Attitudes regarding authoritarianism and freedom 
+- Opinions on homosexuality  
+- Secularism and religion    
+- Favorability towards democracy
+
+
+
+## The results
+
+### The left-right scale
+
+
+```{r}
+df <- vilaweb::ceo %>%
+  mutate(axis = P25,
+         indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+  group_by(axis, indy) %>%
+  tally %>%
+  ungroup %>%
+  group_by(axis) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  filter(!axis %in% c('No ho sap', 'No contesta')) %>%
+  filter(!is.na(indy)) %>%
+  mutate(`Muestra` = n)
+
+df$axis <- factor(df$axis,
+                  levels = levels(df$axis),
+                  labels = gsub(' ', '\n', levels(df$axis)))
+```
+
+The Baròmetre d'Opinió Política, carried out by the Centre d'Estudios d'Opinió, has surveyed Catalans on their views on independence and their left-right orientation regularly since 2015. Over the course of four years, `r sum(df$n)` representatively sampled Catalans have given responded to the questions on ideology and independence. 
+
+The below chart shows the aggregation of those `r sum(df$n)` responses. The x-axis shows self-positioning on the left-right scale, and the y-axis shows the percentage. 
+
+```{r, fig.height = 7}
+ggplot(data = df,
+       aes(x = axis,
+           y = p,
+           color = indy,
+           group = indy)) +
+  geom_line(alpha = 0.4) +
+  geom_point(aes(size = Muestra),
+             alpha = 0.6) +
+  geom_smooth(se = FALSE) +
+  theme_vilaweb() +
+  labs(x = 'Ideologia',
+       title = 'Independentisme i l\'escala esquerra-dreta',
+       y = 'Percentage',
+       caption = 'Mostra: 17.981 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2014-2018. Preguntes P25 i P31.\nJoe Brew | www.vilaweb.cat.') +
+  scale_color_manual(name = '¿A favor de la independència de Catalunya?',
+                     values = c('darkorange',
+                                'black',
+                                'darkblue')) +
+  theme(axis.text.x = element_text(size = 12),
+        plot.title = element_text(size = 21)) +
+  theme(legend.direction="vertical")
+```
+
+In the above chart, there is a clear association between left-leaning ideology and pro-independence attitudes.
+
+
+### Policies and independentism
+
+
+A common (and legitimate) critique of "self" positioning on a left-right scale is the fact that individuals might misclassify themselves. That is, perhaps pro-independence Catalans _think_ they are left-leaning, but actually support right-leaning policies. Could this be true? Let's look at how independentism correlates with specific policies for the answer.
+
+#### Economic growth and the environment
+
+A stereotypical difference between the left and right is the differential priorities between the environment and the economy. The political left generally favors economic protection over economic growth, whereas the political right values economic growth more. In  both early 2015 and mid-2018, 3000 Catalans were asked whether economic growth should have priority over environmental protection. The aggregation of these two surveys show that independentists value the environment more whereas unionists value the economy more (below chart). 
+
+```{r}
+pd <- vilaweb::ceo %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+    filter(!is.na(indy)) %>%
+  filter(indy != 'NS/NC') %>%
+  mutate(economy = P56J) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+  mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>%
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA),
+            people = n()) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100,
+         people = sum(people)) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+pd$indy <- ifelse(pd$indy == 'No',
+                  'Unionistes',
+                  'Independentistes')
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació:",
+       title =  "'El creixement econòmic ha de tenir prioritat\nsobre la protecció del medi ambient'",
+       caption = 'Mostra: 3009 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56J i P31.\nJoe Brew | www.vilaweb.cat.') +
+  theme(legend.position = 'none')
+```
+
+26% of independentists value economic growth over the environment, whereas 33% of unionists do. Clearly, on the issue of the environment, independentism is more to the left than unionism.
+
+
+
+
+#### Government interference in the economy
+
+A classic left-right distinction is the extent to which someone believes the government should intervene in the economy. The political left general favors an active role of the government in managing the economy, whereas the political right is generally more "laissez-faire". In early 2015 and mid 2018, 3000 Catalans were surveyed on precisely this matter. The results are below.
+
+
+```{r}
+pd <- vilaweb::ceo %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+    filter(!is.na(indy)) %>%
+  filter(indy != 'NS/NC') %>%
+  mutate(economy = P56A) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+pd$indy <- ifelse(pd$indy == 'No',
+                  'Unionistes',
+                  'Independentistes')
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'Com menys intervingui el Govern en l\'economia,\nmillor serà pel país'",
+       caption = 'Mostra: 2982 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56A i P31.\nJoe Brew | www.vilaweb.cat.') +
+  theme(legend.position = 'none')
+
+```
+
+#### Taxes and social services
+
+The political left generally favors higher taxes, so as to provide more social services. The political right generally favors lower taxes, even though this means less social services. Let's see what Catalan unionists and independentists say about the social services - taxes trade-off (below chart)
+
+
+```{r}
+pd <- vilaweb::ceo %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+    filter(!is.na(indy)) %>%
+  filter(indy != 'NS/NC') %>%
+  mutate(economy = P56B) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+pd$indy <- ifelse(pd$indy == 'No',
+                  'Unionistes',
+                  'Independentistes')
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'Cal baixar els impostos, encara que això\nimpliqui reduir serveis i prestacions públiques'",
+       caption = 'Mostra: 3090 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56B i P31.\nJoe Brew | www.vilaweb.cat.') +
+  theme(legend.position = 'none')
+
+```
+
+On the measure of taxes and social services, independentists and unionists are similar. That said, unionists are slightly to the right (21.5% of unionists in favor of reducing taxes vs. 16.9% of independentists).
+
+#### Inequality and government intervention
+
+The political left generally feels that the government should take active measures to reduce inequality. The political right generally does not. Let's see what Catalans say on the matter (below):
+
+
+```{r}
+pd <- vilaweb::ceo %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+    filter(!is.na(indy)) %>%
+  filter(indy != 'NS/NC') %>%
+  mutate(economy = P56C) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+pd$indy <- ifelse(pd$indy == 'No',
+                  'Unionistes',
+                  'Independentistes')
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'El Govern hauria de prendre mesures per reduir\nles diferències en els nivells d’ingressos'",
+       caption = 'Mostra: 3125 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56C i P31.\nJoe Brew | www.vilaweb.cat.') +
+  theme(legend.position = 'none')
+```
+
+
+Clearly, both left- and right-leaning Catalans largely favor government measures to reduce inequality. Though very similar, the percentage of pro-independence Catalans who favor lowering inequality (88.4%) is slightly higher than the percentage of unionists (86.7%). In other words, on this matter, independentism is again to the left of unionism (albeit insignificantly).
+
+#### Homosexuality
+
+Another left-right fissure are political rights for homosexuals. In general, the political left favors conferring on homosexuals the same political rights and recognition as that which is given to heterosexuals. The political right, on the other hand, has historically shown more opposition to equal rights/recognition for homosexuals. More than 3,000 Catalans have been polled on the question of homosexual adoption. Let's examine their responses (below).
+
+```{r}
+pd <- vilaweb::ceo %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+    filter(!is.na(indy)) %>%
+  filter(indy != 'NS/NC') %>%
+  mutate(economy = P56D) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+pd$indy <- ifelse(pd$indy == 'No',
+                  'Unionistes',
+                  'Independentistes')
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'Les parelles de gais i lesbianes han de poder\nadoptar fills en les mateixes condicions que\nles parelles heterosexuals'",
+       caption = 'Mostra: 3139 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56D i P31.\nJoe Brew | www.vilaweb.cat.') +
+  theme(legend.position = 'none')
+```
+
+Among both Catalan independentists and unionists, a majority favor allowing gay and lesbian couples to adopt in the same condition as heterosexual couples. However, the rate is much higher among independentists (84.7%) than unionists (72.1%). Again, on this issue, independentism is to the left of unionism.
+
+#### Immigration
+
+Typically, the left is more receptive to immigration, whereas the right is generally more opposed. The below shows how Catalans feel about immigration, based on 2 rounds of asking whether one "feels at home with so much immigration" (asked in early 2015 and mid 2018).
+
+
+```{r}
+pd <- vilaweb::ceo %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+    filter(!is.na(indy)) %>%
+  filter(indy != 'NS/NC') %>%
+  mutate(economy = P56I) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+pd$indy <- ifelse(pd$indy == 'No',
+                  'Unionistes',
+                  'Independentistes')
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'Amb tanta immigració,\nun ja no se sent com a casa'",
+       caption = 'Mostra: 3143 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56I i P31.\nJoe Brew | www.vilaweb.cat.') +
+  theme(legend.position = 'none')
+```
+
+The percentage of unionists who don't feel "at home" due to "so much immigration" is much higher among unionists (40.5%) than independentists (25.6%). Again, on the issue of immigration, independentism is to the left of unionism.
+
+#### Euthanasia
+
+Euthanasia - the decision to end one's life - is generally more favored by the left than the right. The below shows how Catalans feel about euthanasia, broken down by their view on independence.
+
+```{r}
+pd <- vilaweb::ceo %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+    filter(!is.na(indy)) %>%
+  filter(indy != 'NS/NC') %>%
+  mutate(economy = P56H) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+pd$indy <- ifelse(pd$indy == 'No',
+                  'Unionistes',
+                  'Independentistes')
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'Algú amb plenes facultats hauria de poder\ndecidir quan vol morir'",
+       caption = 'Mostra: 3128 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56H i P31.\nJoe Brew | www.vilaweb.cat.') +
+  theme(legend.position = 'none')
+```
+
+Catalan society is largely pro-euthanasia, both on the left and the right. However, independentists are more pro-euthanasia (90.1%) than unionists (82.8%). Again, independentism is more to the left of unionism.
+
+#### Clericalism
+
+The political left has a long tradition of anti-clericalism, whereas the political right has generally been more comfortable with religion. Let's say the breakdown between independentists and unionists in terms of how they feel about the mix of religion and politics.
+
+```{r}
+pd <- vilaweb::ceo %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+    filter(!is.na(indy)) %>%
+  filter(indy != 'NS/NC') %>%
+  mutate(economy = P56F) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+pd$indy <- ifelse(pd$indy == 'No',
+                  'Unionistes',
+                  'Independentistes')
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'La religió no hauria de tenir cap influència\nen la política'",
+       caption = 'Mostra: 3167 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56F i P31.\nJoe Brew | www.vilaweb.cat.') +
+  theme(legend.position = 'none')
+```
+
+Both unionist and independentist Catalans are mostly opposed to religious influence in politics, but independentists are more opposed than unionists. In other words, again, independentism is more to the left than unionism.
+
+```{r}
+# P56e. “L’escola ha d’ensenyar als nens a obeir l’autoritat”
+# P56g. “En qualsevol circumstància, la llei sempre ha de ser obeïda”
+# P56k. “Catalunya no té el dret de celebrar un referèndum d’autodeterminació”
+```
+
+
+
+#### Party positioning
+
+In Catalonia, it is fairly to typical to associate the CUP, Podem(os), PSC, and ERC with the left, Ciutadans with the center, and PDeCat and PP to the right. However, if we look closer at the data on ideological positioning, we say that this stereotype does not hold up for all parties.
+
+```{r}
+
+party_dict <- 
+  tibble(P24 = c("PPC",
+"CiU",
+"ERC",
+"PSC",
+"ICV-EUiA",
+"C's",
+"Reagrupament.cat",
+"SI",
+"PxC",
+"CUP",
+"UPyD",
+"Podemos",
+"Barcelona en Comú",
+"CDC",
+"Junts pel Sí",
+"Catalunya sí que es pot",
+"Democràcia i Llibertat",
+"En Comú Podem",
+"PACMA",
+"PDeCAT",
+"Junts per Catalunya",
+"Catalunya en Comú Podem",
+"Altres partits",
+"Cap",
+"No ho sap",
+"No contesta"),
+partit = c("PPC",
+"PDCat/CiU/CDC/Junts",
+"ERC",
+"PSC",
+"ICV-EUiA",
+"C's",
+"Reagrupament.cat",
+"SI",
+"PxC",
+"CUP",
+"UPyD",
+"Podem(os)",
+"Podem(os)",
+"PDCat/CiU/CDC/Junts",
+"PDCat/CiU/CDC/Junts",
+"Podem(os)",
+"Democràcia i Llibertat",
+"Podem(os)",
+"PACMA",
+"PDCat/CiU/CDC/Junts",
+"PDCat/CiU/CDC/Junts",
+"Podem(os)",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC"))
+
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  group_by(partit) %>%
+  mutate(size = n()) %>%
+  filter(size >= 50) %>%
+  ungroup %>%
+  mutate(year = ANY) %>%
+  mutate(axis = as.character(P25)) %>%
+  mutate(axis = ifelse(axis == 'Extrema esquerra',
+                       '1',
+                       ifelse(axis == 'Extrema dreta',
+                              '10',
+                              as.character(axis)))) %>%
+  mutate(axis = as.numeric(axis)) %>%
+  filter(!partit %in% c('Altre/Cap/NS/NC',
+                        'ICV-EUIA'))
+# P25
+
+agg <- pd %>%
+  group_by(partit, year) %>%
+  summarise(avg = weighted.mean(x = axis, w = PONDERA, na.rm = TRUE)) %>%
+  ungroup
+
+cols <- length(unique(agg$partit))
+cols <- c('darkorange', 'yellow', 'black',
+          grey(0.6), 'darkgreen', 'darkred',
+          'purple', 'blue', 'red')
+# cols <- rainbow(cols)
+ggplot(data = agg,
+       aes(x = year,
+           y = avg)) +
+  geom_bar(stat = 'identity',
+           alpha = 0.6,
+           aes(fill = partit)) +
+  theme_vilaweb() +
+  facet_wrap(~partit) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.5,
+                                   hjust = 1)) +
+  geom_text(aes(label = round(avg, digits = 1)),
+            nudge_y = 1) +
+  coord_flip() +
+  scale_fill_manual(name = '',values = cols) +
+  theme(legend.position = 'none') +
+  geom_point() +
+  geom_line() +
+  labs(x = 'Any',
+       y = 'Escala esquerra (0) / dreta (10)') +
+  ylim(0, 10) +
+  scale_y_continuous(breaks = c(0, 2,4,6)) +
+  geom_hline(yintercept = 5, lty = 2, alpha = 0.3)
+```
+
+The PSC and PDeCat are the two parties which are most misclassified. Over the last few years, PDeCAT voters have moved to the left (from an average ideological position of 4.9 to 4.2), whereas PSC voters have moved an equal distance to the right (3.5 to 4.2). As of 2018, PDeCAT and PSC were identically located (4.2) on the left-right scale. 
+
+# Conclusion
+
+The data are clear: on both self-perceived and objective political measures, the Catalan independence movement is more to the left than its unionist counterpart.
+
+
