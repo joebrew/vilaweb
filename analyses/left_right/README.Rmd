@@ -54,16 +54,16 @@ What is the relationship between the left-right ideological scale and positions 
 
 ## The methods
 
-We'll examine survey data - both from Catalonia and Spain - to uncover the relationship between both the left-right poltical spectrum and favorability of the independenceof Catalonia. The terms "left" and "right" are notoriously slippery. For our purposes, we'll examine the following areas:
+We'll examine survey data to uncover the relationship between both the left-right poltical spectrum and favorability of the independenceof Catalonia. The terms "left" and "right" are notoriously slippery. For our purposes, we'll examine the following areas:
 
 - Left vs. right positioning on the self-assessed ideological scale  
-- Favorability towards social justice via wealth redistribution vs. favorability towards free markets  
-- Hositility towards immigration  
-- Attitudes regarding authoritarianism and freedom 
-- Opinions on homosexuality  
-- Secularism and religion    
-- Favorability towards democracy
-
+- Economic growth and the environment  
+- Government involvement in the economy  
+- Taxes and social services  
+- Inequality and wealth redistribution  
+- Attitudes towards immigration  
+- Attitudes towards euthanasia  
+- Clericalism  
 
 
 ## The results
@@ -447,7 +447,7 @@ ggplot(data = pd,
 
 Clearly, both left- and right-leaning Catalans largely favor government measures to reduce inequality. Though very similar, the percentage of pro-independence Catalans who favor lowering inequality (88.4%) is slightly higher than the percentage of unionists (86.7%). In other words, on this matter, independentism is again to the left of unionism (albeit insignificantly).
 
-#### Homosexuality
+#### Homosexual rights
 
 Another left-right fissure are political rights for homosexuals. In general, the political left favors conferring on homosexuals the same political rights and recognition as that which is given to heterosexuals. The political right, on the other hand, has historically shown more opposition to equal rights/recognition for homosexuals. More than 3,000 Catalans have been polled on the question of homosexual adoption. Let's examine their responses (below).
 
@@ -730,28 +730,7 @@ pd$indy <- ifelse(pd$indy == 'No',
 ggplot(data = pd,
        aes(x = economy,
            y = p)) +
-  geom_bar(stat = 'identity',
-           position = position_dodge(width = 0.9),
-           color = 'black',
-           alpha = 0.8,
-           aes(fill = economy)) +
-  facet_wrap(~indy) +
-  theme_vilaweb() +
-  # scale_fill_manual(name = '',
-  #                   values = cols) +
-  geom_text(aes(label = round(p, digits = 2),
-                y = p + 3),
-            alpha = 0.6,
-            position = position_dodge(width = 0.9),
-            size = 4) +
-  scale_fill_manual(name = '',
-                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
-  labs(x = '',
-       y = 'Percentage',
-       subtitle = "Grau d'acord amb l'afirmació",
-       title =  "'La religió no hauria de tenir cap influència\nen la política'",
-       caption = 'Mostra: 3167 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56F i P31.\nJoe Brew | www.vilaweb.cat.') +
-  theme(legend.position = 'none')
+ 
 ```
 
 Both unionist and independentist Catalans are mostly opposed to religious influence in politics, but independentists are more opposed than unionists. In other words, again, independentism is more to the left than unionism.
@@ -878,6 +857,93 @@ ggplot(data = agg,
 ```
 
 The PSC and PDeCat are the two parties which are most misclassified. Over the last few years, PDeCAT voters have moved to the left (from an average ideological position of 4.9 to 4.2), whereas PSC voters have moved an equal distance to the right (3.5 to 4.2). As of 2018, PDeCAT and PSC were identically located (4.2) on the left-right scale. 
+
+```{r}
+var_dict <-
+  tibble(
+    var = paste0('P56', LETTERS[1:11]),
+    name = c("“Com menys intervingui el Govern en l’economia, millor serà pel país”",
+             "“Cal baixar els impostos, encara que això impliqui reduir serveis i prestacions públiques”",
+             "“El Govern hauria de prendre mesures per reduir les diferències en els nivells d’ingressos”",
+             "“Les parelles de gais i lesbianes han de poder adoptar fills en les mateixes condicions que les parelles heterosexuals”",
+             "“L’escola ha d’ensenyar als nens a obeir l’autoritat”",
+             "“La religió no hauria de tenir cap influència en la política”",
+             "“En qualsevol circumstància, la llei sempre ha de ser obeïda”",
+             "“Algú amb plenes facultats hauria de poder decidir quan vol morir”",
+             "“Amb tanta immigració, un ja no se sent com a casa”",
+             "“El creixement econòmic ha de tenir prioritat sobre la protecció del medi ambient”",
+             "“Catalunya no té el dret de celebrar un referèndum d’autodeterminació”"))
+
+make_plot <- function(var = 'P56A'){
+  name <- var_dict$name[var_dict$var == var]
+  pd <- vilaweb::ceo %>%
+  mutate_(var = var)
+
+  pd <- pd %>%
+  left_join(party_dict) %>%
+  filter(partit %in% c('PSC', 'PDCat/CiU/CDC/Junts')) %>%
+  # group_by(partit) %>%
+  # mutate(size = n()) %>%
+  # filter(size >= 50) %>%
+  # ungroup %>%
+    filter(!is.na(var)) %>%
+      mutate(var = 
+           ifelse(var %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(var %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>%
+  group_by(var, partit) %>%
+  summarise(n = sum(PONDERA),
+            people = n()) %>%
+  ungroup %>%
+  filter(!is.na(var)) %>%
+  filter(!var %in% c('No contesta', 'No ho sap')) %>%
+    group_by(partit) %>%
+    mutate(p = n / sum(n) * 100)
+
+  pd$var<- factor(pd$var,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+  
+  n_cols <- length(unique(pd$var))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+  
+people <- sum(pd$people)
+  ggplot(data = pd,
+       aes(x = var,
+           y = p)) +
+   geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = var)) +
+  facet_wrap(~partit) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  name,
+       caption = paste0('Combinació enquestes CEO. Preguntes ', var, ' i P31.\nJoe Brew | www.vilaweb.cat.')) +
+  theme(legend.position = 'none')
+}
+# make_plot('P56J')
+
+```
 
 # Conclusion
 

@@ -32,15 +32,16 @@ What is the relationship between the left-right ideological scale and positions 
 The methods
 -----------
 
-We'll examine survey data - both from Catalonia and Spain - to uncover the relationship between both the left-right poltical spectrum and favorability of the independenceof Catalonia. The terms "left" and "right" are notoriously slippery. For our purposes, we'll examine the following areas:
+We'll examine survey data to uncover the relationship between both the left-right poltical spectrum and favorability of the independenceof Catalonia. The terms "left" and "right" are notoriously slippery. For our purposes, we'll examine the following areas:
 
 -   Left vs. right positioning on the self-assessed ideological scale
--   Favorability towards social justice via wealth redistribution vs. favorability towards free markets
--   Hositility towards immigration
--   Attitudes regarding authoritarianism and freedom
--   Opinions on homosexuality
--   Secularism and religion
--   Favorability towards democracy
+-   Economic growth and the environment
+-   Government involvement in the economy
+-   Taxes and social services
+-   Inequality and wealth redistribution
+-   Attitudes towards immigration
+-   Attitudes towards euthanasia
+-   Clericalism
 
 The results
 -----------
@@ -89,7 +90,7 @@ The political left generally feels that the government should take active measur
 
 Clearly, both left- and right-leaning Catalans largely favor government measures to reduce inequality. Though very similar, the percentage of pro-independence Catalans who favor lowering inequality (88.4%) is slightly higher than the percentage of unionists (86.7%). In other words, on this matter, independentism is again to the left of unionism (albeit insignificantly).
 
-#### Homosexuality
+#### Homosexual rights
 
 Another left-right fissure are political rights for homosexuals. In general, the political left favors conferring on homosexuals the same political rights and recognition as that which is given to heterosexuals. The political right, on the other hand, has historically shown more opposition to equal rights/recognition for homosexuals. More than 3,000 Catalans have been polled on the question of homosexual adoption. Let's examine their responses (below).
 
@@ -117,7 +118,10 @@ Catalan society is largely pro-euthanasia, both on the left and the right. Howev
 
 The political left has a long tradition of anti-clericalism, whereas the political right has generally been more comfortable with religion. Let's say the breakdown between independentists and unionists in terms of how they feel about the mix of religion and politics.
 
-![](figures/unnamed-chunk-11-1.png)
+    Error: <text>:48:0: unexpected end of input
+    46:            y = p)) +
+    47:  
+       ^
 
 Both unionist and independentist Catalans are mostly opposed to religious influence in politics, but independentists are more opposed than unionists. In other words, again, independentism is more to the left than unionism.
 
