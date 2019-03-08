@@ -118,10 +118,7 @@ Catalan society is largely pro-euthanasia, both on the left and the right. Howev
 
 The political left has a long tradition of anti-clericalism, whereas the political right has generally been more comfortable with religion. Let's say the breakdown between independentists and unionists in terms of how they feel about the mix of religion and politics.
 
-    Error: <text>:48:0: unexpected end of input
-    46:            y = p)) +
-    47:  
-       ^
+![](figures/unnamed-chunk-11-1.png)
 
 Both unionist and independentist Catalans are mostly opposed to religious influence in politics, but independentists are more opposed than unionists. In other words, again, independentism is more to the left than unionism.
 
@@ -132,6 +129,8 @@ In Catalonia, it is fairly to typical to associate the CUP, Podem(os), PSC, and 
 ![](figures/unnamed-chunk-13-1.png)
 
 The PSC and PDeCat are the two parties which are most misclassified. Over the last few years, PDeCAT voters have moved to the left (from an average ideological position of 4.9 to 4.2), whereas PSC voters have moved an equal distance to the right (3.5 to 4.2). As of 2018, PDeCAT and PSC were identically located (4.2) on the left-right scale.
+
+In other words, the "leftist" unionist party (PSC) is ideologically identical (on the left-right) scale as the "right-wing" independentist party (Convergents).
 
 Conclusion
 ==========

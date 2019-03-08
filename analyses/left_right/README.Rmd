@@ -730,7 +730,28 @@ pd$indy <- ifelse(pd$indy == 'No',
 ggplot(data = pd,
        aes(x = economy,
            y = p)) +
- 
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'La religió no hauria de tenir cap\ninfluència en la política'",
+       caption = 'Mostra: 3167 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56F i P31.\nJoe Brew | www.vilaweb.cat.') +
+  theme(legend.position = 'none')
 ```
 
 Both unionist and independentist Catalans are mostly opposed to religious influence in politics, but independentists are more opposed than unionists. In other words, again, independentism is more to the left than unionism.
@@ -941,9 +962,11 @@ people <- sum(pd$people)
        caption = paste0('Combinació enquestes CEO. Preguntes ', var, ' i P31.\nJoe Brew | www.vilaweb.cat.')) +
   theme(legend.position = 'none')
 }
-# make_plot('P56J')
+# gmake_plot('P56J')
 
 ```
+
+In other words, the "leftist" unionist party (PSC) is ideologically identical (on the left-right) scale as the "right-wing" independentist party (Convergents).
 
 # Conclusion
 
