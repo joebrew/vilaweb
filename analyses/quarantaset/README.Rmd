@@ -1,0 +1,532 @@
+---
+title: '47%, no. 53%.'
+output: github_document
+---
+
+(Alternative title: "L'independentisme ja té majoria social")
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(tidyverse)
+library(databrew)
+source('functions.R')
+library(gsheet)
+gurl <- 'https://docs.google.com/spreadsheets/d/15rvunlLRCL1sH5SX9eyVWPsG5HNSrXIfL0T1PfPcxn4/edit?usp=sharing'
+# Read in google sheet with keys
+library(gsheet)
+if(!'goog.RData' %in% dir()){
+  goog <- gsheet::gsheet2tbl(url = gurl)
+  names(goog)[3:4] <- c('A favor de la independència',
+                        'En contra de la independència')
+  save(goog,
+       file = 'goog.RData')
+} else {
+  load('goog.RData')
+}
+
+```
+
+# Introduction
+
+In Catalan politics, the most frequently cited number is 47%. That is the percentage of the popular vote obtained by explicitly pro-independence parties (JxCat, ERC, CUP) in both the September 2015 and December 2017 autonomous elections (*in 2017, including the foreign vote, it's actually close to 48%, but we'll leave that detail for now).
+
+The 47% number is referenced most frequently by [anti-independence politicians](https://twitter.com/miqueliceta/status/648797449167970304), but it is also cited regularly by [international media](https://www.nytimes.com/2017/12/21/world/europe/catalan-separatists-keep-majority-in-regional-vote.html) and even [pro-independence politicians](http://www.totsantcugat.cat/actualitat/politica/torrent-no-hi-ha-cap-independentista-que-es-conformi-amb-un-47-7-hem-de-ser-mes_205053102.html), often suggesting that Catalans in favor of independence are a minority, or implying that a majority (53%) of Catalans are opposed to independence.
+
+Is this true? Is Catalan independentism a minority movement within Catalonia? Do most Catalans oppose independence from Spain?
+
+# Conceptual foundations  
+
+Elections are, of course, the best way to gauge popular sentiment. But it is important to recall that elections are contested between parties (which have _many_ ideas), and not specific policies. When someone votes for a party or candidate, this does not mean that (s)he agrees with all the positions of that party.
+
+Let's discuss an example. In 2016, Donald Trump - who has called climate change "fake science" - received 46.1% of the popular vote. Does this mean that only 54% of Americans believe in climate change? No, of course not. [Surveys show](https://www.apa.org/monitor/2018/02/numbers) that 71% of Americans accept the reality of climate change (and only 13% deny it). In other words, many Americans who voted for Trump _disagreed with him on this specific issue_. They voted for Trump, despite their disagreement on this issue, because the general election was about _many_ issues, not just one.
+
+In the above example, using election results for the purposes of understanding support for a specific issue is a mistake. Could it be that using autonomous election results as a means to measure support for independentism is also mistake? Let's explore the data.
+
+# The methods
+
+We examine survey data to uncover views on Catalan independence by political party. Specifically, we analyze situations in which party position on the specific issue of Catalan independence differs from the position of voters of that party. We use the Baròmetre d'Opinió Política, since it is the largest and most methodologically rigorous of regular surveys carried out in Catalonia. 
+
+# The results
+
+
+```{r, eval = FALSE}
+# ### All surveys
+
+cols <- RColorBrewer::brewer.pal(n = 9,
+                                 name = 'YlGnBu')
+cols2 <- RColorBrewer::brewer.pal(n = 9,
+                                 name = 'BrBG')
+cols <- c(cols2[2], cols[3], cols[6])
+cols <- rev(cols)
+cols <- cols[c(1,3)]
+
+# New ceo
+new_ceo <- vilaweb::ceo %>%
+  mutate(date = BOP_NUM) %>%
+  group_by(date) %>%
+  mutate(year = dplyr::first(as.Date(paste0(ANY,'-', MES, '-01')))) %>%
+  ungroup %>%
+  # filter(ANY >= 2018) %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(is.na(indy), 'NS/NC', indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+  filter(year >= '2015-02-01',
+         indy != 'NS/NC') %>%
+  group_by(year, date, indy) %>%
+  tally %>%
+  ungroup %>%
+  group_by(year) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  filter(!is.na(indy)) %>%
+  mutate(`Muestra` = n) %>%
+  mutate(indy = ifelse(indy == 'No',
+                       'En contra de la independència',
+                       ifelse(indy == 'Sí',
+                              'A favor de la independència',
+                              'NS/NC')))  %>%
+  dplyr::select(-date) %>%
+  mutate(date = year) %>%
+  mutate(key = indy,
+         value = p,
+         survey = 'CEO')
+
+pd <- goog %>%
+  gather(key, value,
+         `A favor de la independència`:`En contra de la independència`)
+pd <- bind_rows(pd, new_ceo) %>%
+  dplyr::select(date, survey, key, value)
+pd <- pd %>% arrange(date) %>%
+  filter(date >= '2015-01-01')
+ggplot(data = pd,
+       aes(x = date,
+           y = value,
+           color = key,
+           group = key)) +
+  geom_point() +
+  geom_line(alpha = 0.3) +
+  stat_smooth(geom='line', alpha=0.8, 
+              span = 0.72,
+              se=FALSE) +
+    # geom_smooth(method = 'loess',
+  #             span = 0.2, se = FALSE,
+  #             alpha = 0.6) +
+  theme_vilaweb() +
+  scale_color_manual(name = '',
+                     values = cols) +
+  geom_hline(yintercept = 50, lty = 2, alpha = 0.2) +
+  labs(x = '',
+       y = '% (extrapolació vot decidit)')
+```
+
+### Overall support for independence
+
+
+```{r}
+cols <- RColorBrewer::brewer.pal(n = 9,
+                                 name = 'YlGnBu')
+cols2 <- RColorBrewer::brewer.pal(n = 9,
+                                 name = 'BrBG')
+cols <- c(cols2[2], cols[3], cols[6])
+cols <- rev(cols)
+
+df <- vilaweb::ceo %>%
+  mutate(date = BOP_NUM) %>%
+  group_by(date) %>%
+  mutate(year = dplyr::first(as.Date(paste0(ANY,'-', MES, '-01')))) %>%
+  ungroup %>%
+  # filter(ANY >= 2018) %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(is.na(indy), 'NS/NC', indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+  filter(year >= '2015-02-01') %>%
+  group_by(year, date, indy) %>%
+  tally %>%
+  ungroup %>%
+  group_by(year) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  filter(!is.na(indy)) %>%
+  mutate(`Muestra` = n) %>%
+  mutate(indy = ifelse(indy == 'No',
+                       'En contra de la independència',
+                       ifelse(indy == 'Sí',
+                              'A favor de la independència',
+                              'NS/NC'))) 
+df$indy <- factor(df$indy,
+                  levels = c('A favor de la independència',
+                             'NS/NC',
+                             'En contra de la independència')) 
+df$indy <- factor(df$indy,
+                  labels = gsub('de la', 'de\nla', levels(df$indy)))
+```
+
+The below chart shows the responses of `r sum(df$n)` Catalans to the question "Do you want Catalonia to become an independent State?", asked at `r length(unique(df$date))` points over the last 4 years, regarding independence.
+
+
+```{r}
+ggplot(data = df,
+       aes(x = year,
+           y = p,
+           group = indy,
+           fill = indy)) +
+      # stat_smooth(
+      # position = position_stack(),
+      # # color = 'black',
+      #   geom = 'area', method = 'loess', span = 0.7,
+      #   alpha = 0.8) +
+  geom_area(alpha = 0.8) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+  geom_hline(yintercept = 50, lty = 2, alpha = 0.6) +
+  theme_vilaweb() +
+  labs(x = '',
+       y = 'Percentage',
+       title = 'Suport a la independència de Catalunya',
+       subtitle = '"Vol que Catalunya esdevingui un Estat independent?"',
+       caption = paste0('Dades del Baròmetre d\'Opinió Política / Centre d\'Estudis d\'Opinió.\n', sum(df$Muestra), ' residents de Catalunya amb ciutadania espanyola. Agregació de ', length(unique(df$date)),' enquestes. \nPregunta P31. Gràfic de Joe Brew | @joethebrew. www.vilaweb.cat.\n')) +
+  theme(legend.position = 'right',
+        plot.caption = element_text(hjust = 0))
+
+```
+
+In the above chart, the percentage in favor of independence (blue) hovers between 41 and 52%, whereas the percentage opposed to independence (brown) never crosses the 50% threshold. 
+It would be erroneous to assume that those who don't answer the question (grey-green) are uniformly opposed to independence. Given the total uncertainy as to their opinion (or as to whether they have an opinion at all), the best way to gauge overall support is to simply remove them. This most realistically reflects the result of a hypothetical referendum.
+
+```{r}
+
+df <- vilaweb::ceo %>%
+  mutate(date = BOP_NUM) %>%
+  group_by(date) %>%
+  mutate(year = dplyr::first(as.Date(paste0(ANY,'-', MES, '-01')))) %>%
+  ungroup %>%
+  # filter(ANY >= 2018) %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(is.na(indy), 'NS/NC', indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+  filter(indy != 'NS/NC') %>%
+  filter(year >= '2015-02-01') %>%
+  group_by(year, date, indy) %>%
+  tally %>%
+  ungroup %>%
+  group_by(year) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  filter(!is.na(indy)) %>%
+  mutate(`Muestra` = n) %>%
+  mutate(indy = ifelse(indy == 'No',
+                       'En contra de la independència',
+                       ifelse(indy == 'Sí',
+                              'A favor de la independència',
+                              'NS/NC'))) 
+df$indy <- factor(df$indy,
+                  levels = c('A favor de la independència',
+                             # 'NS/NC',
+                             'En contra de la independència')) 
+df$indy <- factor(df$indy,
+                  labels = gsub('de la', 'de\nla', levels(df$indy)))
+
+ggplot(data = df,
+       aes(x = year,
+           y = p,
+           group = indy,
+           fill = indy)) +
+      # stat_smooth(
+      # position = position_stack(),
+      # # color = 'black',
+      #   geom = 'area', method = 'loess', span = 0.7,
+      #   alpha = 0.8) +
+  geom_area(alpha = 0.8) +
+  scale_fill_manual(name = '',
+                    values = cols[c(1,3)]) +
+  geom_hline(yintercept = 50, lty = 2, alpha = 0.6) +
+  theme_vilaweb() +
+  labs(x = '',
+       y = 'Percentage',
+       title = 'Suport a la independència de Catalunya',
+       subtitle = '"Vol que Catalunya esdevingui un Estat independent?"',
+       caption = paste0('Dades del Baròmetre d\'Opinió Política / Centre d\'Estudis d\'Opinió.\n', sum(df$Muestra), ' residents de Catalunya amb ciutadania espanyola. Agregació de ', length(unique(df$date)),' enquestes. \nPregunta P31. Gràfic de Joe Brew | @joethebrew. www.vilaweb.cat.\n')) +
+  theme(legend.position = 'right',
+        plot.caption = element_text(hjust = 0)) +
+  geom_vline(xintercept = seq(as.Date('2010-01-01'),
+                 as.Date('2019-01-01'),
+                 by = 'year'),
+             alpha = 0.3) +
+  theme(axis.text.x = element_text(hjust = 0))
+```
+
+In the above, having removed the non-respondents, we see that the pro-independence majority ranges from 51% to 55% over the course of 2018. We end up with an approximate 53.12% majority in favor of independence aggregating all survey rounds carried out in 2018.
+
+### Then why 47% in elections?  
+
+If 51-55% of Catalans are in favor of independence, then why do independentist parties receive only 47-48% of the popular vote in elections? The answer to this question is rather simple: _because many voters of pro-union parties are pro-independence_.
+
+Let's dig in. The below chart shows opinions on independence by party allegiance. One look at the chart reveals a very important truth: the percentage of people who are opposed to their party's stance on independence is greater among unionist parties than independentist parties.
+
+
+
+
+
+```{r}
+cols <- RColorBrewer::brewer.pal(n = 9,
+                                 name = 'YlGnBu')
+cols2 <- RColorBrewer::brewer.pal(n = 9,
+                                 name = 'BrBG')
+cols <- c(cols2[2], cols[3], cols[6])
+cols <- rev(cols)
+
+party_dict <- 
+  tibble(P24 = c("PPC",
+"CiU",
+"ERC",
+"PSC",
+"ICV-EUiA",
+"C's",
+"Reagrupament.cat",
+"SI",
+"PxC",
+"CUP",
+"UPyD",
+"Podemos",
+"Barcelona en Comú",
+"CDC",
+"Junts pel Sí",
+"Catalunya sí que es pot",
+"Democràcia i Llibertat",
+"En Comú Podem",
+"PACMA",
+"PDeCAT",
+"Junts per Catalunya",
+"Catalunya en Comú Podem",
+"Altres partits",
+"Cap",
+"No ho sap",
+"No contesta"),
+partit = c("PPC",
+"PDCat/CDC/Junts",
+"ERC",
+"PSC",
+"ICV-EUiA",
+"C's",
+"Reagrupament.cat",
+"SI",
+"PxC",
+"CUP",
+"UPyD",
+"Podem(os)",
+"Podem(os)",
+"PDCat/CDC/Junts",
+"PDCat/CDC/Junts",
+"Podem(os)",
+"Democràcia i Llibertat",
+"Podem(os)",
+"PACMA",
+"PDCat/CDC/Junts",
+"PDCat/CDC/Junts",
+"Podem(os)",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC"))
+
+df <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  group_by(partit) %>%
+  mutate(size = n()) %>%
+  filter(size >= 50) %>%
+  ungroup %>%
+  filter(!partit %in% c('Altre/Cap/NS/NC',
+                        'ICV-EUIA',
+                        'ICV-EUiA',
+                        'PACMA')) %>%
+  mutate(date = BOP_NUM) %>%
+  group_by(date) %>%
+  mutate(year = dplyr::first(as.Date(paste0(ANY,'-', MES, '-01')))) %>%
+  ungroup %>%
+  # filter(ANY >= 2018) %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(is.na(indy), 'NS/NC', indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+  filter(year >= '2018-01-01') %>%
+    filter(!is.na(indy)) %>%
+
+  group_by(partit, indy) %>%
+  tally %>%
+  ungroup %>%
+  group_by(partit) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n) %>%
+  mutate(indy = ifelse(indy == 'No',
+                       'En contra de la independència',
+                       ifelse(indy == 'Sí',
+                              'A favor de la independència',
+                              'NS/NC'))) 
+df$indy <- factor(df$indy,
+                  levels = c('A favor de la independència',
+                             'NS/NC',
+                             'En contra de la independència')) 
+df$indy <- factor(df$indy,
+                  labels = gsub('de la', 'de\nla', levels(df$indy)))
+
+ggplot(data = df,
+       aes(x = partit,
+           y = p,
+           fill = indy)) +
+  geom_bar(stat = 'identity') +
+  theme_vilaweb() +
+  scale_fill_manual(name = '',
+                    values = cols) +
+  labs(x = 'Partit',
+       y = 'Percentage',
+       title = 'Suport a la independència de Catalunya per partit',
+       subtitle = '2018. "Vol que Catalunya esdevingui un Estat independent?"',
+       caption = paste0('Dades del Baròmetre d\'Opinió Política / Centre d\'Estudis d\'Opinió.\n', sum(df$Muestra), ' residents de Catalunya amb ciutadania espanyola. Agregació de ', length(unique(df$date)),' enquestes. \nPregunta P31. Gràfic de Joe Brew | @joethebrew. www.vilaweb.cat.\n'))
+
+dfb <- df %>% 
+  filter(indy != 'NS/NC') %>%
+  group_by(partit) %>%
+  mutate(p = p / sum(p) * 100)
+```
+
+The most striking examples in the above are the PSC and Podem(os). A full 11% of PSC voters are pro-independence (the equivalent of 11.7% if we remove the non-respondents). Among Podem(os) voters, the percentage which are pro-independence is 29.1% (33.2% in a hypothetical referendum).
+
+Let's aggregate a bit more and examine the opinions of voters crossed with the positions of their parties. The below shows independentism (y-axis) 
+
+```{r}
+indy_dict <- data_frame(partit = c("C's",
+                                   "CUP",
+                                   "ERC",
+                                   "PDCat/CDC/Junts",
+                                   "Podem(os)",
+                                   "PPC",
+                                   "PSC"),
+                        indy_partit = c('En contra de la independència',
+                                  'A favor de la independència',
+                                 'A favor de la independència',
+                                 'A favor de la independència',
+                                 'En contra de la independència',
+                                 'En contra de la independència',
+                                 'En contra de la independència'))
+
+
+df <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  group_by(partit) %>%
+  mutate(size = n()) %>%
+  filter(size >= 50) %>%
+  ungroup %>%
+  filter(!partit %in% c('Altre/Cap/NS/NC',
+                        'ICV-EUIA',
+                        'ICV-EUiA',
+                        'PACMA')) %>%
+  mutate(date = BOP_NUM) %>%
+  group_by(date) %>%
+  mutate(year = dplyr::first(as.Date(paste0(ANY,'-', MES, '-01')))) %>%
+  ungroup %>%
+  # filter(ANY >= 2018) %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(is.na(indy), 'NS/NC', indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+  filter(year >= '2018-01-01') %>%
+    filter(!is.na(indy)) %>%
+  left_join(indy_dict) %>%
+
+  group_by(indy_partit, indy) %>%
+  tally %>%
+  ungroup %>%
+  group_by(indy_partit) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n) %>%
+  mutate(indy = ifelse(indy == 'No',
+                       'En contra de la independència',
+                       ifelse(indy == 'Sí',
+                              'A favor de la independència',
+                              'NS/NC'))) 
+df$indy <- factor(df$indy,
+                  levels = c('A favor de la independència',
+                             'NS/NC',
+                             'En contra de la independència')) 
+df$indy <- factor(df$indy,
+                  labels = paste0(ifelse(levels(df$indy) == 'NS/NC',
+                                         '',
+                                         'Personalment\n'), gsub('ns/nc', 'NS/NC', tolower(gsub('de la', 'de\nla', levels(df$indy))))))
+
+df$indy_partit <- factor(df$indy_partit,
+                  levels = c('A favor de la independència',
+                             # 'NS/NC',
+                             'En contra de la independència')) 
+df$indy_partit <- factor(df$indy_partit,
+                  labels = paste0('Votants de partits ', gsub('ns/nc', 'NS/NC', tolower(gsub('de la', '\nde la', levels(df$indy_partit))))))
+
+ggplot(data = df,
+       aes(x = indy,
+           y = p,
+           fill = indy)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.7)) +
+  geom_text(position = position_dodge(width = 0.7),
+            aes(label = round(p, digits = 1),
+                y = p + 5)) +
+  theme_vilaweb() +
+  scale_fill_manual(name = '',
+                    values = cols) +
+  labs(x = '',
+       y = 'Percentage',
+       title = 'Independentisme per posició del partit',
+       subtitle = '2018. "Vol que Catalunya esdevingui un Estat independent?"',
+       caption = paste0('Dades del Baròmetre d\'Opinió Política / Centre d\'Estudis d\'Opinió.\n', sum(df$Muestra), ' residents de Catalunya amb ciutadania espanyola. Agregació de ', length(unique(df$date)),' enquestes. \nPregunta P31. Gràfic de Joe Brew | @joethebrew. www.vilaweb.cat.\nEn aquest gràfic, "a favor" vol dir CUP, ERC, Junts; "en contra" vol dir PSC, PP, C\'s, Podem(os).')) +
+  facet_wrap(~indy_partit) +
+  theme(legend.position = 'none')
+
+
+```
+
+The above chart shows that only 5.4% of voters of pro-independece parties are anti-independence. However, 14.1% of voters of anti-independence parties are pro-independence. This discrepancy explains why independentism is greater than 50%, even though independence parties receive less than 50% of the vote. 
+
+## Conclusion and reflection
+
+In the above analysis, we have seen that personal opinions on independence do not always align with the official party positions. 91% of the voters of pro-independence parties are personally pro-independence, but only 78.8% of anti-independence parties are themselves anti-independence. In an agreed upon (pactat) referendum, these "cross-over" voters would push the pro-independence vote into a clear majority. In other words, "yes" would win a Catalan independence referendum with equal participation between the blocks.
+
+Why is it that there are so many more "cross-over" voters among unionist parties as compared to independentist parties? The data examined here don't provide the answer, but there are a few possibilities worth considering:  
+
+- The unionist parties are much larger than pro-independence parties throughout Spain, and get more attention in Spanish media. This could result in some people with pro-independence tendencies identifying more readily with a larger, Spanish national parties.  
+- Two of the unionist parties (PP and C's) are significantly to the right of the independentist parties [data here](https://www.vilaweb.cat/noticies/dada-joe-brew-independentisme-dreta-esquerra/). So, a conservative, right-leaning, pro-independence individual may choose to vote for one of the unionist right-wing parties, even though he disagrees with that party on the specific question of Catalan independence (since he/she will agree with most of their other policies).  
+
+- Catalan socialist politicians, who have historically been in favor of self-determination until recently, have taken a more explicit anti-independence stance so as to garner votes at the Spanish national level (rather than a more nuanced stance which would better represent diversity on the question of independence among their voting base).  
+
+- The Podem(os) party and its variants should simply not be considered "unionist".  
+
+
+
