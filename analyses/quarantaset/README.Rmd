@@ -3,7 +3,7 @@ title: '47%, no. 53%.'
 output: github_document
 ---
 
-(Alternative title: "L'independentisme ja té majoria social")
+(Alternative title: "La mentida del 47%: L'independentisme ja és majoritari")
 
 
 ```{r setup, include=FALSE, echo = FALSE}
@@ -43,7 +43,7 @@ if(!'goog.RData' %in% dir()){
 
 # Introduction
 
-In Catalan politics, the most frequently cited number is 47%. That is the percentage of the popular vote obtained by explicitly pro-independence parties (JxCat, ERC, CUP) in both the September 2015 and December 2017 autonomous elections (*in 2017, including the foreign vote, it's actually close to 48%, but we'll leave that detail for now).
+In Catalan politics, the most frequently cited number is 47%. That is the percentage of the popular vote obtained by explicitly pro-independence parties (JxCat, ERC, CUP) in both the September 2015 and December 2017 autonomous elections (*in 2017, including the foreign vote, it's actually close to 48%, but we'll leave that detail out for now).
 
 The 47% number is referenced most frequently by [anti-independence politicians](https://twitter.com/miqueliceta/status/648797449167970304), but it is also cited regularly by [international media](https://www.nytimes.com/2017/12/21/world/europe/catalan-separatists-keep-majority-in-regional-vote.html) and even [pro-independence politicians](http://www.totsantcugat.cat/actualitat/politica/torrent-no-hi-ha-cap-independentista-que-es-conformi-amb-un-47-7-hem-de-ser-mes_205053102.html), often suggesting that Catalans in favor of independence are a minority, or implying that a majority (53%) of Catalans are opposed to independence.
 
@@ -66,6 +66,7 @@ We examine survey data to uncover views on Catalan independence by political par
 
 ```{r, eval = FALSE}
 # ### All surveys
+
 
 cols <- RColorBrewer::brewer.pal(n = 9,
                                  name = 'YlGnBu')
@@ -207,7 +208,8 @@ ggplot(data = df,
        subtitle = '"Vol que Catalunya esdevingui un Estat independent?"',
        caption = paste0('Dades del Baròmetre d\'Opinió Política / Centre d\'Estudis d\'Opinió.\n', sum(df$Muestra), ' residents de Catalunya amb ciutadania espanyola. Agregació de ', length(unique(df$date)),' enquestes. \nPregunta P31. Gràfic de Joe Brew | @joethebrew. www.vilaweb.cat.\n')) +
   theme(legend.position = 'right',
-        plot.caption = element_text(hjust = 0))
+        plot.caption = element_text(hjust = 0)) +
+  theme(plot.caption = element_text(size = 9))
 
 ```
 
@@ -276,7 +278,8 @@ ggplot(data = df,
                  as.Date('2019-01-01'),
                  by = 'year'),
              alpha = 0.3) +
-  theme(axis.text.x = element_text(hjust = 0))
+  theme(axis.text.x = element_text(hjust = 0)) +
+  theme(plot.caption = element_text(size = 9))
 ```
 
 In the above, having removed the non-respondents, we see that the pro-independence majority ranges from 51% to 55% over the course of 2018. We end up with an approximate 53.12% majority in favor of independence aggregating all survey rounds carried out in 2018.
@@ -408,7 +411,8 @@ ggplot(data = df,
        y = 'Percentage',
        title = 'Suport a la independència de Catalunya per partit',
        subtitle = '2018. "Vol que Catalunya esdevingui un Estat independent?"',
-       caption = paste0('Dades del Baròmetre d\'Opinió Política / Centre d\'Estudis d\'Opinió.\n', sum(df$Muestra), ' residents de Catalunya amb ciutadania espanyola. Agregació de ', length(unique(df$date)),' enquestes. \nPregunta P31. Gràfic de Joe Brew | @joethebrew. www.vilaweb.cat.\n'))
+       caption = paste0('Dades del Baròmetre d\'Opinió Política / Centre d\'Estudis d\'Opinió.\n', sum(df$Muestra), ' residents de Catalunya amb ciutadania espanyola. Agregació de ', length(unique(df$date)),' enquestes. \nPregunta P31. Gràfic de Joe Brew | @joethebrew. www.vilaweb.cat.\n')) +
+  theme(plot.caption = element_text(size = 9))
 
 dfb <- df %>% 
   filter(indy != 'NS/NC') %>%
@@ -506,9 +510,10 @@ ggplot(data = df,
        y = 'Percentage',
        title = 'Independentisme per posició del partit',
        subtitle = '2018. "Vol que Catalunya esdevingui un Estat independent?"',
-       caption = paste0('Dades del Baròmetre d\'Opinió Política / Centre d\'Estudis d\'Opinió.\n', sum(df$Muestra), ' residents de Catalunya amb ciutadania espanyola. Agregació de ', length(unique(df$date)),' enquestes. \nPregunta P31. Gràfic de Joe Brew | @joethebrew. www.vilaweb.cat.\nEn aquest gràfic, "a favor" vol dir CUP, ERC, Junts; "en contra" vol dir PSC, PP, C\'s, Podem(os).')) +
+       caption = paste0('Dades del Baròmetre d\'Opinió Política / Centre d\'Estudis d\'Opinió.\n', sum(df$Muestra), ' residents de Catalunya amb ciutadania espanyola. Agregació de ', length(unique(df$date)),' enquestes. \nPregunta P31. Gràfic de Joe Brew | @joethebrew. www.vilaweb.cat.\n"A favor" vol dir CUP, ERC, Junts; "en contra" vol dir PSC, PP, C\'s, Podem(os).')) +
   facet_wrap(~indy_partit) +
-  theme(legend.position = 'none')
+  theme(legend.position = 'none') +
+  theme(plot.caption = element_text(size = 9))
 
 
 ```
@@ -517,16 +522,32 @@ The above chart shows that only 5.4% of voters of pro-independece parties are an
 
 ## Conclusion and reflection
 
-In the above analysis, we have seen that personal opinions on independence do not always align with the official party positions. 91% of the voters of pro-independence parties are personally pro-independence, but only 78.8% of anti-independence parties are themselves anti-independence. In an agreed upon (pactat) referendum, these "cross-over" voters would push the pro-independence vote into a clear majority. In other words, "yes" would win a Catalan independence referendum with equal participation between the blocks.
+If we examine specific political issues, overall election results are not an accurate barometer of population sentiment. To give another Donald Trump example (sorry!), let's look at gay marriage. Both Hillary Clinton and [Donald Trump](https://www.thedailybeast.com/donald-trump-fine-with-same-sex-marriage) are _in favor_ of gay marriage. And nearly 100% of the 2016 US election votes were for Clinton and Trump. Does this mean that 100% of Americans are in favor of gay marriage? No. [35% of Americans oppose homosexual marriage](http://www.pewforum.org/fact-sheet/changing-attitudes-on-gay-marriage/), but voted for Trump (with whom they disagreed on this issue) because the _general_ election is about more than 1 specific issue.
+
+We find the same phenomenon when we compare poll data with election results in Catalonia. In this analysis, we have seen that personal opinions on independence do not always align with the official party positions. And we have seen that (general) election outcomes do not align perfectly with (specific) policy questions.
+
+91% of the voters of pro-independence parties are personally pro-independence, but only 78.8% of anti-independence parties are themselves anti-independence. In an agreed upon (pactat) referendum, these "cross-over" voters would push the pro-independence vote into a clear majority. In other words, "yes" would win a Catalan independence referendum with equal participation between the blocks.
 
 Why is it that there are so many more "cross-over" voters among unionist parties as compared to independentist parties? The data examined here don't provide the answer, but there are a few possibilities worth considering:  
 
+- When people go to vote, they do so with _many_ issues in mind. There may be a significant proportion of independentists who simply care more about other issues than independence (and therefore vote for pro-union parties).  
+
+- There are many new independentists. In these cases, they may retain their previous party allegiance (ie, most of their political views have not changed), even though their view on the specific question of independence has changed in recent years.  
+
 - The unionist parties are much larger than pro-independence parties throughout Spain, and get more attention in Spanish media. This could result in some people with pro-independence tendencies identifying more readily with a larger, Spanish national parties.  
-- Two of the unionist parties (PP and C's) are significantly to the right of the independentist parties [data here](https://www.vilaweb.cat/noticies/dada-joe-brew-independentisme-dreta-esquerra/). So, a conservative, right-leaning, pro-independence individual may choose to vote for one of the unionist right-wing parties, even though he disagrees with that party on the specific question of Catalan independence (since he/she will agree with most of their other policies).  
+- Two of the unionist parties (PP and C's) are significantly to the right of the independentist parties ([data here](https://www.vilaweb.cat/noticies/dada-joe-brew-independentisme-dreta-esquerra/)). So, a conservative, right-leaning, pro-independence individual may choose to vote for one of the unionist right-wing parties, even though he disagrees with that party on the specific question of Catalan independence (since he/she will agree with most of their other policies).  
 
-- Catalan socialist politicians, who have historically been in favor of self-determination until recently, have taken a more explicit anti-independence stance so as to garner votes at the Spanish national level (rather than a more nuanced stance which would better represent diversity on the question of independence among their voting base).  
+- Catalan socialist politicians, who have historically been in favor of self-determination until recently, have taken a more explicit anti-independence stance so as to garner votes at the Spanish national level (rather than a more nuanced stance which would better represent diversity on the question of independence among their voting base). If the socialists more accurately represented their electoral base, they would have at least a few pro-independence politicians in Parlament.
 
-- The Podem(os) party and its variants should simply not be considered "unionist".  
+- The Podem(os) party and its variants should simply not be considered "unionist", since so many of their voters are pro-independence.  
 
+
+The specific reasons for voter-party cross-over on the issue of independence is not entirely clear. What is clear, however, is that in a vote on the specific issue of Catalan independence, a majority of Catalans would vote in favor. 
+
+
+
+# Details
+
+Full code and data for this analysis is available publicly at https://github.com/joebrew/vilaweb/tree/master/analyses/quarantaset. 
 
 
