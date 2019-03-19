@@ -154,7 +154,7 @@ if(catalan){
   the_caption <- 'Mostra: 3143 residents de Catalunya amb ciutadania espanyola. Dades: Combinació enquestes CEO.\n2015 i 2018. Preguntes P56I i P31. Gràfic: Joe Brew | @joethebrew.'
 } else if(english) {
   the_levels <- en_levels
-  the_subtitle <- "Extent of agreement with the phrase"
+  the_subtitle <- "Extent of agreement with the above phrase"
   the_title <- '\n"With so much immigration, it doesn\'t feel like home any more"'
   the_caption <- 'Sample size: 3143 residents of Catalonia with Spanish citizenship. Data: Aggregated CEO surveys,\n2015 and 2018. Questions P56I and P31. Chart: Joe Brew | @joethebrew | joe@databrew.cc.'
 } else {
@@ -173,7 +173,7 @@ cols <- databrew::make_colors(n = 10, categorical = TRUE)
 cols <- cols[c(2,3, 6)]
 cols <- rev(cols)
 # cols <- rev(cols)
-cols[2] <- 'darkgrey'
+cols[2] <- grey(0.2)
 
 pd <- pd %>%
   arrange(desc(economy), p)
@@ -186,8 +186,8 @@ ggplot(data = pd %>%
   geom_bar(stat = 'identity',
            position = 'stack',
            # position = position_dodge(width = 0.9),
-           color = 'black',
-           alpha = 0.6,
+           # color = 'black',
+           alpha = 0.9,
            aes(fill = economy)) +
   # facet_wrap(~partit) +
   theme_vilaweb() +
@@ -195,11 +195,12 @@ ggplot(data = pd %>%
   #                   values = cols) +
   geom_text(aes(label = round(p, digits = 1),
                 y = p-1),
-            alpha = 0.6,
+            alpha = 0.9,
+            col = 'white',
             vjust = 1,
             position = 'stack',
             # position = position_dodge(width = 0.9),
-            size = 3) +
+            size = 5) +
   scale_fill_manual(name = '',
                     values = cols) +
   labs(x = '',
@@ -210,5 +211,152 @@ ggplot(data = pd %>%
   theme(legend.position = 'right',
         axis.text.x = element_text(size = 12),
        plot.caption = element_text(hjust = 0))
+```
+
+```{r}
+
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  group_by(partit) %>%
+  mutate(size = n()) %>%
+  filter(size >= 50) %>%
+  ungroup %>%
+  mutate(year = ANY) %>%
+  mutate(axis = as.character(P25)) %>%
+  mutate(axis = ifelse(axis == 'Extrema esquerra',
+                       '1',
+                       ifelse(axis == 'Extrema dreta',
+                              '10',
+                              as.character(axis)))) %>%
+  mutate(axis = as.numeric(axis)) %>%
+  filter(!partit %in% c('Altre/Cap/NS/NC',
+                        'ICV-EUIA'))
+
+pd <- pd %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) %>%
+    filter(!is.na(indy)) %>%
+  filter(indy != 'NS/NC') %>%
+  mutate(economy = P56I) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o molt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o molt en desacord",
+                         "Ni d'acord ni en desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+original_levels <- c("D'acord o molt d'acord",
+                               "Ni d'acord ni en desacord",
+                               "En desacord o molt en desacord")
+cat_levels <- c("\nD'acord o\nmolt\nd'acord\n",
+                               "\nNi d'acord\nni en\ndesacord\n",
+                               "\nEn desacord\no molt en\ndesacord\n")
+en_levels <- c("\nAgree or\nstrongly agree\n",
+                               "\nNeither agree\nnor disagree\n",
+                               "\nDisagree or\nstrongly disagree\n")
+esp_levels <- c("\nDe acuerdo\no muy\nde acuerdo\n",
+                               "\nNi de\nacuerdo ni\nen desacuerdo\n",
+                               "\nEn desacuerdo\no muy\nen desacuerdo\n")
+catalan <- FALSE
+english <- TRUE
+
+
+
+if(catalan){
+  the_subtitle <- "Grau d'acord amb l'afirmació"
+  the_levels <- cat_levels
+  the_title <- "\n'Amb tanta immigració, un ja no se sent com a casa'"
+  the_caption <- 'Mostra: 3143 residents de Catalunya amb ciutadania espanyola. Dades: Combinació enquestes CEO.\n2015 i 2018. Preguntes P56I i P31. Gràfic: Joe Brew | @joethebrew.'
+    indies <- c('A favor\nde la\nindependència',
+              'NS/NC',
+              'En contra\nde la\nindependència')
+} else if(english){
+  the_levels <- en_levels
+  the_subtitle <- "Extent of agreement with the phrase"
+  the_title <- '\n"With so much immigration, it doesn\'t feel like home any more"'
+  the_caption <- 'Sample size: 3143 residents of Catalonia with Spanish citizenship. Data: Aggregated CEO surveys,\n2015 and 2018. Questions P56I and P31. Chart: Joe Brew | @joethebrew | joe@databrew.cc\nCode for reproducibility: https://github.com/joebrew/vilaweb/tree/master/analyses/xenofobia.'
+  indies <- c('In favor of\nCatalan independence',
+              'Not sure/no answer',
+              'Against\nCatalan independence')
+} else {
+    the_levels <- esp_levels
+  the_subtitle <- "Grado de acuerdo con la afirmación"
+  the_title <- '\n"Con tanta inmigración, uno ya no se siente como en casa"'
+  the_caption <- 'Muestra: 3143 residentes de Cataluña con ciudadanía española. Datos: Combinación encuestas CEO.\n2015 y 2018. Preguntas P56I y P31. Gráfico: Joe Brew | @joethebrew.'
+  indies <- c('A favor\nde la\nindependencia',
+              'NS/NC',
+              'En contra\nde la\nindependencia')
+}
+
+pd$indy <- 
+  ifelse(pd$indy == 'Sí', indies[1],
+         ifelse(pd$indy == 'No', indies[3],
+                indies[2]))
+
+pd$economy<- factor(pd$economy,
+                    levels = rev(original_levels),
+                    labels = rev(the_levels))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = 10, categorical = TRUE)
+cols <- cols[c(2,3, 6)]
+cols <- rev(cols)
+# cols <- rev(cols)
+cols[2] <- grey(0.2)
+
+pd <- pd %>%
+  arrange(desc(economy), p)
+pd$indy <- factor(pd$indy, levels = unique(pd$indy))
+
+ggplot(data = pd,
+       aes(x = indy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = 'stack',
+           # position = position_dodge(width = 0.9),
+           # color = 'black',
+           alpha = 0.85,
+           aes(fill = economy)) +
+  # facet_wrap(~partit) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = paste0(round(p, digits = 1), '%'),
+                y = p-1),
+            alpha = 0.9,
+            col = 'white',
+            vjust = 1,
+            position = 'stack',
+            # position = position_dodge(width = 0.9),
+            size = 5) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+  labs(x = '',
+       y = '%',
+       subtitle = the_subtitle,
+       title =  the_title,
+       caption = the_caption) +
+  theme(legend.position = 'right',
+        axis.text.x = element_text(size = 12),
+       plot.caption = element_text(hjust = 0,
+                                   color = cols[1]))
 ```
 
