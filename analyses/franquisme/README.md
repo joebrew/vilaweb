@@ -4,24 +4,26 @@ El franquisme i l'independentisme
 Introducció
 ===========
 
-S'acusen als sobiranistes catalans de moltes coses: de ser de dretes ([quantitativament fals](https://www.vilaweb.cat/noticies/dada-joe-brew-independentisme-dreta-esquerra/)), de ser xenófobs ([quantitativament fals](https://twitter.com/joethebrew/status/1107874957495681024)), de ser violents ([quantitativament fals](https://www.vilaweb.cat/noticies/els-dirigents-unionistes-no-van-parlar-de-violencia-durant-els-dies-doctobre-on-ara-diuen-que-hi-va-haver-violencia-les-dades/)), de ser minoritaris ([tampoc és veritat](https://www.vilaweb.cat/noticies/independentisme-majoritari-joe-brew/)), etc.
+S'acusen als sobiranistes catalans de ser moltes coses: de dretes ([quantitativament fals](https://www.vilaweb.cat/noticies/dada-joe-brew-independentisme-dreta-esquerra/)), de xenófobs ([quantitativament fals](https://twitter.com/joethebrew/status/1107874957495681024)), de violents ([quantitativament fals](https://www.vilaweb.cat/noticies/els-dirigents-unionistes-no-van-parlar-de-violencia-durant-els-dies-doctobre-on-ara-diuen-que-hi-va-haver-violencia-les-dades/)), de minoritaris ([tampoc és veritat](https://www.vilaweb.cat/noticies/independentisme-majoritari-joe-brew/)), etc.
 
-Però mai havia sentit a ningú acusar el moviment sobiranista de franquista. Fins aquesta setmana.
+Però mai havia sentit a ningú acusar el moviment sobiranista de "franquista." Fins aquesta setmana.
 
-En una entrevista publicada el 18 de març, José Antonio Montano va dir que "el más parecido al franquismo... es el nacionalismo catalán". Després de llegir aquesta comparació, pensava en possibles anàlisis per confirmar o rebutjar - amb dades - la relació independentisme-franquisme. Existeix? Els independentistes són franquistes?
+En [una entrevista publicada el 18 de març](https://www.elcatalan.es/entrevista-a-jose-antonio-montano-lo-mas-parecido-hoy-al-franquismo-es-el-nacionalismo-catalan), José Antonio Montano va dir que "el más parecido al franquismo... es el nacionalismo catalán". Després de llegir aquesta comparació, pensava en possibles anàlisis per confirmar o rebutjar - amb dades - la relació independentisme-franquisme que sugereix el Senyor Montano. Existeix? Els independentistes són franquistes?
 
 Quines dades podria analitzar? D'una banda, algunes actituds de Generalísimo són notories - el seu catolicisme, la seva adversió al comunisme, la seva obsessió amb la lleialtat i la autoritat. Potser podria trobar dades sobre aquests temes. Buscant això, però, vaig trobar alguna cosa molt millor: dades sobre la valoració del franquisme mateix. Específicament, una pregunta joia que es va fer al BOP (Baròmetre d'Opinió Política) en la tercera ronda de 2018 a 1.500 catalans.
 
 La pregunta és aquesta: "Per a vostè, l’etapa del franquisme ha suposat a la història de Catalunya, en conjunt, un període positiu, negatiu o va tenir coses positives i negatives?"
 
-Quina pregunta més perfecta! Quina manera millor de provar la hipòtesi de Montano (l'independentisme és com el franquisme) que veure exactament que pensen els catalans (independentistes i no) sobre el Franco!
+Quina pregunta més perfecta! Quina manera millor de provar la hipòtesi de Montano (l'independentisme és com el franquisme)! Gracies a aquesta pregunta, podrem veure exactament que pensen els catalans (independentistes i no) sobre el Franco!
 
 Fem-ho.
 
 Metodes
 =======
 
-Vaig descarregar les dades "crues" de la [3a onada del BOP](http://ceo.gencat.cat/ca/barometre/detall/index.html?id=6868) del Centre d'Estudis d'Opinió. Aquesta enquesta, administrada per Opinòmetre SL, fa servir [técniques de mostreig riguroses](http://upceo.ceo.gencat.cat/wsceop/6868/Fitxa%20t%C3%A8cnica%20-908.pdf) per que la mostra final representi bé a Catalunya. Amés, i a diferència de moltes enquestes que es publiquen amb freqüencia en alguns mitjans, el BOP és (a) presencial (el que evita el biaix de fer enquestes telefonicament) i (b) restringit als catalans amb ciutadania espanyola (i per tant, reflecteix bastant bé el que serien resultats electorals). De les 1.500 enquestats, 1409 van donar una resposta a la pregunta sobre el franquisme, 1355 van contestar a la pregunta sobre la independència. Vaig examinar les associacions entre les valoracions del franquisme i les opinions sobre la independència de Catalunya.
+Vaig descarregar les dades "crues" de la [3a onada del BOP](http://ceo.gencat.cat/ca/barometre/detall/index.html?id=6868) del Centre d'Estudis d'Opinió. Aquesta enquesta, administrada per Opinòmetre SL, fa servir [técniques de mostreig riguroses](http://upceo.ceo.gencat.cat/wsceop/6868/Fitxa%20t%C3%A8cnica%20-908.pdf) per que la mostra final representi bé a Catalunya. Amés, i a diferència de moltes enquestes que es publiquen amb freqüencia en alguns mitjans, el BOP és (a) presencial (el que evita el biaix de fer enquestes telefonicament) i (b) restringit als catalans amb ciutadania espanyola (i per tant, reflecteix bastant bé el que serien resultats electorals reconeguts per l'Estat Espanyol). De les 1.500 enquestats, 1409 van donar una resposta a la pregunta sobre el franquisme, i 1355 van contestar a la pregunta sobre la independència. Vaig examinar les associacions entre les valoracions del franquisme i les opinions sobre la independència de Catalunya, així com els partits polítics dels enquestats i la seva opinió sobre la Constitució Espanyola.
+
+Tot el còdi i les dades d'aquest anàlisi són publicament disponibles: <https://github.com/joebrew/vilaweb/tree/master/analyses/franquisme>
 
 Resultats
 =========
@@ -82,4 +84,6 @@ Reflecció personal
 
 Jo, personalment, no m'agrada parlar del Franco. La seva omnipresencia a la política espanyola i catalana em molesta. N'estic fart.
 
-Però mentres hi hagi partits polítics on el rebuig al feixisme és minoritari i la majoria diu que el franquisme "va tenir coses positives" (PP i C's), cal parlar-ne, que m'agradi o no. El feixisme desapareixerà quan es canviïen les actituds, no quan s'hagi acabat de parlar d'ell. Agraeixo al Senyor Montano per haver començat la conversa sobre la relació entre l'independentisme i el franquisme, i li convido a continuar-la amb aquestes dades, les objectives, a la mà.
+Però mentres hi hagi partits polítics on el rebuig al feixisme és minoritari i la majoria diu que el franquisme "va tenir coses positives" (PP i C's), cal parlar-ne, que ens agradi o no. El feixisme desapareixerà quan es canviïen les actituds, no quan s'hagi acabat de parlar d'ell. I per canviar les actituds, s'ha de treballar per comprendre les actituds. Afortunadament, més enllà de les opinions, n'hi ha dades.
+
+Agraeixo al Senyor Montano d'haver començat la conversa sobre la relació entre l'independentisme i el franquisme, i li convido a continuar-la amb aquestes dades, les objectives, a la mà.

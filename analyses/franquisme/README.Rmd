@@ -203,6 +203,8 @@ n_respond_both <- length(which(pd$franquisme != 'NS/NC' & pd$indy != 'NS/NC'))
 
 Vaig descarregar les dades "crues" de la [3a onada del BOP](http://ceo.gencat.cat/ca/barometre/detall/index.html?id=6868) del Centre d'Estudis d'Opinió. Aquesta enquesta, administrada per Opinòmetre SL, fa servir [técniques de mostreig riguroses](http://upceo.ceo.gencat.cat/wsceop/6868/Fitxa%20t%C3%A8cnica%20-908.pdf) per que la mostra final representi bé a Catalunya. Amés, i a diferència de moltes enquestes que es publiquen amb freqüencia en alguns mitjans, el BOP és (a) presencial (el que evita el biaix de fer enquestes telefonicament) i (b) restringit als catalans amb ciutadania espanyola (i per tant, reflecteix bastant bé el que serien resultats electorals reconeguts per l'Estat Espanyol). De les 1.500 enquestats, `r n_respond_franquisme` van donar una resposta a la pregunta sobre el franquisme, i `r n_respond_indy` van contestar a la pregunta sobre la independència. Vaig examinar les associacions entre les valoracions del franquisme i les opinions sobre la independència de Catalunya, així com els partits polítics dels enquestats i la seva opinió sobre la Constitució Espanyola.
 
+Tot el còdi i les dades d'aquest anàlisi són publicament disponibles: https://github.com/joebrew/vilaweb/tree/master/analyses/franquisme
+
 # Resultats
 
 ## Valoració del franquisme a Catalunya
@@ -241,6 +243,8 @@ ggplot(data = plot_data,
     theme(legend.position = 'none') +
     theme(axis.text.x = element_text(size = 18),
         axis.text.y = element_text(size = 18),
+        plot.subtitle = element_text(size = 10),
+        plot.caption = element_text(size = 7),
         plot.title = element_text(hjust = 0.5, size = 24))
 ```
 
@@ -324,10 +328,15 @@ ggplot(data = plot_data,
       #                                vjust = 1,
       #                                hjust = 0.5),
       #   axis.text.y = element_text(size = 14),
-        plot.title = element_text(hjust = 0.5, size = 20),
-        strip.text = element_text(size = 10,
+        plot.title = element_text(hjust = 0.5, size = 18),
+        plot.subtitle = element_text(size = 10),
+      plot.caption = element_text(size = 7),
+        strip.text = element_text(size = 9,
                                   color = grey(0.1))) +
-  facet_wrap(~franquisme)
+  facet_wrap(~franquisme) +
+   theme(panel.background = element_rect(fill = grey(0.95)), 
+       panel.grid = element_blank(), 
+       panel.spacing.x = unit(0.5,"line")) 
 ```
 
 La gran majoria dels catalans que diuen que el franquisme va ser negatiu són independentistes (59.7%). I la gran majoria dels que diuen que el franquisme va ser positiu són unionistes (91,6%). 
@@ -358,7 +367,7 @@ ggplot(data = plot_data,
            fill = cols) +
   geom_text(aes(label = paste0(round(p, digits = 1), '%')),
             nudge_y = 4,
-            size = 6,
+            size = 5,
             color = 'black',
             alpha = 0.7) +
   labs(y = 'Percentage',
@@ -374,10 +383,14 @@ ggplot(data = plot_data,
     theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         plot.title = element_text(hjust = 0.5, size = 24),
-        plot.subtitle = element_text(size = 12),
+        plot.subtitle = element_text(size = 10),
+        plot.caption = element_text(size = 7),
         strip.text = element_text(size = 21,
                                   color = grey(0.1))) +
-  facet_wrap(~indy)
+  facet_wrap(~indy) +
+    theme(panel.background = element_rect(fill = grey(0.95)), 
+       panel.grid = element_blank(), 
+       panel.spacing.x = unit(0.5,"line")) 
 ```
 
 El 88,2% dels independentistes diuen que el franquisme va ser negatiu per a Catalunya. Entre unionistes, gairebé la meitat (54,9%) diuen que el franquisme va ser negatiu. 
@@ -444,13 +457,13 @@ ggplot(data = plot_data,
     theme_vilaweb() +
   theme(legend.position = 'right') +
     # theme(legend.position = 'none') +
-    theme(axis.text.x = element_text(size = 14),
+    theme(axis.text.x = element_text(size = 10),
         axis.text.y = element_text(size = 14),
-        plot.title = element_text(hjust = 0.5, size = 24),        plot.subtitle = element_text(size = 12),
+        plot.title = element_text(hjust = 0.5, size = 24),        plot.subtitle = element_text(size = 10),
 
         strip.text = element_text(size = 21,
                                   color = grey(0.1)),
-        plot.caption = element_text(hjust = 0))
+        plot.caption = element_text(hjust = 0, size = 7))
 ```
 
 En els partits més espanyolistes (el PP i Ciutadans), el percentage de gent que diu que el franquisme va ser negatiu és minoritari (25,8% en el PP i 35,1% en Ciutadans). La majoria en aquests partits diuen que el franquisme va ser positiu o va tenir coses positives i negatives. 
@@ -508,15 +521,15 @@ ggplot(data = plot_data,
     theme_vilaweb() +
   theme(legend.position = 'right') +
     # theme(legend.position = 'none') +
-    theme(axis.text.x = element_text(size = 14),
-        axis.text.y = element_text(size = 14),
+    theme(axis.text.x = element_text(size = 11),
+        axis.text.y = element_text(size = 11),
         axis.title.x = element_text(size = 20),
         legend.title = element_text(size = 13),
         legend.text = element_text(size = 10),
-        plot.title = element_text(hjust = 0, size = 20),
+        plot.title = element_text(hjust = 0, size = 16),
         strip.text = element_text(size = 21,
                                   color = grey(0.1)),
-        plot.caption = element_text(hjust = 0))
+        plot.caption = element_text(hjust = 0, size = 7))
 ```
 
 L'associació entre la valoració positiva del franquisme i el suport a la Constitució Espanyola és bastant clara. En un referèndum avui sobre la CE, el "Sí" guanyaria a Catalunya només en el sector (petit) de la població que diu que el franquisme va ser positiu. En el sector ambigu (el franquisme va tenir coses negatives i positives), guanyaria el "No" probablement, però dependria de com voten els "NS/NC". I en el sector que valora de manera negativa el franquisme, el "No" a la Constitució guanyaria de manera clara: en aquest grup, menys de 13% votaria "Sí" a la CE.
@@ -530,5 +543,7 @@ Els catalans franquistes són majoritariament unionistes (91,6%). I els independ
 
 Jo, personalment, no m'agrada parlar del Franco. La seva omnipresencia a la política espanyola i catalana em molesta. N'estic fart.
 
-Però mentres hi hagi partits polítics on el rebuig al feixisme és minoritari i la majoria diu que el franquisme "va tenir coses positives" (PP i C's), cal parlar-ne, que m'agradi o no. El feixisme desapareixerà quan es canviïen les actituds, no quan s'hagi acabat de parlar d'ell. Agraeixo al Senyor Montano per haver començat la conversa sobre la relació entre l'independentisme i el franquisme, i li convido a continuar-la amb aquestes dades, les objectives, a la mà.
+Però mentres hi hagi partits polítics on el rebuig al feixisme és minoritari i la majoria diu que el franquisme "va tenir coses positives" (PP i C's), cal parlar-ne, que ens agradi o no. El feixisme desapareixerà quan es canviïen les actituds, no quan s'hagi acabat de parlar d'ell. I per canviar les actituds, s'ha de treballar per comprendre les actituds. Afortunadament, més enllà de les opinions, n'hi ha dades.
+
+Agraeixo al Senyor Montano d'haver començat la conversa sobre la relació entre l'independentisme i el franquisme, i li convido a continuar-la amb aquestes dades, les objectives, a la mà.
 
