@@ -1,0 +1,534 @@
+---
+title: "El franquisme i l'independentisme"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(tidyverse)
+library(databrew)
+source('functions.R')
+```
+
+
+
+```{r}
+party_dict <- 
+  tibble(P24 = c("PPC",
+"CiU",
+"ERC",
+"PSC",
+"ICV-EUiA",
+"C's",
+"Reagrupament.cat",
+"SI",
+"PxC",
+"CUP",
+"UPyD",
+"Podemos",
+"Barcelona en Comú",
+"CDC",
+"Junts pel Sí",
+"Catalunya sí que es pot",
+"Democràcia i Llibertat",
+"En Comú Podem",
+"PACMA",
+"PDeCAT",
+"Junts per Catalunya",
+"Catalunya en Comú Podem",
+"Altres partits",
+"Cap",
+"No ho sap",
+"No contesta"),
+partit = c("PPC",
+"PDCat/CiU/CDC/Junts",
+"ERC",
+"PSC",
+"ICV-EUiA",
+"C's",
+"Reagrupament.cat",
+"SI",
+"PxC",
+"CUP",
+"UPyD",
+"Podem(os)",
+"Podem(os)",
+"PDCat/CiU/CDC/Junts",
+"PDCat/CiU/CDC/Junts",
+"Podem(os)",
+"Democràcia i Llibertat",
+"Podem(os)",
+"PACMA",
+"PDCat/CiU/CDC/Junts",
+"PDCat/CiU/CDC/Junts",
+"Podem(os)",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC"))
+
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  group_by(partit) %>%
+  mutate(size = n()) %>%
+  # filter(size >= 50) %>%
+  ungroup %>%
+  mutate(year = ANY) %>%
+  mutate(axis = as.character(P25)) %>%
+  mutate(axis = ifelse(axis == 'Extrema esquerra',
+                       '1',
+                       ifelse(axis == 'Extrema dreta',
+                              '10',
+                              as.character(axis)))) %>%
+  mutate(axis = as.numeric(axis)) #%>%
+  # filter(!partit %in% c('Altre/Cap/NS/NC',
+  #                       'ICV-EUIA'))
+
+pd <- pd %>%
+  mutate(indy = P31) %>%
+  mutate(indy = as.character(indy)) %>%
+  mutate(indy = ifelse(indy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       indy)) 
+  #   filter(!is.na(indy)) %>%
+  # filter(indy != 'NS/NC') %>%
+
+# Get date
+pd <- pd %>%
+  arrange(ANY, MES) %>%
+  group_by(BOP_NUM) %>%
+  mutate(bop_date = as.Date(paste0(dplyr::first(ANY),
+                                   '-',
+                                   dplyr::first(MES),
+                                   '-01'))) 
+
+# # Get valoracio del rei 2018 onada 1 p21j
+# pd <- pd %>%
+#   mutate(valoracio_rei = P21J)
+# 
+# # Get val columns
+val_columns <- names(pd)[grepl('val_', names(pd))]
+
+# Franquism question: P102
+pd$franquisme <- pd$P102
+pd$constitucio <- pd$P95
+con_dict <- data_frame(
+  constitucio = c('Votaria sí',
+                  'Votaria no',
+                  'Votaria en blanc',
+                  'Votaria nul',
+                  'No votaria',
+                  'No ho sap',
+                  'Contesta'),
+  constitucio2 = c('Votaria sí',
+                  'Votaria no',
+                  'Votaria nul\nen blanc\nNo votaria\nNS/NC',
+                  'Votaria nul\nen blanc\nNo votaria\nNS/NC',
+                  'Votaria nul\nen blanc\nNo votaria\nNS/NC',
+                  'Votaria nul\nen blanc\nNo votaria\nNS/NC',
+                  'Votaria nul\nen blanc\nNo votaria\nNS/NC')
+)
+pd <- pd %>%
+  left_join(con_dict) %>%
+  dplyr::select(-constitucio) %>%
+  dplyr::rename(constitucio = constitucio2)
+
+# Subset to only include columns of interest
+pd <- pd[,c('axis', 
+            'bop_date',
+            'partit',
+            'indy',
+            'franquisme',
+            'constitucio',
+            'PONDERA')]
+pd <- pd %>%
+  filter(!is.na(franquisme)) %>%
+  mutate(franquisme = as.character(franquisme)) %>%
+  mutate(franquisme = ifelse(franquisme %in% c('No ho sap', 'No contesta'), 'NS/NC', franquisme)) %>%
+  mutate(franquisme = ifelse(franquisme == 'Va tenir coses positives i negatives', 'Va tenir\ncoses positives\ni negatives', franquisme))
+pd$franquisme <- factor(pd$franquisme,
+                        levels = c('Negatiu',
+                                   'Va tenir\ncoses positives\ni negatives', 
+                                   'Positiu',
+                                   'NS/NC'))
+
+# # Gather
+# pd <- pd %>%
+#   gather(key, value, val_Albiol:val_Albiach)
+```
+
+# Introducció
+
+S'acusen als sobiranistes catalans de ser moltes coses: de dretes ([quantitativament fals](https://www.vilaweb.cat/noticies/dada-joe-brew-independentisme-dreta-esquerra/)), de xenófobs ([quantitativament fals](https://twitter.com/joethebrew/status/1107874957495681024)), de violents ([quantitativament fals](https://www.vilaweb.cat/noticies/els-dirigents-unionistes-no-van-parlar-de-violencia-durant-els-dies-doctobre-on-ara-diuen-que-hi-va-haver-violencia-les-dades/)), de minoritaris ([tampoc és veritat](https://www.vilaweb.cat/noticies/independentisme-majoritari-joe-brew/)), etc.
+
+
+Però mai havia sentit a ningú acusar el moviment sobiranista de "franquista." Fins aquesta setmana.
+
+En [una entrevista publicada el 18 de març](https://www.elcatalan.es/entrevista-a-jose-antonio-montano-lo-mas-parecido-hoy-al-franquismo-es-el-nacionalismo-catalan), José Antonio Montano va dir que "el más parecido al franquismo... es el nacionalismo catalán". Després de llegir aquesta comparació, pensava en possibles anàlisis per confirmar o rebutjar - amb dades - la relació independentisme-franquisme que sugereix el Senyor Montano. Existeix? Els independentistes són franquistes? 
+
+Quines dades podria analitzar? D'una banda, algunes actituds de Generalísimo són notories - el seu catolicisme, la seva adversió al comunisme, la seva obsessió amb la lleialtat i la autoritat. Potser podria trobar dades sobre aquests temes. Buscant això, però, vaig trobar alguna cosa molt millor: dades sobre la valoració del franquisme mateix. Específicament, una pregunta joia que es va fer al BOP (Baròmetre d'Opinió Política) en la tercera ronda de 2018 a 1.500 catalans.
+
+La pregunta és aquesta: "Per a vostè, l’etapa del franquisme ha suposat a la història de Catalunya, en conjunt, un període positiu, negatiu o va tenir coses positives i negatives?"
+
+Quina pregunta més perfecta! Quina manera millor de provar la hipòtesi de Montano (l'independentisme és com el franquisme)! Gracies a aquesta pregunta, podrem veure exactament que pensen els catalans (independentistes i no) sobre el Franco!
+
+Fem-ho.
+
+# Metodes
+
+
+```{r}
+n_sample <- nrow(pd)
+n_respond_franquisme <- length(which(pd$franquisme != 'NS/NC'))
+n_respond_indy <- length(which(pd$indy != 'NS/NC'))
+n_respond_both <- length(which(pd$franquisme != 'NS/NC' & pd$indy != 'NS/NC'))
+```
+
+
+Vaig descarregar les dades "crues" de la [3a onada del BOP](http://ceo.gencat.cat/ca/barometre/detall/index.html?id=6868) del Centre d'Estudis d'Opinió. Aquesta enquesta, administrada per Opinòmetre SL, fa servir [técniques de mostreig riguroses](http://upceo.ceo.gencat.cat/wsceop/6868/Fitxa%20t%C3%A8cnica%20-908.pdf) per que la mostra final representi bé a Catalunya. Amés, i a diferència de moltes enquestes que es publiquen amb freqüencia en alguns mitjans, el BOP és (a) presencial (el que evita el biaix de fer enquestes telefonicament) i (b) restringit als catalans amb ciutadania espanyola (i per tant, reflecteix bastant bé el que serien resultats electorals reconeguts per l'Estat Espanyol). De les 1.500 enquestats, `r n_respond_franquisme` van donar una resposta a la pregunta sobre el franquisme, i `r n_respond_indy` van contestar a la pregunta sobre la independència. Vaig examinar les associacions entre les valoracions del franquisme i les opinions sobre la independència de Catalunya, així com els partits polítics dels enquestats i la seva opinió sobre la Constitució Espanyola.
+
+# Resultats
+
+## Valoració del franquisme a Catalunya
+
+
+El gràfic següent mostra la valoració dels catalans del franquisme.
+
+```{r}
+plot_data <- pd %>%
+  filter(franquisme != 'NS/NC') %>%
+  group_by(franquisme) %>%
+  summarise(n = sum(PONDERA),
+            mostra = n()) %>%
+  ungroup %>%
+  mutate(p = n / sum(n) * 100)
+cols <- as.character(vilaweb::colors_vilaweb()[c(5)])
+ggplot(data = plot_data,
+       aes(x = franquisme,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           fill = cols) +
+  geom_text(aes(label = paste0(round(p, digits = 1), '%')),
+            nudge_y = 3,
+            size = 7,
+            color = 'black',
+            alpha = 0.7) +
+  labs(y = 'Percentage',
+       x = '',
+       title = 'Valoració del franquisme a Catalunya',
+       subtitle = "Pregunta: 'Per a vostè, l’etapa del franquisme ha suposat a la història de Catalunya, \nen conjunt, un període positiu, negatiu o va tenir coses positives i negatives?'",
+       caption = paste0(sum(plot_data$mostra),
+                        ' residents de Catalunya amb ciutadania espanyola. Dades del BOP/CEO 3a onada 2018.\nPregunta n 102. Gràfic de Joe Brew | @joethebrew. |  www.vilaweb.cat.')) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+    theme_vilaweb() +
+    theme(legend.position = 'none') +
+    theme(axis.text.x = element_text(size = 18),
+        axis.text.y = element_text(size = 18),
+        plot.title = element_text(hjust = 0.5, size = 24))
+```
+
+3 de cada 4 catalans diuen que el franquisme ha suposat un període negatiu per a la història de Catalunya. I aquest altre 25%? Qui són? Són independentistes (se el Senyor Montano té raó, han de ser)? Mirem-ho.
+
+## Franquisme i independentisme
+
+El gràfic següent mostra tres grups: els que diuen que el franquisme va ser negaitu per a Catalunya (a l'esquerra), els que diuen que "va tenir coses negatives i positives", i els que diuen que va ser positiu (a la dreta). Dins de cada grup, es mostra el perfil independentista (altura de les barres).
+
+
+```{r}
+fran_dict <-
+  data_frame(franquisme2 = c('Negatiu',
+                             'Va tenir\ncoses positives\ni negatives',
+                             'Positiu'))
+fran_dict$franquisme <- factor(paste0('Dels que diuen que\n"El franquisme ',
+                               c('va ser negatiu"',
+                                 'va tenir coses\nnegatives i positives"',
+                                 'va ser positiu"'), '...'),
+                               levels = paste0('Dels que diuen que\n"El franquisme ',
+                               c('va ser negatiu"',
+                                 'va tenir coses\nnegatives i positives"',
+                                 'va ser positiu"'), '...'))
+
+plot_data <- pd %>%
+  # filter(indy != 'NS/NC') %>% 
+  mutate(indy = ifelse(indy == 'No',
+                       '...són unionistes',
+                       ifelse(indy == 'Sí',
+                              '...són independentistes',
+                              '...NS/NC'))) %>%
+  filter(franquisme != 'NS/NC') %>%
+  rename(franquisme2 = franquisme) %>% 
+  left_join(fran_dict) %>%
+  group_by(franquisme, indy) %>%
+  summarise(n = sum(PONDERA),
+            mostra = n()) %>%
+  ungroup %>%
+  group_by(franquisme) %>%
+  mutate(p = n / sum(n) * 100)
+plot_data$indy <- factor(plot_data$indy,
+                  levels = c('...són independentistes',
+                             '...NS/NC',
+                             '...són unionistes'),
+                  labels = c('...són\nindependentistes',
+                             '...NS/NC',
+                             '...són\nunionistes'))
+
+cols <- 
+  c(as.character(vilaweb::colors_vilaweb()[c(5,3)]))
+cols <- c(cols[1], grey(0.4), cols[2])
+ggplot(data = plot_data,
+       aes(x = indy,
+           y = p,
+           fill = indy)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.6)) +
+  geom_text(aes(label = paste0(round(p, digits = 1), '%'),
+                y = p + 4),
+            position = position_dodge(width = 0.6),
+            size = 4,
+            color = 'black',
+            alpha = 0.9) +
+  labs(y = 'Percentage',
+       x = '',
+       title = 'Independentisme segons valoració del franquisme',
+       subtitle = "Pregunta: 'Per a vostè, l’etapa del franquisme ha suposat a la història de Catalunya, \nen conjunt, un període positiu, negatiu o va tenir coses positives i negatives?'",
+       caption = paste0(sum(plot_data$mostra),
+                        ' residents de Catalunya amb ciutadania espanyola. Dades del BOP/CEO 3a onada 2018.\nPreguntes 102 (franquisme) i 31 (independentisme). Gràfic de Joe Brew | @joethebrew. |  www.vilaweb.cat.')) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+    theme_vilaweb() +
+    theme(legend.position = 'none') +
+    theme(
+      axis.text.x = element_text(angle = 45,
+                                 vjust = 1,
+                                 hjust = 1,
+                                 size = 10),
+      # axis.text.x = element_text(size = 11,
+      #                                angle = 90,
+      #                                vjust = 1,
+      #                                hjust = 0.5),
+      #   axis.text.y = element_text(size = 14),
+        plot.title = element_text(hjust = 0.5, size = 20),
+        strip.text = element_text(size = 10,
+                                  color = grey(0.1))) +
+  facet_wrap(~franquisme)
+```
+
+La gran majoria dels catalans que diuen que el franquisme va ser negatiu són independentistes (59.7%). I la gran majoria dels que diuen que el franquisme va ser positiu són unionistes (91,6%). 
+
+Mirem les dades d'una altre manera. En lloc de preguntar quin percentage dels franquistes catalans són independentistes (8,4%), mirem quin percentage dels independentistes són franquiestes. 
+
+
+El gràfic següent mostra la valoració del franquisme pels catalans independentistes (a l'esquerra) i unionistes (a la dreta). Les diferències són remarcables.
+
+```{r}
+plot_data <- pd %>%
+  filter(indy != 'NS/NC') %>% 
+  mutate(indy = ifelse(indy == 'No',
+                       'Unionistes',
+                       'Independentistes')) %>%
+  filter(franquisme != 'NS/NC') %>%
+  group_by(franquisme, indy) %>%
+  summarise(n = sum(PONDERA),
+            mostra = n()) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100)
+cols <- as.character(vilaweb::colors_vilaweb()[c(5)])
+ggplot(data = plot_data,
+       aes(x = franquisme,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           fill = cols) +
+  geom_text(aes(label = paste0(round(p, digits = 1), '%')),
+            nudge_y = 4,
+            size = 6,
+            color = 'black',
+            alpha = 0.7) +
+  labs(y = 'Percentage',
+       x = '',
+       title = 'Valoració del franquisme a Catalunya',
+       subtitle = "Pregunta: 'Per a vostè, l’etapa del franquisme ha suposat a la història de Catalunya, \nen conjunt, un període positiu, negatiu o va tenir coses positives i negatives?'",
+       caption = paste0(sum(plot_data$mostra),
+                        ' residents de Catalunya amb ciutadania espanyola. Dades del BOP/CEO 3a onada 2018.\nPreguntes 102 (franquisme) i 31 (independentisme). Gràfic de Joe Brew | @joethebrew. |  www.vilaweb.cat.')) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+    theme_vilaweb() +
+    theme(legend.position = 'none') +
+    theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        plot.title = element_text(hjust = 0.5, size = 24),
+        plot.subtitle = element_text(size = 12),
+        strip.text = element_text(size = 21,
+                                  color = grey(0.1))) +
+  facet_wrap(~indy)
+```
+
+El 88,2% dels independentistes diuen que el franquisme va ser negatiu per a Catalunya. Entre unionistes, gairebé la meitat (54,9%) diuen que el franquisme va ser negatiu. 
+
+## Per partit
+
+Mirem les valoracions del franquisme per partit:
+
+```{r}
+plot_data <- pd %>%
+  group_by(partit, franquisme) %>%
+  summarise(n = sum(PONDERA),
+            mostra = n()) %>%
+  group_by(partit) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup %>%
+  filter(!partit %in% c('ICV-EUiA', 'PACMA',
+                        'Altre/Cap/NS/NC'))
+
+plot_data <- plot_data %>%
+  arrange(franquisme,p)
+plot_data$partit <- gsub('/', '/\n', plot_data$partit)
+plot_data$partit <- factor(plot_data$partit,
+                           levels = unique(plot_data$partit))
+# plot_data$franquisme <- factor(plot_data$franquisme)
+# plot_data$franquisme <- factor(plot_data$franquisme,
+#                                levels = rev(levels(plot_data$franquisme)))
+
+cols <- RColorBrewer::brewer.pal(n = 8, 'Spectral' )
+cols <- cols[1:4]
+cols <- rev(cols)
+
+# cols <- rev(cols)
+cols[4] <- grey(0.6)
+cols[1] <- as.character(vilaweb::colors_vilaweb()[5])
+
+plot_data$label <- ifelse(plot_data$franquisme == 'NS/NC',
+                          '',
+                          paste0(round(plot_data$p, 1), '%'))
+
+ggplot(data = plot_data,
+       aes(x = partit,
+           y = p,
+           fill = franquisme)) +
+  geom_bar(stat = 'identity',
+           position = position_stack()) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+    geom_text(aes(label = label),
+            # nudge_y = 4,
+            size = 3,
+            position = position_stack(),
+            color = 'white',
+            alpha = 0.8,
+            vjust = 1) +
+  labs(y = 'Percentage',
+       x = '',
+       title = 'Valoració del franquisme per partit',
+       subtitle = "Pregunta: 'Per a vostè, l’etapa del franquisme ha suposat a la història de Catalunya, \nen conjunt, un període positiu, negatiu o va tenir coses positives i negatives?'",
+       caption = paste0(sum(plot_data$mostra),
+                        ' residents de Catalunya amb ciutadania espanyola. Dades del BOP/CEO 3a onada 2018.\nPreguntes 102 (franquisme) i 31 (independentisme). Gràfic de Joe Brew | @joethebrew. |  www.vilaweb.cat.')) +
+  scale_fill_manual(name = 'El franquisme\nva ser...',
+                    values = cols) +
+    theme_vilaweb() +
+  theme(legend.position = 'right') +
+    # theme(legend.position = 'none') +
+    theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        plot.title = element_text(hjust = 0.5, size = 24),        plot.subtitle = element_text(size = 12),
+
+        strip.text = element_text(size = 21,
+                                  color = grey(0.1)),
+        plot.caption = element_text(hjust = 0))
+```
+
+En els partits més espanyolistes (el PP i Ciutadans), el percentage de gent que diu que el franquisme va ser negatiu és minoritari (25,8% en el PP i 35,1% en Ciutadans). La majoria en aquests partits diuen que el franquisme va ser positiu o va tenir coses positives i negatives. 
+
+Els socialistes catalans valoren el franquisme de manera més negativa que els del PP i C's, tot i que més de 2 de cada 3 socialistes no fan una valoració exclusivament negativa del franquisme. Els partits sobiranistes són els més anti-franquistes.
+
+## El franquisme i la Constitució Espanyol
+
+És interessant també veure la relació entre les actituds franquistes i la valoració de la Constitució Espanyola. Afortunadament, com que el BOP fa públiques les seves dades, podem fer aquest anàlisi. El següent gràfic mostra el suport a la Constitució Espanyola (si es votaria a favor o en contra si es tornés a celebrar un referèndum sobre la CE avui) segons la valoració del franquisme (eix X).
+
+```{r}
+plot_data <- pd %>%
+  group_by(franquisme, constitucio) %>%
+  summarise(n = sum(PONDERA),
+            mostra = n()) %>%
+  group_by(franquisme) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup %>%
+  filter(franquisme != 'NS/NC')
+
+plot_data <- plot_data %>%
+  arrange(constitucio,p)
+cols <- RColorBrewer::brewer.pal(n = 8, 'Spectral' )
+cols <- cols[1:4]
+cols <- rev(cols)
+
+# cols <- rev(cols)
+cols[2] <- grey(0.7)
+cols[1] <- as.character(vilaweb::colors_vilaweb()[5])
+
+plot_data$label <- paste0(round(plot_data$p, digits = 1), '%')
+
+ggplot(data = plot_data,
+       aes(x = franquisme,
+           y = p,
+           fill = constitucio)) +
+  geom_bar(stat = 'identity',
+           position = position_stack()) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+    geom_text(aes(label = label),
+            # nudge_y = 4,
+            size = 5,
+            position = position_stack(),
+            color = 'white',
+            alpha = 0.8,
+            vjust = 1) +
+  labs(y = 'Percentage',
+       x = 'Valoració del franquisme',
+       title = 'Suport a la CE segons valoració del franquisme',
+       caption = paste0(sum(plot_data$mostra),
+                        ' residents de Catalunya amb ciutadania espanyola. Dades del BOP/CEO 3a onada 2018.\nPreguntes 102 (franquisme) i 95 (CE). Gràfic de Joe Brew | @joethebrew. |  www.vilaweb.cat.')) +
+  scale_fill_manual(name = 'Si es tornés a fer un\nreferèndum sobre\nla Constitució Espanyol...',
+                    values = cols) +
+    theme_vilaweb() +
+  theme(legend.position = 'right') +
+    # theme(legend.position = 'none') +
+    theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(size = 20),
+        legend.title = element_text(size = 13),
+        legend.text = element_text(size = 10),
+        plot.title = element_text(hjust = 0, size = 20),
+        strip.text = element_text(size = 21,
+                                  color = grey(0.1)),
+        plot.caption = element_text(hjust = 0))
+```
+
+L'associació entre la valoració positiva del franquisme i el suport a la Constitució Espanyola és bastant clara. En un referèndum avui sobre la CE, el "Sí" guanyaria a Catalunya només en el sector (petit) de la població que diu que el franquisme va ser positiu. En el sector ambigu (el franquisme va tenir coses negatives i positives), guanyaria el "No" probablement, però dependria de com voten els "NS/NC". I en el sector que valora de manera negativa el franquisme, el "No" a la Constitució guanyaria de manera clara: en aquest grup, menys de 13% votaria "Sí" a la CE.
+
+
+# Conclusio
+
+Els catalans franquistes són majoritariament unionistes (91,6%). I els independentistes catalans rebutgen el franquisme de manera gairebé unànime (88,2%), mentres que els catalans unionistes fan una valoració del franquisme molt més ambigua (45% dient que va ser positiu o va tenir coses positives). A menys que el Senyor Montano tingui una altre font de dades del qual l'existència desconec, sembla que s'hagi equivocat al dir que l'independentisme català és "parecido" al franquisme. 
+
+# Reflecció personal
+
+Jo, personalment, no m'agrada parlar del Franco. La seva omnipresencia a la política espanyola i catalana em molesta. N'estic fart.
+
+Però mentres hi hagi partits polítics on el rebuig al feixisme és minoritari i la majoria diu que el franquisme "va tenir coses positives" (PP i C's), cal parlar-ne, que m'agradi o no. El feixisme desapareixerà quan es canviïen les actituds, no quan s'hagi acabat de parlar d'ell. Agraeixo al Senyor Montano per haver començat la conversa sobre la relació entre l'independentisme i el franquisme, i li convido a continuar-la amb aquestes dades, les objectives, a la mà.
+
