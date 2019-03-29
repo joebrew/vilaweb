@@ -393,10 +393,10 @@ ggplot(data = pd,
                     values = c('darkorange', 'blue')) +
   theme_vilaweb() +
     # theme(legend.position = 'none') +
-  theme(legend.position = 'right') +
-  theme(strip.text = element_text(size = 6),
+  theme(legend.position = 'bottom') +
+  theme(strip.text = element_text(size = 6.5),
         axis.text.y = element_text(size = 4),
-        axis.text.x = element_text(size = 4)) +
+        axis.text.x = element_text(size = 0)) +
   labs(x = ' ' ,
        y = 'Piulets',
        title = 'Piulets de polítics sobre el judici vs. les eleccions')
