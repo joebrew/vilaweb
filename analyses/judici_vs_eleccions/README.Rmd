@@ -1,0 +1,612 @@
+---
+title: 'La desconnexió entre Espanya i Catalunya: El judici i les eleccions'
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(tidyverse)
+library(databrew)
+source('functions.R')
+library(gsheet)
+gurl <- 'https://docs.google.com/spreadsheets/d/15rvunlLRCL1sH5SX9eyVWPsG5HNSrXIfL0T1PfPcxn4/edit?usp=sharing'
+# Read in google sheet with keys
+library(gsheet)
+if(!'goog.RData' %in% dir()){
+  goog <- gsheet::gsheet2tbl(url = gurl)
+  names(goog)[3:4] <- c('A favor de la independència',
+                        'En contra de la independència')
+  save(goog,
+       file = 'goog.RData')
+} else {
+  load('goog.RData')
+}
+
+
+# # Get international data
+# python3 ../../foreign/twint/Twint.py -s "'trial' AND ('catalan' OR 'catalonia' OR 'separatist' OR 'independence'" --since 2019-03-18 --until 2019-03-28 -o data/trial_english.csv --csv
+# 
+# python3 ../../foreign/twint/Twint.py -s "('election' OR 'elections') AND ('spain' OR 'spanish' OR 'catalan' OR 'catalonia'" --since 2019-03-18 --until 2019-03-28 -o data/elections_english.csv --csv
+
+```
+
+```{r}
+# Read in twitter credentials
+library(yaml)
+twitter_credentials <- yaml.load_file('../../credentials/credentials.yaml')
+## load rtweet package
+library(rtweet)
+token <- create_token(
+  app = "bcndata",
+  consumer_key = twitter_credentials$twitter_api_key,
+  consumer_secret = twitter_credentials$twitter_api_secret_key,
+  access_token = twitter_credentials$twitter_access_token,
+  access_secret = twitter_credentials$twitter_access_token_secret)
+
+
+if('data.RData' %in% dir()){
+  load('data.RData')
+} else {
+  judici_bcn <-
+  rt <- search_tweets(
+    '"judici" OR "juicio"', 
+    n = 1000000000, 
+    include_rts = F, 
+    retryonratelimit = TRUE,
+    geocode = "41.385,2.173,20mi"
+  )
+save(judici_bcn,
+     file = 'judici_bcn.RData')
+judici_mad <-
+  rt <- search_tweets(
+    '"judici" OR "juicio"', 
+    n = 1000000000, 
+    include_rts = F, 
+    retryonratelimit = TRUE,
+    geocode = "40.41678,-3.703,20mi"
+  )
+save(judici_mad,
+     file = 'judici_mad.RData')
+
+#
+elec_bcn <-
+  rt <- search_tweets(
+    '"elecciones" OR "eleccions"', 
+    n = 1000000000, 
+    include_rts = F, 
+    retryonratelimit = TRUE,
+    geocode = "41.385,2.173,20mi"
+  )
+save(elec_bcn,
+     file = 'elec_bcn.RData')
+elec_mad <-
+  rt <- search_tweets(
+    '"elecciones" OR "eleccions"', 
+    n = 1000000000, 
+    include_rts = F, 
+    retryonratelimit = TRUE,
+    geocode = "40.41678,-3.703,20mi"
+  )
+save(elec_mad,
+     file = 'elec_mad.RData')
+
+
+elec_sev <-
+  rt <- search_tweets(
+    '"elecciones" OR "eleccions"', 
+    n = 1000000000, 
+    include_rts = F, 
+    retryonratelimit = TRUE,
+    geocode = "37.3891,-5.9845,20mi"
+  )
+save(elec_sev,
+     file = 'elec_sev.RData')
+judici_sev <-
+  rt <- search_tweets(
+    '"judici" OR "juicio"', 
+    n = 1000000000, 
+    include_rts = F, 
+    retryonratelimit = TRUE,
+    geocode = "37.3891,-5.9845,20mi"
+  )
+save(judici_sev,
+     file = 'judici_sev.RData')
+
+
+
+
+elec_zar <-
+  rt <- search_tweets(
+    '"elecciones" OR "eleccions"', 
+    n = 1000000000, 
+    include_rts = F, 
+    retryonratelimit = TRUE,
+    geocode = "41.6488,-0.8891,20mi"
+  )
+save(elec_zar,
+     file = 'elec_zar.RData')
+judici_zar <-
+  rt <- search_tweets(
+    '"judici" OR "juicio"', 
+    n = 1000000000, 
+    include_rts = F, 
+    retryonratelimit = TRUE,
+    geocode = "41.6488,-0.8891,20mi"
+  )
+save(judici_zar,
+     file = 'judici_zar.RData')
+
+
+
+save(elec_mad, elec_bcn, judici_mad, judici_bcn, elec_sev, judici_sev, elec_zar, judici_zar,
+     file = 'data.RData')
+}
+
+df <- bind_rows(judici_bcn %>% mutate(city = 'Barcelona', subject = 'Judici/Juicio' ), 
+                judici_mad %>% mutate(city = 'Madrid', subject = 'Judici/Juicio'),
+                elec_bcn %>% mutate(city = 'Barcelona', subject = 'Eleccions/Elecciones' ),
+                elec_mad %>% mutate(city = 'Madrid', subject = 'Eleccions/Elecciones'),
+                judici_zar %>% mutate(city = 'Zaragoza', subject = 'Judici/Juicio' ), 
+                judici_sev %>% mutate(city = 'Sevilla', subject = 'Judici/Juicio'),
+                elec_zar %>% mutate(city = 'Zaragoza', subject = 'Eleccions/Elecciones' ),
+                elec_sev %>% mutate(city = 'Sevilla', subject = 'Eleccions/Elecciones'))
+```
+
+```{r}
+keep_names <- c('albert_rivera',
+                'albiol_xg',
+                'alejandro_tgn',
+                'alevysoler',
+                'carmencalvo_',
+                'carrizosacarlos',
+                'ciudadanoscs',
+                'ciutadanscs',
+                'eva_granados',
+                'inesarrimadas',
+                'j_zaragoza_',
+                'josepborrellf',
+                'marianorajoy',
+                'meritxell_batet',
+                'miqueliceta',
+                'pablocasado_',
+                'ppcatalunya',
+                'ppopular',
+                'psoe',
+                'sanchezcastejon',
+                'santi_abascal',
+                'vox_es')
+
+keep_names2 <- c('esquerra_erc',
+                 'pnique',
+                 'pdemocratacat',
+                 'krls',
+                 'adacolau',
+                 'albanodante76',
+                 'carlescampuzano',
+                 'catencomu_podem',
+                 'quimtorraipla',
+                 'cupnacional',
+                 'jaumeasens',
+                 'joantarda',
+                 'junqueras',
+                 'miriamnoguerasm',
+                 'pablo_iglesias_',
+                 'perearagones')
+people <- c(keep_names, keep_names2)
+
+
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    paste0("SELECT * FROM twitter")
+  )
+  save(tl, file = 'tl.RData')  
+  dbDisconnect(con)
+  }
+tl_original <- tl
+
+tl <- tl %>% filter(username %in% people)
+tl <- tl %>% filter(!duplicated(id))
+
+# Read in google sheet with keys
+library(gsheet)
+if(!'goog.RData' %in% dir()){
+  goog_people <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=1425313388')
+  save(goog_people,
+       file = 'goog.RData')
+} else {
+  load('goog.RData')
+}
+
+tl <- tl %>% filter(username %in% goog_people$username,
+                    username %in% people)
+
+# Join the google data
+tl <- tl %>%
+  left_join(goog_people)
+```
+
+
+# Introducció
+
+El judici del procés ha captivat tot l'Estat espanyol. Hi ha alguns que ho miren amb indignació, pertorbats per l'us de la Judicatura per resoldre qüestions fonamentalment polítiques i enfurismats per l'applicació de la presó preventiva. De l'altre, hi ha gent que s'engorulleix de l'acció de l'Estat de dret i celebran que els "copistes" o "rebels" violents catalans que havien intentant "liquidar" Espanya s'enfronten a una Justicia independent. Sigui quina sigui la seva política, tots parlen de la transcendència del judici, i sembla haver un reconeixement universal que està en joc no només són les vides dels acusats, sinó els futurs polítics de Catalunya i Espanya.
+
+He notat, en converses amb amics espanyols i catalans, que el nivell d'interès en el judici del procés és molt different: els meus amics catalans en parlen moltíssim, i els meus amics espanyols poc. Seria interessant saber, pensava, si això és una diferència només entre els meus amics (un mostreig relativament petit), o si és una característica general de les societats catalanes i espanyoles en aquest moment.
+
+Qui parla del judici? Com podem saber-ho? Que podem inferir de les diferències? Aquest article breu tracta d'aquestes preguntes.
+
+# Metodes
+
+Per compensar per la "mida de la mostra" massa petita entre coneguts, vaig recopilar dades d'una font de persones més gran: twitter. Vaig descarregar TOTS el piulets dels últims 10 dies que mencionaven les paraules "judici" o "juicio" i eran geolocalitzables a 4 ciutats de l'Estat espanyol: Barcelona, Madrid, Sevilla, Zaragoza (a menys de 32 kilómetres del centre de la ciutat). Per fer un "control", vaig descarregar també tots els tuits de les mateixes zones que contenien la paraula "eleccions" o "elecciones".
+
+Si la meva impressió anecdótica fos acertada, m'esperaria a veure una proporció judici-eleccions més alta a Catalunya que a la resta de l'Estat. Anem a veure els resultats.
+
+
+# Resultats
+
+## Tots els piulets dels últims 10 dies
+
+El gràfic següent mostra la diferència entre piulets sobre les elecciones (taronja) i el judici (blau) en les 4 ciutats examinades. Les dades han sigut transformades/ajustades per que el número de piulets fent referència a les eleccions sigui la "referència" per cadascuna de les ciutats 100% (per que puguem fer comparacions entre ciutats de poblacions de tamany diferent). O sigui, una barra blava a 100% voldria dir que en aquella ciutat es fan exactament la mateixa quantitat de piulets sobre el judici que les eleccions. Una barra blava més alta que 100% vol dir que es parla més del judici, i una barra menor de 100% vol dir que es parla més de les eleccions.
+
+```{r}
+
+pd <- df %>%
+  group_by(city, subject#,
+           # date = as.POSIXct(cut(created_at, 'month'))
+           ) %>%
+  tally %>%
+  group_by(city) %>%
+  mutate(p = n / sum(n) * 100,
+         r = n / n[subject == 'Eleccions/Elecciones']) %>%
+  mutate(r = r * 100)
+
+library(databrew)
+ggplot(data = pd,
+       aes(x = city,
+           y = r,
+           fill = subject)) +
+  # geom_line() +
+  geom_bar(stat = 'identity',
+           # position = 'dodge',
+           alpha = 0.8,
+           lwd = 0.2,
+           color = 'black',
+           width = 0.5,
+            position = position_dodge(width = 0.7)) +
+  # facet_wrap(~city) +
+  theme_vilaweb() +
+  labs(x = '',
+       y = '% (Referència: elecciones)',
+       title = 'Freqüencia de paraula "judici"\ncomparada amb "eleccions" en piulets',
+       subtitles = 'Piulets geolocalitzats a < 32 km del centre de la ciutat',
+       caption = '18-28 de març. Sense comptar retweets. Dades: API REST de Twitter. Gràfic: Joe Brew.\nwww.vilaweb.cat') +
+  theme(legend.text = element_text(size = 15),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 16),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 13),
+        plot.caption = element_text(size = 11)) +
+  scale_fill_manual(name = '',
+                    values = c('darkorange', 'blue')) +
+  # scale_y_continuous(breaks = seq(0,3, by = 0.2)) +
+  geom_hline(yintercept = 100, alpha = 0.3, lty = 2) +
+  geom_text(aes(y= r + 8, label = round(r, digits = 1)),
+            position = position_dodge(width = 0.7))
+```
+
+Barcelona és la única ciutat on es parla més del judici que de les eleccions. Per cada 2 piulets escrits a Barcelona sobre les eleccions, s'ecriuen 3 sobre el judici. 
+
+A les altres ciutats, la freqüencia (ajustada) de piulets sobre el judici és molt menor. A Madrid, la freqüencia ajustada de piulets sobre el judici és 4 vegades menor que a Barcelona. La bretxa és encara més a Sevilla (4,6 vegades menor). A Zaragoza es parla més del judici que a les altres 2 ciutats de l'Estat, però encara s'escriuen 2 piulets sobre les eleccions per cada piulet sobre el judici a Zaragoza.
+
+
+La comparació Barcelona-Madrid és la més interessant perquè són de tamany més similar i comparteixen un nivell sociodemogràfic més comparable. Mirem la freqüencia de piulets per hora a les dues ciutats:
+
+```{r}
+
+pd <- df %>%
+  group_by(city, subject,
+           date = as.POSIXct(cut(created_at, 'hour'))
+           ) %>%
+  tally %>%
+  group_by(city, date) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  filter(city %in% c('Barcelona', 'Madrid'))
+
+ggplot(data = pd,
+       aes(x = date,
+           y = n,
+           color = subject)) +
+  geom_line() +
+  facet_wrap(~city) +
+  theme_vilaweb() +
+  labs(x = 'Data',
+       y = 'Piulets per hora',
+       title = 'Freqüencia de paraula "judici"\ncomparada amb "eleccions" en piulets',
+       subtitles = 'Piulets geolocalitzats a < 32 km del centre de la ciutat',
+       caption = 'Inclou equivalents en castellà: "juicio" i "elecciones". 18-28 de març.\nSense comptar retweets. Dades: API REST de Twitter. Gràfic: Joe Brew.\nwww.vilaweb.cat') +
+  theme(legend.text = element_text(size = 15),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 16),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        # axis.text.x = element_text(size = 25),
+        axis.text.y = element_text(size = 13),
+        plot.caption = element_text(size = 11)) +
+  scale_color_manual(name = '',
+                    values = c('darkorange', 'blue'))
+```
+
+És clar que el tema del judici atrau a molt menys atenció a Madrid que les eleccions. I a Barcelona, el contrari.
+
+## Tots els piulets dels polítics  
+
+Potser una de les causes potencials de la discrepància Catalunya-Espanya en quant a l'atenció que es para al judici té a veure amb els polítics. O sigui, si els líders polítics no en parlen molt, és normal que els seus seguidors també en parlen poc. 
+
+El gràfic següent mostra la quantitat de piulets que mencionen "eleccions" o "judici" de polítics espanyols i catalans 
+
+```{r, fig.height = 7}
+find_judici <- function(x){
+  grepl('judici|juicio', tolower(x))
+}
+find_eleccions <- function(x){
+  grepl('eleccions|elecciones', tolower(x))
+}
+pd <- tl %>%
+  # filter(!username %in% c('marianorajoy'))
+  filter(username %in% people) %>%
+  filter(date >= '2019-01-01',
+         date <= '2019-03-28') %>%
+  group_by(username) %>%
+  summarise(j = length(which(find_judici(tweet))),
+            e = length(which(find_eleccions(tweet)))) %>%
+  gather(key, value, j:e) %>%
+  mutate(key = ifelse(key == 'j', 'Judici', 'Eleccions')) %>%
+  arrange(username)
+
+ggplot(data = pd,
+       aes(x = key,
+           y = value)) +
+  geom_bar(stat = 'identity',
+           aes(fill = key),
+           alpha = 0.7) +
+  facet_wrap(~username, scales = 'free_y') +
+  scale_fill_manual(name = '',
+                    values = c('darkorange', 'blue')) +
+  theme_vilaweb() +
+    # theme(legend.position = 'none') +
+  theme(legend.position = 'right') +
+  theme(strip.text = element_text(size = 6),
+        axis.text.y = element_text(size = 4),
+        axis.text.x = element_text(size = 6)) +
+  labs(x = ' ' ,
+       y = 'Piulets',
+       title = 'Piulets de polítics sobre el judici vs. les eleccions')
+```
+
+Amb poques excepcions, els polítics sobiranistes parlen molt més del judici que les eleccions, mentres que els polítics en contra de la autodeterminació parlen més de les eleccions. Fins i tot VOX (i el seu líder Santiago Abascal) parlen més de les eleccions que del judici, encara que siguin ells una part oficial del judici. Els no-independentistes catalans del PSC, PPC, i Ciutadans parlen més del judici que els no-independentistes espanyols, però encara parlen més de les eleccions que del judici.
+
+## Atenció internacional
+
+```{r}
+ele <- read_csv('data/elections_english/tweets.csv')
+jud <- read_csv('data/trial_english/tweets.csv')
+
+x <- bind_rows(ele %>% mutate(subject = 'Eleccions'),
+                jud %>% mutate(subject = 'Judici')) %>%
+  filter(!duplicated(id))
+x <- x# %>%
+  # filter(date >= '2019-02-15')
+
+
+# Adjust for time zone
+library(lubridate)
+x$date_time <- as.POSIXct(paste0(x$date, ' ', x$time, ' ', '+0', x$timezone))
+Sys.setenv(TZ='CET')
+
+pd <- x %>%
+  group_by(subject,
+           date = as.POSIXct(cut(date_time, 'day'))
+           ) %>%
+  tally
+```
+
+És interessant també veure l'atenció internacional al judici i a les elecciones del 28-A. Encara que la majoria dels piulets no són geolocalitzats, es pot utilitzar la llengua com una aproximació de la "internacionalitat" (considerant, per aquest análisi, la definició limitada de "internacional" com a "un piulet en anglès"). 
+
+Vaig recopilar tots els piulets que feien referència al judici del procés o a les eleccions espanyoles a traves de dues búsquedes senzilles (detalls al final de l'article). Aqui els piulets per hora en anglès mencionant els dos temes:
+
+```{r}
+ggplot(data = pd,
+       aes(x = date,
+           y = n,
+           color = subject)) +
+  geom_line() +
+  theme_vilaweb() +
+  labs(x = 'Data',
+              subtitle = 'Sense retweets',
+       y = 'Piulets per dia',
+       title = 'Freqüencia de piulets en anglès fent referència\nal judici vs. les elecciones espanyoles',
+       caption = 'Sense comptar retweets. Gràfic: Joe Brew (@joethebrew). www.vilaweb.cat') +
+  theme(legend.text = element_text(size = 15),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 16),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        # axis.text.x = element_text(size = 25),
+        axis.text.y = element_text(size = 13),
+        plot.caption = element_text(size = 11)) +
+  scale_color_manual(name = '',
+                    values = c('darkorange', 'blue'))
+
+y <- pd %>%
+  filter(date >= '2019-01-01') %>%
+  group_by(subject) %>%
+  summarise(n = sum(n))
+```
+
+El gràfic anterior només pren en compte el número de piulets individuals, i no els "retweets". És important també analitzar els retweets perquè reflecteix l'impacte i l'abast dels piulets. Aquí el mateix gràfic però amb retweets.
+
+```{r}
+pd2 <- x %>%
+  group_by(subject,
+           date = as.POSIXct(cut(date_time, 'day'))
+           ) %>%
+  summarise(n = n(),
+            rt = sum(retweets_count,na.rm = TRUE)) %>%
+  mutate(n = n + rt)
+
+ggplot(data = pd2,
+       aes(x = date,
+           y = n,
+           color = subject)) +
+  geom_line() +
+  theme_vilaweb() +
+  labs(x = 'Data',
+       y = 'Piulets per dia',
+       subtitle = 'Amb retweets',
+       title = 'Freqüencia de piulets en anglès fent referència\nal judici vs. les elecciones espanyoles',
+       caption = 'Gràfic: Joe Brew (@joethebrew). www.vilaweb.cat') +
+  theme(legend.text = element_text(size = 15),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 16),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        # axis.text.x = element_text(size = 25),
+        axis.text.y = element_text(size = 13),
+        plot.caption = element_text(size = 11)) +
+  scale_color_manual(name = '',
+                    values = c('darkorange', 'blue'))
+```
+
+Les variacions al llarg del temps son massives i fa que sigui difícil veure la totalitat. Doncs, agreguem tots els piulets en anglès sobre els dos temes del 1 de gener fins al 28 de març. Aquí el resultat:
+
+
+```{r}
+y <- pd %>%
+  filter(date >= '2019-01-01') %>%
+  group_by(subject) %>%
+  summarise(n = sum(n))
+
+ggplot(data = y,
+       aes(x = subject,
+           y = n,
+           fill = subject)) +
+  geom_bar(stat = 'identity') +
+  theme_vilaweb() +
+  labs(x = '',
+       y = 'Piulets',
+       subtitle = '1 de gener 2019 - 28 de març 2019 (sense retweets)',
+       title = 'Número total de piulets en anglès fent referència\nal judici vs. les elecciones espanyoles',
+       caption = 'Gràfic: Joe Brew (@joethebrew). www.vilaweb.cat') +
+  theme(legend.text = element_text(size = 15),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 16),
+        axis.text.x = element_text(size = 25),
+        # axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        # axis.text.x = element_text(size = 25),
+        # axis.text.y = element_text(size = 13),
+        plot.caption = element_text(size = 11)) +
+  scale_fill_manual(name = '',
+                    values = c('darkorange', 'blue')) +
+  geom_text(aes(label = n),
+            nudge_y = -1000,
+            color = 'white') +
+  theme(legend.position = 'none')
+```
+
+En el gràfic anterior es veu que es parla més de 25% més del judici que les eleccions en piulets en anglès.
+
+Com haviem comentat anteriorment, és important prendre en compte també els retweets per entendre l'abast de les converses. El gràfic següent mostra el número de piulets en anglès que fan referència al judici i les eleccions, COMPTANT els retweets.
+
+```{r}
+pd <- x %>%
+  filter(date >= '2019-01-01') %>%
+  group_by(subject) %>%
+  summarise(n = n(),
+            rt = sum(retweets_count, na.rm = TRUE)) %>%
+  mutate(total = n + rt)
+
+
+ggplot(data = pd,
+       aes(x = subject,
+           y = total,
+           fill = subject)) +
+  geom_bar(stat = 'identity') +
+  theme_vilaweb() +
+  labs(x = '',
+       y = 'Piulets',
+       subtitle = '1 de gener 2019 - 28 de març 2019 (amb retweets)',
+       title = 'Número total de piulets en anglès fent referència\nal judici vs. les elecciones espanyoles',
+       caption = 'Gràfic: Joe Brew (@joethebrew). www.vilaweb.cat') +
+  theme(legend.text = element_text(size = 15),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 16),
+        axis.text.x = element_text(size = 25),
+        # axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        # axis.text.x = element_text(size = 25),
+        # axis.text.y = element_text(size = 13),
+        plot.caption = element_text(size = 11)) +
+  scale_fill_manual(name = '',
+                    values = c('darkorange', 'blue')) +
+  geom_text(aes(label = total),
+            nudge_y = -10000,
+            color = 'white') +
+  theme(legend.position = 'none')
+```
+
+La diferència és enorme. Al nivell internacional, es parla 4 vegades més del judici que de les eleccions.
+
+# Conclusió
+
+## Resume de resultats 
+
+- A Catalunya es parla molt més del judici que de les eleccions. A la resta de l'Estat, es parla més de les elecciones que del judici.
+
+- Els polítics sobiranistes catalans parlen més del judici que de les eleccions. Els polítics catalans no sobiranistes parlen més de les eleccions. Els polítics no catalans parlen molt poc del judici, i molt més de les eleccions.
+
+- Al nivell internacoinal, com a Catalunya, es parla molt més del judici que de les eleccions.
+
+## Reflecció personal
+
+No sé exactament perquè es parla tan poc del judici a la resta de l'Estat espanyol. Si hi hagués una rebel-lió violenta, "un cop d'estat", o un esforç de "liquidar la democracia espanyola", em sembla que el judici dels rebels hauria d'atraure l'atenció de tots. 
+
+Però no és el cas. A Catalunya, i a la resta del món, el judici està sent un objecte d'atenció importantíssima. Pero a Espanya, per lo que hem vist en les dades de twitter, es parla poc. La confirmació d'aquesta diferència es denota quan un fa una ullada als titulars dels diaris principals de Catalunya i de l'Estat: en els primers, el judici; en els segons, les eleccions.
+
+La diferència en atenció reflecteix una "desconnexió" entre Espanya i Catalunya. Segons aquest análisi, els catalans i els espanyols no comparteixen la mateixa opinió sobre la importancia relativa dels esdeveniments. Els esdeveniments principals d'un lloc ja no es consideren tan importants a l'altre. 
+
+Però aquest análisi ens ensenya que la desconnexió va més enllà de Catalunya i Espanya. Mentres que l'Estat s'absorbeix en el dia a dia de la campanya electoral, sembla que l'atenció internacional està absorbida pel judici. En quant al judici, la desconnexió no és entre Espanya i Catalunya - és entre Espanya i la resta del món.
+
+# Detalls
+
+La búsqueda de piulets internacionals sobre el judici es va fer així:
+
+```
+"'trial' AND ('catalan' OR 'catalonia' OR 'separatist' OR 'independence'"
+
+```
+
+La búsqueda de piulets internacionals sobre les eleccions es va fer així:
+
+```
+"('election' OR 'elections') AND ('spain' OR 'spanish' OR 'catalan' OR 'catalonia'"
+```
+
+Tot el codi per aquest análisi és publicament accessible a: https://github.com/joebrew/vilaweb/tree/master/analyses/judici_vs_eleccions. 
+
+
