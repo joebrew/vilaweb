@@ -396,7 +396,7 @@ ggplot(data = pd,
   theme(legend.position = 'right') +
   theme(strip.text = element_text(size = 6),
         axis.text.y = element_text(size = 4),
-        axis.text.x = element_text(size = 6)) +
+        axis.text.x = element_text(size = 4)) +
   labs(x = ' ' ,
        y = 'Piulets',
        title = 'Piulets de polítics sobre el judici vs. les eleccions')
@@ -446,8 +446,8 @@ ggplot(data = pd,
        title = 'Freqüencia de piulets en anglès fent referència\nal judici vs. les elecciones espanyoles',
        caption = 'Sense comptar retweets. Gràfic: Joe Brew (@joethebrew). www.vilaweb.cat') +
   theme(legend.text = element_text(size = 15),
-        plot.title = element_text(size = 20),
-        plot.subtitle = element_text(size = 16),
+        plot.title = element_text(size = 15),
+        plot.subtitle = element_text(size = 14),
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
         # axis.text.x = element_text(size = 25),
         axis.text.y = element_text(size = 13),
@@ -484,8 +484,8 @@ ggplot(data = pd2,
        title = 'Freqüencia de piulets en anglès fent referència\nal judici vs. les elecciones espanyoles',
        caption = 'Gràfic: Joe Brew (@joethebrew). www.vilaweb.cat') +
   theme(legend.text = element_text(size = 15),
-        plot.title = element_text(size = 20),
-        plot.subtitle = element_text(size = 16),
+        plot.title = element_text(size = 15),
+        plot.subtitle = element_text(size = 14),
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
         # axis.text.x = element_text(size = 25),
         axis.text.y = element_text(size = 13),
