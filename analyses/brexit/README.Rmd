@@ -73,7 +73,8 @@ uk_immigration()
 **Catalonia:** Are pro-independence Catalans, like pro-Brexit Britons, opposed to immigration? No - just the opposite. Pro-independence Catalans, unlike pro-Brexit Brits, are pro-immigration. A majority (61%) of pro-independence Catalans "strongly disagree" with the xenophobic phrase that "with so much immigration, it doesn't feel like home anymore". Among anti-independence Catalans, only 49% reject the phrase. Whereas pro-Brexit voters were motivated by anti-immigrant sentiment, pro-independence Catalans are quantifiably more pro-immigrant than their pro-Spain counterparts.
 
 ```{r}
-cat_immigration2()
+# cat_immigration2()
+var_cat(ca = F, var = 'P56I')
 ```
 
 # Authoritarianism
@@ -101,7 +102,7 @@ var_cat(ca = FALSE, var = 'P56G')
 uk_welfare()
 ```
 
-**Catalonia:** In the case of welfare, again, Catalan independence voters are opposite to Brexit voters. Whereas those in favor of Brexit largely opposed welfare, those in favor of Catalonia are largely in favor of it. Voters of pro-independence parties are slightly _more_ likely to agree that the State should take measures to fight income inequality (below chart).
+**Catalonia:** In the case of welfare, the Brexit-Catalonia comparison does not hold up. Both pro and anti-independence Catalans are largely in favor of the welfare state. Whereas those in favor of Brexit largely opposed welfare, those in favor of Catalonia are slightly _more_ likely to agree that the State should take measures to fight income inequality (below chart).
 
 ```{r}
 var_cat(ca = FALSE, var = 'P56C') 
@@ -172,7 +173,8 @@ cat_education(ca = T)
 
 ```{r}
 uk_immigration(ca = T)
-cat_immigration2(ca = T)
+# cat_immigration2(ca = T)
+var_cat(ca = T, var = 'P56I')
 ```
 
 ### Authoritarianism

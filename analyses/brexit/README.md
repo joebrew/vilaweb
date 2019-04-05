@@ -56,7 +56,7 @@ Welfare
 
 ![](figures/unnamed-chunk-8-1.png)
 
-**Catalonia:** In the case of welfare, again, Catalan independence voters are opposite to Brexit voters. Whereas those in favor of Brexit largely opposed welfare, those in favor of Catalonia are largely in favor of it. Voters of pro-independence parties are slightly *more* likely to agree that the State should take measures to fight income inequality (below chart).
+**Catalonia:** In the case of welfare, the Brexit-Catalonia comparison does not hold up. Both pro and anti-independence Catalans are largely in favor of the welfare state. Whereas those in favor of Brexit largely opposed welfare, those in favor of Catalonia are slightly *more* likely to agree that the State should take measures to fight income inequality (below chart).
 
 ![](figures/unnamed-chunk-9-1.png)
 
@@ -73,7 +73,7 @@ Age
 
 **Catalonia:** When it comes to age, the Brexit-Catalonia comparison again falls apart. Whereas the old were more in favor of Brexit, in Catalonia the old are more in favor of union with Spain. Like anti-Brexit Brits, pro-independence Catalans are largely young.
 
-    Error: $ operator is invalid for atomic vectors
+![](figures/unnamed-chunk-12-1.png)
 
 Income
 ======
@@ -122,9 +122,7 @@ Welfare
 Age
 ---
 
-![](figures/unnamed-chunk-19-1.png)
-
-    Error: $ operator is invalid for atomic vectors
+![](figures/unnamed-chunk-19-1.png)![](figures/unnamed-chunk-19-2.png)
 
 Income
 ------

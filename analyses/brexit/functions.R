@@ -127,14 +127,19 @@ cat_education <- function(ca = FALSE){
                       labels = c('No', 'Not sure/\nno answer', 'Yes'))
   }
   
-  cols <- RColorBrewer::brewer.pal(n = 9,
-                                   name = 'YlGnBu')
-  cols2 <- RColorBrewer::brewer.pal(n = 9,
-                                    name = 'BrBG')
-  cols <- c(cols2[2], 
-            grey(0.7),
-            # grey(0.6),
-            cols[6])
+  # cols <- RColorBrewer::brewer.pal(n = 9,
+  #                                  name = 'YlGnBu')
+  # cols2 <- RColorBrewer::brewer.pal(n = 9,
+  #                                   name = 'BrBG')
+  # cols <- c(cols2[2], 
+  #           grey(0.7),
+  #           # grey(0.6),
+  #           cols[6])
+  cols <- databrew::make_colors(n = 10, categorical = TRUE)
+  cols <- cols[c(2,3, 6)]
+  cols <- rev(cols)
+  # cols <- rev(cols)
+  cols[2] <- grey(0.2)
   
   if(ca){
     the_labs <- labs(x = '',
@@ -180,7 +185,7 @@ cat_education <- function(ca = FALSE){
 uk_immigration <- function(ca = FALSE){
   if(!ca){
     the_labs <- labs(x = '',
-                     y = 'Percent',
+                     y = 'Percent in favor of Brexit',
                      title = 'Lowering immigration was a main issue in the Brexit vote',                     
                      caption = 'Data source: "Understanding the Leave Vote" by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
     immigration <- factor(c('EU membership\nundermines\nBritain\'s\nindependence',
@@ -190,8 +195,8 @@ uk_immigration <- function(ca = FALSE){
                         levels = immigration)
   } else {
     the_labs <- labs(x = '',
-                     y = 'Percentage',
-                     title = 'Reduir la immigració: una des les motivacions  principals del Brexit',
+                     y = 'Percentage a favor del Brexit',
+                     title = 'Reduir la immigració: una des les motivacions principals del Brexit',
                      caption = 'Font de dades: "Understanding the Leave Vote" de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
     immigration <- factor(c('Adhesió a la\nUE soscava la\nindependència de\nBretanya',
                             'Marxar de la\nUE reduiria\nla immigració',
@@ -611,7 +616,7 @@ var_cat <- function(ca = FALSE, var = 'P56I'){
     tibble(var = paste0('P56',
                         c(LETTERS[1:11])),
            catalan = c("“Com menys intervingui el Govern en l’economia, millor serà pel país”",
-                       "“Cal baixar els impostos, encara que això impliqui reduir serveis i prestacions públiques”",
+                       "“Cal baixar els impostos, encara que això impliqui reduir\nserveis i prestacions públiques”",
                        "“El Govern hauria de prendre mesures per reduir les diferències en els nivells d’ingressos”",
                        "“Les parelles de gais i lesbianes han de poder adoptar fills en les mateixes condicions que les parelles heterosexuals”",
                        "“L’escola ha d’ensenyar als nens a obeir l’autoritat”",
@@ -622,8 +627,8 @@ var_cat <- function(ca = FALSE, var = 'P56I'){
                        "“El creixement econòmic ha de tenir prioritat sobre la protecció del medi ambient”",
                        "“Catalunya no té el dret de celebrar un referèndum d’autodeterminació”"),
            english = c("“The less the government interferes in the economy, the better off the country will be”",
-                       "“Taxes must be lowered, even though it may mean reducing public services”",
-                       "“The government should take measures to reduce differenes in income”",
+                       "“Taxes must be lowered, even though it may\nmean reducing public services”",
+                       "“The government should take measures to\nreduce differenes in income”",
                        "“Gay and lesbian couples should be able to adopt children under the same conditions as heterosexual couples”",
                        "“School should teach children to obey authority”",
                        "“Religion should have no influence on politics”",
@@ -674,7 +679,7 @@ var_cat <- function(ca = FALSE, var = 'P56I'){
   
   pd <- pd %>%
     arrange(desc(variable), p)
-  pd$indy <- factor(pd$indy, levels = unique(pd$indy))
+  pd$indy <- factor(pd$indy, levels = rev(unique(sort(pd$indy))))
   
   ggplot(data = pd,
          aes(x = indy,
@@ -861,31 +866,34 @@ cat_age <- function(ca = FALSE){
                       levels = c('No', 'NS/NC', 'Sí'),
                       labels = c('No', 'Not sure/\nno answer', 'Yes'))
   }
-  cols <- RColorBrewer::brewer.pal(n = 9,
-                                   name = 'YlGnBu')
-  cols2 <- RColorBrewer::brewer.pal(n = 9,
-                                    name = 'BrBG')
-  cols <- c(cols2[2], 
-            grey(0.7),
-            # grey(0.6),
-            cols[6])
+  # cols <- RColorBrewer::brewer.pal(n = 9,
+  #                                  name = 'YlGnBu')
+  # cols2 <- RColorBrewer::brewer.pal(n = 9,
+  #                                   name = 'BrBG')
+  # cols <- c(cols2[2], 
+  #           grey(0.7),
+  #           # grey(0.6),
+  #           cols[6])
+  cols <- databrew::make_colors(n = 10, categorical = TRUE)
+  cols <- cols[c(2,3, 6)]
+  # cols <- rev(cols)
+  # cols <- rev(cols)
+  cols[2] <- grey(0.2)
   if(ca){
-    df$education <- df$ca
     legend_title <- 'Independentista'
     the_labs <- labs(x = '',
                      y = 'Percentage',
                      title = 'Independentisme i edat',
                      caption = paste0('Mostra: ',
-                                      sum(x$Muestra),
+                                      sum(pd$Muestra),
                                       ' residents de Catalunya amb ciutadania espanyola.\nDades: Combinació enquestes CEO.\n2015 a 2018. Gràfic: Joe Brew | @joethebrew.'))
   } else {
-    df$education <- df$en
     legend_title <- 'Pro-\nindependence'
     the_labs <- labs(x = '',
                      y = 'Percentage',
                      title = 'Age and support for Catalan independence',
                      caption = paste0('Sample: ',
-                                      sum(x$Muestra),
+                                      sum(pd$Muestra),
                                       ' residents of Catalonia with Spanish citizeship.\nData: Combination of CEO/BOP surveys from 2015-2018Gràfic: Joe Brew | @joethebrew.'))
   }
   ggplot(data = pd,
@@ -956,14 +964,19 @@ cat_income <- function(ca = FALSE){
     ungroup
   
   
-  cols <- RColorBrewer::brewer.pal(n = 9,
-                                   name = 'YlGnBu')
-  cols2 <- RColorBrewer::brewer.pal(n = 9,
-                                    name = 'BrBG')
-  cols <- c(cols2[2], 
-            grey(0.7),
-            # grey(0.6),
-            cols[6])
+  # cols <- RColorBrewer::brewer.pal(n = 9,
+  #                                  name = 'YlGnBu')
+  # cols2 <- RColorBrewer::brewer.pal(n = 9,
+  #                                   name = 'BrBG')
+  # cols <- c(cols2[2], 
+  #           grey(0.7),
+  #           # grey(0.6),
+  #           cols[6])
+  cols <- databrew::make_colors(n = 10, categorical = TRUE)
+  cols <- cols[c(2,3, 6)]
+  cols <- rev(cols)
+  # cols <- rev(cols)
+  cols[2] <- grey(0.2)
   if(ca){
     legend_title <- 'Independentista'
     the_labs <- labs(y = 'Percentage',
