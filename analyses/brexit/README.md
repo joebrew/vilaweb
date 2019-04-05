@@ -73,7 +73,7 @@ Age
 
 **Catalonia:** When it comes to age, the Brexit-Catalonia comparison again falls apart. Whereas the old were more in favor of Brexit, in Catalonia the old are more in favor of union with Spain. Like anti-Brexit Brits, pro-independence Catalans are largely young.
 
-![](figures/unnamed-chunk-12-1.png)
+    Error: $ operator is invalid for atomic vectors
 
 Income
 ======
@@ -122,7 +122,9 @@ Welfare
 Age
 ---
 
-![](figures/unnamed-chunk-19-1.png)![](figures/unnamed-chunk-19-2.png)
+![](figures/unnamed-chunk-19-1.png)
+
+    Error: $ operator is invalid for atomic vectors
 
 Income
 ------
