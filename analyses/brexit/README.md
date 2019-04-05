@@ -34,7 +34,7 @@ Immigration
 
 ![](figures/unnamed-chunk-4-1.png)
 
-**Catalonia:** Are pro-independence Catalans, like pro-Brexit Britons, opposed to independence? No - just the opposite. Pro-independence Catalans, unlike pro-Brexit Brits, are pro-immigration. A majority (61%) of pro-independence Catalans "strongly disagree" with the xenophobic phrase that "with so much immigration, it doesn't feel like home anymore". Among anti-independence Catalans, only 49% reject the phrase. Whereas pro-Brexit voters were motivated by anti-immigrant sentiment, pro-independence Catalans are quantifiably more pro-immigrant than their pro-Spain counterparts.
+**Catalonia:** Are pro-independence Catalans, like pro-Brexit Britons, opposed to immigration? No - just the opposite. Pro-independence Catalans, unlike pro-Brexit Brits, are pro-immigration. A majority (61%) of pro-independence Catalans "strongly disagree" with the xenophobic phrase that "with so much immigration, it doesn't feel like home anymore". Among anti-independence Catalans, only 49% reject the phrase. Whereas pro-Brexit voters were motivated by anti-immigrant sentiment, pro-independence Catalans are quantifiably more pro-immigrant than their pro-Spain counterparts.
 
 ![](figures/unnamed-chunk-5-1.png)
 
@@ -52,7 +52,7 @@ Authoritarianism
 Welfare
 =======
 
-**UK:** The pro-Brexit vote was characterized by strong anti-welfare attitudes (ie, brexiteers were largely in favor of reducing State aid to fight inequality). Among pro-Brexit voters, 75% were classified as “anti-welfare”, whereas only 30% were pro-welfare
+**UK:** The pro-Brexit vote was characterized by strong anti-welfare attitudes (ie, brexiteers were largely in favor of reducing State aid to fight inequality). Among anti-welfare voters, 75% were pro-Brexit, whereas only 30% of libertarian Brits voted in favor of Brexit.
 
 ![](figures/unnamed-chunk-8-1.png)
 
