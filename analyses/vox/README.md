@@ -1,7 +1,7 @@
 Si us plau, pareu de parlar tant de VOX
 ================
 
-*"No existeix la publicitat bona. Tota publicitat és bona publicitat"*
+*"No existeix la publicitat dolenta Tota publicitat és bona publicitat"*
 
 *-Phineas T. Barnum, fundador del Circ Barnum Brothers*
 
@@ -62,6 +62,8 @@ No tots els mitjans mencionen a VOX amb el mateix nivell de desproporcionalitat.
 El problema amb el gràfic anterior és que alguns mitjans no parlen molt de la política i els partits en general, i altres molt. Per tant, estaria bé mirar quin percentage de piulets *que mencionen algun partit polític* fan referència a VOX. Això es veu al gràfic següent.
 
 ![](figures/unnamed-chunk-8-1.png)
+
+No hi ha un patró clar esquerra-dreta amb la freqüencia de mencions de VOX. Ho fan molt, i ho fan tots.
 
 També es pot analitzar, mitjà per mitjà, la distribució de referencies als partits (gràfics al final d'aquest article).
 

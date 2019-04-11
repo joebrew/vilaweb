@@ -3,7 +3,7 @@ title: "Si us plau, pareu de parlar tant de VOX"
 output: github_document
 ---
 
-_"No existeix la publicitat bona. Tota publicitat és bona publicitat"_
+_"No existeix la publicitat dolenta Tota publicitat és bona publicitat"_
 
 _-Phineas T. Barnum, fundador del Circ Barnum Brothers_
 
@@ -253,7 +253,7 @@ ggplot(data = x,
        y = '%',
        title = '% de piulets que mencionen a VOX',
        subtitle = '1 de desembre 2018 - 9 d\'abril 2019' ) +
-    geom_text(aes(label = round(of_parties, digits = 1)),
+    geom_text(aes(label = round(pp, digits = 1)),
             alpha = 0.8,
             color = 'black',
             size = 2,
@@ -282,6 +282,8 @@ ggplot(data = x,
             size = 2,
             nudge_y = -4)
 ```
+
+No hi ha un patró clar esquerra-dreta amb la freqüencia de mencions de VOX. Ho fan molt, i ho fan tots.
 
 També es pot analitzar, mitjà per mitjà, la distribució de referencies als partits (gràfics al final d'aquest article).
 
