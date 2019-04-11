@@ -107,6 +107,10 @@ tl <- tl %>% filter(date >= '2018-12-01',
 # Remove tvs
 tl <- tl %>%
   filter(!tolower(username) %in% c('tv3cat', "lindependant", 'rtve','ccma_cat'))
+
+# Fix newspaper names
+newspapers$name[newspapers$name == 'Cadana Ser'] <- 'Cadena Ser'
+newspapers$name[newspapers$name == 'E-noticies'] <- 'E-notícies'
 ```
 
 # Introducció
@@ -146,7 +150,7 @@ tl <- tl %>%
   mutate(any_party = cs | `pp/ppc` | vox | `psoe/psc` | `junts/pdecat` | podemos | erc | cup)
 ```
 
-Dels `r nrow(tl)` piulets dels `r length(unique(tl$username))` mitjans, `r round(length(which(tl$any_party)) / length(tl$any_party) * 100, digits = 2)` van mencionar un partit. Però aquestes mencions no eran distribuides de manera uniforme per partit, ni de manera representativa. Aqui el percentage de tots els piulets que mencionaven a cadascú dels partits examinats.
+Dels `r nrow(tl)` piulets dels `r length(unique(tl$username))` mitjans, `r round(length(which(tl$any_party)) / length(tl$any_party) * 100, digits = 2)` van esmentar un partit. Però aquestes esmentades no eran distribuides de manera uniforme per partit, ni de manera representativa. Aqui el percentatge de tots els piulets que esmentaven cadascú dels partits examinats.
 
 
 
@@ -186,12 +190,12 @@ ggplot(data = party_dict,
             size = 4) +
   theme_vilaweb() +
   labs(x = 'Partit',
-       y = 'Percentage',
-       title = '% de piulets de mitjans mencionant a partits',
+       y = 'Percentatge',
+       title = '% de piulets de mitjans esmentant partits',
        subtitle = '1 de desembre 2018 - 9 d\'abril 2019')
 ```
 
-El gràfic anterior mostra el percentage de piulets que fan referència a cada partit de _tots el piulets_ de tots el mitjans. Però és útil mirar també aquest percentage només entre aquells piulets que mencionen algún partit (per excloure piluets no polítics, etc.):
+El gràfic anterior mostra el percentatge de piulets que fan referència a cada partit de _tots el piulets_ de tots el mitjans. Però és útil mirar també aquest percentatge només entre aquells piulets que esmenten algún partit (per excloure piluets no polítics, etc.):
 
 ```{r}
 ggplot(data = party_dict,
@@ -208,16 +212,16 @@ ggplot(data = party_dict,
             size = 4) +
   theme_vilaweb() +
   labs(x = 'Partit',
-       y = 'Percentage',
-       title = '% de piulets de mitjans mencionant a partits',
-       subtitle = '(només incloent piulets que mencionen al menys un partit polític)\n1 de desembre 2018 - 9 d\'abril 2019')
+       y = 'Percentatge',
+       title = '% de piulets de mitjans esmentant partits',
+       subtitle = '(només incloent piulets que esmenten, com a mínim, un partit polític)\n1 de desembre 2018 - 9 d\'abril 2019')
 ```
 
-VOX, segons el CIS, és el cinquè partit d'Espanya. El seu support fluctuava durants el mesos d'aquest análisi de 5% a 11%. Però en cobertura mediàtica és el primer. Dels mitjans examinats, 34% dels piulets que mencionen a un partit polític fan referència a VOX. Va ser així amb Trump, al principi de les primàries. Tot i que la majoria dels republicans preferessin un altre candidat, Trump rebia constantment més cobertura, el que li va convertir - al llarg del temps - en el candidat més preferit.
+VOX, segons el CIS, és el cinquè partit d'Espanya. El seu support fluctuava durants el mesos d'aquest análisi de 5% a 11%. Però en cobertura mediàtica és el primer. Dels mitjans examinats, 34% dels piulets que esmenten un partit polític fan referència a VOX. Va ser així amb Trump, al principi de les primàries. Tot i que la majoria dels republicans preferessin un altre candidat, Trump rebia constantment més cobertura, el que li va convertir - al llarg del temps - en el candidat més preferit.
 
 ## Per mitjà
 
-No tots els mitjans mencionen a VOX amb el mateix nivell de desproporcionalitat. Mirem-ho. El gràfic següent mostra el percentage de tots els piulets de cada mitjà que fa referència a VOX.
+No tots els mitjans esmenten VOX amb el mateix nivell de desproporcionalitat. Mirem-ho. El gràfic següent mostra el percentatge de tots els piulets de cada mitjà que fa referència a VOX.
 
 ```{r}
 mitjans <- sort(unique(tl$username))
@@ -251,7 +255,7 @@ ggplot(data = x,
                                    vjust = 0.5)) +
   labs(x = '',
        y = '%',
-       title = '% de piulets que mencionen a VOX',
+       title = '% de piulets que esmenten VOX',
        subtitle = '1 de desembre 2018 - 9 d\'abril 2019' ) +
     geom_text(aes(label = round(pp, digits = 1)),
             alpha = 0.8,
@@ -261,7 +265,7 @@ ggplot(data = x,
 
 ```
 
-El problema amb el gràfic anterior és que alguns mitjans no parlen molt de la política i els partits en general, i altres molt. Per tant, estaria bé mirar quin percentage de piulets _que mencionen algun partit polític_ fan referència a VOX. Això es veu al gràfic següent.
+El problema amb el gràfic anterior és que alguns mitjans no parlen molt de la política i els partits en general, i altres molt. Per tant, estaria bé mirar quin percentatge de piulets _que esmenten algun partit polític_ fan referència a VOX. Això es veu al gràfic següent.
 
 ```{r}
 ggplot(data = x,
@@ -274,8 +278,8 @@ ggplot(data = x,
                                    vjust = 0.5)) +
   labs(x = '',
        y = '%',
-       title = '% de piulets que mencionen a VOX',
-       subtitle = '(només incloent piulets que mencionen al menys un partit polític)\n1 de desembre 2018 - 9 d\'abril 2019' ) +
+       title = '% de piulets que esmenten VOX',
+       subtitle = '(només incloent piulets que estmenten, com a mínim, un partit polític)\n1 de desembre 2018 - 9 d\'abril 2019' ) +
   geom_text(aes(label = round(of_parties, digits = 1)),
             alpha = 0.8,
             color = 'white',
@@ -283,7 +287,7 @@ ggplot(data = x,
             nudge_y = -4)
 ```
 
-No hi ha un patró clar esquerra-dreta amb la freqüencia de mencions de VOX. Ho fan molt, i ho fan tots.
+No hi ha un patró clar esquerra-dreta amb la freqüencia de referències a VOX. Ho fan molt, i ho fan tots.
 
 També es pot analitzar, mitjà per mitjà, la distribució de referencies als partits (gràfics al final d'aquest article).
 
@@ -309,7 +313,7 @@ mitja_plot <- function(mitja = 'vilaweb' ){
   pdx <- out %>%
     gather(key, value, pp:of_parties)
   pdx$key <- ifelse(pdx$key == 'of_parties',
-                    'Només entre aquells piulets\nque mencionen algun partit',
+                    'Només entre aquells piulets\nque esmenten algun partit',
                     'Entre tots els piulets\ndel compte')
   
   the_title <- spanish_newspapers$name[tolower(spanish_newspapers$username) == mitja]
@@ -327,7 +331,7 @@ mitja_plot <- function(mitja = 'vilaweb' ){
     labs(x = '',
          y = '%',
          title = paste0(the_title, ' (@', mitja, ')'),
-         subtitle = 'Percentage de piulets que mencionen a partits polítics')
+         subtitle = 'Percentatge de piulets que esmenten partits polítics')
 }
 
 mitjans <- sort(unique(tl$username))

@@ -42,28 +42,28 @@ Vaig descarregar 398229 piulets dels comptes de 29 diaris espanyols i catalans d
 Resultats
 =========
 
-Dels 398229 piulets dels 29 mitjans, 8.58 van mencionar un partit. Però aquestes mencions no eran distribuides de manera uniforme per partit, ni de manera representativa. Aqui el percentage de tots els piulets que mencionaven a cadascú dels partits examinats.
+Dels 398229 piulets dels 29 mitjans, 8.58 van esmentar un partit. Però aquestes esmentades no eran distribuides de manera uniforme per partit, ni de manera representativa. Aqui el percentatge de tots els piulets que esmentaven cadascú dels partits examinats.
 
 ![](figures/unnamed-chunk-4-1.png)
 
-El gràfic anterior mostra el percentage de piulets que fan referència a cada partit de *tots el piulets* de tots el mitjans. Però és útil mirar també aquest percentage només entre aquells piulets que mencionen algún partit (per excloure piluets no polítics, etc.):
+El gràfic anterior mostra el percentatge de piulets que fan referència a cada partit de *tots el piulets* de tots el mitjans. Però és útil mirar també aquest percentatge només entre aquells piulets que esmenten algún partit (per excloure piluets no polítics, etc.):
 
 ![](figures/unnamed-chunk-5-1.png)
 
-VOX, segons el CIS, és el cinquè partit d'Espanya. El seu support fluctuava durants el mesos d'aquest análisi de 5% a 11%. Però en cobertura mediàtica és el primer. Dels mitjans examinats, 34% dels piulets que mencionen a un partit polític fan referència a VOX. Va ser així amb Trump, al principi de les primàries. Tot i que la majoria dels republicans preferessin un altre candidat, Trump rebia constantment més cobertura, el que li va convertir - al llarg del temps - en el candidat més preferit.
+VOX, segons el CIS, és el cinquè partit d'Espanya. El seu support fluctuava durants el mesos d'aquest análisi de 5% a 11%. Però en cobertura mediàtica és el primer. Dels mitjans examinats, 34% dels piulets que esmenten un partit polític fan referència a VOX. Va ser així amb Trump, al principi de les primàries. Tot i que la majoria dels republicans preferessin un altre candidat, Trump rebia constantment més cobertura, el que li va convertir - al llarg del temps - en el candidat més preferit.
 
 Per mitjà
 ---------
 
-No tots els mitjans mencionen a VOX amb el mateix nivell de desproporcionalitat. Mirem-ho. El gràfic següent mostra el percentage de tots els piulets de cada mitjà que fa referència a VOX.
+No tots els mitjans esmenten VOX amb el mateix nivell de desproporcionalitat. Mirem-ho. El gràfic següent mostra el percentatge de tots els piulets de cada mitjà que fa referència a VOX.
 
 ![](figures/unnamed-chunk-7-1.png)
 
-El problema amb el gràfic anterior és que alguns mitjans no parlen molt de la política i els partits en general, i altres molt. Per tant, estaria bé mirar quin percentage de piulets *que mencionen algun partit polític* fan referència a VOX. Això es veu al gràfic següent.
+El problema amb el gràfic anterior és que alguns mitjans no parlen molt de la política i els partits en general, i altres molt. Per tant, estaria bé mirar quin percentatge de piulets *que esmenten algun partit polític* fan referència a VOX. Això es veu al gràfic següent.
 
 ![](figures/unnamed-chunk-8-1.png)
 
-No hi ha un patró clar esquerra-dreta amb la freqüencia de mencions de VOX. Ho fan molt, i ho fan tots.
+No hi ha un patró clar esquerra-dreta amb la freqüencia de referències a VOX. Ho fan molt, i ho fan tots.
 
 També es pot analitzar, mitjà per mitjà, la distribució de referencies als partits (gràfics al final d'aquest article).
 
