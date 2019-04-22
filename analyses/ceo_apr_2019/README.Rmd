@@ -1,0 +1,637 @@
+---
+title: "Què pensen els catalans dels seus polítics i les seves institucions?"
+output: github_document
+---
+
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(tidyverse)
+library(databrew)
+require(readr)  
+library(ggrepel)
+library(haven)
+```
+
+```{r}
+# Read in Apr 2019 CEO data
+df <- haven::read_sav('../../data-raw/ceo/Microdades anonimitzades -919.sav')
+df <- df %>%
+  dplyr::select(P24A,P24B,P24C,P24D,P24E,P24F,P24G,
+                P34,
+                P38_R,
+                EDAT,
+                EDAT_GR,
+                P29,
+                LLENGUA_ENQUESTA,
+                LLOC_NAIX,PROVÍNCIA,
+                contains("P49"),
+                contains("P26"),
+                P69) %>%
+  dplyr::rename(provincia = PROVÍNCIA,
+                llengua = P69) %>%
+  mutate(llengua = as_factor(llengua)) %>%
+  mutate(axis = ifelse(P29 %in% 98:99,
+                       NA, P29)) %>%
+  mutate(axis_simple = ifelse(axis <=3, 
+                              'Esquerra',
+                              ifelse(axis <= 6,
+                                     'Centre',
+                                     'Dreta')))
+df$axis_simple <- factor(df$axis_simple,
+                         levels = c('Esquerra', 'Centre', 'Dreta'))
+
+
+
+llengua_dict <- tibble(
+  llengua = c("Català (valencià / balear)",
+               "Castellà",
+               "Totes dues igual: català (valencià / balear) i castellà",
+               "Altres llengües o altres combinacions",
+               "No ho sap"),
+language = c('Cat', 'Esp', 'Cat i\nEsp', 'Altres', 'Altres'))
+llengua_dict$language <- factor(llengua_dict$language,
+                                levels = c('Cat',  'Cat i\nEsp', 'Altres',  'Esp'))
+
+df <- left_join(df, llengua_dict)
+df <- df %>% dplyr::select(-llengua) %>%
+  dplyr::rename(llengua = language)
+df$llengua <- factor(df$llengua,
+                                levels = c('Cat',  'Cat i\nEsp', 'Altres',  'Esp'))
+# P34 is the indepenence question
+# df$indy <- df$P34
+indy_dict <- tibble(P34 = c(1, 2, 98,99),
+                    indy = c('Independentistes',
+                             'Unionistes',
+                             'NS/NC',
+                             'NS/NC'))
+
+# P38_R is party question
+party_dict <- tibble(P38_R = c(1, 3, 4, 6, 10, 21, 22, 80, 93, 96, 98),
+                     partit = c('PPC','ERC', 'PSC', "C's", 'CUP', 'JxCat',
+                                'CatEnComú\nPodem', rep('Altre/NS/NC', 4)))
+
+
+df <- left_join(df, party_dict)
+df <- left_join(df, indy_dict)
+
+# # # P24 is the twitter question
+# 
+# a Pàgines de mitjans de comunicació.
+# b Pàgines de partits o candidats.
+# c Pàgines d’organitzacions ciutadanes o moviments cívics.
+# d Blogs o fòrums de debat.
+# e Facebook. 
+# f Twitter.
+# g Instagram.
+# 1. si
+# 2. no
+# 98/99. no sap / no contesta
+df$twitter <- as_factor(df$P24F)
+df$twitter <- as.character(df$twitter)
+df$twitter <- ifelse(is.na(df$twitter),
+                     'No fa servir internet',
+                     ifelse(df$twitter == 'Sí',
+                            'Fa servir twitter\n(amb o sense altres mitjans)',
+                            'No fa servir twitter,\nperò sí fa servir internet'))
+df$twitter <- factor(df$twitter,
+                     levels = rev(c('Fa servir twitter\n(amb o sense altres mitjans)',
+                                'No fa servir twitter,\nperò sí fa servir internet',
+                                 'No fa servir internet')))
+# df$twitter <- factor(df$twitter,
+#                      levels = rev(levels(df$twitter)))
+
+
+# Valoració de polítics
+politics <- gsub('P49A_', '', names(df)[grepl('P49A', names(df))])
+val_pol <- function(who = NULL,
+                    know = FALSE,
+                    group = NULL){
+  if(is.null(who)){
+    who <- politics
+  }
+  pd <- df %>%
+    dplyr::select(partit, axis, llengua, axis_simple, llengua, indy, contains('P49'))
+  pd <- pd %>%
+    gather(key, value, P49A_AFERNANDEZ:P49B_RIERA)
+  pd$politic <- gsub('P49A_|P49B_', '', pd$key)
+  pd$key <- substr(pd$key, 4,4)
+  key_dict <- tibble(key = c('A',
+                             'B'),
+                     know = c('Know', 'Score'))
+  pd <- left_join(pd, key_dict)
+  if(know){
+    out <- pd %>%
+      filter(know == 'Know') %>%
+      mutate(value = ifelse(value == 2, 0, value))
+  } else {
+    out <- pd %>%
+      filter(know == 'Score') %>%
+      filter(! value %in% 98:99)
+  }
+  if(is.null(group)){
+    out <- out %>%
+      group_by(politic) %>%
+      summarise(value = mean(value, na.rm = TRUE),
+                n = n())
+  } else {
+    out <- out %>%
+      group_by_('politic', group) %>%
+      summarise(value = mean(value, na.rm = TRUE),
+                n = n())
+  }
+  if(know){
+    out$value <- out$value * 100
+  }
+  out <- out %>% arrange(desc(value))
+  return(out)
+}
+
+# x <- val_pol(know = TRUE, group = 'partit')
+```
+
+
+# Introducció
+
+# Mètodes
+
+# Resultats
+
+## Reconeixement
+
+
+```{r}
+bp <- function(a,b){
+  RColorBrewer::brewer.pal(n = 8, name = a)[b]
+}
+cols <- bp('Oranges', 6)
+pd <- val_pol(know = TRUE)
+pd$politic <- factor(pd$politic, levels = unique(pd$politic))
+ggplot(data = pd,
+       aes(x = politic,
+           y = value)) +
+  theme_vilaweb() +
+  geom_bar(stat = 'identity',
+           fill = cols) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   hjust = 1)) +
+  geom_text(aes(label = round(value, digits = 1)),
+            nudge_y = -5,
+            color = 'white') +
+  labs(x = '',
+       y = 'Percentatge',
+       title = 'Reconeixement de polítics catalans',
+       subtitle = 'Em podria dir, per a cadascun d’ells, si els coneix?',
+       caption = 'Mostra: 1500 residents de Catalunya amb ciutadania espanyola.\nDades del Baròmetre d\'Opinió Política, 2019, 1a onada (treball de camp: març 2019).\nGràfic: Joe Brew | @joethebrew | www.vilaweb.cat.')
+```
+
+## Reconeixement per partit
+
+
+```{r}
+party_plot <- function(party = 'CUP'){
+  bp <- function(a,b){
+  RColorBrewer::brewer.pal(n = 8, name = a)[b]}
+  cols <- bp('Oranges', 6)
+  pd <- val_pol(know = TRUE, group = 'partit')
+  pd <- pd %>%
+           filter(partit %in%
+                    c(party)) %>%
+               mutate(partit = gsub('\n', ' ', partit)) %>%
+
+    mutate(partit = ifelse(partit == 'CUP', 'la CUP', partit))
+  pd$politic <- factor(pd$politic, levels = unique(pd$politic))
+  ggplot(data = pd,
+         aes(x = politic,
+             y = value)) +
+    theme_vilaweb() +
+    geom_bar(stat = 'identity',
+             fill = cols) +
+    theme(axis.text.x = element_text(angle = 90,
+                                     hjust = 1)) +
+    geom_text(aes(label = round(value, digits = 1)),
+              nudge_y = -5,
+              # size = 1,
+              color = 'white') +
+    labs(x = '',
+         y = 'Percentatge',
+         title = paste0('Reconeixement de polítics catalans\n(Només entre votants de ', pd$partit[1], ')'),
+         subtitle = 'Em podria dir, per a cadascun d’ells, si els coneix?',
+         caption = paste0('Mostra: ', pd$n[1], ' residents de Catalunya amb ciutadania espanyola.\nDades del Baròmetre d\'Opinió Política, 2019, 1a onada (treball de camp: març 2019).\nGràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'))
+}
+```
+
+### C's
+
+```{r}
+party_plot("C's")
+```
+
+
+### Catalunya en Comú Podem
+
+```{r}
+party_plot("CatEnComú\nPodem")
+```
+
+
+### La CUP
+
+```{r}
+party_plot("CUP")
+```
+
+
+### ERC
+
+```{r}
+party_plot("ERC")
+```
+
+
+### Junts per Catalunya
+
+```{r}
+party_plot("JxCat")
+```
+
+
+### PPC
+
+```{r}
+party_plot("PPC")
+```
+
+
+### PSC
+
+```{r}
+party_plot("PSC")
+```
+
+# Valoració
+
+```{r}
+pd <- val_pol()
+cols <- bp('Oranges', 6)
+pd$politic <- factor(pd$politic, levels = unique(pd$politic))
+ggplot(data = pd,
+       aes(x = politic,
+           y = value)) +
+  theme_vilaweb() +
+  geom_bar(stat = 'identity',
+           fill = cols) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   hjust = 1)) +
+  geom_text(aes(label = round(value, digits = 1)),
+            nudge_y = -1,
+            color = 'white') +
+  labs(x = '',
+       y = 'Valoració mitjana (0-10)',
+       title = 'Valoració de polítics catalans',
+       subtitle = 'Com valora l’actuació política d’aquests líders',
+       caption = 'Mostra: 1500 residents de Catalunya amb ciutadania espanyola.\nDades del Baròmetre d\'Opinió Política, 2019, 1a onada (treball de camp: març 2019).\nGràfic: Joe Brew | @joethebrew | www.vilaweb.cat.') +
+  ylim(0, max(pd$value))
+```
+
+## Valoració per ideologia política del enquestat
+
+```{r}
+pd <- val_pol(know = FALSE, group = 'axis_simple') %>%
+  filter(!is.na(axis_simple))
+ggplot(data = pd,
+       aes(x = axis_simple,
+           y = value)) +
+  geom_area(aes(group = politic),
+            fill = bp('Greys', 4),
+            # color = bp('Greys', 5),
+            alpha = 0.6) +
+  geom_point(color = bp('Greys', 8),
+             size = 0.5) +
+  facet_wrap(~politic) +
+  theme_vilaweb() +
+  labs(y = 'Valoració mitjana',
+       x = '',
+       title = 'Valoració de polítics per ideologia del enquestat',
+       caption = "Dades del Baròmetre d'Opinió Política, març 2019. Mostra: 1500 residents de CAT amb ciutadania ESP.\nIdeologia: escala 0-10 (esquerra-dreta). 0-3:Esquerra; 4-6:Centre; 7-10:Dreta. Gràfic de Joe Brew | @joethebrew.") +
+  geom_text(aes(label = round(value, digits = 1)),
+            alpha = 0.6,
+            nudge_y = 1.5,
+            size = 3) +
+  geom_line(aes(group = 1),
+            alpha = 0.8,
+            size = 0.3)
+
+```
+
+## Valoració de polítics per independentisme del enquestat
+
+```{r}
+pd <- val_pol(know = FALSE, group = 'indy') 
+ggplot(data = pd,
+       aes(x = indy,
+           y = value)) +
+  geom_area(aes(group = politic),
+            fill = bp('Greys', 4),
+            # color = bp('Greys', 5),
+            alpha = 0.6) +
+  geom_point(color = bp('Greys', 8),
+             size = 0.5) +
+  facet_wrap(~politic) +
+  theme_vilaweb() +
+  labs(y = 'Valoració mitjana',
+       x = '',
+       title = 'Valoració de polítics per independentisme del enquestat',
+       caption = "Dades del Baròmetre d'Opinió Política, març 2019. Mostra: 1500 residents de CAT amb ciutadania ESP.\nGràfic de Joe Brew | @joethebrew.") +
+  geom_text(aes(label = round(value, digits = 1)),
+            alpha = 0.6,
+            nudge_y = 1.5,
+            size = 3) +
+  geom_line(aes(group = 1),
+            alpha = 0.8,
+            size = 0.3) +
+  theme(axis.text.x = element_text(size = 7,
+                                   angle = 45,
+                                   vjust = 1,
+                                   hjust = 1))
+```
+
+
+
+## Valoració de polítics per partit polític del enquestat
+
+```{r}
+pd <- val_pol(know = FALSE, group = 'partit')  %>%
+  filter(!partit %in% c('Altre/NS/NC')) %>%
+  mutate(partit = ifelse(partit == 'CatEnComú\nPodem', 'Podem', partit))
+pd$partit <- factor(pd$partit,
+                    levels = c("CUP",
+                               "ERC",
+                               'JxCat',
+                               "Podem",
+                               'PSC',
+                               "C's",
+                               "PPC"))
+ggplot(data = pd,
+       aes(x = partit,
+           y = value)) +
+  geom_area(aes(group = politic),
+            fill = bp('Greys', 4),
+            # color = bp('Greys', 5),
+            alpha = 0.6) +
+  geom_point(color = bp('Greys', 8),
+             size = 0.5) +
+  facet_wrap(~politic) +
+  theme_vilaweb() +
+  labs(y = 'Valoració mitjana',
+       x = '',
+       title = 'Valoració de polítics per partit polític del enquestat',
+       caption = "Dades del Baròmetre d'Opinió Política, març 2019. Mostra: 1500 residents de CAT amb ciutadania ESP.\nGràfic de Joe Brew | @joethebrew.") +
+  geom_text(aes(label = round(value, digits = 1)),
+            alpha = 0.6,
+            nudge_y = 1.5,
+            size = 3) +
+  geom_line(aes(group = 1),
+            alpha = 0.8,
+            size = 0.3) +
+  theme(axis.text.x = element_text(size = 7,
+                                   angle = 45,
+                                   vjust = 1,
+                                   hjust = 1))
+```
+
+## Valoració de polítics per llengua del enquestat
+
+```{r}
+pd <- val_pol(know = FALSE, group = 'llengua') %>%
+  filter(!llengua %in% 'Altres')
+
+ggplot(data = pd,
+       aes(x = llengua,
+           y = value)) +
+  geom_area(aes(group = politic),
+            fill = bp('Greys', 4),
+            # color = bp('Greys', 5),
+            alpha = 0.6) +
+  geom_point(color = bp('Greys', 8),
+             size = 0.5) +
+  facet_wrap(~politic) +
+  theme_vilaweb() +
+  labs(y = 'Valoració mitjana',
+       x = '',
+       title = 'Valoració de polítics per llengua del enquestat',
+       caption = "Dades del Baròmetre d'Opinió Política, març 2019. Mostra: 1500 residents de CAT amb ciutadania ESP.\nGràfic de Joe Brew | @joethebrew.") +
+  geom_text(aes(label = round(value, digits = 1)),
+            alpha = 0.6,
+            nudge_y = 1.5,
+            size = 3) +
+  geom_line(aes(group = 1),
+            alpha = 0.8,
+            size = 0.3) +
+  theme(axis.text.x = element_text(size = 7,
+                                   angle = 45,
+                                   vjust = 1,
+                                   hjust = 1))
+```
+
+
+
+```{r, eval = FALSE}
+
+# Old stuff
+
+# By independentism
+pd <- df %>%
+  filter(indy != 'NS/NC') %>%
+  group_by(indy, twitter) %>%
+  summarise(n = n()) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup %>%
+  arrange(desc(twitter), p) %>%
+  group_by(indy) %>%
+  mutate(pp = cumsum(p))
+
+cols <- rev(databrew::make_colors(n = 3, categorical = F))
+red <- RColorBrewer::brewer.pal(8, 'Oranges')[4]
+cols[1] <- red
+ggplot(data = pd,
+       aes(x = indy,
+           y = p,
+           fill = twitter)) +
+  geom_bar(stat = 'identity',
+           alpha = 1) +
+  theme_databrew() +
+  labs(x = '',
+       y = '%',
+       title = 'Independentisme i ús de Twitter/internet',
+       caption = "Dades del Baròmetre d'Opinió Política, març 2019. 1500 residents de Catalunya amb ciutadania espanyola.\nGràfic de Joe Brew | @joethebrew.") +
+  scale_fill_manual('A través a quins mitjans\ns\'acostuma a informar\ndels temes polítics?',
+                    values = cols) +
+  guides(fill = guide_legend(title.position = "top",
+                             reverse = FALSE)) +
+  theme(axis.text.x = element_text(size = 18),
+        legend.text = element_text(size = 13),
+        legend.position = 'right',
+        plot.title = element_text(size = 25),
+        plot.caption = element_text(hjust = 0)) +
+  geom_text(
+    data = pd %>% filter(twitter != 'No fa servir internet'),
+    aes(label = round(pp, digits = 1)),
+    position = position_stack(),
+    vjust = 1,
+    color = 'white'
+  )
+
+# By party
+pd <- df %>%
+  filter(#!is.na(twitter),
+         partit != 'Altre/NS/NC') %>%
+  group_by(partit, twitter) %>%
+  summarise(n = n()) %>%
+  ungroup %>%
+  group_by(partit) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup %>%
+  arrange(twitter, p)
+pd$partit <- factor(pd$partit, levels = unique(pd$partit))
+
+cols <- rev(databrew::make_colors(n = 3, categorical = F))
+red <- RColorBrewer::brewer.pal(8, 'Oranges')[4]
+cols[1] <- red
+ggplot(data = pd,
+       aes(x = partit,
+           y = p,
+           fill = twitter)) +
+  geom_bar(stat = 'identity',
+           alpha = 1) +
+  theme_databrew() +
+  labs(x = '',
+       y = '%',
+       title = 'Ús de Twitter i internet per a seguir la política, per partit',
+       caption = "Dades del Baròmetre d'Opinió Política, març 2019. 1500 residents de Catalunya amb ciutadania espanyola.\nGràfic de Joe Brew | @joethebrew.") +
+  scale_fill_manual('A través a quins mitjans s\'acostuma a informar dels temes polítics?',
+                    values = cols) +
+  guides(fill = guide_legend(title.position = "top",
+                             reverse = TRUE)) +
+  theme(axis.text.x = element_text(size = 14),
+        legend.text = element_text(size = 13)) 
+
+# Lloc de naixement
+pd <- df %>%
+  mutate(LLOC_NAIX = as_factor(LLOC_NAIX)) %>%
+  group_by(LLOC_NAIX, indy) %>%
+  tally %>%
+  group_by(LLOC_NAIX) %>%
+  mutate(p = n / sum(n) * 100)
+
+# Age structure
+library(ggridges)
+
+
+pd <- df %>%
+#   mutate(age = ifelse(EDAT >= 70, '50+',
+#                         ifelse(EDAT < 70, '<50',
+#                                EDAT))) %>%
+# # pd <- vilaweb::ceo %>%
+#   group_by(age, #age = as_factor(EDAT_GR), 
+#            partit) %>%
+  tally %>%
+  group_by(partit) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  arrange(desc(age), p)
+# pd$age <- factor(pd$age, levels = rev(levels(pd$age)))
+pd$partit <- factor(pd$partit, levels = unique(pd$partit))
+
+ggplot(data = pd %>% filter(partit != 'Altre/NS/NC'),
+       aes(x = partit,
+           y = p,
+           fill = age)) +
+  geom_bar(stat = 'identity',
+           position = position_stack(),
+           color = 'black',
+           lwd = 0.5) +
+  scale_fill_manual(name = 'Edat',
+                    values = rev(databrew::make_colors(n = length(unique(pd$age)), categorical = F)))
+
+
+pd <- df %>%
+  group_by(partit, indy) %>%
+  tally %>%
+  group_by(partit) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  arrange(desc(indy), p)
+# pd$age <- factor(pd$age, levels = rev(levels(pd$age)))
+pd$partit <- factor(pd$partit, levels = unique(pd$partit))
+
+ggplot(data = pd %>% filter(partit != 'Altre/NS/NC'),
+       aes(x = partit,
+           y = p,
+           fill = age)) +
+  geom_bar(stat = 'identity',
+           position = position_stack(),
+           color = 'black',
+           lwd = 0.5) +
+  scale_fill_manual(name = 'Edat',
+                    values = rev(databrew::make_colors(n = length(unique(pd$age)), categorical = F)))
+
+# Tabarnia
+pd <- df %>%
+  group_by(indy, provincia = as_factor(provincia)) %>%
+  tally %>%
+  group_by(provincia) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup %>%
+  arrange(provincia)
+pd$indy <- factor(pd$indy,
+                  levels = c('Independentista',
+                             'Unionista',
+                             'NS/NC'))
+
+library(RColorBrewer)
+cols <- 
+  c(brewer.pal(n = 9, name = 'Blues')[7],
+    brewer.pal(n = 9, name = 'Oranges')[5],
+    brewer.pal(n = 9, name = 'Greys')[7])
+
+ggplot(data = pd,
+       aes(x = provincia,
+           y = p,
+           group = indy,
+           fill = indy)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9)) +
+  geom_text(aes(label = paste0(round(p, digits = 1), '%'),
+                y = p + 3),
+            position = position_dodge(width= 0.9),
+            alpha = 0.8) +
+  theme_databrew() +
+  scale_fill_manual(name = '',
+                    values = cols) +
+  labs(x = '',
+       y = '%',
+       title = 'Independentisme per província',
+       caption = 'Dades del Baròmetre d\'Opinió Política, 1a Onada, 2019 (treball de camp: març 2019).\nMostra: 1500 residents de Catalunya amb ciutadania espanyola. Gràfic: Joe Brew | @joethebrew.') +
+  theme(axis.text.x = element_text(size = 20),
+        plot.title = element_text(size = 30),
+        legend.text = element_text(size = 24),
+        plot.caption = element_text())
+```
