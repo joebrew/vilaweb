@@ -36,9 +36,9 @@ El gràfic següent mostra el coneixement de polítics catalans pels votants de 
 
 ![](figures/unnamed-chunk-5-1.png)
 
-### Catalunya en Comú Podem
+### Catalunya en Comú-Podem
 
-El gràfic següent mostra el coneixement de polítics catalans pels votants de Podem. Com el cas de Ciutadans, la gran majoria coneixen als principals liders independentistes. Però menys de la meitat dels votants de Podem saben qui són els polítics del seu propi partit (Jessica Albiach i el aliat Joan Mena).
+El gràfic següent mostra el coneixement de polítics catalans pels votants de CECP Com el cas de Ciutadans, la gran majoria coneixen als principals liders independentistes. Però menys de la meitat dels votants de CECP saben qui són els polítics del seu propi partit (Jessica Albiach i el aliat Joan Mena).
 
 ![](figures/unnamed-chunk-6-1.png)
 
@@ -81,10 +81,10 @@ El gràfic següent mostra la valoració mitjana dels polítics per tots els cat
 
 ![](figures/unnamed-chunk-12-1.png)
 
-Valoració per ideologia política del enquestat
-----------------------------------------------
+Valoració per ideologia política de l'enquestat
+-----------------------------------------------
 
-La valoració mitjana amaga un factor important: l'ideologia del enquestat. Com veiem en el pròxim gràfic, la valoració de cada polític varia bastant segons la ideologia política del enquestat.
+La valoració mitjana amaga un factor important: l'ideologia de l'enquestat. Com veiem en el pròxim gràfic, la valoració de cada polític varia bastant segons la ideologia política de l'enquestat.
 
 ![](figures/unnamed-chunk-13-1.png)
 
@@ -94,8 +94,8 @@ La bretxa entre les valoracions dels votants d'esquerra i de dreta és més gran
 
 També és curiós que els dos polítics del partit catalanista "de dretes" (el PDeCat: Quim Torra i Carles Puigdemont) són millor valorats pels votants d'esquerres que els de dretes.
 
-Valoració de polítics per independentisme del enquestat
--------------------------------------------------------
+Valoració de polítics per independentisme de l'enquestat
+--------------------------------------------------------
 
 Mirem el mateix, aquesta vegada substituent la ideologia esquerra-dreta per l'independentisme.
 
@@ -103,17 +103,17 @@ Mirem el mateix, aquesta vegada substituent la ideologia esquerra-dreta per l'in
 
 El patró és el mateix. Però dos coses sorprenen. Primer, Oriol Junqueras rep una valoració bastant alta fins i tot dels unionistes (4,2), el doble que la valoració que aquest bloc posa al Quim Torra o al Carles Puigdemont. Segon, els independentistes valoren bastant positivament a Jessica Abliach i Joan Mena (encara que no siguin independentistes).
 
-Valoració de polítics per partit polític del enquestat
-------------------------------------------------------
+Valoració de polítics per partit polític de l'enquestat
+-------------------------------------------------------
 
-Ara mirem la valoració dels polítics per partit del enquestat.
+Ara mirem la valoració dels polítics per partit de l'enquestat.
 
 ![](figures/unnamed-chunk-15-1.png)
 
 En el gràfic anterior, cal destacar 3 coses. Primer, Manuel Valls (socialista a França, aliat amb C's a Catalunya) és valorat millor pels votants del PP que qualsevol altre partit. Segon, Inés Arrimadas rep una valoració altíssima dels votants del PP (més alta, per exemple, que la valoració mitjana que els socialistes posen a Meritxell Batet). Tercer, els únics que reben valoracions molt altes (7+) de membres d'altres partits són Junqueras, Puigdemont, i Rovira (tots tres a la presó o a l'exili).
 
-Valoració de polítics per llengua del enquestat
------------------------------------------------
+Valoració de polítics per llengua de l'enquestat
+------------------------------------------------
 
 La llengua considerada "pròpia" també influeix en la valoració dels polítics.
 

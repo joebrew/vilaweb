@@ -87,7 +87,7 @@ indy_dict <- tibble(P34 = c(1, 2, 98,99),
 # P38_R is party question
 party_dict <- tibble(P38_R = c(1, 3, 4, 6, 10, 21, 22, 80, 93, 96, 98),
                      partit = c('PPC','ERC', 'PSC', "C's", 'CUP', 'JxCat',
-                                'CatEnComú\nPodem', rep('Altre/NS/NC', 4)))
+                                'CECP', rep('Altre/NS/NC', 4)))
 
 
 df <- left_join(df, party_dict)
@@ -133,6 +133,7 @@ val_pol <- function(who = NULL,
   pd <- pd %>%
     gather(key, value, P49A_AFERNANDEZ:P49B_RIERA)
   pd$politic <- gsub('P49A_|P49B_', '', pd$key)
+  pd$politic <- ifelse(pd$politic == 'AFERNANDEZ', 'FERNANDEZ', pd$politic)
   pd$key <- substr(pd$key, 4,4)
   key_dict <- tibble(key = c('A',
                              'B'),
@@ -228,6 +229,11 @@ party_plot <- function(party = 'CUP'){
 
     mutate(partit = ifelse(partit == 'CUP', 'la CUP', partit))
   pd$politic <- factor(pd$politic, levels = unique(pd$politic))
+  if(party == 'ERC'){
+    the_title <- paste0('Reconeixement de polítics catalans\n(Només entre votants d\'', pd$partit[1], ')')
+  } else {
+    the_title <- paste0('Reconeixement de polítics catalans\n(Només entre votants de ', pd$partit[1], ')')
+  }
   ggplot(data = pd,
          aes(x = politic,
              y = value)) +
@@ -242,7 +248,7 @@ party_plot <- function(party = 'CUP'){
               color = 'white') +
     labs(x = '',
          y = 'Percentatge',
-         title = paste0('Reconeixement de polítics catalans\n(Només entre votants de ', pd$partit[1], ')'),
+         title = the_title,
          subtitle = 'Em podria dir, per a cadascun d’ells, si els coneix?',
          caption = paste0('Mostra: ', pd$n[1], ' residents de Catalunya amb ciutadania espanyola.\nDades del Baròmetre d\'Opinió Política, 2019, 1a onada (treball de camp: març 2019).\nGràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'))
 }
@@ -259,12 +265,12 @@ party_plot("C's")
 ```
 
 
-### Catalunya en Comú Podem
+### Catalunya en Comú-Podem
 
-El gràfic següent mostra el coneixement de polítics catalans pels votants de Podem. Com el cas de Ciutadans, la gran majoria coneixen als principals liders independentistes. Però menys de la meitat dels votants de Podem saben qui són els polítics del seu propi partit (Jessica Albiach i el aliat Joan Mena).
+El gràfic següent mostra el coneixement de polítics catalans pels votants de CECP Com el cas de Ciutadans, la gran majoria coneixen als principals liders independentistes. Però menys de la meitat dels votants de CECP saben qui són els polítics del seu propi partit (Jessica Albiach i el aliat Joan Mena).
 
 ```{r}
-party_plot("CatEnComú\nPodem")
+party_plot("CECP")
 ```
 
 ### La CUP
@@ -342,14 +348,14 @@ ggplot(data = pd,
   labs(x = '',
        y = 'Valoració mitjana (0-10)',
        title = 'Valoració de polítics catalans',
-       subtitle = 'Com valora l’actuació política d’aquests líders',
+       subtitle = 'Com valoreu l’actuació política d’aquests dirigents',
        caption = 'Mostra: 1500 residents de Catalunya amb ciutadania espanyola.\nDades del Baròmetre d\'Opinió Política, 2019, 1a onada (treball de camp: març 2019).\nGràfic: Joe Brew | @joethebrew | www.vilaweb.cat.') +
   ylim(0, max(pd$value))
 ```
 
-## Valoració per ideologia política del enquestat
+## Valoració per ideologia política de l'enquestat
 
-La valoració mitjana amaga un factor important: l'ideologia del enquestat. Com veiem en el pròxim gràfic, la valoració de cada polític varia bastant segons la ideologia política del enquestat.
+La valoració mitjana amaga un factor important: l'ideologia de l'enquestat. Com veiem en el pròxim gràfic, la valoració de cada polític varia bastant segons la ideologia política de l'enquestat.
 
 ```{r}
 pd <- val_pol(know = FALSE, group = 'axis_simple') %>%
@@ -367,7 +373,7 @@ ggplot(data = pd,
   theme_vilaweb() +
   labs(y = 'Valoració mitjana',
        x = '',
-       title = 'Valoració de polítics per ideologia del enquestat',
+       title = 'Valoració de polítics per ideologia de l\'enquestat',
        caption = "Dades del Baròmetre d'Opinió Política, març 2019. Mostra: 1500 residents de CAT amb ciutadania ESP.\nIdeologia: escala 0-10 (esquerra-dreta). 0-3:Esquerra; 4-6:Centre; 7-10:Dreta. Gràfic de Joe Brew | @joethebrew.") +
   geom_text(aes(label = round(value, digits = 1)),
             alpha = 0.6,
@@ -385,7 +391,7 @@ La bretxa entre les valoracions dels votants d'esquerra i de dreta és més gran
 
 També és curiós que els dos polítics del partit catalanista "de dretes" (el PDeCat: Quim Torra i Carles Puigdemont) són millor valorats pels votants d'esquerres que els de dretes.
 
-## Valoració de polítics per independentisme del enquestat
+## Valoració de polítics per independentisme de l'enquestat
 
 Mirem el mateix, aquesta vegada substituent la ideologia esquerra-dreta per l'independentisme. 
 
@@ -404,7 +410,7 @@ ggplot(data = pd,
   theme_vilaweb() +
   labs(y = 'Valoració mitjana',
        x = '',
-       title = 'Valoració de polítics per independentisme del enquestat',
+       title = 'Valoració de polítics per independentisme de l\'enquestat',
        caption = "Dades del Baròmetre d'Opinió Política, març 2019. Mostra: 1500 residents de CAT amb ciutadania ESP.\nGràfic de Joe Brew | @joethebrew.") +
   geom_text(aes(label = round(value, digits = 1)),
             alpha = 0.6,
@@ -422,53 +428,59 @@ ggplot(data = pd,
 El patró és el mateix. Però dos coses sorprenen. Primer, Oriol Junqueras rep una valoració bastant alta fins i tot dels unionistes (4,2), el doble que la valoració que aquest bloc posa al Quim Torra o al Carles Puigdemont. Segon, els independentistes valoren bastant positivament a Jessica Abliach i Joan Mena (encara que no siguin independentistes).
 
 
-## Valoració de polítics per partit polític del enquestat
+## Valoració de polítics per partit polític de l'enquestat
 
-Ara mirem la valoració dels polítics per partit del enquestat. 
+Ara mirem la valoració dels polítics per partit de l'enquestat. 
 
 ```{r}
 pd <- val_pol(know = FALSE, group = 'partit')  %>%
   filter(!partit %in% c('Altre/NS/NC')) %>%
-  mutate(partit = ifelse(partit == 'CatEnComú\nPodem', 'Podem', partit))
+  mutate(partit = ifelse(partit == 'CatEnComú\nPodem', 'CECP', partit))
 pd$partit <- factor(pd$partit,
                     levels = c("CUP",
                                "ERC",
                                'JxCat',
-                               "Podem",
+                               "CECP",
                                'PSC',
                                "C's",
                                "PPC"))
 ggplot(data = pd,
        aes(x = partit,
            y = value)) +
-  geom_area(aes(group = politic),
-            fill = bp('Greys', 4),
-            # color = bp('Greys', 5),
-            alpha = 0.6) +
-  geom_point(color = bp('Greys', 8),
-             size = 0.5) +
-  facet_wrap(~politic) +
+  # geom_area(aes(group = politic),
+  #           fill = bp('Greys', 4),
+  #           # color = bp('Greys', 5),
+  #           alpha = 0.6) +
+  # geom_point(color = bp('Greys', 8),
+  #            size = 0.5) +
+  geom_bar(stat = 'identity',
+           fill = bp('Greys', 4),
+           width = 1,
+           color = bp('Greys', 5)) +
+  facet_wrap(~politic,
+             scales = 'free_x') +
   theme_vilaweb() +
   labs(y = 'Valoració mitjana',
        x = '',
-       title = 'Valoració de polítics per partit polític del enquestat',
+       title = 'Valoració de polítics per partit polític de l\'enquestat',
        caption = "Dades del Baròmetre d'Opinió Política, març 2019. Mostra: 1500 residents de CAT amb ciutadania ESP.\nGràfic de Joe Brew | @joethebrew.") +
   geom_text(aes(label = round(value, digits = 1)),
             alpha = 0.6,
             nudge_y = 1.5,
             size = 3) +
-  geom_line(aes(group = 1),
-            alpha = 0.8,
-            size = 0.3) +
+  # geom_line(aes(group = 1),
+            # alpha = 0.8,
+            # size = 0.3) +
   theme(axis.text.x = element_text(size = 7,
                                    angle = 45,
                                    vjust = 1,
-                                   hjust = 1))
+                                   hjust = 1),
+        strip.text = element_text(size = 10)) 
 ```
 
 En el gràfic anterior, cal destacar 3 coses. Primer, Manuel Valls (socialista a França, aliat amb C's a Catalunya) és valorat millor pels votants del PP que qualsevol altre partit. Segon, Inés Arrimadas rep una valoració altíssima dels votants del PP (més alta, per exemple, que la valoració mitjana que els socialistes posen a Meritxell Batet). Tercer, els únics que reben valoracions molt altes (7+) de membres d'altres partits són Junqueras, Puigdemont, i Rovira (tots tres a la presó o a l'exili).
 
-## Valoració de polítics per llengua del enquestat
+## Valoració de polítics per llengua de l'enquestat
 
 La llengua considerada "pròpia" també influeix en la valoració dels polítics. 
 
@@ -489,7 +501,7 @@ ggplot(data = pd,
   theme_vilaweb() +
   labs(y = 'Valoració mitjana',
        x = '',
-       title = 'Valoració de polítics per llengua del enquestat',
+       title = 'Valoració de polítics per llengua de l\'enquestat',
        caption = "Dades del Baròmetre d'Opinió Política, març 2019. Mostra: 1500 residents de CAT amb ciutadania ESP.\nGràfic de Joe Brew | @joethebrew.") +
   geom_text(aes(label = round(value, digits = 1)),
             alpha = 0.6,
