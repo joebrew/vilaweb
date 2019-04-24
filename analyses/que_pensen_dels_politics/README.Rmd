@@ -510,13 +510,14 @@ En general, els polítics que parlen més en català reben valoracions altes del
 
 En general, els catalans valoren de manera bastant negativa els seus polítics. Dels 12 polítics principals, només 4 són "aprobats" pels votants; els altres 8 "suspenen".
 
-Cap polític rep una bona valoració de tots els ambits. O sigui, tots tenen grups que els valoren negativament (Puigdemont amb els votants de dretes, Arrimadas amb els catalanoparlants). Això és normal.
 
-En la política catalana s'acusa freqüentment a l'adversari polític de "només representar a la meitat de Catalunya". Ironicament, aquesta acusació vé més sovint dels polítics que reben valoracions més baixes de "l'altre meitat". Les dades demostren els que polítics de dretes (Arrimadas, Fernández, i Valls) són els que reben les pitjors valoracions dels votants de "l'altre banda" (d'esquerres). I els polítics unionistes reben pitjors valoracions dels independentistes que els polítics independentistes dels votants unionistes. 
+En la política catalana s'acusa freqüentment a l'adversari polític de "només representar a la meitat de Catalunya". Ironicament, aquesta acusació vé més sovint dels polítics que reben valoracions més baixes de "l'altre meitat". Les dades demostren els que polítics de dretes (Arrimadas, Fernández, i Valls) són els que reben les pitjors valoracions dels votants de "l'altre banda" (d'esquerres). I els polítics unionistes reben pitjors valoracions dels independentistes que els polítics independentistes dels votants unionistes. O sigui, cap polític és "tranversal" en els eixos llengua, ideologia, independentisme, però els "menys" tranversals són els que més freqüentment acusen els altres de no ser-ho.
 
-Per exemple, els votants d'esquerres posen una valoració de 1,3 a Inés Arrimadas, i els votants independentistes li posen una valoració de 0,8. Compara aquestes valoracions amb el 4,2 que li posen els votants de dretes i els no independentistes a Oriol Junqueras. Ningú representa bé a tots, i tots representen millor als seus votants que a altres. Però sí s'ha acusar algú de no representar bé a tots, hauria de ser els unionistes de dretes, que semblen representar bé només els seus. 
+
 
 # Details
+
+El codi per la reproducció d'aquesta anàlitsi està publicament disponible a https://github.com/joebrew/vilaweb/tree/master/analyses/que_pensen_dels_politics.
 
 
 ```{r, eval = FALSE}
