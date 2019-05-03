@@ -181,6 +181,8 @@ Some politicians, particularly those on the political right, frequently accuse t
   </tr>
     <tr>
     <td><img src="img/supermacisme_rivera.png" /></td>
+    <td><img src="img/xenofob4.png" /></td>
+
   </tr>
 
 </table>
@@ -217,7 +219,7 @@ In a hypothetical yes-no referendum, in other words, independence would win by 4
 
 ```{r}
 indy_plot(treure = TRUE) +
-  labs(subtitle = 'Removing the "not sure"/"no answer" responses')
+  labs(subtitle = "Removing the 'not sure'/'no answer' responses")
 ```
 
 Iceta is not only wrong about whether Catalans want independence (it's close, at least), he's especially wrong in suggesting that Catalans don't want a referendum. They do. 78,7% agree with the phrase that "Catalans have a right to decide their future as a country through a referendum".
@@ -308,7 +310,7 @@ indy_plot(ca = T)
 
 ```{r}
 indy_plot(ca = T, treure = TRUE) +
-  labs(subtitle = 'Traient els "NS/NC"')
+  labs(subtitle = "Traient els 'NS/NC'")
 ```
 
 

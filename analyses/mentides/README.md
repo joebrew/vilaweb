@@ -125,6 +125,7 @@ Some politicians, particularly those on the political right, frequently accuse t
 </tr>
     <tr>
     <td><img src="img/supermacisme_rivera.png" /></td>
+    <td><img src="img/xenofob4.png" /></td>
 
 </tr>
 </table>
