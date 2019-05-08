@@ -1,0 +1,444 @@
+---
+title: "TSJ analysis for Andreu"
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.height = 8,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+library(webshot)
+
+# Hypotheses
+
+# Que la ciutadania [sí o no] es va adonar que el TSJ havia ordenat aturar el referèndum (freqüencia de tuits relacionats amb el tema, etc.)
+# https://twitter.com/martamartorell/status/913079799668789248
+
+
+# Que la ciutadania [sí o no] es va adonar que aquesta ordre aturava les acutacions de la Fiscalia.
+# https://twitter.com/elsmatins/status/913284227864686592
+```
+
+
+```{r}
+library(gsheet)
+goog_people <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=1425313388')
+
+
+people <- c('oscar_puente_',
+  'nytimes',
+  'elmundoespana',
+  'f_armengol',
+  'abalosmeco',
+  'esquerra_erc',
+  'argeliaqueralt',
+  'chadleistikow',
+  'quimtorraipla',
+  'foreignpolicy',
+  'santi_abascal',
+  'juanluisgordo',
+  'j_zaragoza_',
+  'newsweek',
+  'matthewbennett',
+  'chaomendespage',
+  'ft',
+  'sanchezcastejon',
+  'masterepmok1',
+  'jeanrafaelson',
+  'sorayapsoe',
+  'guardiacivil',
+  'antoniohurtado',
+  'jaumeasens',
+  '20m',
+  'albiol_xg',
+  'naciodigital',
+  'marianorajoy',
+  'lemondefr',
+  'mespermallorca',
+  'zaibatsu',
+  'bbcworld',
+  'lawrence',
+  'pablocasado_',
+  'delo_otaibi',
+  'patxilopez',
+  'susana_ros',
+  'policia',
+  'cesarjramos',
+  'jesusmariafer',
+  'adacolau',
+  'cope',
+  'ximopuig',
+  'vilaweb',
+  'mespermenorca',
+  'ciutadanscs',
+  'carlosvidalp',
+  'ajenglish',
+  'pedro_casares',
+  'elcatalan_es',
+  'ibangarciadb',
+  '1043ple',
+  'larazon_es',
+  'cristinanarbona',
+  'euronews',
+  'angelrosdomingo',
+  'elsa_artadi',
+  'rogertorrent',
+  'javizqui',
+  'fargmira',
+  'jaumecollboni',
+  'pilicancela',
+  'chanofranquis',
+  'cupnacional',
+  'toninoguera',
+  'guardian',
+  'abc_es',
+  'claraaguilera7',
+  'joanribo',
+  'okdiario',
+  'cronicaglobal',
+  'enricmillo',
+  'elconfidencial',
+  'ccma_cat',
+  'europapress',
+  'joantarda',
+  'enoticiescat',
+  'joethebrew',
+  'telecincoes',
+  'miriamnoguerasm',
+  'dbalears',
+  'meritxell_batet',
+  'miqueliceta',
+  'diarilaveu_',
+  'albanodante76',
+  'alivelshi',
+  'cnn',
+  'alejandrotgn',
+  'pablo_iglesias_',
+  'washingtonpost',
+  'emrekbol',
+  'beatrizcorredor',
+  'lavanguardia',
+  'perearagones',
+  'repbrownley',
+  'rcorteslastra',
+  'ivanyanoviene',
+  'ondacero_es',
+  'carmencalvo_',
+  'jeanmarcpujol',
+  'espciudadana',
+  'micaela_navarro',
+  'elpuntavui',
+  'laverdad_es',
+  'alejandro_tgn',
+  'theeconomist',
+  'albert_rivera',
+  'tv3cat',
+  'cnnbrk',
+  'joanbaldovi',
+  'irishtimes',
+  'elperiodico',
+  'el_pais',
+  'kaipics',
+  'belenfcasero',
+  'carlescampuzano',
+  'publico_es',
+  'joseluisrequero',
+  'santicl',
+  'elmundoes',
+  'politicoeurope',
+  'time',
+  'socialistesval',
+  'la_ser',
+  'diariara',
+  'xsalaimartin',
+  'alevysoler',
+  'voz_populi',
+  'globalspain',
+  'abetancor',
+  'drtomdepaoli',
+  'nuriaparlon',
+  'ppcatalunya',
+  'nbcnews',
+  'eleconomistaes',
+  'sorayasds',
+  'emegezeta',
+  'politico',
+  'elnacionalcat',
+  'krls',
+  'kabe_zukazuka',
+  'pdemocratacat',
+  'rtve',
+  'carrizosacarlos',
+  'luzseijo',
+  'financialtimes',
+  'elpais_espana',
+  'inesarrimadas',
+  'isabelbonig',
+  'societatcc',
+  'luisacarcedo',
+  'uhmallorca',
+  'libertaddigital',
+  'socialistes_cat',
+  'ppopular',
+  'ciudadanoscs',
+  'cridanacional',
+  'krina_monkda',
+  'psoe',
+  'foxnews',
+  'elespanolcom',
+  'bbc',
+  'pnique',
+  'enricmorera',
+  'cesarluena',
+  'junqueras',
+  'msnbc',
+  'vox_es',
+  'simancasrafael',
+  'iurquizu',
+  'catencomu_podem',
+  'cnni',
+  'eva_granados',
+  'lindependant',
+  'teresaribera',
+  'gabrielrufian',
+  'jacksepthlcceye',
+  'nytimesworld',
+  'jruizcarbonell',
+  'compromis',
+  'josepborrellf',
+  'g_pisarello',
+  'monicaoltra',
+  'vicentsolerm')
+people <- people[people %in% goog_people$username] 
+
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  query = paste0("SELECT * FROM twitter where username = ANY ('{",
+           paste0('"', people, '"', collapse = ','),
+           "}')")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    query
+  )
+  save(tl, file = 'tl.RData')  
+  dbDisconnect(con)
+}
+```
+
+
+
+```{r}
+# Que la ciutadania [sí o no] es va adonar que el TSJ havia ordenat aturar el referèndum (freqüencia de tuits relacionats amb el tema, etc.)
+# https://twitter.com/martamartorell/status/913079799668789248
+
+
+# Que la ciutadania [sí o no] es va adonar que aquesta ordre aturava les acutacions de la Fiscalia.
+# https://twitter.com/elsmatins/status/913284227864686592
+
+search_tsj <- "'tsj_cat' OR 'Tribunal Superior de Justícia' OR 'TSJ'"
+search_fiscalia <- "fiscalía"
+# system(paste0("python3 ../../foreign/twint/Twint.py -s ",
+#               search_tsj,
+#               " --since 2017-09-20 --until 2017-10-05 -o data/tsj --csv"))
+# system(paste0("python3 ../../foreign/twint/Twint.py -s ",
+#               search_fiscalia,
+#               " --since 2017-09-20 --until 2017-10-05 -o data/fiscalia --csv"))
+
+```
+
+```{r}
+searches <- c(search_fiscalia, search_tsj)
+data_dir <- dir('data', recursive = TRUE)
+out_list <- list()
+for(i in 1:length(data_dir)){
+  file_path <- paste0('data/', data_dir[i])
+  search_string <- searches[i]
+  data <- read_csv(file_path) %>%
+    mutate(search_string = search_string)
+  out_list[[i]] <- data
+}
+
+
+df <- bind_rows(out_list)
+df <- df %>% group_by(search_string, id) %>%
+  mutate(n = n()) %>%
+  ungroup %>%
+  filter(n == 1) %>%
+  dplyr::select(-n) %>%
+  filter(date >= '2017-09-25',
+         date <= '2017-10-02')
+# Adjust for time zone
+library(lubridate)
+df$date_time <- as.POSIXct(paste0(df$date, ' ', df$time, ' ', '+0', df$timezone))
+Sys.setenv(TZ='CET')
+
+make_plot <- function(with_retweets = FALSE){
+  pd <- df %>%
+    group_by(date = as.POSIXct(cut(date_time, 'hour')),
+             search_string) %>%
+    summarise(n = n(),
+              wrt = sum(retweets_count))
+  left <- expand.grid(date = sort(unique(pd$date)),
+                      search_string = sort(unique(pd$search_string)))
+  pd <- left_join(left, pd) %>%
+    mutate(n = ifelse(is.na(n), 0, n),
+           wrt = ifelse(is.na(wrt), 0, wrt))
+  if(with_retweets){
+    pd <- pd %>% mutate(n = n + wrt)  
+  } 
+  
+  date_line <- as.POSIXct('2017-09-27 18:45:00 CEST')
+  
+  
+  ggplot(data = pd,
+         aes(x = date,
+             y = n)) +
+    geom_area(alpha = 0.5, fill = 'darkblue') +
+    geom_line(color = 'darkblue') +
+    facet_wrap(~search_string,
+               nrow = 2,
+               scales = 'free_y') +
+    theme_databrew() +
+    geom_vline(xintercept = date_line,
+               lty= 2) +
+    labs(x = 'Data',
+         y = 'Tuits',
+         title = 'Freqüencia de tuits per hora',
+         subtitle = 'Línia vertical: notícia sobre l\'ordre del TSJ de Cat sobre el tancament\nde locals públics i la requisió de material del referèndum.')
+}
+```
+
+# Preguntes
+
+1. La ciutadania es va adonar que el TSJ havia ordenat aturar el referèndum?
+
+2. La ciutadania es va adonar que aquesta ordre aturava les acutacions de la Fiscalía?
+
+# Mètodes
+
+## Mètode A
+
+Recompte de freqüencia de piulets amb referències al TSJ (pregunta 1) i a la Fiscalía (pregunta 2), fent servir les búsquedes següents:
+
+1. "'tsj_cat' OR 'Tribunal Superior de Justícia' OR 'TSJ'"
+2. '"Fiscalía" OR "Fiscalia"
+
+## Mètode B
+
+Referències (en piulets) al TSJ i/o la Fiscalía per part de 60 polítics catalans/espanyols de renom.
+
+# Hipòtesi
+
+Si fossin notoris els fets que el (1) TSJ havia ordenat aturar el referèndum, i (2) que aquesta aturada implicava aturar les actuacions de la Fiscalía, s'esperaria a una pujada en la freqüencia de piulets sobre els dos temas just després de la noticia (a la vespra del 27 i el matí del 27 de setembre).
+
+# Resultats
+
+## Resultats A
+
+El gràfic següent mostra la freqüencia de tuits per les dues búsquedes.
+
+```{r}
+make_plot(with_retweets = F)
+```
+
+El gràfic següent mostra el mateix, però incloent també retuits.
+
+```{r}
+make_plot(with_retweets = T)
+```
+
+
+
+
+## Resultats B: Piulets de polítics
+
+Vem recollir tots els tuits de 59 comptes de polítics/grups catalans/espanyols coneguts, dels qual 31 són "unionistes", 11 són "sobiranistes" (a favor de la autodeterminació de Catalunya però no la independència) i 17 són "independentistes". Aquests comptes són:
+
+```{r}
+cat(paste0(sort(unique(tl$username)), collapse = '\n'))
+```
+
+```{r}
+tl <- left_join(tl, goog_people)
+```
+
+
+```{r}
+sub_tl <- tl %>%
+  filter(date >= '2017-09-27',
+         date <= '2017-09-28')
+
+sub_tl$date_time <- as.POSIXct(paste0(sub_tl$date, ' ', sub_tl$time, ' ', '+0', sub_tl$timezone))
+Sys.setenv(TZ='CET')
+
+tiny_tl <- sub_tl %>%
+  filter(grepl('tsj|tribunal superior|fiscal', tolower(tweet)))
+```
+
+La taula següent mostra els `r nrow(tiny_tl)` tuits d'aquests 59 comptes els dies 27-28 de setembre que feien alguna referència al TSJ o la Fiscalía (búsqueda = "'tsj' OR 'tribunal superior' OR 'fiscal').
+
+```{r}
+library(knitr)
+kable(tiny_tl %>% arrange(username, date_time) %>% dplyr::select(username, date_time, tweet))
+```
+
+
+
+# Conclusió
+
+La notícia sembla haver tingut un impacte relativament menor en Twitter. 
+
+- Tuits fent referència al TSJ no van passar els 30 per hora en cap moment, i cap va tenir més de 600 retuits. Després del matí del 28 (on hi va haver una pujada en retuits), la freqüencia de tuits/retuits sobre el tema van tornar a ser molt baixa.
+
+- La freqüencia de tuits fent referència a la Fiscalía van ser dins del rang normal els dies 27-28 de setembre.
+
+# Technical details
+
+- Data scraped from twtiter on May 8, 2019 using the python twint library.   
+- Data processed, aggregated, and visualized using R.  
+
+```{r}
+si <- Sys.info()
+out <- paste0('Data processed on a ', si['sysname'], ' machine with OS ', si['version'], ' at ', Sys.time())
+```
+
+`r out`
+
+# Appendix
+
+
+La taula següent mostra TOTS els `r nrow(sub_tl)` tuits d'aquests 59 comptes els dies 27-28 de setembre.
+
+```{r}
+library(knitr)
+kable(sub_tl %>% arrange(username, date_time) %>% dplyr::select(username, date_time, tweet))
+```
