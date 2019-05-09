@@ -1,0 +1,183 @@
+---
+title: "TSJ analysis for Andreu: Newspapers"
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.height = 8,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+library(webshot)
+
+```
+
+```{r, results='asis'}
+
+newspaper_df <-
+  data_frame(file = dir('newspaper_headlines')) %>%
+  mutate(paper = unlist(lapply(lapply(strsplit(file, '_'), function(x){x[2]}), function(y){gsub('.jpg', '', y, fixed = T)}))) %>%
+  mutate(date = as.Date(substr(file, 1, 10))) %>%
+  mutate(file = paste0('newspaper_headlines/', file))
+
+sub_newspapers <- newspaper_df %>%
+  filter((date >= '2017-09-28'&
+         date <= '2017-10-01'))
+sub_newspapers <- sub_newspapers %>%
+  arrange(date, paper)
+for(i in 1:nrow(sub_newspapers)){
+   this_file <- sub_newspapers$file[i]
+  new_person <- FALSE
+  if(i == 1){
+    new_person <- TRUE
+  } else if(sub_newspapers$date[i] != sub_newspapers$date[i-1]){
+    new_person <- TRUE
+  }
+  if(new_person){
+    cat(paste0('\n### ', as.character(sub_newspapers$date[i]), '\n\n'))
+  }
+  cat(paste0('\n##### ', as.character(sub_newspapers$date[i]), ', ',   as.character(sub_newspapers$paper[i]), '\n'))
+  cat(paste0('\n![',this_file,'](', this_file, ')\n'))
+}
+```
+
+
+```{r, eval = FALSE}
+library(gsheet)
+goog_people <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=1425313388')
+
+people <- goog_people$username
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  query = paste0("SELECT * FROM twitter where username = ANY ('{",
+           paste0('"', people, '"', collapse = ','),
+           "}')")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    query
+  )
+  save(tl, file = 'tl.RData')  
+  dbDisconnect(con)
+}
+
+# Que la ciutadania [sí o no] es va adonar que el TSJ havia ordenat aturar el referèndum (freqüencia de tuits relacionats amb el tema, etc.)
+# https://twitter.com/martamartorell/status/913079799668789248
+
+
+# Que la ciutadania [sí o no] es va adonar que aquesta ordre aturava les acutacions de la Fiscalia.
+# https://twitter.com/elsmatins/status/913284227864686592
+
+search_tsj <- "'tsj_cat' OR 'Tribunal Superior de Justícia' OR 'TSJ'"
+search_fiscalia <- "fiscalía"
+# system(paste0("python3 ../../foreign/twint/Twint.py -s ",
+#               search_tsj,
+#               " --since 2017-09-20 --until 2017-10-05 -o data/tsj --csv"))
+# system(paste0("python3 ../../foreign/twint/Twint.py -s ",
+#               search_fiscalia,
+#               " --since 2017-09-20 --until 2017-10-05 -o data/fiscalia --csv"))
+
+
+searches <- c(search_fiscalia, search_tsj)
+data_dir <- dir('data', recursive = TRUE)
+out_list <- list()
+for(i in 1:length(data_dir)){
+  file_path <- paste0('data/', data_dir[i])
+  search_string <- searches[i]
+  data <- read_csv(file_path) %>%
+    mutate(search_string = search_string)
+  out_list[[i]] <- data
+}
+
+
+df <- bind_rows(out_list)
+df <- df %>% group_by(search_string, id) %>%
+  mutate(n = n()) %>%
+  ungroup %>%
+  filter(n == 1) %>%
+  dplyr::select(-n) %>%
+  filter(date >= '2017-09-25',
+         date <= '2017-10-02')
+# Adjust for time zone
+library(lubridate)
+df$date_time <- as.POSIXct(paste0(df$date, ' ', df$time, ' ', '+0', df$timezone))
+Sys.setenv(TZ='CET')
+
+make_plot <- function(with_retweets = FALSE){
+  pd <- df %>%
+    group_by(date = as.POSIXct(cut(date_time, 'hour')),
+             search_string) %>%
+    summarise(n = n(),
+              wrt = sum(retweets_count))
+  left <- expand.grid(date = sort(unique(pd$date)),
+                      search_string = sort(unique(pd$search_string)))
+  pd <- left_join(left, pd) %>%
+    mutate(n = ifelse(is.na(n), 0, n),
+           wrt = ifelse(is.na(wrt), 0, wrt))
+  if(with_retweets){
+    pd <- pd %>% mutate(n = n + wrt)  
+  } 
+  
+  date_line <- as.POSIXct('2017-09-27 18:45:00 CEST')
+  
+  
+  ggplot(data = pd,
+         aes(x = date,
+             y = n)) +
+    geom_area(alpha = 0.5, fill = 'darkblue') +
+    geom_line(color = 'darkblue') +
+    facet_wrap(~search_string,
+               nrow = 2,
+               scales = 'free_y') +
+    theme_databrew() +
+    geom_vline(xintercept = date_line,
+               lty= 2) +
+    labs(x = 'Data',
+         y = 'Tuits',
+         title = 'Freqüencia de tuits per hora',
+         subtitle = 'Línia vertical: notícia sobre l\'ordre del TSJ de Cat sobre el tancament\nde locals públics i la requisió de material del referèndum.')
+}
+
+tl <- left_join(tl, goog_people)
+
+sub_tl <- tl %>%
+  filter(date >= '2017-09-27',
+         date <= '2017-09-28')
+
+sub_tl$date_time <- as.POSIXct(paste0(sub_tl$date, ' ', sub_tl$time, ' ', '+0', sub_tl$timezone))
+Sys.setenv(TZ='CET')
+
+tiny_tl <- sub_tl %>%
+  filter(grepl('tsj|tribunal superior|fiscal', tolower(tweet)))
+
+si <- Sys.info()
+out <- paste0('Data processed on a ', si['sysname'], ' machine with OS ', si['version'], ' at ', Sys.time())
+```
+
