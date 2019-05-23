@@ -1,0 +1,696 @@
+---
+title: "Que ens diu el Twitter sobre els candidats de les eleccions municipals i europees?"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(waffle)
+library(ggplot2)
+library(databrew)
+library(vilaweb)
+library(ggthemes)
+```
+
+```{r}
+# Read in twitter credentials
+library(yaml)
+twitter_credentials <- yaml.load_file('../../credentials/credentials.yaml')
+## load rtweet package
+library(rtweet)
+token <- create_token(
+  app = "bcndata",
+  consumer_key = twitter_credentials$twitter_api_key,
+  consumer_secret = twitter_credentials$twitter_api_secret_key,
+  access_token = twitter_credentials$twitter_access_token,
+  access_secret = twitter_credentials$twitter_access_token_secret)
+```
+
+```{r}
+# Define who we're running for
+candidates_df <- 
+  tibble(name = c('Ada Colau',
+                  'Joaquim Forn',
+                  'Manuel Valls',
+                  'Ernest Maragall',
+                  'Jaume Collboni',
+                  'Josep Bou',
+                  'Anna Saliente',
+                  'Jordi Graupera'),
+         handle = c('AdaColau',
+                    'quimforn',
+                    'manuelvalls',
+                    'ernestmaragall',
+                    'jaumecollboni',
+                    'josepbouvila',
+                    'annasaliente',
+                    'JordiGraupera')) %>%
+  mutate(handle = paste0('@', handle))
+candidates_df <- candidates_df %>%
+  arrange(name)
+# Run on 13 may
+if('out_list.RData' %in% dir()){
+  load('out_list.RData')
+} else {
+  out_list <- list()
+  for(i in 1:nrow(candidates_df)){
+    message(i, ' of ', nrow(candidates_df))
+    this_candidate <- candidates_df$name[i]
+    this_handle <- candidates_df$handle[i]
+    string <- paste0("'", this_candidate,
+                     "' OR '",
+                     this_handle,
+                     "'")
+    this_data <-
+      rt <- search_tweets(
+        string, 
+        n = 1000000000, 
+        include_rts = TRUE, 
+        retryonratelimit = TRUE
+      )
+    this_data$candidate <- string
+      # paste0(this_candidate, ', ', this_handle)
+    out_list[[i]] <- this_data
+  }
+  save(out_list, file = 'out_list.RData')
+}
+done <- bind_rows(out_list)
+
+
+# Run on 23 May
+if('out_list2.RData' %in% dir()){
+  load('out_list2.RData')
+} else {
+  out_list2 <- list()
+  for(i in 1:nrow(candidates_df)){
+    message(i, ' of ', nrow(candidates_df))
+    this_candidate <- candidates_df$name[i]
+    this_handle <- candidates_df$handle[i]
+    string <- paste0("'", this_candidate,
+                     "' OR '",
+                     this_handle,
+                     "'")
+    this_data <-
+      rt <- search_tweets(
+        string, 
+        n = 1000000000, 
+        include_rts = TRUE, 
+        retryonratelimit = TRUE
+      )
+    this_data$candidate <- string
+      # paste0(this_candidate, ', ', this_handle)
+    out_list2[[i]] <- this_data
+    save(out_list2, file = 'out_list2.RData')
+  }
+}
+done2 <- bind_rows(out_list2)
+
+
+# Run on 23 May
+if('out_list3.RData' %in% dir()){
+  load('out_list3.RData')
+} else {
+  out_list3 <- list()
+  for(i in 1:nrow(candidates_df)){
+    message(i, ' of ', nrow(candidates_df))
+    this_candidate <- candidates_df$name[i]
+    this_handle <- candidates_df$handle[i]
+    string <- paste0("'", this_candidate,
+                     "' OR '",
+                     this_handle,
+                     "'")
+    this_data <-
+      rt <- search_tweets(
+        string, 
+        n = 1000000000, 
+        include_rts = TRUE, 
+        retryonratelimit = TRUE,
+        geocode = "41.385,2.173,20mi"
+      )
+    
+    this_data$candidate <- string
+    this_data$city <- 'BCN'
+    
+    this_data2 <-
+      rt <- search_tweets(
+        string, 
+        n = 1000000000, 
+        include_rts = TRUE, 
+        retryonratelimit = TRUE,
+    geocode = "40.41678,-3.703,20mi"
+      )
+    
+    this_data2$candidate <- string
+    this_data2$city <- 'MAD'
+    
+    # Combine the two cities
+    this_data <- bind_rows(this_data, this_data2)
+      # paste0(this_candidate, ', ', this_handle)
+    out_list3[[i]] <- this_data
+    save(out_list3, file = 'out_list3.RData')
+  }
+}
+done3 <- bind_rows(out_list3)
+
+
+# Define who is running for eu elections
+candidates_df <- 
+  tibble(name = c('Carles Puigdemont',
+                  'Oriol Junqueras',
+                  'Josep Borrell',
+                  'Dolors Montserrat',
+                  'Luis Garicano',
+                  'María Eugenia Rodríguez Palop',
+                  'Izaskun Bilbao',
+                  # 'Jordi Sebastiá',
+                  'Jorge Buxade'),
+         handle = c('KRLS',
+                    'junqueras',
+                    'JosepBorrellF',
+                    'DolorsMM',
+                    'lugaricano',
+                    'MEugeniaRPalop',
+                    'IzaskunBilbaoB',
+                    'Jorgebuxade')) %>%
+  mutate(handle = paste0('@', handle))
+candidates_df <- candidates_df %>%
+  arrange(name)
+
+# European candidates
+if('out_list4.RData' %in% dir()){
+  load('out_list4.RData')
+} else {
+  out_list4 <- list()
+  for(i in 1:nrow(candidates_df)){
+    message(i, ' of ', nrow(candidates_df))
+    this_candidate <- candidates_df$name[i]
+    this_handle <- candidates_df$handle[i]
+    string <- paste0("'", this_candidate,
+                     "' OR '",
+                     this_handle,
+                     "'")
+    this_data <-
+      rt <- search_tweets(
+        string, 
+        n = 1000000000, 
+        include_rts = TRUE, 
+        retryonratelimit = TRUE
+      )
+    this_data$candidate <- string
+      # paste0(this_candidate, ', ', this_handle)
+    out_list4[[i]] <- this_data
+  }
+  save(out_list4, file = 'out_list4.RData')
+}
+done4 <- bind_rows(out_list4)
+```
+
+# Introducció
+
+Twitter és la més "política" de les xarxes socials. Gairebé tots els candidats en fan servir, i la propoció política del contingut total és molt més alta que en altres xarxes. Twitter reflecteix la realitat política ([de manera imperfecta i sovint esbiaixada](https://www.vilaweb.cat/noticies/twitter-contra-vida-real-joe-brew/)) i també influeix en ella (per això les campanyes polítiques intenten, de maneres lícites i [a vegades qüestionables](https://www.theatlantic.com/technology/archive/2016/11/election-bots/506072/), aprofitar-s'en per fer "viral" els seus missatges.  
+
+Existeix una [línea d'anàlisi](https://www.researchgate.net/publication/313456510_Tweet_sentiment_as_proxy_for_political_campaign_momentum) [de dades](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5989214/) de Twitter per fer prediccions polítiques. És una "ciència" jove, les dades de Twitter són molt heterogènies al llarg del temps, i hi ha dubtes sobre la generalitzabilitat de les metodes (anàlisi de sentiments, proporcions de retweets vs. piulets originals, etc.) en geografies differents. O sigui, no es pot fer prediccions sòlides; per això, ni m'atraveixo. 
+
+Però amb les eleccions europees i municipals d'aqui uns díes, és interessant examinar, visualment, les tendències i els patrons dels piulets relacionats amb els principals candidats. No sugereixo que aquestes tendències prediguin res. Però sí que penso que poden reflectir coses que van més enllà de les enquestes: l'entusiasme, el pes en donar forma al debat polític, la rellevància, etc. Anem a les dades.
+
+# Mètodes
+
+Fent servir el API de Twitter, vaig descarregar tots els piulets on s'esmentava o (a) el nom sencer (nom i cognom) del candidat o (b) el nom d'usuari del candidat.
+
+# Resultats
+
+## Eleccions municipals a Barcelona
+
+El gràfic següent mostra el nombre de piulets totals esmentant a cada candidat principal a la batllia de Barcelona del 4 fins al 22 de maig.
+
+```{r}
+# Combine the two mayoral datasets
+done <- bind_rows(done, done2)
+pd <- done %>%
+  filter(created_at >= '2019-05-04',
+         created_at <= '2019-05-23') %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(candidate) %>%
+  summarise(n = length(which(!is_retweet))) %>%
+  arrange(desc(n))
+pd$candidate <- factor(pd$candidate, levels = pd$candidate)
+ggplot(data = pd,
+       aes(x = candidate,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+   theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90,size = 10),
+        strip.text = element_text(size = 11)) +
+  labs(title = 'Candidats a la batllia de Barcelona. Esmentades al Twitter',
+       subtitle = 'Sense incloure retweets') +
+  labs(caption = '4-22 maig. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat') +
+  theme(panel.grid = element_line(size = 0.3)) +
+  labs(x = '',
+       y = '') +
+  geom_text(aes(label = n),
+             nudge_y = 500,
+             alpha = 0.7)
+```
+
+El següent gràfic és el mateix, però incloent retweets.
+
+```{r}
+# Combine the two mayoral datasets
+done <- bind_rows(done, done2)
+pd <- done %>%
+  filter(created_at >= '2019-05-04',
+         created_at <= '2019-05-23') %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(candidate) %>%
+  tally %>%
+  arrange(desc(n))
+pd$candidate <- factor(pd$candidate, levels = pd$candidate)
+ggplot(data = pd,
+       aes(x = candidate,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+   theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90,size = 10),
+        strip.text = element_text(size = 11)) +
+  labs(title = 'Candidats a la batllia de Barcelona. Esmentades al Twitter',
+       subtitle = 'Incloent retweets') +
+  labs(caption = '4-22 maig. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat') +
+  theme(panel.grid = element_line(size = 0.3)) +
+  labs(x = '',
+       y = '')  +
+  geom_text(aes(label = n),
+             nudge_y = -2000,
+             color = 'white',
+             alpha = 0.7)
+```
+
+No sorprèn que Ada Colau sigui la candidata més esmentada (sent la battle actual). El que sorprèn és que Manuel Valls, que [les enquestes](https://beteve.cat/politica/enquestes-eleccions-municipals-2019-barcelona/) situen en quart o cinquè lloc, arribi al segon lloc en esmentades al Twitter, i que Jaume Collboni (tercer en enquestes) rebi tan poca atenció a la xarxa.
+
+Si mirem el mateix al llarg del temps, és dificil treure cap patró general. L'únic destacable és la pica d'atenció al Josep Bou el día 17, quan el [Jordi Borràs va publicar un document evidenciant que Bou havia militat al partit ultra "Fuerza Nueva"](https://www.vilaweb.cat/noticies/josep-bou-fuerza-nueva-inscripcio/).
+
+
+```{r}
+# Combine the two mayoral datasets
+done <- bind_rows(done, done2)
+pd <- done %>%
+    filter(created_at >= '2019-05-04',
+         created_at <= '2019-05-23') %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(date = as.POSIXct(cut(created_at, 'hour')),
+           candidate) %>%
+  summarise(n = length(which(!is_retweet))) 
+  
+date_breaks <- as.Date(sort(unique(pd$date)))
+date_breaks <- unique(as.POSIXct(date_breaks))
+date_labels <- format(date_breaks, '%d')
+date_labels <- paste0(date_labels, ' maig')
+ggplot(data = pd,
+       aes(x = date,
+           y = n)) +
+  facet_wrap(~candidate,
+             ncol = 4) +
+  geom_area(alpha = 0.5,
+            color = NA,
+            fill = 'darkorange') +
+  geom_line(size = 0.4) +
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90,size = 6),
+        strip.text = element_text(size = 11)) +
+  labs(title = 'Candidats a la batllia de Barcelona. Esmentades al Twitter',
+       subtitle = 'Sense incloure retweets') +
+  scale_x_datetime(breaks= date_breaks,
+               labels = date_labels) +
+  labs(caption = 'Piulets per hora. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat') +
+  theme(panel.grid = element_line(size = 0.3)) +
+  labs(x = '',
+       y = '')
+```
+
+Examinant el mateix, però amb retweets, poc és molt destacable, menys la tendència general (de tots el candidats) de rebre més esmentades quan més a prop de la data de les eleccions.
+
+```{r}
+# Combine the two mayoral datasets
+done <- bind_rows(done, done2)
+pd <- done %>%
+    filter(created_at >= '2019-05-04',
+         created_at <= '2019-05-23') %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(date = as.POSIXct(cut(created_at, 'hour')),
+           candidate) %>%
+  summarise(n = n())
+  
+date_breaks <- as.Date(sort(unique(pd$date)))
+date_breaks <- unique(as.POSIXct(date_breaks))
+date_labels <- format(date_breaks, '%d')
+date_labels <- paste0(date_labels, ' maig')
+ggplot(data = pd,
+       aes(x = date,
+           y = n)) +
+  facet_wrap(~candidate,
+             ncol = 4) +
+  geom_area(alpha = 0.5,
+            color = NA,
+            fill = 'darkorange') +
+  geom_line(size = 0.4) +
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90,size = 6),
+        strip.text = element_text(size = 11)) +
+  labs(title = 'Candidats a la batllia de Barcelona. Esmentades al Twitter',
+       subtitle = 'Incloent retweets') +
+  scale_x_datetime(breaks= date_breaks,
+               labels = date_labels) +
+  labs(caption = 'Piulets per hora. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat') +
+  theme(panel.grid = element_line(size = 0.3)) +
+  labs(x = '',
+       y = '')
+```
+
+Pocs piulets fan servir la funcionalitat de "geocoding" de Twitter, però és interessant veure quins l'utilitzan i quins no. El gràfic següent mostra el percentatge de tots el piulets del darrers 10 dies esmenant els candidats que son geolocalitzats a Barcelona.
+
+```{r}
+# # By geography
+# pd <- done3 %>%
+#   mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+#   group_by(date = as.POSIXct(cut(created_at, 'day')),
+#            city,
+#            candidate) %>%
+#   tally
+#   
+# date_breaks <- as.Date(sort(unique(pd$date)))
+# date_breaks <- unique(as.POSIXct(date_breaks))
+# date_labels <- format(date_breaks, '%d')
+# date_labels <- paste0(date_labels, ' maig')
+# ggplot(data = pd,
+#        aes(x = date,
+#            y = n)) +
+#   facet_wrap(~candidate,
+#              ncol = 4,
+#              scales = 'free_y') +
+#   geom_line(size = 0.4,
+#             aes(color = city)) +
+#   theme_fivethirtyeight() +
+#   theme(axis.text.x = element_text(angle = 90),
+#         strip.text = element_text(size = 14)) +
+#   labs(title = 'Candidats a la batllia de Barcelona. Esmentades al Twitter') +
+#   scale_x_datetime(breaks= date_breaks,
+#                labels = date_labels) +
+#   labs(caption = 'Piulets per hora, incloent retweets. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\nDades del API de Twitter. Gràfic de Joe Brew.') +
+#   theme(panel.grid = element_line(size = 0.3))
+# 
+# pd <- done3 %>%
+#   mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+#   group_by(city,
+#            candidate) %>%
+#   tally %>%
+#   group_by(candidate) %>%
+#   mutate(p = n / sum(n) * 100)
+# ggplot(data = pd,
+#        aes(x = city,
+#            y = p)) +
+#   geom_bar(stat = 'identity') +
+#   facet_wrap(~candidate) +
+#   geom_text(aes(label = round(p, digits = 2)),
+#             nudge_y= 5)
+
+# Overall geocoded in bcn
+left <- done3 %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(city,
+           candidate) %>%
+  tally %>%
+  filter(city == 'BCN')
+right <- done %>%
+  filter(created_at >= min(done3$created_at),
+         created_at <= max(done3$created_at)) %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(candidate) %>%
+  summarise(denom = n())
+joined <- left_join(left, right) %>%
+  mutate(p = n / denom * 100) %>%
+  arrange(desc(p))
+joined$candidate <- factor(joined$candidate, levels = joined$candidate)
+
+ggplot(data = joined,
+       aes(x = candidate,
+           y = p)) +
+    geom_bar(stat = 'identity') +
+   theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90,size = 10),
+        strip.text = element_text(size = 11)) +
+  labs(title = '% d\'esmentades al Twitter geolocalitzats a Barcelona',
+       subtitle = 'Incloent retweets') +
+  labs(caption = '13-22 maig. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\n"A Barcelona" = a un radi de 32 km del centre de la ciutat.\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat') +
+  theme(panel.grid = element_line(size = 0.3)) +
+  labs(x = '',
+       y = '') +
+  geom_text(aes(label = round(p, digits = 2)),
+            nudge_y = -1,
+            color = 'white')
+```
+
+
+I el següent mostra el percentatge de piulets esmentant els candidats que són geolocalitzats a Madrid.
+
+```{r}
+left <- done3 %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(city,
+           candidate) %>%
+  tally %>%
+  filter(city == 'MAD')
+right <- done %>%
+  filter(created_at >= min(done3$created_at),
+         created_at <= max(done3$created_at)) %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(candidate) %>%
+  summarise(denom = n())
+joined <- left_join(left, right) %>%
+  mutate(p = n / denom * 100) %>%
+  arrange(desc(p))
+joined$candidate <- factor(joined$candidate, levels = joined$candidate)
+
+ggplot(data = joined,
+       aes(x = candidate,
+           y = p)) +
+    geom_bar(stat = 'identity') +
+   theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90,size = 10),
+        strip.text = element_text(size = 11)) +
+  labs(title = '% d\'esmentades al Twitter geolocalitzats a Madrid',
+       subtitle = 'Incloent retweets') +
+  labs(caption = '13-22 maig. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\n"A Madrid" = a un radi de 32 km del centre de la ciutat.\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat') +
+  theme(panel.grid = element_line(size = 0.3)) +
+  labs(x = '',
+       y = '') +
+  geom_text(aes(label = round(p, digits = 2)),
+            nudge_y = 0.1,
+            color = 'black',
+            alpha = 0.6) 
+```
+
+# Eleccions europees
+
+
+
+El gràfic següent mostra el nombre de piulets totals esmentant a cada candidat principal a les eleccions europees del 14 fins al 22 de maig.
+
+```{r}
+# Combine the two mayoral datasets
+done <- done4
+pd <- done %>%
+  mutate(candidate = gsub('genia ', 'genia\n', candidate)) %>%
+  filter(created_at >= '2019-05-04',
+         created_at <= '2019-05-23') %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(candidate) %>%
+  summarise(n = length(which(!is_retweet))) %>%
+  arrange(desc(n))
+pd$candidate <- factor(pd$candidate, levels = pd$candidate)
+ggplot(data = pd,
+       aes(x = candidate,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+   theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90,size = 10),
+        strip.text = element_text(size = 11)) +
+  labs(title = 'Candidats a les europees. Esmentades al Twitter',
+       subtitle = 'Sense incloure retweets') +
+  labs(caption = '14-22 maig. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat') +
+  theme(panel.grid = element_line(size = 0.3)) +
+  labs(x = '',
+       y = '') +
+  geom_text(aes(label = n),
+            alpha = 0.7,
+            nudge_y = 300)
+```
+
+El següent gràfic és el mateix, però incloent retweets.
+
+```{r}
+# Combine the two mayoral datasets
+done <- done4
+pd <- done %>%
+    mutate(candidate = gsub('genia ', 'genia\n', candidate)) %>%
+  filter(created_at >= '2019-05-04',
+         created_at <= '2019-05-23') %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(candidate) %>%
+  tally %>%
+  arrange(desc(n))
+pd$candidate <- factor(pd$candidate, levels = pd$candidate)
+ggplot(data = pd,
+       aes(x = candidate,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+   theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90,size = 10),
+        strip.text = element_text(size = 11)) +
+  labs(title = 'Candidats a les europees. Esmentades al Twitter',
+       subtitle = 'Incloent retweets') +
+  labs(caption = '14-22 maig. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat') +
+  theme(panel.grid = element_line(size = 0.3)) +
+  labs(x = '',
+       y = '') +
+  geom_text(aes(label = n),
+            alpha = 0.7,
+            nudge_y = 2000)
+```
+
+En els dos gràfics anteriors, es nota que els principals candidats sobiranistes (Junqueras i Puigdemont) són molt més esmentats que els seus rivals polítics. Notablement, Oriol Junqueras (que havia tingut un impacte en les xarxes bastant reduïda des de la seva detenció) sembla haver recuperat el protagonisme. 
+
+Mirem les esmentades al llarg del temps:
+
+```{r}
+done <- done4
+pd <- done %>%
+      mutate(candidate = gsub('genia ', 'genia\n', candidate)) %>%
+    filter(created_at >= '2019-05-04',
+         created_at <= '2019-05-23') %>%
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(date = as.POSIXct(cut(created_at, 'hour')),
+           candidate) %>%
+  summarise(n = length(which(!is_retweet))) 
+  
+date_breaks <- as.Date(sort(unique(pd$date)))
+date_breaks <- unique(as.POSIXct(date_breaks))
+date_labels <- format(date_breaks, '%d')
+date_labels <- paste0(date_labels, ' maig')
+ggplot(data = pd,
+       aes(x = date,
+           y = n)) +
+  facet_wrap(~candidate,
+             ncol = 4) +
+  geom_area(alpha = 0.5,
+            color = NA,
+            fill = 'darkorange') +
+  geom_line(size = 0.4) +
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90,size = 6),
+        strip.text = element_text(size = 11)) +
+  labs(title = 'Candidats a les europees. Esmentades al Twitter',
+       subtitle = 'Sense incloure retweets') +
+  scale_x_datetime(breaks= date_breaks,
+               labels = date_labels) +
+  labs(caption = 'Piulets per hora. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat') +
+  theme(panel.grid = element_line(size = 0.3)) +
+  labs(x = '',
+       y = '')
+```
+
+És destacable que Junqueras ha rebut tantes esmentades els darrers díes. Una part d'això es deu, molt probablement, a la seva apareixença física al Congrés espanyol. A diferència de fa uns mesos (quan vaig escriure sobre [l'efecte "invisibilitzador" de la presó](https://www.vilaweb.cat/noticies/invisibilitzacio-presos-politics-joe-brew/)) la presència i visibilitat de Junqueras (al judici i al Congrés) sembla haver afectat l'atenció que rep a les xarxes. Però la freqüencia alta d'esmentades de Junqueras no només coincideix amb els dies que va anar al Congrés, sinó també amb els dies anteriors.
+
+El següent gràfic és el mateix, però amb retweets.
+
+```{r}
+# Combine the two mayoral datasets
+done <- done4
+pd <- done %>%
+    filter(created_at >= '2019-05-04',
+         created_at <= '2019-05-23') %>%
+        mutate(candidate = gsub('genia ', 'genia\n', candidate)) %>%
+
+  mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+  group_by(date = as.POSIXct(cut(created_at, 'hour')),
+           candidate) %>%
+  summarise(n = n())
+  
+date_breaks <- as.Date(sort(unique(pd$date)))
+date_breaks <- unique(as.POSIXct(date_breaks))
+date_labels <- format(date_breaks, '%d')
+date_labels <- paste0(date_labels, ' maig')
+ggplot(data = pd,
+       aes(x = date,
+           y = n)) +
+  facet_wrap(~candidate,
+             ncol = 4) +
+  geom_area(alpha = 0.5,
+            color = NA,
+            fill = 'darkorange') +
+  geom_line(size = 0.4) +
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90,size = 6),
+        strip.text = element_text(size = 11)) +
+  labs(title = 'Candidats a les europees. Esmentades al Twitter',
+       subtitle = 'Incloent retweets') +
+  scale_x_datetime(breaks= date_breaks,
+               labels = date_labels) +
+  labs(caption = 'Piulets per hora. Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat') +
+  theme(panel.grid = element_line(size = 0.3)) +
+  labs(x = '',
+       y = '')
+```
+
+
+```{r}
+# library(ggrepel)
+#   pd <- done4 %>%
+#     filter(created_at >= '2019-05-04',
+#          created_at <= '2019-05-23') %>%
+#         mutate(candidate = gsub('genia ', 'genia\n', candidate)) %>%
+# 
+#   mutate(candidate = gsub('OR ', '\n', candidate)) %>%
+#   group_by(candidate) %>%
+#   summarise(Piulaires = length(unique(user_id)),
+#             Retweets = n())
+# 
+# ggplot(data = pd,
+#        aes(x = Piulaires,
+#            y = Retweets)) +
+#   geom_point() +
+#     geom_smooth(method='lm',formula=y~x, se = FALSE) +
+#   theme_vilaweb() +
+#   ggrepel::geom_text_repel(aes(label = candidate),
+#                            alpha = 0.7,
+#                            size = 3) +
+#   labs(title = 'Correlació piulaires que esmenten i retweets',
+#        subtitle = '14-22 de maig, candidats a les eleccions europees',
+#        caption = 'Una "esmentada" = un piulet contenint o\n(a) el nom d\'usuari de la persona en qüestió o (b) el nom complet [nom+cognom].\nDades del API de Twitter. Gràfic de Joe Brew. www.vilaweb.cat')
+
+```
+
+ 
+
+
+# Conclusió
+
+Cap. Aneu a votar. I com va dir el gran Nelson Mandela, "May your choices reflect your hopes, not your fears" (que les teves decisions reflecteixin les teves esperances, no les teves pors).
