@@ -47,6 +47,8 @@ The campaign was picked up by others, too. Both private Twitter users and offici
 
 </tr>
 </table>
+Reading all these tweets, it's clear that Spain's democracy improved last year, right?
+
 But...
 ======
 
@@ -61,7 +63,7 @@ It's simply false. It's a "bulo". It's "fake news"
 The data
 ========
 
-Global Spain either made an honest mistake, or attempted (dishonestly) to mislead about the V-Dem data. Or rather, not one mistake, but three.
+Global Spain made an honest mistake in interpreting the V-Dem data. Or rather, three mistakes
 
 Mistake 1: Spain's "Liberal Democracy Index" did not increase over the last year; it decreased.
 -----------------------------------------------------------------------------------------------
@@ -111,7 +113,7 @@ There are two variables in the V-Dem which directly measure judicial independenc
 
 What Global Spain reported as "judicial independence" was actually a misleading translation of the "Judicial constraints on the executive" index. This index indeed *includes* some measures on judicial independence, but it also includes other measures (such as the executive's respect for the Constitution, compliance with courts, etc.). Here is Global Spain's infographic showing the misleading translation:
 
-<img src="img/judb.jpeg"/>
+<img src="img/jud2.jpg"/>
 
 How did these mistakes happen?
 ==============================
@@ -141,7 +143,7 @@ Conclusion
 
 Global Spain published, and then heavily publicized, an "improvement" in its ranking and scores as a liberal democracy via the V-Dem data. It also stated, and publicized, that it was a top-10 country in the world according to V-Dem's in the area of "judicial independence". Both the improvement and the top-10 judicial independence scores are false. Spain's "Liberal Democracy Index" score did not improve over the last year, and Spain is not in the top 10 countries in the world in "judicial independence" according to the V-Dem.
 
-Like I said, it is entirely plausible that this was a simple mistake on the part of Global Spain, and not an attempt to mislead. And if this was indeed a mistake, I hope that Global Spain will make as much of an effort to publish the *real* data (as I've reported in this article, and as is publicly available on [V-Dem's website](https://www.v-dem.net/en/)) as they did to publish the *false* data last week.
+Like I said, it is entirely plausible that this was a simple mistake on the part of Global Spain, and not an attempt to mislead. And if this was indeed a mistake, I hope that Global Spain will make as much of an effort to publish the *correct* comparison data (as I've reported in this article, and as is publicly available on [V-Dem's website](https://www.v-dem.net/en/)) as they did to publish the *misleading* data last week.
 
 Appendix
 ========
