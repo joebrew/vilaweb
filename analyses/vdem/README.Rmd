@@ -1,5 +1,5 @@
 ---
-title: "No, V-Dem data does NOT show an improvement in democracy in Spain. In fact, Spain just received its worst score in 40 years."
+title: "No, V-Dem data does NOT show an improvement in liberal democracy in Spain. In fact, Spain just received its worst score in 40 years."
 output: github_document
 ---
 
@@ -112,7 +112,7 @@ make_plot <- function(ca = FALSE, start_year = 1979,
   if(ca){
     the_labs <- labs(x = 'Any',
                      y = 'Index de democràcia liberal',
-                     title = 'Espanya: Index de democràcia liberals segons el V-Dem',
+                     title = 'Espanya: Index de democràcia liberal, V-Dem',
                      subtitle = 'Dades V-Dem, versió 9, publicades en maig 2019.',
                      caption = 'Dades V-Dem. https://www.v-dem.net/en/data/data-version-9/\nGràfic de Joe Brew | www.vilaweb.cat | @joethebrew.')
   } else {
@@ -170,7 +170,7 @@ make_plot_rank <- function(ca = FALSE, start_year = 1979,
   if(ca){
     the_labs <- labs(x = 'Any',
                      y = 'Ranking',
-                     title = 'Ranking d\'Espanya: Index de democràcia liberals segons el V-Dem',
+                     title = 'Ranking d\'Espanya: Index de democràcia liberal segons el V-Dem',
                      subtitle = 'Dades V-Dem, versió 9, publicades en maig 2019.',
                      caption = 'Dades V-Dem. https://www.v-dem.net/en/data/data-version-9/\nGràfic de Joe Brew | www.vilaweb.cat | @joethebrew.')
   } else {
@@ -187,7 +187,8 @@ make_plot_rank <- function(ca = FALSE, start_year = 1979,
     geom_line() +
     geom_point() +
     theme_vilaweb() +
-    the_labs
+    the_labs +
+    theme(plot.title = element_text(size = 14))
   if(label_it){
     g <- g +
       geom_text_repel(aes(label = rank),

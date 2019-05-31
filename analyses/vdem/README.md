@@ -1,4 +1,4 @@
-No, V-Dem data does NOT show an improvement in democracy in Spain. In fact, Spain just received its worst score in 40 years.
+No, V-Dem data does NOT show an improvement in liberal democracy in Spain. In fact, Spain just received its worst score in 40 years.
 ================
 
 The V-Dem data
