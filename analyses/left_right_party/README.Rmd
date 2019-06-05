@@ -1,0 +1,1036 @@
+---
+title: 'Esquerra i dreta'
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(tidyverse)
+library(databrew)
+library(stringi)
+source('functions.R')
+```
+
+```{r}
+make_plot <- function(ceo = vilaweb::ceo,
+                      var = 'P56J'){
+  
+  df <- ceo %>%
+    mutate(axis = P25,
+           indy = P31) %>%
+    mutate(indy = as.character(indy)) %>%
+    mutate(indy = ifelse(indy %in% c('No ho sap',
+                                    'No contesta'),
+                         'NS/NC',
+                         indy)) %>%
+    group_by(axis, indy) %>%
+    tally %>%
+    ungroup %>%
+    group_by(axis) %>%
+    mutate(p = n / sum(n) * 100) %>%
+    filter(!axis %in% c('No ho sap', 'No contesta')) %>%
+    filter(!is.na(indy)) %>%
+    mutate(`Muestra` = n)
+  
+  df$axis <- factor(df$axis,
+                    levels = levels(df$axis),
+                    labels = gsub(' ', '\n', levels(df$axis)))
+  
+  zz <- theme(axis.text.x = element_text(size = 10),
+              plot.caption  = element_text(hjust = 0))
+  
+  party_dict <- 
+    tibble(P24 = c("PPC",
+  "CiU",
+  "ERC",
+  "PSC",
+  "ICV-EUiA",
+  "C's",
+  "Reagrupament.cat",
+  "SI",
+  "PxC",
+  "CUP",
+  "UPyD",
+  "Podemos",
+  "Barcelona en Comú",
+  "CDC",
+  "Junts pel Sí",
+  "Catalunya sí que es pot",
+  "Democràcia i Llibertat",
+  "En Comú Podem",
+  "PACMA",
+  "PDeCAT",
+  "Junts per Catalunya",
+  "Catalunya en Comú Podem",
+  "Altres partits",
+  "Cap",
+  "No ho sap",
+  "No contesta"),
+  partit = c("PPC",
+  "PDCat/CiU/CDC/Junts",
+  "ERC",
+  "PSC",
+  "ICV-EUiA",
+  "C's",
+  "Reagrupament.cat",
+  "SI",
+  "PxC",
+  "CUP",
+  "UPyD",
+  "Podem(os)",
+  "Podem(os)",
+  "PDCat/CiU/CDC/Junts",
+  "PDCat/CiU/CDC/Junts",
+  "Podem(os)",
+  "Democràcia i Llibertat",
+  "Podem(os)",
+  "PACMA",
+  "PDCat/CiU/CDC/Junts",
+  "PDCat/CiU/CDC/Junts",
+  "Podem(os)",
+  "Altre/Cap/NS/NC",
+  "Altre/Cap/NS/NC",
+  "Altre/Cap/NS/NC",
+  "Altre/Cap/NS/NC")) %>%
+    mutate(partit = ifelse(partit == "PDCat/CiU/CDC/Junts",
+                           "PDCat/CiU/\nCDC/Junts",
+                           partit)) %>%
+    mutate(partit = ifelse(partit == 'Podem(os)',
+                           'Podem',
+                           partit))
+  
+  
+  pd <- vilaweb::ceo
+  pd$var <- as.character(pd[,var] %>% unlist)
+  
+  pd <- pd %>%
+    left_join(party_dict) %>%
+    filter(partit %in% c("C's", "CUP", "ERC",
+                         "Podem", "PPC",'PSC', 'PDCat/CiU/\nCDC/Junts')) %>%
+    mutate(indy = partit) %>%
+    mutate(var = as.character(var)) %>%
+    mutate(var = ifelse(var %in% c('No ho sap',
+                                    'No contesta'),
+                         'NS/NC',
+                         var)) %>%
+      filter(!is.na(var)) %>%
+    filter(var != 'NS/NC') %>%
+    mutate(var = 
+             ifelse(var %in% c("Molt d'acord",
+                                   "D'acord"),
+                    "D'acord o\nmolt d'acord",
+                    ifelse(var %in% c("En desacord",
+                                          "Molt en desacord"),
+                           "En desacord o\nmolt en desacord",
+                           "Ni d'acord ni\nen desacord"))) %>%
+    group_by(var, indy) %>%
+    summarise(n = sum(PONDERA),
+              people = n()) %>%
+    ungroup %>%
+    group_by(indy) %>%
+    mutate(p = n / sum(n) * 100,
+           people = sum(people)) %>%
+    mutate(`Muestra` = n)
+    
+    phrase_dict <- 
+      tibble(var = paste0('P56',
+                          c(LETTERS[1:11])),
+             catalan = c("'Com menys intervingui el govern en l’economia, millor serà pel país'",
+                         "'Cal abaixar els impostos, encara que això impliqui\nreduir serveis i prestacions públiques'",
+                         "'El govern hauria de prendre mesures per a reduir les\ndiferències en els nivells d’ingressos'",
+                         "'Les parelles de gais i lesbianes han de poder adoptar\nfills en les mateixes condicions que les parelles heterosexuals'",
+                         "'L’escola ha d’ensenyar als nens a obeir l’autoritat'",
+                         "'La religió no hauria de tenir cap influència en la política'",
+                         "'En qualsevol circumstància, la llei sempre ha de ser obeïda'",
+                         "'Algú amb plenes facultats hauria de poder decidir quan vol morir'",
+                         "'Amb tanta immigració, un ja no se sent com a casa'",
+                         "'El creixement econòmic ha de tenir prioritat sobre la protecció del medi ambient'",
+                         "'Catalunya no té el dret de celebrar un referèndum d’autodeterminació'"),
+             english = c("'The less the government interferes in the economy, the better off the country will be'",
+                         "'Taxes must be lowered, even though it may\nmean reducing public services'",
+                         "'The government should take measures to\nreduce differenes in income'",
+                         "'Gay and lesbian couples should be able to adopt children\nunder the same conditions as heterosexual couples'",
+                         "'School should teach children to obey authority'",
+                         "'Religion should have no influence on politics'",
+                         "'The law should always be obeyed in any circumstance'",
+                         "'Someone with full abilities should be allowed to decide when (s)he wants to die'",
+                         "'With so much immigration, one no longer feels at home'",
+                         "'Economic growth should have priority over protection of the environment'",
+                         "'Catalonia does not have a right to hold a self-determination referendum'"))
+    
+    the_phrase <- phrase_dict$catalan[phrase_dict$var == var]
+    line_breaker <- function(x){
+      x <- stri_wrap(x, width = 50)
+      x <- paste0(x, collapse = '\n')
+      return(x)
+    }
+  the_phrase <- line_breaker(the_phrase)  
+  pd$var<- factor(pd$var,
+                      levels = c("D'acord o\nmolt d'acord",
+                                 "Ni d'acord ni\nen desacord",
+                                 "En desacord o\nmolt en desacord"),
+                      labels = c("D'acord",
+                                 "Ni d'acord ni\nen desacord",
+                                 "En desacord"))
+  n_cols <- length(unique(pd$var))
+  # cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+  # cols <- as.character(vilaweb::colors_vilaweb()[c(1,5,3)])
+  cols <- c(
+    RColorBrewer::brewer.pal(n = 9, name = 'Oranges')[6],
+    'darkgrey',
+    RColorBrewer::brewer.pal(n = 9, name = 'Blues')[7]
+  )
+  cols <- rev(cols)
+  
+  ggplot(data = pd,
+         aes(x = indy,
+             y = p)) +
+    geom_bar(stat = 'identity',
+             position = position_stack(vjust = 0.5, reverse = T),
+             color = 'black',
+             alpha = 0.9,
+             aes(fill = var,
+                 group = var)) +
+    theme_vilaweb() +
+    geom_text(aes(label = round(p, digits = 2),
+                  group = var),
+              position = position_stack(vjust = 0.5,
+                                        reverse = T),
+              alpha = 0.7,
+              color = 'white',
+              size = 3) +
+    scale_fill_manual(name = '',
+                      values = cols) +
+    labs(x = '',
+         y = 'Percentage',
+         subtitle = "Grau d'acord amb l'afirmació:",
+         title =  the_phrase,
+         caption = paste0('Mostra: ', point_replace(commafy(sum(pd$people))),
+                          ' residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes ',
+                          var,
+                          ' i P31.\nJoe Brew | @joethebrew. | www.vilaweb.cat')) +
+    theme(legend.position = 'right') +
+    zz 
+  
+}
+make_plot()
+```
+
+#### Economic growth and the environment
+
+```{r}
+
+party_dict <- 
+  tibble(P24 = c("PPC",
+"CiU",
+"ERC",
+"PSC",
+"ICV-EUiA",
+"C's",
+"Reagrupament.cat",
+"SI",
+"PxC",
+"CUP",
+"UPyD",
+"Podemos",
+"Barcelona en Comú",
+"CDC",
+"Junts pel Sí",
+"Catalunya sí que es pot",
+"Democràcia i Llibertat",
+"En Comú Podem",
+"PACMA",
+"PDeCAT",
+"Junts per Catalunya",
+"Catalunya en Comú Podem",
+"Altres partits",
+"Cap",
+"No ho sap",
+"No contesta"),
+partit = c("PPC",
+"PDCat/CiU/CDC/Junts",
+"ERC",
+"PSC",
+"ICV-EUiA",
+"C's",
+"Reagrupament.cat",
+"SI",
+"PxC",
+"CUP",
+"UPyD",
+"Podem(os)",
+"Podem(os)",
+"PDCat/CiU/CDC/Junts",
+"PDCat/CiU/CDC/Junts",
+"Podem(os)",
+"Democràcia i Llibertat",
+"Podem(os)",
+"PACMA",
+"PDCat/CiU/CDC/Junts",
+"PDCat/CiU/CDC/Junts",
+"Podem(os)",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC"))
+
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  filter(partit %in% c('PSC', 'PDCat/CiU/CDC/Junts')) %>%
+  mutate(indy = partit) %>%
+  mutate(economy = P56J) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+  mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>%
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA),
+            people = n()) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100,
+         people = sum(people)) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació:",
+       title =  "'El creixement econòmic ha de tenir prioritat\nsobre la protecció del medi ambient'",
+       caption = 'Mostra: 3009 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56J i P31.\nJoe Brew | @joethebrew.') +
+  theme(legend.position = 'none') +
+  zz
+```
+
+
+
+#### Government interference in the economy
+
+```{r}
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  filter(partit %in% c('PSC', 'PDCat/CiU/CDC/Junts')) %>%
+  mutate(indy = partit) %>%
+  mutate(economy = P56A) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'Com menys intervingui el Govern en l\'economia,\nmillor serà pel país'",
+       caption = 'Mostra: 2982 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56A i P31.\nJoe Brew | @joethebrew.') +
+  theme(legend.position = 'none') +
+  zz
+
+```
+
+#### Taxes and social services
+
+
+```{r}
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  filter(partit %in% c('PSC', 'PDCat/CiU/CDC/Junts')) %>%
+  mutate(indy = partit) %>%
+  mutate(economy = P56B) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'Cal baixar els impostos, encara que això\nimpliqui reduir serveis i prestacions públiques'",
+       caption = 'Mostra: 3090 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56B i P31.\nJoe Brew | @joethebrew.') +
+  theme(legend.position = 'none') +
+  zz
+
+```
+
+#### Inequality and government intervention
+
+
+```{r}
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  filter(partit %in% c('PSC', 'PDCat/CiU/CDC/Junts')) %>%
+  mutate(indy = partit) %>%
+  mutate(economy = P56C) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'El Govern hauria de prendre mesures per reduir\nles diferències en els nivells d’ingressos'",
+       caption = 'Mostra: 3125 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56C i P31.\nJoe Brew | @joethebrew.') +
+  theme(legend.position = 'none') +
+  zz
+```
+
+
+#### Homosexual rights
+
+```{r}
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  filter(partit %in% c('PSC', 'PDCat/CiU/CDC/Junts')) %>%
+  mutate(indy = partit) %>%
+  mutate(economy = P56D) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'Les parelles de gais i lesbianes han de poder\nadoptar fills en les mateixes condicions que\nles parelles heterosexuals'",
+       caption = 'Mostra: 3139 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56D i P31.\nJoe Brew | @joethebrew.') +
+  theme(legend.position = 'none') +
+  zz
+```
+
+#### Immigration
+
+```{r}
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  filter(partit %in% c('PSC', 'PDCat/CiU/CDC/Junts')) %>%
+  mutate(indy = partit) %>%
+  mutate(economy = P56I) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'Amb tanta immigració,\nun ja no se sent com a casa'",
+       caption = 'Mostra: 3143 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56I i P31.\nJoe Brew | @joethebrew.') +
+  theme(legend.position = 'none') +
+  zz
+```
+
+#### Euthanasia
+```{r}
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  filter(partit %in% c('PSC', 'PDCat/CiU/CDC/Junts')) %>%
+  mutate(indy = partit) %>%
+  mutate(economy = P56H) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'Algú amb plenes facultats hauria de poder\ndecidir quan vol morir'",
+       caption = 'Mostra: 3128 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56H i P31.\nJoe Brew | @joethebrew.') +
+  theme(legend.position = 'none') +
+  zz
+```
+
+#### Clericalism
+
+
+```{r}
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  filter(partit %in% c('PSC', 'PDCat/CiU/CDC/Junts')) %>%
+  mutate(indy = partit) %>%
+  mutate(economy = P56F) %>%
+  mutate(economy = as.character(economy)) %>%
+  mutate(economy = ifelse(economy %in% c('No ho sap',
+                                  'No contesta'),
+                       'NS/NC',
+                       economy)) %>%
+    filter(!is.na(economy)) %>%
+  filter(economy != 'NS/NC') %>%
+    mutate(economy = 
+           ifelse(economy %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(economy %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>% 
+  group_by(economy, indy) %>%
+  summarise(n = sum(PONDERA)) %>%
+  ungroup %>%
+  group_by(indy) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  mutate(`Muestra` = n)
+
+pd$economy<- factor(pd$economy,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+n_cols <- length(unique(pd$economy))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+ggplot(data = pd,
+       aes(x = economy,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = economy)) +
+  facet_wrap(~indy) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  "'La religió no hauria de tenir cap\ninfluència en la política'",
+       caption = 'Mostra: 3167 residents de Catalunya amb ciutadania espanyola. Combinació enquestes CEO.\n2015 i 2018. Preguntes P56F i P31.\nJoe Brew | @joethebrew.') +
+  theme(legend.position = 'none') +
+  zz
+```
+
+```{r}
+# P56e. “L’escola ha d’ensenyar als nens a obeir l’autoritat”
+# P56g. “En qualsevol circumstància, la llei sempre ha de ser obeïda”
+# P56k. “Catalunya no té el dret de celebrar un referèndum d’autodeterminació”
+```
+
+
+
+#### Party positioning
+
+In Catalonia, it is fairly to typical to associate the CUP, Podem(os), PSC, and ERC with the left, Ciutadans with the center, and PDeCat and PP to the right. However, if we look closer at the data on ideological positioning, we say that this stereotype does not hold up for all parties.
+
+```{r}
+
+party_dict <- 
+  tibble(P24 = c("PPC",
+"CiU",
+"ERC",
+"PSC",
+"ICV-EUiA",
+"C's",
+"Reagrupament.cat",
+"SI",
+"PxC",
+"CUP",
+"UPyD",
+"Podemos",
+"Barcelona en Comú",
+"CDC",
+"Junts pel Sí",
+"Catalunya sí que es pot",
+"Democràcia i Llibertat",
+"En Comú Podem",
+"PACMA",
+"PDeCAT",
+"Junts per Catalunya",
+"Catalunya en Comú Podem",
+"Altres partits",
+"Cap",
+"No ho sap",
+"No contesta"),
+partit = c("PPC",
+"PDCat/CiU/CDC/Junts",
+"ERC",
+"PSC",
+"ICV-EUiA",
+"C's",
+"Reagrupament.cat",
+"SI",
+"PxC",
+"CUP",
+"UPyD",
+"Podem(os)",
+"Podem(os)",
+"PDCat/CiU/CDC/Junts",
+"PDCat/CiU/CDC/Junts",
+"Podem(os)",
+"Democràcia i Llibertat",
+"Podem(os)",
+"PACMA",
+"PDCat/CiU/CDC/Junts",
+"PDCat/CiU/CDC/Junts",
+"Podem(os)",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC",
+"Altre/Cap/NS/NC"))
+
+pd <- vilaweb::ceo %>%
+  left_join(party_dict) %>%
+  group_by(partit) %>%
+  mutate(size = n()) %>%
+  filter(size >= 50) %>%
+  ungroup %>%
+  mutate(year = ANY) %>%
+  mutate(axis = as.character(P25)) %>%
+  mutate(axis = ifelse(axis == 'Extrema esquerra',
+                       '1',
+                       ifelse(axis == 'Extrema dreta',
+                              '10',
+                              as.character(axis)))) %>%
+  mutate(axis = as.numeric(axis)) %>%
+  filter(!partit %in% c('Altre/Cap/NS/NC',
+                        'ICV-EUIA'))
+# P25
+
+agg <- pd %>%
+  group_by(partit, year) %>%
+  summarise(avg = weighted.mean(x = axis, w = PONDERA, na.rm = TRUE)) %>%
+  ungroup
+
+cols <- length(unique(agg$partit))
+cols <- c('darkorange', 'yellow', 'black',
+          grey(0.6), 'darkgreen', 'darkred',
+          'purple', 'blue', 'red')
+# cols <- rainbow(cols)
+ggplot(data = agg,
+       aes(x = year,
+           y = avg)) +
+  geom_bar(stat = 'identity',
+           alpha = 0.6,
+           aes(fill = partit)) +
+  theme_vilaweb() +
+  facet_wrap(~partit) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.5,
+                                   hjust = 1)) +
+  geom_text(aes(label = round(avg, digits = 1)),
+            nudge_y = 1) +
+  coord_flip() +
+  scale_fill_manual(name = '',values = cols) +
+  theme(legend.position = 'none') +
+  geom_point() +
+  geom_line() +
+  labs(x = 'Any',
+       y = 'Escala esquerra (0) / dreta (10)') +
+  ylim(0, 10) +
+  scale_y_continuous(breaks = c(0, 2,4,6)) +
+  geom_hline(yintercept = 5, lty = 2, alpha = 0.3)
+```
+
+```{r}
+var_dict <-
+  tibble(
+    var = paste0('P56', LETTERS[1:11]),
+    name = c("“Com menys intervingui el Govern en l’economia, millor serà pel país”",
+             "“Cal baixar els impostos, encara que això impliqui reduir serveis i prestacions públiques”",
+             "“El Govern hauria de prendre mesures per reduir les diferències en els nivells d’ingressos”",
+             "“Les parelles de gais i lesbianes han de poder adoptar fills en les mateixes condicions que les parelles heterosexuals”",
+             "“L’escola ha d’ensenyar als nens a obeir l’autoritat”",
+             "“La religió no hauria de tenir cap influència en la política”",
+             "“En qualsevol circumstància, la llei sempre ha de ser obeïda”",
+             "“Algú amb plenes facultats hauria de poder decidir quan vol morir”",
+             "“Amb tanta immigració, un ja no se sent com a casa”",
+             "“El creixement econòmic ha de tenir prioritat sobre la protecció del medi ambient”",
+             "“Catalunya no té el dret de celebrar un referèndum d’autodeterminació”"))
+
+make_plot <- function(var = 'P56A'){
+  name <- var_dict$name[var_dict$var == var]
+  pd <- vilaweb::ceo %>%
+  mutate_(var = var)
+
+  pd <- pd %>%
+  left_join(party_dict) %>%
+  filter(partit %in% c('PSC', 'PDCat/CiU/CDC/Junts')) %>%
+  # group_by(partit) %>%
+  # mutate(size = n()) %>%
+  # filter(size >= 50) %>%
+  # ungroup %>%
+    filter(!is.na(var)) %>%
+      mutate(var = 
+           ifelse(var %in% c("Molt d'acord",
+                                 "D'acord"),
+                  "D'acord o\nmolt d'acord",
+                  ifelse(var %in% c("En desacord",
+                                        "Molt en desacord"),
+                         "En desacord o\nmolt en desacord",
+                         "Ni d'acord ni\nen desacord"))) %>%
+  group_by(var, partit) %>%
+  summarise(n = sum(PONDERA),
+            people = n()) %>%
+  ungroup %>%
+  filter(!is.na(var)) %>%
+  filter(!var %in% c('No contesta', 'No ho sap')) %>%
+    group_by(partit) %>%
+    mutate(p = n / sum(n) * 100)
+
+  pd$var<- factor(pd$var,
+                    levels = c("D'acord o\nmolt d'acord",
+                               "Ni d'acord ni\nen desacord",
+                               "En desacord o\nmolt en desacord"))
+  
+  n_cols <- length(unique(pd$var))
+cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+# cols <- rev(cols)
+cols[2] <- 'darkgrey'
+  
+people <- sum(pd$people)
+  ggplot(data = pd,
+       aes(x = var,
+           y = p)) +
+   geom_bar(stat = 'identity',
+           position = position_dodge(width = 0.9),
+           color = 'black',
+           alpha = 0.8,
+           aes(fill = var)) +
+  facet_wrap(~partit) +
+  theme_vilaweb() +
+  # scale_fill_manual(name = '',
+  #                   values = cols) +
+  geom_text(aes(label = round(p, digits = 2),
+                y = p + 3),
+            alpha = 0.6,
+            position = position_dodge(width = 0.9),
+            size = 4) +
+  scale_fill_manual(name = '',
+                    values = as.character(vilaweb::colors_vilaweb()[c(1,5,3)])) +
+  labs(x = '',
+       y = 'Percentage',
+       subtitle = "Grau d'acord amb l'afirmació",
+       title =  name,
+       caption = paste0('Combinació enquestes CEO. Preguntes ', var, ' i P31.\nJoe Brew | @joethebrew.')) +
+  theme(legend.position = 'none')
+}
+# gmake_plot('P56J')
+
+```
+
