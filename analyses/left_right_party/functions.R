@@ -889,3 +889,731 @@ self_determination_plot <- function(language = 'en',
          caption= caption)
   
 }
+
+
+make_franco <- function(){
+  
+  party_dict <- 
+    tibble(P24 = c("PPC",
+                   "CiU",
+                   "ERC",
+                   "PSC",
+                   "ICV-EUiA",
+                   "C's",
+                   "Reagrupament.cat",
+                   "SI",
+                   "PxC",
+                   "CUP",
+                   "UPyD",
+                   "Podemos",
+                   "Barcelona en Comú",
+                   "CDC",
+                   "Junts pel Sí",
+                   "Catalunya sí que es pot",
+                   "Democràcia i Llibertat",
+                   "En Comú Podem",
+                   "PACMA",
+                   "PDeCAT",
+                   "Junts per Catalunya",
+                   "Catalunya en Comú Podem",
+                   "Altres partits",
+                   "Cap",
+                   "No ho sap",
+                   "No contesta"),
+           partit = c("PPC",
+                      "PDCat/CiU/CDC/Junts",
+                      "ERC",
+                      "PSC",
+                      "ICV-EUiA",
+                      "C's",
+                      "Reagrupament.cat",
+                      "SI",
+                      "PxC",
+                      "CUP",
+                      "UPyD",
+                      "Podem(os)",
+                      "Podem(os)",
+                      "PDCat/CiU/CDC/Junts",
+                      "PDCat/CiU/CDC/Junts",
+                      "Podem(os)",
+                      "Democràcia i Llibertat",
+                      "Podem(os)",
+                      "PACMA",
+                      "PDCat/CiU/CDC/Junts",
+                      "PDCat/CiU/CDC/Junts",
+                      "Podem(os)",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC"))
+  
+  pd <- vilaweb::ceo %>%
+    left_join(party_dict) %>%
+    group_by(partit) %>%
+    mutate(size = n()) %>%
+    # filter(size >= 50) %>%
+    ungroup %>%
+    mutate(year = ANY) %>%
+    mutate(axis = as.character(P25)) %>%
+    mutate(axis = ifelse(axis == 'Extrema esquerra',
+                         '1',
+                         ifelse(axis == 'Extrema dreta',
+                                '10',
+                                as.character(axis)))) %>%
+    mutate(axis = as.numeric(axis)) #%>%
+  # filter(!partit %in% c('Altre/Cap/NS/NC',
+  #                       'ICV-EUIA'))
+  
+  pd <- pd %>%
+    mutate(indy = P31) %>%
+    mutate(indy = as.character(indy)) %>%
+    mutate(indy = ifelse(indy %in% c('No ho sap',
+                                     'No contesta'),
+                         'NS/NC',
+                         indy)) 
+  #   filter(!is.na(indy)) %>%
+  # filter(indy != 'NS/NC') %>%
+  
+  # Get date
+  pd <- pd %>%
+    arrange(ANY, MES) %>%
+    group_by(BOP_NUM) %>%
+    mutate(bop_date = as.Date(paste0(dplyr::first(ANY),
+                                     '-',
+                                     dplyr::first(MES),
+                                     '-01'))) 
+  
+  # # Get valoracio del rei 2018 onada 1 p21j
+  # pd <- pd %>%
+  #   mutate(valoracio_rei = P21J)
+  # 
+  # # Get val columns
+  val_columns <- names(pd)[grepl('val_', names(pd))]
+  
+  # Franquism question: P102
+  pd$franquisme <- pd$P102
+  pd$constitucio <- pd$P95
+  con_dict <- data_frame(
+    constitucio = c('Votaria sí',
+                    'Votaria no',
+                    'Votaria en blanc',
+                    'Votaria nul',
+                    'No votaria',
+                    'No ho sap',
+                    'Contesta'),
+    constitucio2 = c('Votaria sí',
+                     'Votaria no',
+                     'Votaria nul\nen blanc\nNo votaria\nNS/NC',
+                     'Votaria nul\nen blanc\nNo votaria\nNS/NC',
+                     'Votaria nul\nen blanc\nNo votaria\nNS/NC',
+                     'Votaria nul\nen blanc\nNo votaria\nNS/NC',
+                     'Votaria nul\nen blanc\nNo votaria\nNS/NC')
+  )
+  pd <- pd %>%
+    left_join(con_dict) %>%
+    dplyr::select(-constitucio) %>%
+    dplyr::rename(constitucio = constitucio2)
+  
+  # Subset to only include columns of interest
+  pd <- pd[,c('axis', 
+              'bop_date',
+              'partit',
+              'indy',
+              'franquisme',
+              'constitucio',
+              'PONDERA')]
+  pd <- pd %>%
+    filter(!is.na(franquisme)) %>%
+    mutate(franquisme = as.character(franquisme)) %>%
+    mutate(franquisme = ifelse(franquisme %in% c('No ho sap', 'No contesta'), 'NS/NC', franquisme)) %>%
+    mutate(franquisme = ifelse(franquisme == 'Va tenir coses positives i negatives', 'Va tenir\ncoses positives\ni negatives', franquisme))
+  pd$franquisme <- factor(pd$franquisme,
+                          levels = c('Negatiu',
+                                     'Va tenir\ncoses positives\ni negatives', 
+                                     'Positiu',
+                                     'NS/NC'))
+  
+  # # Gather
+  # pd <- pd %>%
+  #   gather(key, value, val_Albiol:val_Albiach)
+  plot_data <- pd %>%
+    group_by(partit, franquisme) %>%
+    summarise(n = sum(PONDERA),
+              mostra = n()) %>%
+    group_by(partit) %>%
+    mutate(p = n / sum(n) * 100) %>%
+    ungroup %>%
+    filter(!partit %in% c('ICV-EUiA', 'PACMA',
+                          'Altre/Cap/NS/NC'))
+  
+  plot_data <- plot_data %>%
+    arrange(franquisme,p)
+  plot_data$partit <- gsub('/', '/\n', plot_data$partit)
+  plot_data$partit <- factor(plot_data$partit,
+                             levels = unique(plot_data$partit))
+  # plot_data$franquisme <- factor(plot_data$franquisme)
+  # plot_data$franquisme <- factor(plot_data$franquisme,
+  #                                levels = rev(levels(plot_data$franquisme)))
+  
+  cols <- RColorBrewer::brewer.pal(n = 8, 'Spectral' )
+  cols <- cols[1:4]
+  cols <- rev(cols)
+  
+  # cols <- rev(cols)
+  cols[4] <- grey(0.6)
+  cols[1] <- as.character(vilaweb::colors_vilaweb()[5])
+  
+  plot_data$label <- ifelse(plot_data$franquisme == 'NS/NC',
+                            '',
+                            paste0(round(plot_data$p, 1), '%'))
+  
+  ggplot(data = plot_data,
+         aes(x = partit,
+             y = p,
+             fill = franquisme)) +
+    geom_bar(stat = 'identity',
+             position = position_stack()) +
+    scale_fill_manual(name = '',
+                      values = cols) +
+    geom_text(aes(label = label),
+              # nudge_y = 4,
+              size = 3,
+              position = position_stack(),
+              color = 'white',
+              alpha = 0.8,
+              vjust = 1) +
+    labs(y = 'Percentage',
+         x = '',
+         title = 'Valoració del franquisme per partit',
+         subtitle = "Pregunta: 'Per a vostè, l’etapa del franquisme ha suposat a la història de Catalunya, \nen conjunt, un període positiu, negatiu o va tenir coses positives i negatives?'",
+         caption = paste0(sum(plot_data$mostra),
+                          ' residents de Catalunya amb ciutadania espanyola. Dades del BOP/CEO 3a onada 2018.\nPreguntes 102 (franquisme) i 24 (partit). Gràfic de Joe Brew | @joethebrew. |  www.vilaweb.cat.')) +
+    scale_fill_manual(name = 'El franquisme\nva ser...',
+                      values = cols) +
+    theme_vilaweb() +
+    theme(legend.position = 'right') +
+    # theme(legend.position = 'none') +
+    theme(axis.text.x = element_text(size = 10),
+          axis.text.y = element_text(size = 14),
+          plot.title = element_text(hjust = 0.5, size = 24),        plot.subtitle = element_text(size = 10),
+          
+          strip.text = element_text(size = 21,
+                                    color = grey(0.1)),
+          plot.caption = element_text(hjust = 0, size = 7))
+}
+
+make_plot <- function(var = 'P56J',
+                      only_2018 = FALSE,
+                      show_labels = TRUE,
+                      ceo = vilaweb::ceo){
+  
+  df <- ceo
+  if(only_2018){
+    df <- df %>%
+      filter(ANY == 2018)
+  }
+  df <- df %>%
+    mutate(axis = P25,
+           indy = P31) %>%
+    mutate(indy = as.character(indy)) %>%
+    mutate(indy = ifelse(indy %in% c('No ho sap',
+                                     'No contesta'),
+                         'NS/NC',
+                         indy)) %>%
+    group_by(axis, indy) %>%
+    tally %>%
+    ungroup %>%
+    group_by(axis) %>%
+    mutate(p = n / sum(n) * 100) %>%
+    # filter(!axis %in% c('No ho sap', 'No contesta')) %>%
+    # filter(!is.na(indy)) %>%
+    mutate(`Muestra` = n)
+  
+  df$axis <- factor(df$axis,
+                    levels = levels(df$axis),
+                    labels = gsub(' ', '\n', levels(df$axis)))
+  
+  zz <- theme(axis.text.x = element_text(size = 10),
+              plot.caption  = element_text(hjust = 0))
+  
+  party_dict <- 
+    tibble(P24 = c("PPC",
+                   "CiU",
+                   "ERC",
+                   "PSC",
+                   "ICV-EUiA",
+                   "C's",
+                   "Reagrupament.cat",
+                   "SI",
+                   "PxC",
+                   "CUP",
+                   "UPyD",
+                   "Podemos",
+                   "Barcelona en Comú",
+                   "CDC",
+                   "Junts pel Sí",
+                   "Catalunya sí que es pot",
+                   "Democràcia i Llibertat",
+                   "En Comú Podem",
+                   "PACMA",
+                   "PDeCAT",
+                   "Junts per Catalunya",
+                   "Catalunya en Comú Podem",
+                   "Altres partits",
+                   "Cap",
+                   "No ho sap",
+                   "No contesta"),
+           partit = c("PPC",
+                      "PDCat/CiU/CDC/Junts",
+                      "ERC",
+                      "PSC",
+                      "ICV-EUiA",
+                      "C's",
+                      "Reagrupament.cat",
+                      "SI",
+                      "PxC",
+                      "CUP",
+                      "UPyD",
+                      "Podem(os)",
+                      "Podem(os)",
+                      "PDCat/CiU/CDC/Junts",
+                      "PDCat/CiU/CDC/Junts",
+                      "Podem(os)",
+                      "Democràcia i Llibertat",
+                      "Podem(os)",
+                      "PACMA",
+                      "PDCat/CiU/CDC/Junts",
+                      "PDCat/CiU/CDC/Junts",
+                      "Podem(os)",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC")) %>%
+    mutate(partit = ifelse(partit == "PDCat/CiU/CDC/Junts",
+                           "PDCat/CiU/\nCDC/Junts",
+                           partit)) %>%
+    mutate(partit = ifelse(partit == 'Podem(os)',
+                           'Podem',
+                           partit))
+  
+  
+  pd <- vilaweb::ceo
+  pd$var <- as.character(pd[,var] %>% unlist)
+  
+  pd <- pd %>%
+    left_join(party_dict) %>%
+    filter(partit %in% c("C's", "CUP", "ERC",
+                         "Podem", "PPC",'PSC', 'PDCat/CiU/\nCDC/Junts')) %>%
+    mutate(indy = partit) %>%
+    mutate(var = as.character(var)) %>%
+    mutate(var = ifelse(var %in% c('No ho sap',
+                                   'No contesta'),
+                        'NS/NC',
+                        var)) %>%
+    filter(!is.na(var)) %>%
+    filter(var != 'NS/NC') %>%
+    mutate(var = 
+             ifelse(var %in% c("Molt d'acord",
+                               "D'acord"),
+                    "D'acord o\nmolt d'acord",
+                    ifelse(var %in% c("En desacord",
+                                      "Molt en desacord"),
+                           "En desacord o\nmolt en desacord",
+                           "Ni d'acord ni\nen desacord"))) %>%
+    group_by(var, indy) %>%
+    summarise(n = sum(PONDERA),
+              people = n()) %>%
+    ungroup %>%
+    group_by(indy) %>%
+    mutate(p = n / sum(n) * 100) %>%
+    mutate(`Muestra` = n)
+  
+  pd <- pd %>% arrange(var, p)
+  pd$indy <- factor(pd$indy, levels = unique(pd$indy))
+  
+  phrase_dict <- 
+    tibble(var = paste0('P56',
+                        c(LETTERS[1:11])),
+           catalan = c("'Com menys intervingui el govern en l’economia, millor serà pel país'",
+                       "'Cal abaixar els impostos, encara que això impliqui\nreduir serveis i prestacions públiques'",
+                       "'El govern hauria de prendre mesures per a reduir les\ndiferències en els nivells d’ingressos'",
+                       "'Les parelles de gais i lesbianes han de poder adoptar\nfills en les mateixes condicions que les parelles heterosexuals'",
+                       "'L’escola ha d’ensenyar als nens a obeir l’autoritat'",
+                       "'La religió no hauria de tenir cap influència en la política'",
+                       "'En qualsevol circumstància, la llei sempre ha de ser obeïda'",
+                       "'Algú amb plenes facultats hauria de poder decidir quan vol morir'",
+                       "'Amb tanta immigració, un ja no se sent com a casa'",
+                       "'El creixement econòmic ha de tenir prioritat sobre la protecció del medi ambient'",
+                       "'Catalunya no té el dret de celebrar un referèndum d’autodeterminació'"),
+           english = c("'The less the government interferes in the economy, the better off the country will be'",
+                       "'Taxes must be lowered, even though it may\nmean reducing public services'",
+                       "'The government should take measures to\nreduce differenes in income'",
+                       "'Gay and lesbian couples should be able to adopt children\nunder the same conditions as heterosexual couples'",
+                       "'School should teach children to obey authority'",
+                       "'Religion should have no influence on politics'",
+                       "'The law should always be obeyed in any circumstance'",
+                       "'Someone with full abilities should be allowed to decide when (s)he wants to die'",
+                       "'With so much immigration, one no longer feels at home'",
+                       "'Economic growth should have priority over protection of the environment'",
+                       "'Catalonia does not have a right to hold a self-determination referendum'"))
+  
+  the_phrase <- phrase_dict$catalan[phrase_dict$var == var]
+  line_breaker <- function(x){
+    x <- stri_wrap(x, width = 50)
+    x <- paste0(x, collapse = '\n')
+    return(x)
+  }
+  the_phrase <- line_breaker(the_phrase)  
+  pd$var<- factor(pd$var,
+                  levels = c("D'acord o\nmolt d'acord",
+                             "Ni d'acord ni\nen desacord",
+                             "En desacord o\nmolt en desacord"),
+                  labels = c("D'acord",
+                             "Ni d'acord ni\nen desacord",
+                             "En desacord"))
+  n_cols <- length(unique(pd$var))
+  # cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
+  # cols <- as.character(vilaweb::colors_vilaweb()[c(1,5,3)])
+  cols <- c(
+    RColorBrewer::brewer.pal(n = 9, name = 'Oranges')[6],
+    'darkgrey',
+    RColorBrewer::brewer.pal(n = 9, name = 'Blues')[7]
+  )
+  cols <- rev(cols)
+  
+  if(only_2018){
+    the_caption <- paste0('Mostra: ', point_replace(commafy(sum(pd$people))),
+                          ' residents de Catalunya amb ciutadania espanyola.\nEnquestes BOP del CEO, 2018. Preguntes ',
+                          var,
+                          ' i P31.\nJoe Brew | @joethebrew. | www.vilaweb.cat')
+  } else {
+    the_caption <- paste0('Mostra: ', point_replace(commafy(sum(pd$people))),
+                          ' residents de Catalunya amb ciutadania espanyola.\nCombinació enquestes BOP del CEO, 2015 i 2018. Preguntes ',
+                          var,
+                          ' i P31.\nJoe Brew | @joethebrew. | www.vilaweb.cat')
+  }
+  
+  g <- ggplot(data = pd,
+              aes(x = indy,
+                  y = p)) +
+    geom_bar(stat = 'identity',
+             position = position_stack(vjust = 0.5, reverse = T),
+             # color = 'black',
+             alpha = 0.9,
+             aes(fill = var,
+                 group = var)) +
+    theme_vilaweb() +
+    scale_fill_manual(name = '',
+                      values = cols) +
+    labs(x = '',
+         y = 'Percentage',
+         subtitle = "Grau d'acord amb l'afirmació:",
+         title =  the_phrase,
+         caption = the_caption) +
+    theme(legend.position = 'right') +
+    zz +
+    guides(fill = guide_legend(reverse = T))
+  if(show_labels){
+    g <- g +
+      geom_text(aes(label = round(p, digits = 2),
+                    group = var),
+                position = position_stack(vjust = 0.5,
+                                          reverse = T),
+                alpha = 0.7,
+                color = 'white',
+                size = 3) 
+  }
+  return(g)
+}
+
+party_position <- function(snapshot = FALSE){
+  
+  party_dict <- 
+    tibble(P24 = c("PPC",
+                   "CiU",
+                   "ERC",
+                   "PSC",
+                   "ICV-EUiA",
+                   "C's",
+                   "Reagrupament.cat",
+                   "SI",
+                   "PxC",
+                   "CUP",
+                   "UPyD",
+                   "Podemos",
+                   "Barcelona en Comú",
+                   "CDC",
+                   "Junts pel Sí",
+                   "Catalunya sí que es pot",
+                   "Democràcia i Llibertat",
+                   "En Comú Podem",
+                   "PACMA",
+                   "PDeCAT",
+                   "Junts per Catalunya",
+                   "Catalunya en Comú Podem",
+                   "Altres partits",
+                   "Cap",
+                   "No ho sap",
+                   "No contesta"),
+           partit = c("PPC",
+                      "PDCat/CiU/CDC/Junts",
+                      "ERC",
+                      "PSC",
+                      "ICV-EUiA",
+                      "C's",
+                      "Reagrupament.cat",
+                      "SI",
+                      "PxC",
+                      "CUP",
+                      "UPyD",
+                      "Podem(os)",
+                      "Podem(os)",
+                      "PDCat/CiU/CDC/Junts",
+                      "PDCat/CiU/CDC/Junts",
+                      "Podem(os)",
+                      "Democràcia i Llibertat",
+                      "Podem(os)",
+                      "PACMA",
+                      "PDCat/CiU/CDC/Junts",
+                      "PDCat/CiU/CDC/Junts",
+                      "Podem(os)",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC"))
+  
+  pd <- vilaweb::ceo %>%
+    left_join(party_dict) %>%
+    group_by(partit) %>%
+    mutate(size = n()) %>%
+    filter(size >= 50) %>%
+    ungroup %>%
+    mutate(year = ANY) %>%
+    mutate(axis = as.character(P25)) %>%
+    mutate(axis = ifelse(axis == 'Extrema esquerra',
+                         '1',
+                         ifelse(axis == 'Extrema dreta',
+                                '10',
+                                as.character(axis)))) %>%
+    mutate(axis = as.numeric(axis)) %>%
+    filter(!partit %in% c('Altre/Cap/NS/NC',
+                          'ICV-EUIA'))
+  # P25
+  
+  if(snapshot){
+    agg <- pd %>%
+      filter(ANY == 2018)
+      nn <- nrow(agg[!is.na(agg$axis),])
+    
+    agg <- agg %>%
+      group_by(partit) %>%
+      summarise(avg = weighted.mean(x = axis, w = PONDERA, na.rm = TRUE)) %>%
+      ungroup
+    
+    cols <- length(unique(agg$partit))
+    cols <- c('darkorange', 'yellow', 'black',
+              grey(0.6), 'darkgreen', 'darkred',
+              'purple', 'blue', 'red')
+    cols <- cols[order(agg$avg)]
+  agg <- agg %>% arrange(avg)
+  agg$partit <- gsub('PDCat/CiU/CDC/Junts', 'PDCat/Junts', agg$partit)
+  agg$partit <- factor(agg$partit, levels = agg$partit)  
+  
+  g <- ggplot(data = agg,
+              aes(x = partit,
+                  y = avg)) +
+    geom_bar(stat = 'identity',
+             aes(fill = partit)) +
+    scale_fill_manual(name = '', values = cols) +
+    theme_vilaweb() +
+    theme(legend.position = 'none') +
+    coord_flip() +
+    labs(x = '',
+         y = 'Resposta mitjana: escala esquerra (0) - dreta (10)') +
+    geom_text(aes(label = round(avg, digits = 1)),
+              nudge_y = -0.3,
+              color = 'white')
+  
+  } else {
+    nn <- nrow(pd[!is.na(pd$axis),])
+    agg <- pd %>%
+      group_by(partit, year) %>%
+      summarise(avg = weighted.mean(x = axis, w = PONDERA, na.rm = TRUE)) %>%
+      ungroup
+    
+    cols <- length(unique(agg$partit))
+    cols <- c('darkorange', 'yellow', 'black',
+              grey(0.6), 'darkgreen', 'darkred',
+              'purple', 'blue', 'red')
+    # cols <- rainbow(cols)
+    g <- ggplot(data = agg,
+           aes(x = year,
+               y = avg)) +
+      geom_bar(stat = 'identity',
+               alpha = 0.6,
+               aes(fill = partit)) +
+      theme_vilaweb() +
+      facet_wrap(~partit) +
+      theme(axis.text.x = element_text(angle = 90,
+                                       vjust = 0.5,
+                                       hjust = 1)) +
+      geom_text(aes(label = round(avg, digits = 1)),
+                nudge_y = 1,
+                size = 2) +
+      coord_flip() +
+      scale_fill_manual(name = '',values = cols) +
+      theme(legend.position = 'none') +
+      geom_point() +
+      geom_line() +
+      labs(x = 'Any',
+           y = 'Escala esquerra (0) / dreta (10)') +
+      ylim(0, 10) +
+      scale_y_continuous(breaks = c(0, 2,4,6)) +
+      geom_hline(yintercept = 5, lty = 2, alpha = 0.3)
+  }
+  
+  g <- g +
+    labs(subtitle = "Pregunta: 'Em pot dir on s’ubicaria vostè en una escala de 0 a 10 on\n0 significa extrema esquerra i 10 extrema dreta?'",
+  caption = paste0(point_replace(commafy(nn)),
+                   ' residents de Catalunya amb ciutadania espanyola. Dades del BOP/CEO\nPregunta P25 (ideologia) i P24 (partit). Gràfic de Joe Brew | @joethebrew. |  www.vilaweb.cat.'),
+  title = 'Autoubicació ideològica per partit') +
+    theme(plot.subtitle = element_text(hjust = 0))
+  return(g)
+}
+
+make_val <- function(who = 'Albiach',
+                     ceo = vilaweb::ceo,
+                     only_2018 = FALSE){
+  
+  df <- ceo
+  if(only_2018){
+    df <- df %>%
+      filter(ANY == 2018)
+  }
+  df <- df %>%
+    mutate(axis = P25,
+           indy = P31) %>%
+    mutate(indy = as.character(indy)) %>%
+    mutate(indy = ifelse(indy %in% c('No ho sap',
+                                     'No contesta'),
+                         'NS/NC',
+                         indy)) %>%
+    group_by(axis, indy) %>%
+    tally %>%
+    ungroup %>%
+    group_by(axis) %>%
+    mutate(p = n / sum(n) * 100) %>%
+    # filter(!axis %in% c('No ho sap', 'No contesta')) %>%
+    # filter(!is.na(indy)) %>%
+    mutate(`Muestra` = n)
+  
+  df$axis <- factor(df$axis,
+                    levels = levels(df$axis),
+                    labels = gsub(' ', '\n', levels(df$axis)))
+  
+  zz <- theme(axis.text.x = element_text(size = 10),
+              plot.caption  = element_text(hjust = 0))
+  
+  party_dict <- 
+    tibble(P24 = c("PPC",
+                   "CiU",
+                   "ERC",
+                   "PSC",
+                   "ICV-EUiA",
+                   "C's",
+                   "Reagrupament.cat",
+                   "SI",
+                   "PxC",
+                   "CUP",
+                   "UPyD",
+                   "Podemos",
+                   "Barcelona en Comú",
+                   "CDC",
+                   "Junts pel Sí",
+                   "Catalunya sí que es pot",
+                   "Democràcia i Llibertat",
+                   "En Comú Podem",
+                   "PACMA",
+                   "PDeCAT",
+                   "Junts per Catalunya",
+                   "Catalunya en Comú Podem",
+                   "Altres partits",
+                   "Cap",
+                   "No ho sap",
+                   "No contesta"),
+           partit = c("PPC",
+                      "PDCat/CiU/CDC/Junts",
+                      "ERC",
+                      "PSC",
+                      "ICV-EUiA",
+                      "C's",
+                      "Reagrupament.cat",
+                      "SI",
+                      "PxC",
+                      "CUP",
+                      "UPyD",
+                      "Podem(os)",
+                      "Podem(os)",
+                      "PDCat/CiU/CDC/Junts",
+                      "PDCat/CiU/CDC/Junts",
+                      "Podem(os)",
+                      "Democràcia i Llibertat",
+                      "Podem(os)",
+                      "PACMA",
+                      "PDCat/CiU/CDC/Junts",
+                      "PDCat/CiU/CDC/Junts",
+                      "Podem(os)",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC",
+                      "Altre/Cap/NS/NC")) %>%
+    mutate(partit = ifelse(partit == "PDCat/CiU/CDC/Junts",
+                           "PDCat/CiU/\nCDC/Junts",
+                           partit)) %>%
+    mutate(partit = ifelse(partit == 'Podem(os)',
+                           'Podem',
+                           partit))
+  
+  
+  pd <- vilaweb::ceo
+  var <- paste0('val_', who)
+  pd$var <- as.character(pd[,var] %>% unlist)
+  pd$var <- as.character(pd$var)
+  pd$var <- ifelse(pd$var == 'Excel·lent', '10',
+                   ifelse(pd$var == 'Molt deficient', 0,
+                          pd$var))
+  pd$var <- as.numeric(pd$var)
+  pd <- pd %>%
+    left_join(party_dict) %>%
+    filter(partit %in% c("C's", "CUP", "ERC",
+                         "Podem", "PPC",'PSC', 'PDCat/CiU/\nCDC/Junts')) %>%
+    mutate(indy = partit) %>%
+    filter(!is.na(var)) %>%
+    group_by(indy) %>%
+    summarise(avg = mean(var, na.rm = TRUE),
+              n = sum(PONDERA),
+              people = n()) %>%
+    ungroup %>%
+    mutate(p = n / sum(n) * 100) %>%
+    mutate(`Muestra` = n) %>%
+    arrange(avg)
+  pd$indy <- factor(pd$indy, levels = pd$indy)
+  
+  ggplot(data = pd,
+         aes(x = indy,
+             y = avg)) +
+    geom_bar(stat = 'identity',
+             fill = 'darkorange',
+             alpha = 0.7) +
+    geom_text(aes(label = round(avg, digits = 1)),
+              color = 'white',
+              nudge_y = -0.5) +
+    labs(title = paste0('Valoració de ', who),
+         caption = paste0(point_replace(commafy(sum(pd$people))),
+                          ' residents de Catalunya amb ciutadania espanyola. Dades del BOP/CEO.\nGràfic de Joe Brew | @joethebrew. |  www.vilaweb.cat.', ifelse(who == 'Albiach',
+                                                                                                                                                                '\nExclou el PPC perquè cap dels enquestats sabia qui era Albiach, i per tant no podian valorar-la.', '')),
+                          x = 'Votants d\'aquest partit',
+                          y = 'Valoració (0-10)') +
+    theme_vilaweb() +
+    theme(plot.subtitle = element_text(hjust = 0))
+}
