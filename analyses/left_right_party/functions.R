@@ -1290,7 +1290,7 @@ make_plot <- function(var = 'P56J',
     the_caption <- paste0('Mostra: ', point_replace(commafy(sum(pd$people))),
                           ' residents de Catalunya amb ciutadania espanyola.\nCombinació enquestes BOP del CEO, 2015 i 2018. Preguntes ',
                           var,
-                          ' i P31.\nJoe Brew | @joethebrew. | www.vilaweb.cat')
+                          ' i P31.\nPercentatges calculats amb ponderació. Joe Brew | @joethebrew. | www.vilaweb.cat')
   }
   
   g <- ggplot(data = pd,

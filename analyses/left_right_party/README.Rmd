@@ -1,8 +1,7 @@
 ---
-title: 'El perfil ideològic dels partits polítics catalans'
+title: ''
 output: github_document
 ---
-
 
 ```{r setup, include=FALSE, echo = FALSE}
 # Basic knitr options
@@ -28,6 +27,11 @@ library(stringi)
 source('functions.R')
 ```
 
+
+
+# No, el PSC no és més "d\'esquerres" que el PDeCat
+
+
 # Introducció
 
 En política, es parla molt de l'escala ideològica esquerra-dreta. Per exemple, la paraula "esquerra" formava part del lema del partit socialista ("Som l'esquerra") durant campanyes electorals prèvies, i forma part actualment del nom d'un partit ("Esquerra Republicana"). Els partits de dretes, però, reclamen menys la paraula "dreta" (potser perquè la gran majoria dels catalans s'autoubiquen a l'esquerra), però si que fan servir la paraula "esquerra" sovint de manera acusatoria.
@@ -52,6 +56,27 @@ N'hi ha que diuen l'autoubicació no és fiable, que els votants no saben situar
 
 En els gràfics següents es veuen uns patrons clars: el PPC i C's se situen normalment junts, and un grau d'acord (o desacord) consistent amb un posicionament ideològic de dretes, mentres la CUP, ERC i Podem se situen més a l'esquerra. Lo interessant, però, és la comparació entre el PDeCat i el PSC. En algunes mesures (intervenció estatal en l'economia), el PSC se situa clarament a l'esquerra del PDeCat, però en altres (mesures per a reduir la desigualtat), el PDeCat sembla més d'esquerres. En la majoria d'indicadors, el PDeCat i el PSC tenen un perfil ideològic gairebé igual. És a dir, si es considera que el PDeCat és "de dretes", el PSC també; i si el PSC és "d'esquerres", el PDeCat també.
 
+## Immigració i xenofòbia
+
+```{r}
+make_plot(var = 'P56I')
+```
+
+
+## Desigualtat i intervenció estatal
+
+```{r}
+make_plot(var = 'P56C')
+```
+
+
+## El paper de la religió en la política
+
+```{r}
+make_plot(var = 'P56F')
+```
+
+
 ## Intervenció estatal i l'economia
 
 ```{r}
@@ -64,11 +89,6 @@ make_plot(var = 'P56A')
 make_plot(var = 'P56B')
 ```
 
-## Desigualtat i intervenció estatal
-
-```{r}
-make_plot(var = 'P56C')
-```
 
 ## Drets dels homosexuals
 
@@ -80,12 +100,6 @@ make_plot(var = 'P56D')
 
 ```{r}
 make_plot(var = 'P56E')
-```
-
-## El paper de la religió en la política
-
-```{r}
-make_plot(var = 'P56F')
 ```
 
 ## Obediència i llei
@@ -100,11 +114,6 @@ make_plot(var = 'P56G')
 make_plot(var = 'P56H')
 ```
 
-## Immigració i xenofòbia
-
-```{r}
-make_plot(var = 'P56I')
-```
 
 ## Protecció del medi ambient i creixement econòmic
 
@@ -151,4 +160,6 @@ En el gràfic anterior, és clar que la probabilitat de pensar que el franquisme
 
 # Conclusió
 
-Analitzant l'autoubicació, el grau d'acord amb polítiques, i la valoració de polítics, és clar que Catalunya té dos partits grans de dretes: el PP i C's. També és clar que té 3 partits clarament d'esquerres: CUP, ERC, i Podem. Però les dades demostren que la classificació freqüent del PSC com un partit "d'esquerres" i el PDeCat com un partit "de dretes" és simplement errònea. Els PSC i el PDeCAT ocupen el mateix espai polític a Catalunya: el centre. Amb l'excepció de la qüestió de l'autodeterminació, els votants dels dos partits comparteixen una ideologia política similar. Continuar assignant el PSC a l'esquerra i el PDeCat a la dreta reflecteix una ignòrancia de les dades objectives.
+Analitzant l'autoubicació, el grau d'acord amb polítiques, i la valoració de polítics, és clar que Catalunya té dos partits grans de dretes: el PP i C's. També és clar que té 3 partits clarament d'esquerres: CUP, ERC, i Podem. Però les dades demostren que la classificació freqüent del PSC com un partit "d'esquerres" i el PDeCat com un partit "de dretes" és simplement errònea. Els PSC i el PDeCAT ocupen el mateix espai polític a Catalunya: el centre. Amb l'excepció de la qüestió de l'autodeterminació, els votants dels dos partits comparteixen una ideologia política similar. En algunes qüestions, els votants del PSC són més a l'esquerra; en altres, el votants del PDeCat. Però en general, són més semblants que differents.
+
+Continuar assignant el PSC a l'esquerra i el PDeCat a la dreta reflecteix una ignòrancia de les dades objectives, o un intent de distorsionar la realitat.

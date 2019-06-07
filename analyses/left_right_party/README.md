@@ -1,5 +1,6 @@
-El perfil ideològic dels partits polítics catalans
-================
+
+No, el PSC no és més "d'esquerres" que el PDeCat
+================================================
 
 Introducció
 ===========
@@ -26,48 +27,48 @@ Grau d'acord amb afirmacions ideologicament situades
 
 En els gràfics següents es veuen uns patrons clars: el PPC i C's se situen normalment junts, and un grau d'acord (o desacord) consistent amb un posicionament ideològic de dretes, mentres la CUP, ERC i Podem se situen més a l'esquerra. Lo interessant, però, és la comparació entre el PDeCat i el PSC. En algunes mesures (intervenció estatal en l'economia), el PSC se situa clarament a l'esquerra del PDeCat, però en altres (mesures per a reduir la desigualtat), el PDeCat sembla més d'esquerres. En la majoria d'indicadors, el PDeCat i el PSC tenen un perfil ideològic gairebé igual. És a dir, si es considera que el PDeCat és "de dretes", el PSC també; i si el PSC és "d'esquerres", el PDeCat també.
 
-Intervenció estatal i l'economia
---------------------------------
+Immigració i xenofòbia
+----------------------
 
 ![](figures/unnamed-chunk-3-1.png)
-
-Impostos i prestacions públiques
---------------------------------
-
-![](figures/unnamed-chunk-4-1.png)
 
 Desigualtat i intervenció estatal
 ---------------------------------
 
-![](figures/unnamed-chunk-5-1.png)
-
-Drets dels homosexuals
-----------------------
-
-![](figures/unnamed-chunk-6-1.png)
-
-Obediència i autoritat
-----------------------
-
-![](figures/unnamed-chunk-7-1.png)
+![](figures/unnamed-chunk-4-1.png)
 
 El paper de la religió en la política
 -------------------------------------
 
+![](figures/unnamed-chunk-5-1.png)
+
+Intervenció estatal i l'economia
+--------------------------------
+
+![](figures/unnamed-chunk-6-1.png)
+
+Impostos i prestacions públiques
+--------------------------------
+
+![](figures/unnamed-chunk-7-1.png)
+
+Drets dels homosexuals
+----------------------
+
 ![](figures/unnamed-chunk-8-1.png)
+
+Obediència i autoritat
+----------------------
+
+![](figures/unnamed-chunk-9-1.png)
 
 Obediència i llei
 -----------------
 
-![](figures/unnamed-chunk-9-1.png)
+![](figures/unnamed-chunk-10-1.png)
 
 Eutanàsia
 ---------
-
-![](figures/unnamed-chunk-10-1.png)
-
-Immigració i xenofòbia
-----------------------
 
 ![](figures/unnamed-chunk-11-1.png)
 
@@ -113,4 +114,6 @@ En el gràfic anterior, és clar que la probabilitat de pensar que el franquisme
 Conclusió
 =========
 
-Analitzant l'autoubicació, el grau d'acord amb polítiques, i la valoració de polítics, és clar que Catalunya té dos partits grans de dretes: el PP i C's. També és clar que té 3 partits clarament d'esquerres: CUP, ERC, i Podem. Però les dades demostren que la classificació freqüent del PSC com un partit "d'esquerres" i el PDeCat com un partit "de dretes" és simplement errònea. Els PSC i el PDeCAT ocupen el mateix espai polític a Catalunya: el centre. Amb l'excepció de la qüestió de l'autodeterminació, els votants dels dos partits comparteixen una ideologia política similar. Continuar assignant el PSC a l'esquerra i el PDeCat a la dreta reflecteix una ignòrancia de les dades objectives.
+Analitzant l'autoubicació, el grau d'acord amb polítiques, i la valoració de polítics, és clar que Catalunya té dos partits grans de dretes: el PP i C's. També és clar que té 3 partits clarament d'esquerres: CUP, ERC, i Podem. Però les dades demostren que la classificació freqüent del PSC com un partit "d'esquerres" i el PDeCat com un partit "de dretes" és simplement errònea. Els PSC i el PDeCAT ocupen el mateix espai polític a Catalunya: el centre. Amb l'excepció de la qüestió de l'autodeterminació, els votants dels dos partits comparteixen una ideologia política similar. En algunes qüestions, els votants del PSC són més a l'esquerra; en altres, el votants del PDeCat. Però en general, són més semblants que differents.
+
+Continuar assignant el PSC a l'esquerra i el PDeCat a la dreta reflecteix una ignòrancia de les dades objectives, o un intent de distorsionar la realitat.
