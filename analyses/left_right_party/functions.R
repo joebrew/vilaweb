@@ -2,7 +2,7 @@ commafy <- function(x){
   scales::comma(x, big.mark = '.', decimal.mark = ',')
 }
 point_replace <- function(x){
-  gsub('.', ',', x, fixed = TRUE)
+  gsub(',', '.', x, fixed = TRUE)
 }
 
 
@@ -925,23 +925,23 @@ make_franco <- function(){
                       "ERC",
                       "PSC",
                       "ICV-EUiA",
-                      "C's",
+                      "Cs",
                       "Reagrupament.cat",
                       "SI",
                       "PxC",
                       "CUP",
                       "UPyD",
-                      "Podem(os)",
-                      "Podem(os)",
+                      "Podem",
+                      "Podem",
                       "PDCat/CiU/CDC/Junts",
                       "PDCat/CiU/CDC/Junts",
-                      "Podem(os)",
+                      "Podem",
                       "Democràcia i Llibertat",
-                      "Podem(os)",
+                      "Podem",
                       "PACMA",
                       "PDCat/CiU/CDC/Junts",
                       "PDCat/CiU/CDC/Junts",
-                      "Podem(os)",
+                      "Podem",
                       "Altre/Cap/NS/NC",
                       "Altre/Cap/NS/NC",
                       "Altre/Cap/NS/NC",
@@ -1168,23 +1168,23 @@ make_plot <- function(var = 'P56J',
                       "ERC",
                       "PSC",
                       "ICV-EUiA",
-                      "C's",
+                      "Cs",
                       "Reagrupament.cat",
                       "SI",
                       "PxC",
                       "CUP",
                       "UPyD",
-                      "Podem(os)",
-                      "Podem(os)",
+                      "Podem",
+                      "Podem",
                       "PDCat/CiU/CDC/Junts",
                       "PDCat/CiU/CDC/Junts",
-                      "Podem(os)",
+                      "Podem",
                       "Democràcia i Llibertat",
-                      "Podem(os)",
+                      "Podem",
                       "PACMA",
                       "PDCat/CiU/CDC/Junts",
                       "PDCat/CiU/CDC/Junts",
-                      "Podem(os)",
+                      "Podem",
                       "Altre/Cap/NS/NC",
                       "Altre/Cap/NS/NC",
                       "Altre/Cap/NS/NC",
@@ -1192,7 +1192,7 @@ make_plot <- function(var = 'P56J',
     mutate(partit = ifelse(partit == "PDCat/CiU/CDC/Junts",
                            "PDCat/CiU/\nCDC/Junts",
                            partit)) %>%
-    mutate(partit = ifelse(partit == 'Podem(os)',
+    mutate(partit = ifelse(partit == 'Podem',
                            'Podem',
                            partit))
   
@@ -1202,7 +1202,7 @@ make_plot <- function(var = 'P56J',
   
   pd <- pd %>%
     left_join(party_dict) %>%
-    filter(partit %in% c("C's", "CUP", "ERC",
+    filter(partit %in% c("Cs", "CUP", "ERC",
                          "Podem", "PPC",'PSC', 'PDCat/CiU/\nCDC/Junts')) %>%
     mutate(indy = partit) %>%
     mutate(var = as.character(var)) %>%
@@ -1325,7 +1325,8 @@ make_plot <- function(var = 'P56J',
   }
   return(g)
 }
-
+library(tidyverse)
+library(vilaweb)
 party_position <- function(snapshot = FALSE){
   
   party_dict <- 
@@ -1360,23 +1361,23 @@ party_position <- function(snapshot = FALSE){
                       "ERC",
                       "PSC",
                       "ICV-EUiA",
-                      "C's",
+                      "Cs",
                       "Reagrupament.cat",
                       "SI",
                       "PxC",
                       "CUP",
                       "UPyD",
-                      "Podem(os)",
-                      "Podem(os)",
+                      "Podem",
+                      "Podem",
                       "PDCat/CiU/CDC/Junts",
                       "PDCat/CiU/CDC/Junts",
-                      "Podem(os)",
+                      "Podem",
                       "Democràcia i Llibertat",
-                      "Podem(os)",
+                      "Podem",
                       "PACMA",
                       "PDCat/CiU/CDC/Junts",
                       "PDCat/CiU/CDC/Junts",
-                      "Podem(os)",
+                      "Podem",
                       "Altre/Cap/NS/NC",
                       "Altre/Cap/NS/NC",
                       "Altre/Cap/NS/NC",
@@ -1520,7 +1521,7 @@ make_val <- function(who = 'Albiach',
                    "ERC",
                    "PSC",
                    "ICV-EUiA",
-                   "C's",
+                   "Cs",
                    "Reagrupament.cat",
                    "SI",
                    "PxC",
@@ -1546,23 +1547,23 @@ make_val <- function(who = 'Albiach',
                       "ERC",
                       "PSC",
                       "ICV-EUiA",
-                      "C's",
+                      "Cs",
                       "Reagrupament.cat",
                       "SI",
                       "PxC",
                       "CUP",
                       "UPyD",
-                      "Podem(os)",
-                      "Podem(os)",
+                      "Podem",
+                      "Podem",
                       "PDCat/CiU/CDC/Junts",
                       "PDCat/CiU/CDC/Junts",
-                      "Podem(os)",
+                      "Podem",
                       "Democràcia i Llibertat",
-                      "Podem(os)",
+                      "Podem",
                       "PACMA",
                       "PDCat/CiU/CDC/Junts",
                       "PDCat/CiU/CDC/Junts",
-                      "Podem(os)",
+                      "Podem",
                       "Altre/Cap/NS/NC",
                       "Altre/Cap/NS/NC",
                       "Altre/Cap/NS/NC",
@@ -1570,7 +1571,7 @@ make_val <- function(who = 'Albiach',
     mutate(partit = ifelse(partit == "PDCat/CiU/CDC/Junts",
                            "PDCat/CiU/\nCDC/Junts",
                            partit)) %>%
-    mutate(partit = ifelse(partit == 'Podem(os)',
+    mutate(partit = ifelse(partit == 'Podem',
                            'Podem',
                            partit))
   
@@ -1585,7 +1586,7 @@ make_val <- function(who = 'Albiach',
   pd$var <- as.numeric(pd$var)
   pd <- pd %>%
     left_join(party_dict) %>%
-    filter(partit %in% c("C's", "CUP", "ERC",
+    filter(partit %in% c("Cs", "CUP", "ERC",
                          "Podem", "PPC",'PSC', 'PDCat/CiU/\nCDC/Junts')) %>%
     mutate(indy = partit) %>%
     filter(!is.na(var)) %>%
@@ -1608,7 +1609,9 @@ make_val <- function(who = 'Albiach',
     geom_text(aes(label = round(avg, digits = 1)),
               color = 'white',
               nudge_y = -0.5) +
-    labs(title = paste0('Valoració de ', who),
+    labs(title = ifelse(who == 'Albiach',
+                        'Valoració d\'Albiach',
+                        paste0('Valoració de ', who)),
          caption = paste0(point_replace(commafy(sum(pd$people))),
                           ' residents de Catalunya amb ciutadania espanyola. Dades del BOP/CEO.\nGràfic de Joe Brew | @joethebrew. |  www.vilaweb.cat.', ifelse(who == 'Albiach',
                                                                                                                                                                 '\nExclou el PPC perquè cap dels enquestats sabia qui era Albiach, i per tant no podian valorar-la.', '')),
