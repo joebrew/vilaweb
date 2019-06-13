@@ -1,0 +1,319 @@
+---
+title: "La gran distracció: com afecta el judici al procés a l'atencio a la independència de Catalunya"
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+library(webshot)
+```
+
+
+```{r}
+# # Get most recent tweets from our people of interest
+
+# # Read in google sheet with keys
+# library(gsheet)
+# if(!'goog.RData' %in% dir()){
+#   goog_people <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=1425313388')
+#   save(goog_people,
+#        file = 'goog.RData')
+# } else {
+#   load('goog.RData')
+# }
+# people <- goog_people$username
+people <- read_csv('people.csv')
+
+if(file.exists('tl.RData')){
+  load('tl.RData')
+} else {
+  # Connect to the db
+  pg = DBI::dbDriver("PostgreSQL")
+  con = DBI::dbConnect(pg, dbname="twitter")
+  tl <- RPostgreSQL::dbGetQuery(
+    con,
+    paste0("SELECT * FROM twitter where username = ANY ('{",
+           paste0('"', people$username, '"', collapse = ','),
+           "}')")
+  )
+  tl <- tl %>%
+    filter(!duplicated(id))
+  save(tl, file = 'tl.RData')  
+  dbDisconnect(con)
+  }
+
+find_indepe <- function(x){
+  x <- tolower(x)
+  grepl('indepe', x)
+}
+find_anything <- function(anything, x){
+  x <- tolower(x)
+  grepl(anything, x)
+}
+
+
+tl <- tl %>%
+  mutate(indepe = find_indepe(tweet),
+         judici = find_anything('judici|juicio', tweet),
+         presos = find_anything('presos polítics', tweet),
+         republica = find_anything('república|republicana|republicano|republicà', tweet),
+         dialeg = find_anything('diàleg|diálog|dialog', tweet),
+         indepe_republica = find_anything('indepe|república|republicana|republicano|republicà', tweet),
+         presos_judici = find_anything('presos polítics|judici|juicio', tweet)
+         )
+key_dict <- 
+  tibble(key = c('indepe', 'judici', 'presos',
+                 'republica', 'dialeg', 'indepe_republica',
+                 'presos_judici'),
+         title = c('Independència', 'Judici', 'Presos polítics',
+                   'República', 'Diàleg',
+                   'Independència o República',
+                   'Presos polítics o judici'),
+         search_string = c('indepe', 'judici o juicio',
+                           'presos polítics', 
+                           'república, republicana, republicano, republicà',
+                           'diàleg, diálogo, dialogar',
+                           'indepe o república, republicana, republicano, republicà',
+                           'presos o pres o judici o juicio'))
+```
+
+```{r}
+make_chart <- function(who = people$username,
+                       y = 'p',
+                       vars = c('indepe', 'presos'),
+                       agg_people = FALSE,
+                       point_size = 0.6,
+                       point_alpha = 0.6){
+  sub_data <- tl %>%
+    filter(date >= '2017-01-01',
+           date <= '2019-05-31') %>%
+    filter(username %in% who)
+  sub_data <- sub_data[,c('date', 'username',
+                          vars)]
+  
+  if(agg_people){
+    sub_data <- sub_data %>%
+    gather(key, value, vars[1], vars[length(vars)])
+  pd <- sub_data %>%
+      mutate(date = as.Date(paste0(format(date, '%Y-%m'), '-01'))) %>%
+    group_by(date, key) %>%
+    summarise(n = length(which(value)),
+              denom = n()) %>%
+    mutate(p = n / denom * 100) %>%
+    left_join(key_dict) %>%
+    dplyr::select(-key) %>%
+    dplyr::rename(key = title)
+  
+  
+  } else {
+    sub_data <- sub_data %>%
+    gather(key, value, vars[1], vars[length(vars)])
+  pd <- sub_data %>%
+      mutate(date = as.Date(paste0(format(date, '%Y-%m'), '-01'))) %>%
+    group_by(date, username, key) %>%
+    summarise(n = length(which(value)),
+              denom = n()) %>%
+    mutate(p = n / denom * 100) %>%
+    left_join(key_dict) %>%
+    dplyr::select(-key) %>%
+    dplyr::rename(key = title)
+  }
+  pd$y <- unlist(pd[,y])
+  pd$username <- paste0('@', pd$username)
+  
+  g <- 
+    ggplot(data = pd,
+         aes(x = date,
+             y = y, color = key)) +
+    geom_point(alpha = point_alpha,
+               size = point_size) +
+    geom_line(alpha = 0.6) +
+    geom_line(stat="smooth",
+              method = "auto",
+              # formula = y ~ 0 + I(1/x) + I((x-1)/x),
+              size = 1,
+              # linetype ="dashed",
+              alpha = 0.8)
+  if(!agg_people){
+    g <- g +
+        facet_wrap(~username,
+               scales = 'free_y')
+  }
+  n_keys <- length(unique(pd$key))
+  if(n_keys >= 3){
+    cols <- RColorBrewer::brewer.pal(n = n_keys,name = 'Spectral')
+  } else {
+    cols <- c(
+      RColorBrewer::brewer.pal(n = 8,name = 'Oranges')[6],
+      RColorBrewer::brewer.pal(n = 8,name = 'Blues')[6]
+    )
+  }
+  # Get caption
+  the_caption <- paste0('Búsquedes: ', paste0("'", key_dict$search_string[key_dict$key %in% vars], "'", collapse = ', '))
+  g <- g +
+    theme_vilaweb() +
+    scale_color_manual(name = '',
+                      values = cols) +
+    theme(strip.text = element_text(size = 9),
+          axis.text.y =  element_text(size = 5),
+          axis.text.x = element_text(size = 6,
+                                     angle = 90, 
+                                     vjust = 0.5,
+                                     hjust = 1)) +
+    labs(caption = paste0('Joe Brew. @joethebrew. www.vilaweb.cat.\n',
+                           the_caption))
+  
+  return(g)
+}
+```
+
+
+# Introducció
+
+És clar que l'empresonament d'una grant part del lideratge polític català és important. El que no és tan clar és fins quin punt l'empresonament afecta les aspiracions polítiques dels líders catalans. 
+
+D'una banda, es podria hipotetitzar que la preso podria tenir un efecte _persuasiu_ pel sobiranisme, demostrant que l'Estat espanyol té tendències autoritaries o que la Justícia espanyola confon, per raons polítiques, la desobediència civil amb una insurrecció armada. Però de l'altre banda, es podria hipotetitzar que la preso tindria un efecte _disuasiu_ pel sobiranisme: que el fet de afrontar-se a possibles penes de preso fa que els líders no perseguexin els seus objectius polítics amb tanta fervor com abans, o tot simplement que el patiment humà dels presos fa que els sobiranistes canviin de prioritats.
+
+Aquesta article tractarà aquest tema: quina és la relació entre l'atenció a la independència i l'atenció als presos.
+
+# Metodologia
+
+Faig un anàlisi de `r nrow(tl)` piulets de `r nrow(people)` polítics sobiranistes (no necessariament independentistes). Calculo la freqüencia de l'aparació de certs termes ("independència", "presos", "república", "judici", etc.).
+
+# Resultats
+
+El gràfic següent mostra el percentatge de piulets mensuals que cadascú dels polítics seleccionats esmentant paraules relacionades amb la independència ("independent", "independència", etc.) i els presos ("presos", "judici", "juicio") des del principi de 2017 fins el final del mes passat (maig 2019).
+
+```{r}
+make_chart(vars = c('indepe_republica', 'presos_judici')) +
+  labs(x = 'Mes',
+       y = '% dels seus piulets durant el mes',
+       title = 'Piulets de polítics sobiranistes')
+```
+
+Si agreguem tots aquests polítics en un sol gràfic, es veu així: 
+
+```{r}
+make_chart(vars = c('indepe_republica', 'presos_judici'),
+           agg_people = TRUE) +
+  labs(x = 'Mes',
+       y = '% dels seus piulets durant el mes',
+       title = 'Polítics sobiranistes: Esmentades de termes relacionats amb la\nindependència i els presos') +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))
+```
+
+
+Que passa? Les dues linies segueixen un patró classicament inversa: una puja i l'altre baixa, una baixa i l'altre puja. Què sugereix? Que com més atenció facin els polítics sobiranistes al judici, menys cas fan als seus objectius polítics.
+
+# Interpretació
+
+Entre polítics sobiranistes, l'atenció que fan als presos sembla estar inversament correlacionada amb l'atenció a la independència de Catalunya. Es podria interpretar aquesta troballa com a evidència de la efectivitat de l'estratègia de l'unionisme. És a dir, el fet d'haver empresonament el llideratge polític català ha frenat (o al menys desaccelerat) l'independentisme. Per raons humanes, els liders independentistes potser estàn més preocupats pel que passa en una sala a Madrid que al Parlament de Catalunya. O sigui, haver judicialitzat la qüestió de la independència de Catalunya sembla haver funcionat: els polítics independentistes, pendents del futur dels seus companys i de les seves families, ja no parlen tant del tema de la República.
+
+Però hi ha una altre interpretació. La judicialització de la qüestió de la sobirania de Catalunya no és un fre a l'independentisme, sinó un "temps mort" a la política (a "time-out" from politics). És una simple pausa. Funciona en el sentit de que ha "decapitat" el llideratge, i ha captivat l'atenció de tothom durant més d'un any. Però el judici s'acaba. I l'anticipació del fi del judici ja es veu en les dades: en els últims mesos, el percentatge de piulets relacionats amb la independència torna a pujar.
+
+L'empresonament va ser efectiu al seu moment, però l'efecte comença a afeblir-se. Els polítics catalans comencen a parlar, una altre vegada, del seu objectiu polític: una república independent.
+
+# Reflexió personal
+
+Independenment de la sentència a Madrid, d'aqui uns mesos Espanya i Catalunya es trobaràn en exactament la mateixa situació que en Octubre 2017. La única diferència serà que Espanya ja haurà "played the card up its sleeve". O sigui, o els presos estaràn en llibertat, o el cas ja no a Madrid, sinó Estrasburg. En qualsevol dels 2 casos anteriors, fer servir la Juridactura una altre vegada per a fins polítics ja no serà possible. Espanya haurà de reconeixer que té un problema polític, i haurà d'intentar resoldre el problema fent política. 
+
+
+```{r}
+# # system("python3 ../../foreign/twint/Twint.py -s 'fent república' --since 2017-01-01 --until 2019-06-10 -o data/fent_republica --csv")
+# # system("python3 ../../foreign/twint/Twint.py -s 'república catalana' --since 2017-01-01 --until 2019-06-10 -o data/republica_catalana --csv")
+# # system("python3 ../../foreign/twint/Twint.py -s 'presos polítics' --since 2017-01-01 --until 2019-06-10 -o data/presos_politics --csv")
+# # system("python3 ../../foreign/twint/Twint.py -s 'fent república' --since 2017-01-01 --until 2019-06-10 -o data/fent_republica --csv")
+# 
+# cotxes_dir <- dir('data', recursive = TRUE)
+# out_list <- list()
+# # for(i in which(cotxes_dir == 'final/tweets.csv')){
+# for(i in 1:length(cotxes_dir)){
+#   file_path <- paste0('data/', cotxes_dir[i])
+#   search_string <- unlist(strsplit(file_path, '/'))[2]
+#   data <- read_csv(file_path) %>%
+#     mutate(search_string = search_string)
+#   out_list[[i]] <- data
+# }
+# 
+# 
+# df <- bind_rows(out_list)
+# # df <- df %>% filter(!duplicated(id))
+# # Remove duplicates
+# df <- df %>%
+#   mutate(dummy = 1) %>%
+#   group_by(search_string, id) %>%
+#   mutate(dummy_cs = cumsum(dummy)) %>%
+#   ungroup %>%
+#   filter(dummy_cs == 1)
+# 
+# # Adjust for time zone
+# library(lubridate)
+# df$date_time <- as.POSIXct(paste0(df$date, ' ', df$time, ' ', '+0', df$timezone))
+# Sys.setenv(TZ='CET')
+# 
+# 
+# # df$date_time <- with_tz(df$date_time, 'CET')
+# 
+# 
+# agg <- df %>%
+#   mutate(date = as.Date(paste0(format(date, '%Y-%m'), '-01'))) %>%
+#   group_by(date, search_string) %>% 
+#   summarise(n = n(),
+#             retweets = sum(retweets_count, na.rm = TRUE) + 1,
+#             likes = sum(likes_count))
+# left <- expand.grid(date  = sort(unique(agg$date)),
+#                    search_string = sort(unique(df$search_string)))
+# agg <- left_join(left, agg)
+# agg$n[is.na(agg$n)] <- 0
+# agg$retweets[is.na(agg$retweets)] <- 0
+# agg$likes[is.na(agg$likes)] <- 0
+# agg$interactions <- agg$n + agg$retweets + agg$likes
+# agg <- agg %>% filter(date>='2017-06-01')
+
+# ggplot(data = agg,
+#        aes(x = date,
+#            y = interactions)) +
+#   geom_bar(stat = 'identity') +
+#   facet_wrap(~search_string) +
+#   theme(axis.text.x = element_text(angle = 90,
+#                                    vjust = 0.5, hjust = 1))
+```
+
+
+
+
+# Technical details
+
+- Data scraped from twtiter during the period on June 12, 2019 using the python twint library.   
+- Data processed, aggregated, and visualized using R.  
+- The number of retweets and likes are as of date of data retrieval  
+- All code for this analysis at https://github.com/joebrew/vilaweb/tree/master/analyses/
