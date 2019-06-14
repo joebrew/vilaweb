@@ -1,12 +1,7 @@
 La gran distracció: com afecta el judici al procés a l'atencio a la independència de Catalunya
 ================
 
--   [Introducció](#introducció)
--   [Metodologia](#metodologia)
--   [Resultats](#resultats)
--   [Interpretació](#interpretació)
--   [Reflexió personal](#reflexió-personal)
--   [Technical details](#technical-details)
+    [1] TRUE
 
 Introducció
 ===========
@@ -20,7 +15,7 @@ Aquesta article tractarà aquest tema: quina és la relació entre l'atenció a 
 Metodologia
 ===========
 
-Faig un anàlisi de 263639 piulets de 40 polítics sobiranistes (no necessariament independentistes). Calculo la freqüencia de l'aparació de certs termes ("independència", "presos", "república", "judici", etc.).
+Faig un anàlisi de 422512 piulets de 40 polítics sobiranistes (no necessariament independentistes). Calculo la freqüencia de l'aparació de certs termes ("independència", "presos", "república", "judici", etc.).
 
 Resultats
 =========

@@ -1,9 +1,6 @@
 ---
 title: "La gran distracció: com afecta el judici al procés a l'atencio a la independència de Catalunya"
-output:
-  github_document:
-    toc: true
-    toc_depth: 2
+output: github_document
 ---
 
 
