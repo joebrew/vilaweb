@@ -1,0 +1,695 @@
+---
+title: "Catalonia and the King of Spain"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(tidyverse)
+require(readr)
+library(ggrepel)
+source('prepare_ceo_data.R')
+```
+
+# Introduction
+
+Felipe Bourbon has just completed his fifth year as Spain's Head of State. As the symbol of Spanish unity and strength, the congratulations rolled in from all sectors of Spanish politics. 
+
+
+
+<table style="width:100%">
+  <tr>
+    <td><img src="img/a.png" /></td>
+    <td><img src="img/f.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="img/e.png" /></td>
+    <td><img src="img/d.png" /></td>
+  </tr>
+</table>
+
+Well, not quite _all_ sectors. There was a notable silence from Catalonia's elected political leadership. Neither Carles Puigdemont (the exiled President), nor Quim Torra (the acting President), nor Pere Aragonès (the Vice-President), nor Alfred Bosch (the Foreign Minister), nor Miquel Buch (the Interior Minister), nor any other high-level member of the Catalan Government wrote to congratulate Felipe Bourbon.
+
+Why the silence? Why did nobody from the Catalan Government congratulate the King of Spain on the five year anniversary of his reign? Perhaps it's because they were doing something that _elected_ leaders generally do better than _unelected_ ones: representing their people.
+
+The thing is, an overwhelming majority of Catalans disapprove of Monarchy generally as a form of government, and of Felipe Bourbon specifically as a Head of State. Regardless of one's own personal feelings on Catalan leaders, Mr. Borbón, or different forms of government, these are just the facts: most Catalans don't want a King. 
+
+Let's dig into the data.
+
+# The data
+
+## Catalans express low confidence in the Spanish Monarchy
+
+Catalans have very little confidence in their Head of State. On a scale from 0 to 10, with 0 being "no confidence" and 10 being "a great deal of confidence", Catalans over the last four years have assigned to the Spanish Monarchy a value of 2. The below chart shows how Catalans' (already low) degree of confidence in the Monarchy dropped even lower following the Spanish State's handling of the Catalan independence referendum. 
+
+```{r}
+make_chart <- function(ca = TRUE,
+                       df,
+                       skipper = 0.25){
+  
+  pd <- df %>%
+  filter(!is.na(var)) %>%
+  group_by(date) %>%
+  summarise(p = mean(var, na.rm = TRUE),
+            people = n()) %>%
+  mutate(date = date + 20)
+  
+  if(ca){
+    the_labs <- labs(x = 'Data',
+                     y = 'Valoració',
+                     subtitle = 'Escala de 0 a 10',
+                     caption = paste0('Mostra: ', numberfy(sum(pd$people)),
+                                       ' residents de Catalunya amb ciutadania espanyola.\nDades del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  } else {
+    the_labs <- labs(x = 'Date',
+                     y = 'Rating',
+                     
+                     subtitle = 'Scale from 0 to 10',
+                     caption = paste0('Sample: ', numberfy(sum(pd$people)),
+                                       ' residents of Catalonia with Spanish citizenship.\nData from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  }
+
+ggplot(data = pd,
+       aes(x = date,
+           y = p)) +
+  geom_point() +
+  geom_area(alpha = 0.2) +
+  geom_line(alpha = 0.4) +
+  theme_vilaweb() +
+  scale_y_continuous(breaks = seq(0, 10, by = skipper)) +
+  geom_text_repel(aes(label = round(p, digits = 1)),
+            alpha = 0.6,
+            nudge_y = 0.1) +
+  geom_vline(aes(xintercept = as.Date('2017-09-20')),
+             alpha = 0.8,
+             lty = 2) +
+  geom_label(data = data.frame(date = as.Date('2017-09-20'),
+                               p = 1.25,
+                               label = 'Oct 2017'),
+             aes(x = date, y = p, label = label)) +
+  the_labs
+}
+make_chart(ca = FALSE,
+           df = df %>% mutate(var = monarquia)) +
+  labs(title = 'Degree of confidence in the Spanish Monarchy')
+```
+
+A score of 2 on a scale from 0 to 10 may seem low, and that's because it is. The below chart shows the aggregation of 4 years of surveys regarding Catalans' confidence in different institutions. The Monarchy ranks below all of them, even lower than banks.
+
+
+```{r}
+make_b <- function(ca = TRUE){
+  
+  pd <- vilaweb::ceo %>%
+  dplyr::select(contains('P21'))
+for(j in 1:ncol(pd)){
+  message(j)
+  col_name <- names(pd)[j]
+  this_name <- attr(eval(parse(text = paste0('pd$`', col_name, '`'))), 'label')
+  names(pd)[j] <- this_name
+}
+names(pd) <- unlist(lapply(strsplit(names(pd), '. ', fixed = TRUE), function(x){x[2]}))
+for(j in 1:ncol(pd)){
+  pd[,j] <- make_number(unlist(pd[,j]))
+}
+
+
+
+out <- apply(pd, 2, mean, na.rm = TRUE)
+people <- apply(pd, 2, function(x){length(which(!is.na(x)))})
+people <- range(people)
+people <- numberfy(people)
+people <- paste0(people, collapse = ' - ')
+  if(ca){
+    the_labs <- labs(x = '',
+                     y = 'Valoració',
+                     title = 'Grau de confiança dels catalans en les institucions',
+                     subtitle = 'Escala de 0 a 10',
+                     caption = paste0('Mostra: ', people,
+                                       ' residents de Catalunya amb ciutadania espanyola.\nDades: agregació de dades del 2015-2018 del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  } else {
+    the_labs <- labs(x = '',
+                     y = 'Rating',
+                     title = 'Catalans\' degree of confidence in institutions',
+                     subtitle = 'Scale from 0 to 10',
+                     caption = paste0('Sample: ', people,
+                                       ' residents of Catalonia with Spanish citizenship.\nData. Aggregation of 2015-2018 data from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  }
+
+
+pd <- tibble(key = names(out),
+             value = as.numeric(out)) %>%
+  arrange(value) %>%
+  # mutate(key = gsub('la i', 'la\ni', key)) %>%
+  mutate(key = gsub(' (0-10)', '', key, fixed = TRUE))
+pd$key <- factor(pd$key, levels = pd$key)
+pd$yend <- 0
+ggplot(data = pd,
+       aes(x = key,
+           y = value)) +
+  geom_point() +
+  theme_vilaweb() +
+    theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.5,
+                                   hjust = 1,
+                                   size = 2),
+          plot.title = element_text(hjust = 1)) +
+  geom_text(aes(label = round(value, digits = 2)),
+            nudge_y = 0.5,
+            alpha = 0.6,
+            size = 3) +
+  geom_segment(aes(xend = key,
+                   yend = yend)) +
+  the_labs +
+  coord_flip()
+}
+make_b(ca = FALSE)
+```
+
+It's worth nothing that confidence has not fallen only in the Spanish Monarchy in recent years. It has also fallen in the National Police and Civil Guard.
+
+```{r}
+make_chart(ca = FALSE,
+           df = df %>% mutate(var = P26L),
+           skipper = 0.5) +
+  labs(title = 'Catalans\' degree of confidence in the National\nPolice and Civil Guard')
+```
+
+## But how does (the rest of) Spain feel about its King?
+
+It's difficult to know if Catalans are alone in their dislike of the institution of the Monarchy, or if Spaniards feel similarly. An equivalent of the Catalan Barometer of Public Opinion (the data source for previous charts) does not exist in most Spanish regions, and the CIS (the State-level survey) stopped asking about the Monarchy in 2015. 
+
+That said, private polling suggests that most Spaniards do not share the anti-monarchical feelings of Catalans. A recently published [Vanitatis poll](https://www.vanitatis.elconfidencial.com/casas-reales/2019-06-19/encuesta-vanitatis-felipe-letizia-monarquia-republica-espana-cataluna_2075143/) showed that 74% of Catalans preferred a Republic, and only 21,6% preferred the Monarchy. This figure was nearly reversed in Madrid (62,0% in favor of the Monarchy and only 37,4% in favor of the Republic). The rest of Spain also showed larely pro-Monarchy sentiment. Only in the Valencian Community, Galicia, the Basque Country and Catalonia are there more Republicans than Monarchists.
+
+```{r}
+vanitatis <- function(ca = TRUE){
+  
+  if(ca){
+    the_labs <- labs(title = 'Preferències de model d\'Estat',
+                     caption = 'Gràfic creat a partir de dades de IMOP Insights, publicats per Vanitatis/El Confidencial\nhttps://www.vanitatis.elconfidencial.com/casas-reales/2019-06-19/encuesta-vanitatis-felipe-letizia-monarquia-republica-espana-cataluna_2075143\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat')
+  } else {
+    the_labs <- labs(title = 'Preferences for form of government',
+                     caption = 'Chart crated based on data from IMOP Insights, published by  Vanitatis/El Confidencial\nhttps://www.vanitatis.elconfidencial.com/casas-reales/2019-06-19/encuesta-vanitatis-felipe-letizia-monarquia-republica-espana-cataluna_2075143\nChart by Joe Brew | @joethebrew | www.vilaweb.cat')
+  }
+  
+  pd <- tibble(ccaa = c('Andalucía',
+                      'Madrid',
+                      'España',
+                      'Com. Valenciana',
+                      'Galicia',
+                      'Pais Vasc',
+                      'Catalunya'),
+             `República` = c(23.5, 37.4, 39, 49.9, 51.6, 70.6, 74),
+             `Monarquia` = -1 * c(75.1, 62.0, 56, 49.8, 45.6, 24.7, 21.6)) %>%
+  gather(key, value, `República`:`Monarquia`) %>%
+    arrange(key, value)
+  pd$ccaa <- factor(pd$ccaa, levels = unique(pd$ccaa))
+
+ggplot(data = pd,
+       aes(x = ccaa,
+           y = value,
+           group = key,
+           fill = key)) +
+  geom_bar(stat = 'identity',
+           position = position_stack())  +
+  coord_flip() +
+  theme_vilaweb() +
+  labs(x = '',
+       y = '%') +
+  scale_y_continuous(breaks = seq(-80, 80, by = 40),
+                     labels = abs(seq(-80, 80, by = 40))) +
+  geom_text(aes(label = value)) +
+  scale_fill_manual(name = '',
+                    values = RColorBrewer::brewer.pal(n = 6, name = 'Spectral')[c(2,5)]) +
+  the_labs +
+  theme(plot.caption = element_text(size = 8))
+}
+
+vanitatis(ca = FALSE)
+```
+
+
+## So, who likes the Monarchy?
+
+The tri-annual BOP survey asks thousands of Catalans their degree of confidence in institutions on a regular basis. Since 2015, 13.804 Catalans have responded to the BOP's question on the Monarchy. Of those, more than half (6.662 or 50,6%) have given the Spanish Monarchy a score of 0 on a scale of 0-10. Only 1.638 of the 13.804 (12%) give the Monarchy a score of 6 or greater.
+
+Who are these 12% of Catalans that approve of the Monarchy? Let's see.
+
+### Monarchists by party
+
+The below chart shows the percentage of Catalans of each political party who have a high degree of confidence (6 or more on a scale from 0 to 10) in the Spanish Monarchy. In only the conservative "People's Party" is it a majority.
+
+```{r}
+party_plot <- function(ca = FALSE){
+  
+
+  
+    pd <- df %>%
+  filter(!is.na(partit),
+         !is.na(monarquia)) %>%
+  group_by(partit) %>%
+  summarise(denominator = n(),
+            numerator = length(which(monarquia > 5))) %>%
+  mutate(p = numerator / denominator * 100) %>%
+  arrange(p) %>%
+      mutate(people = denominator)
+pd$partit <- factor(pd$partit, levels = pd$partit)
+pd$y <- ifelse(pd$p <=7, pd$p + 3, pd$p - 2)
+pd$text_color <- ifelse(pd$p <=7, 'black', 'white')
+if(ca){
+    the_labs <- labs(y = 'Percentatge',
+                     title = 'Taxa d\'aprobació de la Monarquia Espanyola',
+                     subtitle = 'Per partit de simpatía',
+                     caption = paste0('Mostra: ', numberfy(sum(pd$people)),
+                                       ' residents de Catalunya amb ciutadania espanyola (agregació 2015-2019).\n\'Aprobació\' vol dir un grau de confiança de 6 o més en una escala de 0 a 10.\nDades del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  } else {
+    the_labs <- labs(y = 'Percentage',
+                     title = 'Approval rate of Spanish Monarchy',
+                     subtitle = 'By party',
+                     caption = paste0('Sample: ', numberfy(sum(pd$people)),
+                                       ' residents of Catalonia with Spanish citizenship (aggregation 2015-2019).\n\'Approval\' means a confidence score of 6+ on a 0-10 scale.\nData from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  }
+
+ggplot(data = pd,
+       aes(x = partit,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           fill = as.character(vilaweb::colors_vilaweb()[4])) +
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(size = 14)) +
+  geom_text(aes(y = y,
+                label = paste0(round(p, digits = 1),'%')),
+            color = pd$text_color,
+            alpha = 0.7,
+            size = 5) +
+  the_labs
+}
+party_plot(ca = FALSE)
+```
+
+
+### Monarchists by ideology
+
+
+
+```{r}
+
+# The below chart shows the approval rate (score of 6 or more on a 0-10 confidence scale) of the Spanish Monarchy as a function of Catalans' political ideology.
+# 
+# ideology <- function(ca = FALSE){
+#   
+# 
+#   
+#     pd <- df %>%
+#   filter(!is.na(axis),
+#          !is.na(monarquia)) %>%
+#   group_by(axis) %>%
+#   summarise(denominator = n(),
+#             numerator = length(which(monarquia > 5))) %>%
+#   mutate(p = numerator / denominator * 100) %>%
+#   arrange(p) %>%
+#       mutate(people = denominator)
+# pd$y <- ifelse(pd$p <=1, pd$p + 3, pd$p - 2)
+# pd$text_color <- ifelse(pd$p <=1, 'black', 'white')
+# if(ca){
+#     the_labs <- labs(y = 'Percentatge',
+#                      x = 'Autoubicació en escala ideològica esquerra-dreta (0-10)',
+#                      title = 'Taxa d\'aprobació de la Monarquia Espanyola',
+#                      subtitle = 'Per ideología política del enquestat',
+#                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
+#                                        ' residents de Catalunya amb ciutadania espanyola (agregació 2015-2019).\n\'Aprobació\' vol dir un grau de confiança de 6 o més en una escala de 0 a 10.\nDades del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
+#     axis_labels <- c('Extrema\nesquerra', 
+#                                 'Esquerra',
+#                                 'Centre',
+#                                 'Dreta',
+#                                 'Extrema\ndreta')
+#   } else {
+#     the_labs <- labs(y = 'Percentage',
+#                      x = 'Self-positioning on left-right ideological scale (0-10)',
+#                      title = 'Approval rate of Spanish Monarchy',
+#                      subtitle = 'By survey respondant\'s political ideology',
+#                      caption = paste0('Sample: ', numberfy(sum(pd$people)),
+#                                        ' residents of Catalonia with Spanish citizenship (aggregation 2015-2019).\n\'Approval\' means a confidence score of 6+ on a 0-10 scale.\nData from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+#     axis_labels <- c('Far\nleft', 
+#                                 'Left',
+#                                 'Center',
+#                                 'Right',
+#                                 'Far\nright')
+#   }
+# 
+# ggplot(data = pd,
+#        aes(x = axis,
+#            y = p)) +
+#   geom_bar(stat = 'identity',
+#            fill = as.character(vilaweb::colors_vilaweb()[4])) +
+#   theme_vilaweb() +
+#   theme(axis.text.x = element_text(size = 14)) +
+#   geom_text(aes(y = y,
+#                 label = paste0(round(p, digits = 1),'%')),
+#             color = pd$text_color,
+#             alpha = 0.7,
+#             size = 5) +
+#   the_labs +
+#   scale_x_continuous(breaks = 0:10,
+#                      sec.axis = sec_axis(
+#     trans = ~.,
+#     breaks = c(0, 2.5, 5, 7.5, 10),
+#                      labels = axis_labels))
+# }
+# ideology(ca = FALSE)
+```
+
+
+The below chart shows the approval rate (score of 6 or more on a 0-10 confidence scale) of the Spanish Monarchy as a function of Catalans' political ideology (aggregated from numerical values into categories as follows: 0-2: far left, 3-4: left, 5: center, 6-7: right, 8-10: far right).
+
+```{r}
+ideology_simple <- function(ca = FALSE){
+  
+
+    pd <- df %>%
+  filter(!is.na(axis_simple),
+         !is.na(monarquia)) %>%
+  group_by(axis = axis_simple) %>%
+  summarise(denominator = n(),
+            numerator = length(which(monarquia > 5))) %>%
+  mutate(p = numerator / denominator * 100) %>%
+  arrange(p) %>%
+      mutate(people = denominator)
+pd$y <- ifelse(pd$p <=1, pd$p + 3, pd$p - 2)
+pd$text_color <- ifelse(pd$p <=1, 'black', 'white')
+if(ca){
+    the_labs <- labs(y = 'Percentatge',
+                     x = 'Autoubicació en escala ideològica esquerra-dreta (0-10)',
+                     title = 'Taxa d\'aprobació de la Monarquia Espanyola',
+                     subtitle = 'Per ideología política del enquestat',
+                     caption = paste0('Mostra: ', numberfy(sum(pd$people)),
+                                       ' residents de Catalunya amb ciutadania espanyola (agregació 2015-2019).\n\'Aprobació\' vol dir un grau de confiança de 6 o més en una escala de 0 a 10.\nDades del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
+    axis_labels <- c('Extrema\nesquerra', 
+                                'Esquerra',
+                                'Centre',
+                                'Dreta',
+                                'Extrema\ndreta')
+  } else {
+    the_labs <- labs(y = 'Percentage',
+                     x = 'Self-positioning on left-right ideological scale (0-10)',
+                     title = 'Approval rate of Spanish Monarchy',
+                     subtitle = 'By survey respondant\'s political ideology',
+                     caption = paste0('Sample: ', numberfy(sum(pd$people)),
+                                       ' residents of Catalonia with Spanish citizenship (aggregation 2015-2019).\n\'Approval\' means a confidence score of 6+ on a 0-10 scale.\nData from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+    axis_labels <- c('Far\nleft', 
+                                'Left',
+                                'Center',
+                                'Right',
+                                'Far\nright')
+  }
+
+ggplot(data = pd,
+       aes(x = axis,
+           y = p)) +
+  geom_bar(stat = 'identity',
+           fill = as.character(vilaweb::colors_vilaweb()[4])) +
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(size = 14)) +
+  geom_text(aes(y = y,
+                label = paste0(round(p, digits = 1),'%')),
+            color = pd$text_color,
+            alpha = 0.7,
+            size = 4) +
+  the_labs 
+}
+ideology_simple(ca = FALSE)
+```
+
+The above chart shows that the Monarchy's approval rating is linearly associated with the ideology of Catalans: the more to the far-right, the more support for the Monarchy.
+
+This phenomenon is not specific to Catalonia. As documented in [a Twitter thread](https://twitter.com/LluisOrriols/status/1141431539441524736?s=19) by [Lluís Orriols](https://twitter.com/LluisOrriols), in Spain the confidence in the Spanish Monarch is much higher among those who are ideologically right-wing than left-wing, and the gap had been growing (at least up until the CIS stopped asking the question in 2015).
+
+
+### Support for the monarchy and language
+
+The below chart shows the association of the language Catalans consider to be their "own" and their confidence (again on a 0-10 scale) in the Spanish Monarchy.
+
+```{r}
+language <- function(ca = FALSE){
+  
+  pd <- df %>%
+  filter(!is.na(llengua)) %>%
+  filter(llengua != 'Altres') %>%
+  group_by(llengua) %>%
+  summarise(people = n(),
+            p = mean(monarquia, na.rm = TRUE))
+  
+    if(ca){
+    the_labs <- labs(x = 'Llengua',
+                     y = 'Valoració',
+                     title = 'Grau de confiança en la Monarquia Espanyola',
+                     subtitle = 'Per llengua considerada \'pròpia\', escala de 0 a 10',
+                     caption = paste0('Mostra: ', numberfy(sum(pd$people)),
+                                       ' residents de Catalunya amb ciutadania espanyola.\nDades: agregació de dades del 2015-2018 del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  } else {
+    the_labs <- labs(x = 'Language',
+                     y = 'Rating',
+                     title = 'Catalans\' degree of confidence in the Spanish Monarchy',
+                     subtitle = 'By language considered \'ones own\', scale from 0 to 10',
+                     caption = paste0('Sample: ', numberfy(sum(pd$people)),
+                                       ' residents of Catalonia with Spanish citizenship.\nData. Aggregation of 2015-2018 data from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  }
+  
+  ggplot(data = pd,
+         aes(x = llengua,
+             y = p)) +
+    geom_bar(stat = 'identity',
+             fill = vilaweb::colors_vilaweb()[4]) +
+    theme_vilaweb() +
+    theme(axis.text.x = element_text(size = 15)) +
+    the_labs +
+    geom_text(aes(label = round(p, digits = 1)),
+              nudge_y = -0.3,
+              color = 'white',
+              size = 8)
+  
+}
+language(ca = FALSE)
+```
+
+It's clear in the above that those who consider Catalan to be their language are far less confident in the Spanish Monarchy than those who consider Spanish to be their language. That said, it's worth paying attention to the scale of the y-axis. Even among Spanish-speakers, the average confidence score in the Monarchy is only about 3 of 10.
+
+### Support for the Monarchy and age
+
+The below chart shows the average degree of confidence in the Spanish Monarchy among Catalans, as a function of age. Either (a) young Catalans will become monarchical with time or (b) in the future the (already low) approval rate of Felipe Bourbon among Catalans will drop even further as the group with the highest level of support for him passes on.
+
+```{r}
+age <- function(ca = TRUE){
+    pd <- df %>%
+    filter(!is.na(monarquia)) %>%
+    group_by(EDAT) %>%
+    summarise(people = n(),
+              p = mean(monarquia, na.rm = TRUE))
+      if(ca){
+    the_labs <- labs(x = 'Edat',
+                     y = 'Valoració',
+                     title = 'Grau de confiança en la Monarquia Espanyola',
+                     subtitle = 'Per age, escala de 0 a 10',
+                     caption = paste0('Mostra: ', numberfy(sum(pd$people)),
+                                       ' residents de Catalunya amb ciutadania espanyola.\nDades: agregació de dades del 2015-2018 del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
+    legend_title <- 'Mostra'
+  } else {
+    the_labs <- labs(x = 'Age',
+                     y = 'Rating',
+                     title = 'Catalans\' degree of confidence in the Spanish Monarchy',
+                     subtitle = 'By age, scale from 0 to 10',
+                     caption = paste0('Sample: ', numberfy(sum(pd$people)),
+                                       ' residents of Catalonia with Spanish citizenship.\nData. Aggregation of 2015-2018 data from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+    legend_title <- 'Sample size'
+  }
+  
+
+  
+  ggplot(data = pd,
+         aes(x = EDAT,
+             y = p)) +
+    geom_point(aes(size = people),
+               alpha = 0.3) +
+     stat_smooth(method="auto", aes(weight=people),
+                 se = FALSE) +
+    theme_vilaweb() +
+    scale_size_continuous(name = legend_title) +
+    the_labs
+#       geom_line(aes(group = 1),
+#             stat="smooth",
+#             method = 'auto',
+#             # method = "lm", formula = y ~ 0 + I(1/x) + I((x-1)/x),
+#               size = 1,
+#               # linetype ="dashed",
+#               alpha = 0.8,
+#             lwd = 2) 
+}
+age(ca = FALSE)
+```
+
+
+
+
+```{r}
+
+# ## Support for Monarchy and place of birth
+# 
+# Many Catalans were born outside of Catalonia (the rest of the Spanish State being the largest area of provenance). Place of birth is significantly associated with degree of confidence in the monarchy: the average degree of confidence among Catalans born outside of Catalonia is more than double that of those born in Catalonia.
+# pob <- function(ca = FALSE){
+#   
+#   pd <- df %>%
+#   filter(!is.na(LLOC_NAIX)) %>% 
+#     filter(!LLOC_NAIX %in% c('No contesta')) %>%
+#     mutate(LLOC_NAIX = ifelse(LLOC_NAIX != 'Catalunya', 'No Catalunya', LLOC_NAIX)) %>%
+#   group_by(LLOC_NAIX) %>%
+#   summarise(people = n(),
+#             p = mean(monarquia, na.rm = TRUE))
+#   
+#     if(ca){
+#     the_labs <- labs(x = 'Lloc de naixement',
+#                      y = 'Valoració',
+#                      title = 'Grau de confiança en la Monarquia Espanyola',
+#                      subtitle = 'Per lloc de naixement, escala de 0 a 10',
+#                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
+#                                        ' residents de Catalunya amb ciutadania espanyola.\nDades: agregació de dades del 2015-2018 del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
+#   } else {
+#     the_labs <- labs(x = 'Place of birth',
+#                      y = 'Rating',
+#                      title = 'Catalans\' degree of confidence in the Spanish Monarchy',
+#                      subtitle = 'By place of birth, scale from 0 to 10',
+#                      caption = paste0('Sample: ', numberfy(sum(pd$people)),
+#                                        ' residents of Catalonia with Spanish citizenship.\nData. Aggregation of 2015-2018 data from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+#   }
+#   
+#   ggplot(data = pd,
+#          aes(x = LLOC_NAIX,
+#              y = p)) +
+#     geom_bar(stat = 'identity',
+#              fill = vilaweb::colors_vilaweb()[4]) +
+#     theme_vilaweb() +
+#     theme(axis.text.x = element_text(size = 15)) +
+#     the_labs +
+#     geom_text(aes(label = round(p, digits = 1)),
+#               nudge_y = -0.3,
+#               color = 'white',
+#               size = 8)
+#   
+# }
+# pob(ca = FALSE)
+# 
+# 
+# We can explore the association with place of birth in other ways as well. The below chart shows the degree of confidence in the Spanish King on the x-axis, and the percentage of Catalans _born in Catalonia_ vs. _born outside of Catalonia_ on the y-axis. To be clear, 100% of the people in this survey are Catalans.
+# 
+# pob2 <- function(ca = TRUE){
+#   
+#   pd = df %>% 
+#       filter(!is.na(LLOC_NAIX)) %>% 
+#     filter(!LLOC_NAIX %in% c('No contesta')) %>%
+#     mutate(LLOC_NAIX = ifelse(LLOC_NAIX != 'Catalunya', 'No Catalunya', LLOC_NAIX)) %>%
+#     group_by(monarquia, LLOC_NAIX) %>% 
+#     summarise(n = n(),
+#               people = n()) %>%
+#     ungroup %>%
+#     group_by(monarquia) %>%
+#     mutate(p = n / sum(n) * 100)
+# 
+#     
+#   if(ca){
+#     the_labs <- labs(x = 'Confiança en la Monarquia Espanyola',
+#                      y = 'Percentatge nascut a Catalunya',
+#                      title = 'Relació entre lloc de naixement i confiança en la Monarquia',
+#                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
+#                                        ' residents de Catalunya amb ciutadania espanyola.\nDades: agregació de dades del 2015-2018 del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
+#     legend_title <- 'Lloc de\nnaixement'
+#   } else {
+#     the_labs <- labs(x = 'Confidence in the Spanish Monarchy',
+#                      y = 'Percentage born in Catalonia',
+#                      title = 'Relationship between place of birth and confidence in the Monarchy',
+#                      caption = paste0('Sample: ', numberfy(sum(pd$people)),
+#                                        ' residents of Catalonia with Spanish citizenship.\nData. Aggregation of 2015-2018 data from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+#     legend_title <- 'Place\nof birth'
+#   }
+#   
+#   ggplot(data = pd,
+#          aes(x = monarquia,
+#              y = p,
+#              fill = LLOC_NAIX)) +
+#     geom_bar(stat = 'identity',
+#              position = position_stack()) +
+#     theme_vilaweb() +
+#     theme(axis.text.x = element_text(size = 15)) +
+#     the_labs +
+#     geom_text(aes(label = round(p, digits = 1),
+#                   y  = p - 5),
+#               position = position_stack(),
+#               color = 'white',
+#               size = 3) +
+#     scale_x_continuous(breaks = 0:10) +
+#     scale_fill_manual(name = legend_title,
+#                       values = as.character(vilaweb::colors_vilaweb()[c(3, 6)])) +
+#     theme(legend.position = 'right')
+# }
+# pob2(ca = FALSE)
+# 
+# The further to the right, the higher the degree of confidence in the Spanish Monarchy. A majority of Catalans with the highest degree of support for the Monarchy (7 and above) were born outside of Catalonia. Of note, this group (giving the Monarchy a degree of confidence of 7 or above) makes up a very small percentage of all Catalans: fewer than 8.7%.
+```
+
+
+
+# Conclusion
+
+There is a broad, anti-monarchy consensus in Catalonia. More than half of Catalans give the Spanish Monarchy a 0 out of 10 in terms of general confidence. Catalans have lower confidence in the Spanish Monarchy than any other institution (including the Spanish Government, banks, police, and the military). And the trend over the last few years is largely downward.  
+
+
+The very few Catalans (12%) that give the Monarchy a passing score are largely concentrated in the political far-right. The numbers of Monarchists on the Catalan left being virtually negligible (5% among the far-left and 7% among the left). In addition to being right-wing, the likelihood of being a pro-Monarchy Catalan is associated with (a) being older, (b) considering Spanish one's "own" language, and (c) being a voter of Spanish nationalist parties (PP, C's, and Socialists).
+
+That the Spanish Monarchy gets most of its support from the political right should come as no surprise, given the close relationship between the Bourbon family and the former right-wing dictator, Francisco Franco. What is surprising is how _low_ the levels of support for the Spanish Monarchy are _even among those groups most favorable to it_. Most Catalans - even those on the ideological right - still have low confidence in the Spanish Monarchy.
+
+Regardless of how one personally feels about the Felipe Bourbon, it is clear that the future viability of the Bourbon family's reign in Catalonia is doubtful. The Monarch's support in Catalonia is low across all sectors, and highest in groups who are in demographic decline. The trend, especially since October 2017, is downwards.
+
+
+
+# Catalan-language charts
+
+```{r}
+make_chart(ca = TRUE,
+           df %>% mutate(var = monarquia)) +
+  labs(title = 'Grau de confiança en la monarquia espanyola')
+
+
+make_b(ca = TRUE)
+
+make_chart(ca = TRUE,
+           df = df %>% mutate(var = P26L),
+           skipper = 0.5) +
+  labs(title = 'Grau de confiança dels catalans en la\nPolicia Nacional i la Guardia Civil')
+
+vanitatis(ca = TRUE)
+
+party_plot(ca = TRUE)
+# ideology(ca = TRUE)
+ideology_simple(ca = TRUE)
+language(ca = TRUE)
+age(ca = TRUE)
+
+# pob(ca = TRUE)
+# pob2(ca = TRUE)
+
+```
