@@ -160,8 +160,9 @@ pd <- tibble(key = names(out),
   # mutate(key = gsub('la i', 'la\ni', key)) %>%
   mutate(key = gsub(' (0-10)', '', key, fixed = TRUE))
 pd <- pd %>%
-  mutate(key = gsub('Policia Nacional espanyola', 'policia espanyola', key),
+  mutate(key = gsub('Policia Nacional Espanyola', 'policia espanyola', key),
          key = gsub('Exèrcit', 'exèrcit', key),
+         key = gsub('uardia', 'ùardia', key),
          key = gsub('Congrés dels Diputats', 'congrés dels diputats', key),
          key = gsub(' / central', '', key))
 pd$key <- factor(pd$key, levels = pd$key)
@@ -405,7 +406,7 @@ if(ca){
     the_labs <- labs(y = 'Percentatge',
                      x = 'Autoubicació en escala ideològica esquerra-dreta (0-10)',
                      title = 'Taxa d\'aprovació de la monarquia espanyola',
-                     subtitle = 'Per ideologia política del enquestat',
+                     subtitle = 'Per ideologia política de l\'enquestat',
                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
                                        ' residents de Catalunya amb ciutadania espanyola (agregació 2015-2019).\n\'Aprobació\' vol dir un grau de confiança de 6 o més en una escala de 0 a 10.\nDades del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
     axis_labels <- c('Extrema\nesquerra', 
@@ -686,7 +687,7 @@ make_b(ca = TRUE)
 make_chart(ca = TRUE,
            df = df %>% mutate(var = P26L),
            skipper = 0.5) +
-  labs(title = 'Grau de confiança dels catalans en la\npolicia espanyola i la Guardia Civil')
+  labs(title = 'Grau de confiança dels catalans en la\npolicia espanyola i la Guàrdia Civil')
 
 vanitatis(ca = TRUE)
 
