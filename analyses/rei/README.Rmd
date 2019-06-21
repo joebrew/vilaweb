@@ -159,6 +159,11 @@ pd <- tibble(key = names(out),
   arrange(value) %>%
   # mutate(key = gsub('la i', 'la\ni', key)) %>%
   mutate(key = gsub(' (0-10)', '', key, fixed = TRUE))
+pd <- pd %>%
+  mutate(key = gsub('Policia Nacional espanyola', 'policia espanyola', key),
+         key = gsub('Exèrcit', 'exèrcit', key),
+         key = gsub('Congrés dels Diputats', 'congrés dels diputats', key),
+         key = gsub(' / central', '', key))
 pd$key <- factor(pd$key, levels = pd$key)
 pd$yend <- 0
 ggplot(data = pd,
@@ -189,7 +194,7 @@ It's worth nothing that confidence has not fallen only in the Spanish Monarchy i
 make_chart(ca = FALSE,
            df = df %>% mutate(var = P26L),
            skipper = 0.5) +
-  labs(title = 'Catalans\' degree of confidence in the National\nPolice and Civil Guard')
+  labs(title = 'Catalans\' degree of confidence in the Spanish\nPolice and Civil Guard')
 ```
 
 ## But how does (the rest of) Spain feel about its King?
@@ -217,8 +222,8 @@ vanitatis <- function(ca = TRUE){
                       'Pais Vasc',
                       'Catalunya'),
              `República` = c(23.5, 37.4, 39, 49.9, 51.6, 70.6, 74),
-             `Monarquia` = -1 * c(75.1, 62.0, 56, 49.8, 45.6, 24.7, 21.6)) %>%
-  gather(key, value, `República`:`Monarquia`) %>%
+             `monarquia` = -1 * c(75.1, 62.0, 56, 49.8, 45.6, 24.7, 21.6)) %>%
+  gather(key, value, `República`:`monarquia`) %>%
     arrange(key, value)
   pd$ccaa <- factor(pd$ccaa, levels = unique(pd$ccaa))
 
@@ -275,8 +280,8 @@ pd$y <- ifelse(pd$p <=7, pd$p + 3, pd$p - 2)
 pd$text_color <- ifelse(pd$p <=7, 'black', 'white')
 if(ca){
     the_labs <- labs(y = 'Percentatge',
-                     title = 'Taxa d\'aprobació de la Monarquia Espanyola',
-                     subtitle = 'Per partit de simpatía',
+                     title = 'Taxa d\'aprovació de la monarquia espanyola',
+                     subtitle = 'Per partit amb què simpatitza',
                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
                                        ' residents de Catalunya amb ciutadania espanyola (agregació 2015-2019).\n\'Aprobació\' vol dir un grau de confiança de 6 o més en una escala de 0 a 10.\nDades del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
   } else {
@@ -331,7 +336,7 @@ party_plot(ca = FALSE)
 # if(ca){
 #     the_labs <- labs(y = 'Percentatge',
 #                      x = 'Autoubicació en escala ideològica esquerra-dreta (0-10)',
-#                      title = 'Taxa d\'aprobació de la Monarquia Espanyola',
+#                      title = 'Taxa d\'aprobació de la monarquia espanyola',
 #                      subtitle = 'Per ideología política del enquestat',
 #                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
 #                                        ' residents de Catalunya amb ciutadania espanyola (agregació 2015-2019).\n\'Aprobació\' vol dir un grau de confiança de 6 o més en una escala de 0 a 10.\nDades del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
@@ -397,8 +402,8 @@ pd$text_color <- ifelse(pd$p <=1, 'black', 'white')
 if(ca){
     the_labs <- labs(y = 'Percentatge',
                      x = 'Autoubicació en escala ideològica esquerra-dreta (0-10)',
-                     title = 'Taxa d\'aprobació de la Monarquia Espanyola',
-                     subtitle = 'Per ideología política del enquestat',
+                     title = 'Taxa d\'aprovació de la monarquia espanyola',
+                     subtitle = 'Per ideologia política del enquestat',
                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
                                        ' residents de Catalunya amb ciutadania espanyola (agregació 2015-2019).\n\'Aprobació\' vol dir un grau de confiança de 6 o més en una escala de 0 a 10.\nDades del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
     axis_labels <- c('Extrema\nesquerra', 
@@ -459,7 +464,7 @@ language <- function(ca = FALSE){
     if(ca){
     the_labs <- labs(x = 'Llengua',
                      y = 'Valoració',
-                     title = 'Grau de confiança en la Monarquia Espanyola',
+                     title = 'Grau de confiança en la monarquia espanyola',
                      subtitle = 'Per llengua considerada \'pròpia\', escala de 0 a 10',
                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
                                        ' residents de Catalunya amb ciutadania espanyola.\nDades: agregació de dades del 2015-2018 del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
@@ -505,8 +510,8 @@ age <- function(ca = TRUE){
       if(ca){
     the_labs <- labs(x = 'Edat',
                      y = 'Valoració',
-                     title = 'Grau de confiança en la Monarquia Espanyola',
-                     subtitle = 'Per age, escala de 0 a 10',
+                     title = 'Grau de confiança en la monarquia espanyola',
+                     subtitle = 'Per edat, escala de 0 a 10',
                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
                                        ' residents de Catalunya amb ciutadania espanyola.\nDades: agregació de dades del 2015-2018 del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
     legend_title <- 'Mostra'
@@ -565,7 +570,7 @@ age(ca = FALSE)
 #     if(ca){
 #     the_labs <- labs(x = 'Lloc de naixement',
 #                      y = 'Valoració',
-#                      title = 'Grau de confiança en la Monarquia Espanyola',
+#                      title = 'Grau de confiança en la monarquia espanyola',
 #                      subtitle = 'Per lloc de naixement, escala de 0 a 10',
 #                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
 #                                        ' residents de Catalunya amb ciutadania espanyola.\nDades: agregació de dades del 2015-2018 del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
@@ -612,9 +617,9 @@ age(ca = FALSE)
 # 
 #     
 #   if(ca){
-#     the_labs <- labs(x = 'Confiança en la Monarquia Espanyola',
+#     the_labs <- labs(x = 'Confiança en la monarquia espanyola',
 #                      y = 'Percentatge nascut a Catalunya',
-#                      title = 'Relació entre lloc de naixement i confiança en la Monarquia',
+#                      title = 'Relació entre lloc de naixement i confiança en la monarquia',
 #                      caption = paste0('Mostra: ', numberfy(sum(pd$people)),
 #                                        ' residents de Catalunya amb ciutadania espanyola.\nDades: agregació de dades del 2015-2018 del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
 #     legend_title <- 'Lloc de\nnaixement'
@@ -679,7 +684,7 @@ make_b(ca = TRUE)
 make_chart(ca = TRUE,
            df = df %>% mutate(var = P26L),
            skipper = 0.5) +
-  labs(title = 'Grau de confiança dels catalans en la\nPolicia Nacional i la Guardia Civil')
+  labs(title = 'Grau de confiança dels catalans en la\npolicia espanyola i la Guardia Civil')
 
 vanitatis(ca = TRUE)
 

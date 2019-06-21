@@ -1,0 +1,171 @@
+---
+title: "Some more charts"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(tidyverse)
+require(readr)
+library(ggrepel)
+source('prepare_ceo_data.R')
+```
+
+```{r}
+make_b <- function(ca = TRUE){
+  
+  pd <- vilaweb::ceo %>%
+  dplyr::select(contains('P21'))
+for(j in 1:ncol(pd)){
+  message(j)
+  col_name <- names(pd)[j]
+  this_name <- attr(eval(parse(text = paste0('pd$`', col_name, '`'))), 'label')
+  names(pd)[j] <- this_name
+}
+names(pd) <- unlist(lapply(strsplit(names(pd), '. ', fixed = TRUE), function(x){x[2]}))
+for(j in 1:ncol(pd)){
+  pd[,j] <- make_number(unlist(pd[,j]))
+}
+
+
+
+out <- apply(pd, 2, mean, na.rm = TRUE)
+people <- apply(pd, 2, function(x){length(which(!is.na(x)))})
+people <- range(people)
+people <- numberfy(people)
+people <- paste0(people, collapse = ' - ')
+  if(ca){
+    the_labs <- labs(x = '',
+                     y = 'Valoració',
+                     title = 'Grau de confiança dels catalans en les institucions',
+                     subtitle = 'Escala de 0 a 10',
+                     caption = paste0('Mostra: ', people,
+                                       ' residents de Catalunya amb ciutadania espanyola.\nDades: agregació de dades del 2015-2018 del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  } else {
+    the_labs <- labs(x = '',
+                     y = 'Rating',
+                     title = 'Catalans\' degree of confidence in institutions',
+                     subtitle = 'Scale from 0 to 10',
+                     caption = paste0('Sample: ', people,
+                                       ' residents of Catalonia with Spanish citizenship.\nData. Aggregation of 2015-2018 data from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  }
+
+
+pd <- tibble(key = names(out),
+             value = as.numeric(out)) %>%
+  arrange(value) %>%
+  # mutate(key = gsub('la i', 'la\ni', key)) %>%
+  mutate(key = gsub(' (0-10)', '', key, fixed = TRUE))
+pd$key <- factor(pd$key, levels = pd$key)
+pd$yend <- 0
+ggplot(data = pd,
+       aes(x = key,
+           y = value)) +
+  geom_point() +
+  theme_vilaweb() +
+    theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.5,
+                                   hjust = 1,
+                                   size = 2),
+          plot.title = element_text(hjust = 1)) +
+  geom_text(aes(label = round(value, digits = 2)),
+            nudge_y = 0.5,
+            alpha = 0.6,
+            size = 3) +
+  geom_segment(aes(xend = key,
+                   yend = yend)) +
+  the_labs +
+  coord_flip()
+}
+
+make_chart <- function(ca = TRUE,
+                       df,
+                       skipper = 0.25){
+  
+  pd <- df %>%
+  filter(!is.na(var)) %>%
+  group_by(date) %>%
+  summarise(p = mean(var, na.rm = TRUE),
+            people = n()) %>%
+  mutate(date = date + 20)
+  
+  if(ca){
+    the_labs <- labs(x = 'Data',
+                     y = 'Valoració',
+                     subtitle = 'Escala de 0 a 10',
+                     caption = paste0('Mostra: ', numberfy(sum(pd$people)),
+                                       ' residents de Catalunya amb ciutadania espanyola.\nDades del Baròmetre d\'Opinió Pública del Centre d\'Estudis d\'Opinió.'))
+  } else {
+    the_labs <- labs(x = 'Date',
+                     y = 'Rating',
+                     
+                     subtitle = 'Scale from 0 to 10',
+                     caption = paste0('Sample: ', numberfy(sum(pd$people)),
+                                       ' residents of Catalonia with Spanish citizenship.\nData from the Baròmetre d\'Opinió Pública of the Centre d\'Estudis d\'Opinió.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'))
+  }
+
+ggplot(data = pd,
+       aes(x = date,
+           y = p)) +
+  geom_point() +
+  geom_area(alpha = 0.2) +
+  geom_line(alpha = 0.4) +
+  theme_vilaweb() +
+  scale_y_continuous(breaks = seq(0, 10, by = skipper)) +
+  geom_text_repel(aes(label = round(p, digits = 1)),
+            alpha = 0.6,
+            nudge_y = 0.1) +
+  # geom_vline(aes(xintercept = as.Date('2017-09-20')),
+  #            alpha = 0.8,
+  #            lty = 2) +
+  # geom_label(data = data.frame(date = as.Date('2017-09-20'),
+  #                              p = 1.25,
+  #                              label = 'Oct 2017'),
+  #            aes(x = date, y = p, label = label)) +
+  the_labs +
+  ylim(0,7)
+}
+make_chart(ca = TRUE,
+           df = df %>% mutate(var = monarquia),
+          skipper = 1) +
+  labs(title = 'Grau de confiança dels catalans en\nla Monarquia Espanyola')
+# make_b(ca = TRUE)
+
+
+
+ P26B = P21B, # partits politics
+                       P26C = P21C, # el seu ajuntament
+                       P26D = P21D, # govern espanyol
+                       P26E = P21E, # els sindicats
+                       P26F = P21F, # govern de la generalitat
+                       P26G = P21G, # congres dels diputats
+                       P26H = P21H, # parlament de catalunya
+                       P26I = P21I, # la UE
+                       P26K = P21K, # l'exercit
+                       P26L = P21L, # PN i GC
+                       P26M = P21M, # mossos d'esquadra
+                       P26N = P21N, # esglesia catolica
+                       P26O = P21O, # l ONU
+                       P26P = P21P, # la banca
+                       P26Q = P21Q, # mitjans de comunicacio
+                       P26R = P21R, # tribunal constitucional
+                       P26S = P21S, # universitats
+                       P26T = P21T, # parlament europe
+```
