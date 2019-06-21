@@ -99,7 +99,7 @@ The very few Catalans (12%) that give the Monarchy a passing score are largely c
 
 That the Spanish Monarchy gets most of its support from the political right should come as no surprise, given the close relationship between the Bourbon family and the former right-wing dictator, Francisco Franco. What is surprising is how *low* the levels of support for the Spanish Monarchy are *even among those groups most favorable to it*. Most Catalans - even those on the ideological right - still have low confidence in the Spanish Monarchy.
 
-Regardless of how one personally feels about the Felipe Bourbon, it is clear that the future viability of the Bourbon family's reign in Catalonia is doubtful. The Monarch's support in Catalonia is low across all sectors, and highest in groups who are in demographic decline. The trend, especially since October 2017, is downwards.
+Regardless of how one personally feels about Mr. Felipe Bourbon, it is clear that the future viability of the Bourbon family's reign in Catalonia is doubtful. The Monarch's support in Catalonia is low across all sectors, and highest in groups who are in demographic decline. The trend, especially since October 2017, is downwards.
 
 Catalan-language charts
 =======================
