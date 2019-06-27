@@ -170,7 +170,7 @@ bloomberg <- function(ca = FALSE,
     the_labs <- labs(x = 'Data',
                      y = '%',
                      title = 'Catalunya: Relació entre atur i independentisme',
-                     caption = 'Dades del Centre d\'Estudis d\'Opinió i l\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.')
+                     caption = 'Dades del Centre d\'Estudis d\'Opinió i l\'Institut d\'Estadística espanyol\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.')
   } else {
     pd <- pd %>%
       mutate(key = ifelse(key == 'Un estat independent',
@@ -243,7 +243,7 @@ The economy has continued to improve since the time of the Bloomberg article, an
 What follows is a reproduction of the Bloomberg chart, but with more up to date unemployment and independentism data.
 
 ```{r}
-bloomberg(ca = TRUE, transformer = 1)
+bloomberg(ca = FALSE, transformer = 1)
 ```
 
 The unemployment rate in Catalonia has lowered steadily from 2015 through the beginning of 2019 (from 20% down to approximately 11%). During this same time, however, support for Catalan independence has remained steady over time.
@@ -279,7 +279,7 @@ atur_plot <- function(ca = FALSE){
     the_labs <- labs(x = 'Data',
                      y = '%',
                      title = 'Atur: Catalunya vs estat espanyol',
-                     caption = 'Dades del Instituto Nacional de Estadística \nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.')
+                     caption = 'Dades de l\'Institut Nacional de Estadística espanyol\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.')
   } else {
     the_labs <- labs(x = 'Date',
                      y = '%',
