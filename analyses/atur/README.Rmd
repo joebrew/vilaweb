@@ -170,7 +170,7 @@ bloomberg <- function(ca = FALSE,
     the_labs <- labs(x = 'Data',
                      y = '%',
                      title = 'Catalunya: Relació entre atur i independentisme',
-                     caption = 'Dades del Centre d\'Estudis d\'Opinió CAT i el Instituto Nacional de Estadística ESP\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.')
+                     caption = 'Dades del Centre d\'Estudis d\'Opinió i l\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.')
   } else {
     pd <- pd %>%
       mutate(key = ifelse(key == 'Un estat independent',
@@ -278,7 +278,7 @@ atur_plot <- function(ca = FALSE){
   if(ca){
     the_labs <- labs(x = 'Data',
                      y = '%',
-                     title = 'Atur: Catalunya vs Estat Espanyol',
+                     title = 'Atur: Catalunya vs estat espanyol',
                      caption = 'Dades del Instituto Nacional de Estadística \nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.')
   } else {
     the_labs <- labs(x = 'Date',
@@ -308,7 +308,7 @@ Even if the relationship between Catalan unemployment and Catalan independentism
 ```{r}
 charter <- function(ca = FALSE){
   if(ca){
-    words <- c('Aturats', 'No aturats')
+    words <- c('Desocupats', 'Ocupats')
   } else {
     words <- c('Unemployed', 'Not unemployed')
   }
@@ -345,7 +345,7 @@ charter <- function(ca = FALSE){
     the_labs <- labs(x = '',
                      y = '%',
                      title = 'Atur i independentisme a Catalunya',
-                     caption = 'Dades del Centre d\'Estudis d\'Opinió CAT i el Instituto Nacional de Estadística ESP\n\'No aturats\' inclou estudiants, jubilats, treballadors domèstics no remunerats.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.')
+                     caption = 'Dades del Centre d\'Estudis d\'Opinió i l\'Institut d\'Estadística espanyol\n\'Ocupats\' inclou estudiants, jubilats, treballadors domèstics no remunerats.\nGràfic de Joe Brew | @joethebrew | www.vilaweb.cat.')
   } else {
     the_labs <- labs(x = '',
                      y = '%',
