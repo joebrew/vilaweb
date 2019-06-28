@@ -1,0 +1,172 @@
+---
+title: "Analysis of Twitter: October 1 2017"
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.height = 8,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+library(webshot)
+```
+
+```{r}
+# system("python3 ../../foreign/twint/Twint.py -s \'(("violencia" OR "violentos" OR "violents" OR "violentas" OR "violentes") AND ("Barcelona" OR "Cataluña" OR "Catalunya" OR "catalanes" OR "catalanas" OR "catalans" OR "catalanes" OR "catalán" OR "España" OR "español" OR "españoles" OR "española" OR "españolas"))' --since 2017-09-27 --until 2017-10-04 -o data/violencia --csv")
+
+
+# system("python3 ../../foreign/twint/Twint.py -s '(("càrregues" OR " càrrega" OR "cargas" OR "carga") AND ("agents" OR "agentes" OR "guàrdia civil" OR "guardia civil" OR "policía" OR "policia" OR "policíaca" OR "policiaca" OR "policíacas" OR "policiaques" OR "policial" OR "policials" OR "policiales"))' --since 2017-09-27 --until 2017-10-04 -o data/cargas --csv")
+
+# system("python3 ../../foreign/twint/Twint.py -s '(("police") AND ("violence" OR "violent") AND ("Barcelona" OR "Spain" OR "Catalan" OR "Catalonia"))' --since 2017-09-27 --until 2017-10-04 -o data/violence --csv")
+
+# system(paste0("python3 ../../foreign/twint/Twint.py -s '(("polizei" OR "polizesten") AND ("gewalt" OR "gewalttätigkeit" OR "heftig" OR "kräftig") AND ("Barcelona" OR "Spanien" OR "Spanisch" OR "Katalanisch" OR "Katalonien"))' --since 2017-09-27 --until 2017-10-04 -o data/gewalt --csv"))
+
+search_df <- tibble(
+  search_string = c('violencia', 'cargas', 'violence', 'gewalt'),
+  full_string = c(
+    '(("violencia" OR "violentos" OR "violents" OR "violentas" OR "violentes") AND ("Barcelona" OR "Cataluña" OR "Catalunya" OR "catalanes" OR "catalanas" OR "catalans" OR "catalanes" OR "catalán" OR "España" OR "español" OR "españoles" OR "española" OR "españolas"))',
+    '(("càrregues" OR " càrrega" OR "cargas" OR "carga") AND ("agents" OR "agentes" OR "guàrdia civil" OR "guardia civil" OR "policía" OR "policia" OR "policíaca" OR "policiaca" OR "policíacas" OR "policiaques" OR "policial" OR "policials" OR "policiales"))',
+    '(("police") AND ("violence" OR "violent") AND ("Barcelona" OR "Spain" OR "Catalan" OR "Catalonia"))',
+    '(("polizei" OR "polizesten") AND ("gewalt" OR "gewalttätigkeit" OR "heftig" OR "kräftig") AND ("Barcelona" OR "Spanien" OR "Spanisch" OR "Katalanisch" OR "Katalonien"))')
+)
+search_df <- search_df %>%
+  mutate(start_date = '2017-09-27',
+         end_date = '2017-10-04')
+skip <- TRUE
+if(!skip){
+for(i in 1:nrow(search_df)){
+  run_this <- paste0("python3 ../../foreign/twint/Twint.py -s '((",
+                 search_df$full_string[i],
+                 "))' --since ",
+                 search_df$start_date[i],
+                 " --until ", 
+                 search_df$end_date[i],
+                 " -o data/", 
+                 search_df$search_string[i],
+                 " --csv")
+  system(run_this)
+}
+}
+
+data_dir <- dir('data', recursive = TRUE)
+out_list <- list()
+sub_dirs <- data_dir
+skip <- TRUE # once finished
+  for(i in 1:length(sub_dirs)){
+
+  this_dir <- sub_dirs[i]
+  file_path <- paste0('data/', sub_dirs[i])
+  search_string <- unlist(strsplit(file_path, '/'))[2]
+  data <- read_csv(file_path) %>%
+    mutate(search_string = search_string) %>%
+    filter(!duplicated(id))
+  out_list[[i]] <- data
+}
+
+
+
+df <- bind_rows(out_list)
+
+# Adjust for time zone
+library(lubridate)
+df$date_time <- as.POSIXct(paste0(df$date, ' ', df$time, ' ', '+0', df$timezone))
+Sys.setenv(TZ='CET')
+
+
+# df$date_time <- with_tz(df$date_time, 'CET')
+
+
+agg <- df %>%
+  mutate(hour = as.POSIXct(cut(date_time, 'hour'))) %>%
+  group_by(hour, search_string) %>% 
+  summarise(n = n(),
+            retweets = sum(retweets_count, na.rm = TRUE) + 1,
+            likes = sum(likes_count))
+left <- data.frame(hour  = seq(min(agg$hour),
+                               max(agg$hour),
+                               by = 'hour'),
+                   search_string = sort(unique(agg$search_string)))
+agg <- left_join(left, agg)
+agg$n[is.na(agg$n)] <- 0
+agg$retweets[is.na(agg$retweets)] <- 0
+agg$likes[is.na(agg$likes)] <- 0
+agg$interactions <- agg$n + agg$retweets + agg$likes
+
+
+date_breaks <- data.frame(date_time = sort(unique(agg$hour)))
+date_breaks$date <- as.Date(date_breaks$date_time)
+date_breaks$hour <- as.numeric(substr(date_breaks$date_time, 12, 13))
+keep_breaks <- date_breaks %>%
+  filter(hour %in% seq(0, 24, 8)) %>%
+  dplyr::select(date_time) %>%
+  .$date_time
+strong_lines <- date_breaks %>%
+  filter(hour %in% 0) %>%
+  dplyr::select(date_time) %>%
+  .$date_time
+
+shader <- date_breaks %>% filter(hour == 0)
+shader$end <- shader$date_time + hours(24)
+```
+
+# Search strategy
+
+```{r}
+knitr::kable(search_df)
+```
+
+# Visualization
+
+```{r, fig.height = 9}
+ggplot(data = agg,
+       aes(x = hour,
+           y = n)) +
+  geom_vline(xintercept = strong_lines,
+             alpha = 0.7, 
+             lty = 2) +
+  geom_area(fill = 'blue', alpha = 0.3) +
+  geom_line() +
+  theme_databrew() +
+  scale_x_datetime(breaks = keep_breaks) +
+  # scale_x_datetime(breaks = sort(unique(agg$hour))) +
+  theme(axis.text.x = element_text(angle = 90,
+                                   size = 10,
+                                   vjust = 0.5),
+        plot.title = element_text(size = 30),
+        plot.subtitle = element_text(size = 15)) +
+  labs(title = 'Piulets per hora*',
+       x = 'Hora', y = 'Piulets',
+       subtitle = 'Veure taula per la búsqueda correcta') +
+  facet_wrap(~search_string, scales = 'free_y')
+```
+
+# Technical details
+
+- Data scraped from twtiter on `r format(Sys.Date(), '%B %d, %Y')`using the python twint library.   
+- Data processed, aggregated, and visualized using R.  
+- The number of retweets and likes are as of date of data retrieval  
+- All code for this analysis at https://github.com/joebrew/vilaweb/tree/master/analyses/oct1/
