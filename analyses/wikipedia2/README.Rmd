@@ -1,0 +1,241 @@
+---
+title: "'Spain is back' ('España ha vuelto') but for all the wrong reasons"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/',
+               fig.height = 6)
+```
+
+```{r}
+source('prepare_data.R')
+```
+
+Alternative title: "Global Spain", we have a problem: Puigdemont and Junqueras - not Borrell - dominate the global conversation about Spain
+
+```{r}
+# # Get tweets
+# system("python3 ../../foreign/twint/Twint.py -s '(("Puigdemont" OR "@KRLS"))' --since 2019-06-01 --until 2019-07-04 -o data/Puigdemont --csv")
+# system("python3 ../../foreign/twint/Twint.py -s '(("Comín" OR "@toni_comin"))' --since 2019-06-01 --until 2019-07-04 -o data/Comín --csv")
+# system("python3 ../../foreign/twint/Twint.py -s '(("Junqueras" OR "@junqueras"))' --since 2019-06-01 --until 2019-07-04 -o data/Junqueras --csv")
+# system("python3 ../../foreign/twint/Twint.py -s '(("Borrell" OR "@JosepBorrellF"))' --since 2019-06-01 --until 2019-07-04 -o data/Borrell --csv")
+
+
+data_dir <- dir('data', recursive = TRUE)
+out_list <- list()
+sub_dirs <- data_dir
+for(i in 1:length(sub_dirs)){
+
+  this_dir <- sub_dirs[i]
+  file_path <- paste0('data/', sub_dirs[i])
+  search_string <- unlist(strsplit(file_path, '/'))[2]
+  data <- read_csv(file_path) %>%
+    mutate(search_string = search_string) %>%
+    filter(!duplicated(id))
+  out_list[[i]] <- data
+}
+
+
+
+df <- bind_rows(out_list)
+
+# Adjust for time zone
+library(lubridate)
+df$date_time <- as.POSIXct(paste0(df$date, ' ', df$time, ' ', '+0', df$timezone))
+Sys.setenv(TZ='CET')
+
+
+# df$date_time <- with_tz(df$date_time, 'CET')
+
+
+agg <- df %>%
+  mutate(hour = as.POSIXct(cut(date_time, 'hour'))) %>%
+  group_by(hour, search_string) %>% 
+  summarise(n = n(),
+            retweets = sum(retweets_count, na.rm = TRUE) + 1,
+            likes = sum(likes_count))
+left <- expand.grid(hour  = seq(min(agg$hour),
+                               max(agg$hour),
+                               by = 'hour'),
+                   search_string = sort(unique(agg$search_string)))
+agg <- left_join(left, agg)
+agg$n[is.na(agg$n)] <- 0
+agg$retweets[is.na(agg$retweets)] <- 0
+agg$likes[is.na(agg$likes)] <- 0
+agg$interactions <- agg$n + agg$retweets + agg$likes
+
+
+date_breaks <- data.frame(date_time = sort(unique(agg$hour)))
+date_breaks$date <- as.Date(date_breaks$date_time)
+date_breaks$hour <- as.numeric(substr(date_breaks$date_time, 12, 13))
+keep_breaks <- date_breaks %>%
+  filter(hour %in% seq(0, 24, 8)) %>%
+  dplyr::select(date_time) %>%
+  .$date_time
+strong_lines <- date_breaks %>%
+  filter(hour %in% 0) %>%
+  dplyr::select(date_time) %>%
+  .$date_time
+
+shader <- date_breaks %>% filter(hour == 0)
+shader$end <- shader$date_time + hours(24)
+```
+
+# Introduction
+
+
+"España ha vuelto" ("Spain is back"). This is how Spanish President Pedro Sánchez described the outcome of the negotiations leading to the nomination of Josep Borrell (current Spanish Foreign Minister) as the EU's highest representative for foreign affairs. The phrase "Spain is back" is meant to convey Spain's return to a powerful, central role in European and global politics. The idea is that Spain will complete its transition from a "backwater" to a leader of the democratic world (replacing, to some extent, a UK plagued by Brexit and a US plagued by Trump), with Josep Borrell as the face of Europe to the rest of the world. People will be talking about Spain again.
+
+To some extent, Sánchez is right. The shake-up in European politics following May's European elections has indeed lead to more people talking about Spain. But instead of talking about the new jobs of Spain's top diplomat (Borrell), people are talking about Carles Puigdemont, Toní Comín, and Oriol Junqueras. In other words, people are talking about Spain - but for all the wrong reasons. 
+
+# Methods
+
+Data was gathered from two sources:
+
+1. [Wikipedia](https://www.wikipedia.org/), a popular online encyclopedia, which makes data on page visits [publicly available](https://tools.wmflabs.org/pageviews/?project=en.wikipedia.org&platform=all-access&agent=user&range=latest-20&pages=Cat|Dog).
+
+2. [Twitter](https://www.twitter.com), a popular social network.
+
+Our units of analysis were page-views (for Wikipedia) and mentions (for Twitter), the latter including both mentions of the person's last name and/or their twitter username. 
+
+The analysis consisted of comparing the frequency of page-views/mentions of four Catalans recently elected to the Catalan Parliament: Josep Borrell (the Spanish Foreign Minister who was recently nominated to lead EU foreign affairs) vs. pro-independence leaders Carles Puigdemont, Oriol Junqueras, and Toni Comín. They hypothesis was that if Spain had really returned to the world stage as a democratic leader, there would be more searches for and chatter about Borrell than the others; if, on the other hand, internet data revealed more activity around the 3 pro-independence leaders, it would suggest the opposite.
+
+
+# Results
+
+## Twitter
+
+The below chart shows the total number of tweets mentioning the four politicians in question over the last few weeks. 
+
+```{r}
+data_dir <- dir('data', recursive = TRUE)
+out_list <- list()
+sub_dirs <- data_dir
+for(i in 1:length(sub_dirs)){
+
+  this_dir <- sub_dirs[i]
+  file_path <- paste0('data/', sub_dirs[i])
+  search_string <- unlist(strsplit(file_path, '/'))[2]
+  data <- read_csv(file_path) %>%
+    mutate(search_string = search_string) %>%
+    filter(!duplicated(id))
+  out_list[[i]] <- data
+}
+
+df <- bind_rows(out_list)
+
+# Adjust for time zone
+library(lubridate)
+df$date_time <- as.POSIXct(paste0(df$date, ' ', df$time, ' ', '+0', df$timezone))
+Sys.setenv(TZ='CET')
+
+
+# df$date_time <- with_tz(df$date_time, 'CET')
+
+
+agg <- df %>%
+    mutate(hour = as.Date(cut(date_time, 'day'))) %>%
+  # mutate(hour = as.POSIXct(cut(date_time, 'hour'))) %>%
+  group_by(hour, search_string) %>% 
+  summarise(n = n(),
+            retweets = sum(retweets_count, na.rm = TRUE) + 1,
+            likes = sum(likes_count))
+left <- expand.grid(hour  = seq(min(agg$hour),
+                               max(agg$hour),
+                               by = 'hour'),
+                   search_string = sort(unique(agg$search_string)))
+agg <- left_join(left, agg)
+agg$n[is.na(agg$n)] <- 0
+agg$retweets[is.na(agg$retweets)] <- 0
+agg$likes[is.na(agg$likes)] <- 0
+agg$interactions <- agg$n + agg$retweets + agg$likes
+
+
+# date_breaks <- data.frame(date_time = sort(unique(agg$hour)))
+# date_breaks$date <- as.Date(date_breaks$date_time)
+# date_breaks$hour <- as.numeric(substr(date_breaks$date_time, 12, 13))
+# keep_breaks <- date_breaks %>%
+#   filter(hour %in% seq(0, 24, 8)) %>%
+#   dplyr::select(date_time) %>%
+#   .$date_time
+# strong_lines <- date_breaks %>%
+#   filter(hour %in% 0) %>%
+#   dplyr::select(date_time) %>%
+#   .$date_time
+# 
+# shader <- date_breaks %>% filter(hour == 0)
+# shader$end <- shader$date_time + hours(24)
+
+
+make_plot <- function(ca = FALSE){
+  if(ca){
+    the_labs <- labs(x = 'Dia',
+                   y = 'Piulets',
+                   title = 'Piulets per dia esmentant polítics catalans',
+                   subtitle = '1 de juny - 3 de juliol 2019',
+                   caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
+  } else {
+    the_labs <- labs(x = 'Day',
+                   y = 'Tweets',
+                   title = 'Tweets per day mentioning Catalan politicians',
+                   subtitle = 'June 1 - July 3 2019',
+                   caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
+  }
+  ggplot(data = agg %>% filter(hour <= '2019-07-03'),
+         aes(x = hour,
+             y = n,
+             group = search_string,
+             fill = search_string)) +
+    geom_bar(stat = 'identity', width = 1) +
+    facet_wrap(~search_string) +
+    theme_vilaweb() +
+    scale_fill_manual(name = '',
+                      values = as.character(vilaweb::colors_vilaweb()[1:4])) +
+    the_labs
+}
+
+```
+
+
+## Wikipedia
+
+The below chart shows the total number of page view for the four politics in question, in English, Catalan, and Spanish, over the last x weeks.
+
+```{r}
+article_people <- c('Josep Borrell',
+                          'Carles Puigdemont',
+                          'Antoni Comín',
+                          'Oriol Junqueras')
+make_wiki_plot(since = '2019-06-20',
+               people = article_people) +
+  labs(title = 'Wikipedia page views')
+```
+
+```{r}
+make_wiki_time_plot(people = article_people,
+                    language = 'en',
+                    alpha = 0.9,
+                    size = 0.6) +
+  labs(title = 'Monthly Wikipedia page-views for Catalan political prisoners')  +
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(size = 14))
+```
+
+# Conclusion
+
+Both Wikipedia and Twitter data indicate the same general phenomenon: people are talking more about Spain's prisoners than their leaders. Pedro Sánchez's intentions to associate Spain with leadership of the democratic world abroad are noble, but unlikely to succeed until the democratic problems "at home" are resolved. 
+
+# Technical details
+
+
+Data were gathered from Wikipedia in January 2019 using the `pageviews` R package. The code for this analysis is publicly available [here](https://github.com/joebrew/vilaweb/tree/master/analyses/wikipedia). The already-gathered data is also available [here](https://raw.githubusercontent.com/joebrew/vilaweb/master/analyses/wikipedia/wiki_data_2017-2018.csv). 
