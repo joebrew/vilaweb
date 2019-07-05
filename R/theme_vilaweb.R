@@ -18,10 +18,10 @@
 
 theme_vilaweb <-
   function (base_size = 15,
-            base_family = "Open Sans",
+            base_family = "Avenir",
             y_comma = TRUE,
-            subtitle_family = 'Open Sans',
-            axis_family = 'Open Sans'){
+            subtitle_family = 'Avenir',
+            axis_family = 'Avenir'){
 
 
     color_background = 'white'#  '#FFFFFF'#  '#F8F5E1'#grey(0.99)
@@ -29,8 +29,10 @@ theme_vilaweb <-
     color_axis_text =  "#333333"
     color_axis_title = color_axis_text
     color = 'darkgrey'
-    color_title = '#000000'
-    color_subtitle = '#ff6600'
+    color_title = '#FF5B04'
+    color_subtitle = '#3C3C3C'
+    # color_caption = '#EFEFEF'
+    color_caption = 'black'
     base_size1 = base_size
     out <-
       theme_bw(base_size = base_size1) +
@@ -60,7 +62,7 @@ theme_vilaweb <-
                                          # hjust = -0.95,
                                          vjust = 1.25)) +
       theme(axis.text.x = element_text(family = axis_family,
-                                       size = base_size * 0.7,
+                                       size = base_size * 0.62,
                                        color = color_axis_text)) +
       theme(axis.text.y = element_text(family = axis_family,
                                        size = base_size * 0.7,
@@ -85,7 +87,7 @@ theme_vilaweb <-
             panel.border = element_rect(colour = NA, fill=NA, size=0),
             plot.caption = element_text(size = base_size * 0.7,
                                         family = base_family,
-                                        color = color_axis_text))
+                                        color = color_caption))
 
     # Commas on continous y axes
     if(y_comma){

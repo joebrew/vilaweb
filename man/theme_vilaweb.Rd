@@ -4,9 +4,8 @@
 \alias{theme_vilaweb}
 \title{vilaweb theme}
 \usage{
-theme_vilaweb(base_size = 15, base_family = "Open Sans",
-  y_comma = TRUE, subtitle_family = "Open Sans",
-  axis_family = "Open Sans")
+theme_vilaweb(base_size = 15, base_family = "Avenir", y_comma = TRUE,
+  subtitle_family = "Avenir", axis_family = "Avenir")
 }
 \arguments{
 \item{base_size}{The size of the base font}
