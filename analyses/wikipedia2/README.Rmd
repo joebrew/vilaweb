@@ -23,74 +23,6 @@ source('prepare_data.R')
 
 Alternative title: "Global Spain", we have a problem: Puigdemont and Junqueras - not Borrell - dominate the global conversation about Spain
 
-```{r}
-# # Get tweets
-# system("python3 ../../foreign/twint/Twint.py -s '(("Puigdemont" OR "@KRLS"))' --since 2019-06-01 --until 2019-07-04 -o data/Puigdemont --csv")
-# system("python3 ../../foreign/twint/Twint.py -s '(("Comín" OR "@toni_comin"))' --since 2019-06-01 --until 2019-07-04 -o data/Comín --csv")
-# system("python3 ../../foreign/twint/Twint.py -s '(("Junqueras" OR "@junqueras"))' --since 2019-06-01 --until 2019-07-04 -o data/Junqueras --csv")
-# system("python3 ../../foreign/twint/Twint.py -s '(("Borrell" OR "@JosepBorrellF"))' --since 2019-06-01 --until 2019-07-04 -o data/Borrell --csv")
-
-
-data_dir <- dir('data', recursive = TRUE)
-out_list <- list()
-sub_dirs <- data_dir
-for(i in 1:length(sub_dirs)){
-
-  this_dir <- sub_dirs[i]
-  file_path <- paste0('data/', sub_dirs[i])
-  search_string <- unlist(strsplit(file_path, '/'))[2]
-  data <- read_csv(file_path) %>%
-    mutate(search_string = search_string) %>%
-    filter(!duplicated(id))
-  out_list[[i]] <- data
-}
-
-
-
-df <- bind_rows(out_list)
-
-# Adjust for time zone
-library(lubridate)
-df$date_time <- as.POSIXct(paste0(df$date, ' ', df$time, ' ', '+0', df$timezone))
-Sys.setenv(TZ='CET')
-
-
-# df$date_time <- with_tz(df$date_time, 'CET')
-
-
-agg <- df %>%
-  mutate(hour = as.POSIXct(cut(date_time, 'hour'))) %>%
-  group_by(hour, search_string) %>% 
-  summarise(n = n(),
-            retweets = sum(retweets_count, na.rm = TRUE) + 1,
-            likes = sum(likes_count))
-left <- expand.grid(hour  = seq(min(agg$hour),
-                               max(agg$hour),
-                               by = 'hour'),
-                   search_string = sort(unique(agg$search_string)))
-agg <- left_join(left, agg)
-agg$n[is.na(agg$n)] <- 0
-agg$retweets[is.na(agg$retweets)] <- 0
-agg$likes[is.na(agg$likes)] <- 0
-agg$interactions <- agg$n + agg$retweets + agg$likes
-
-
-date_breaks <- data.frame(date_time = sort(unique(agg$hour)))
-date_breaks$date <- as.Date(date_breaks$date_time)
-date_breaks$hour <- as.numeric(substr(date_breaks$date_time, 12, 13))
-keep_breaks <- date_breaks %>%
-  filter(hour %in% seq(0, 24, 8)) %>%
-  dplyr::select(date_time) %>%
-  .$date_time
-strong_lines <- date_breaks %>%
-  filter(hour %in% 0) %>%
-  dplyr::select(date_time) %>%
-  .$date_time
-
-shader <- date_breaks %>% filter(hour == 0)
-shader$end <- shader$date_time + hours(24)
-```
-
 # Introduction
 
 
@@ -118,82 +50,113 @@ The analysis consisted of comparing the frequency of page-views/mentions of four
 The below chart shows the total number of tweets mentioning the four politicians in question over the last few weeks. 
 
 ```{r}
-data_dir <- dir('data', recursive = TRUE)
-out_list <- list()
-sub_dirs <- data_dir
-for(i in 1:length(sub_dirs)){
-
-  this_dir <- sub_dirs[i]
-  file_path <- paste0('data/', sub_dirs[i])
-  search_string <- unlist(strsplit(file_path, '/'))[2]
-  data <- read_csv(file_path) %>%
-    mutate(search_string = search_string) %>%
-    filter(!duplicated(id))
-  out_list[[i]] <- data
+if('saved.RData' %in% dir()){
+  load('saved.RData')
+} else {
+  # # Get tweets
+  # system("python3 ../../foreign/twint/Twint.py -s '(("Puigdemont" OR "@KRLS"))' --since 2019-05-01 --until 2019-07-04 -o data/Puigdemont --csv")
+  # system("python3 ../../foreign/twint/Twint.py -s '(("Comín" OR "@toni_comin"))' --since 2019-05-01 --until 2019-07-04 -o data/Comín --csv")
+  # system("python3 ../../foreign/twint/Twint.py -s '(("Junqueras" OR "@junqueras"))' --since 2019-05-01 --until 2019-07-04 -o data/Junqueras --csv")
+  # system("python3 ../../foreign/twint/Twint.py -s '(("Borrell" OR "@JosepBorrellF"))' --since 2019-05-01 --until 2019-07-04 -o data/Borrell --csv")
+  
+  
+  data_dir <- dir('data', recursive = TRUE)
+  out_list <- list()
+  sub_dirs <- data_dir
+  for(i in 1:length(sub_dirs)){
+  
+    this_dir <- sub_dirs[i]
+    file_path <- paste0('data/', sub_dirs[i])
+    search_string <- unlist(strsplit(file_path, '/'))[2]
+    data <- read_csv(file_path) %>%
+      mutate(search_string = search_string) %>%
+      filter(!duplicated(id))
+    out_list[[i]] <- data
+  }
+  
+  df <- bind_rows(out_list)
+  # Adjust for time zone
+  library(lubridate)
+  df$date_time <- as.POSIXct(paste0(df$date, ' ', df$time, ' ', '+0', df$timezone))
+  Sys.setenv(TZ='CET')
+  df$ok <- TRUE
+  df <- df %>%
+    mutate(ok = ifelse(search_string == 'Comín' &
+                         (!grepl('í', tweet) &
+                            ! grepl('toni_comin', tweet) &
+                            ! grepl('ni Com', tweet)),
+                       FALSE,
+                       ok))
+  df <- df %>% filter(ok)
+  
+  # df$date_time <- with_tz(df$date_time, 'CET')
+  
+  
+  agg <- df %>%
+      mutate(hour = as.Date(cut(date_time, 'day'))) %>%
+    # mutate(hour = as.POSIXct(cut(date_time, 'hour'))) %>%
+    group_by(hour, search_string) %>% 
+    summarise(n = n(),
+              retweets = sum(retweets_count, na.rm = TRUE) + 1,
+              likes = sum(likes_count))
+  left <- expand.grid(hour  = seq(min(agg$hour),
+                                 max(agg$hour),
+                                 by = 'day'),
+                     search_string = sort(unique(agg$search_string)))
+  agg <- left_join(left, agg)
+  agg$n[is.na(agg$n)] <- 0
+  agg$retweets[is.na(agg$retweets)] <- 0
+  agg$likes[is.na(agg$likes)] <- 0
+  agg$interactions <- agg$n + agg$retweets + agg$likes
+  
+  
+  # date_breaks <- data.frame(date_time = sort(unique(agg$hour)))
+  # date_breaks$date <- as.Date(date_breaks$date_time)
+  # date_breaks$hour <- as.numeric(substr(date_breaks$date_time, 12, 13))
+  # keep_breaks <- date_breaks %>%
+  #   filter(hour %in% seq(0, 24, 8)) %>%
+  #   dplyr::select(date_time) %>%
+  #   .$date_time
+  # strong_lines <- date_breaks %>%
+  #   filter(hour %in% 0) %>%
+  #   dplyr::select(date_time) %>%
+  #   .$date_time
+  # 
+  # shader <- date_breaks %>% filter(hour == 0)
+  # shader$end <- shader$date_time + hours(24)
+  save(df, agg, file = 'saved.RData')
 }
 
-df <- bind_rows(out_list)
-
-# Adjust for time zone
-library(lubridate)
-df$date_time <- as.POSIXct(paste0(df$date, ' ', df$time, ' ', '+0', df$timezone))
-Sys.setenv(TZ='CET')
-
-
-# df$date_time <- with_tz(df$date_time, 'CET')
-
-
-agg <- df %>%
-    mutate(hour = as.Date(cut(date_time, 'day'))) %>%
-  # mutate(hour = as.POSIXct(cut(date_time, 'hour'))) %>%
-  group_by(hour, search_string) %>% 
-  summarise(n = n(),
-            retweets = sum(retweets_count, na.rm = TRUE) + 1,
-            likes = sum(likes_count))
-left <- expand.grid(hour  = seq(min(agg$hour),
-                               max(agg$hour),
-                               by = 'hour'),
-                   search_string = sort(unique(agg$search_string)))
-agg <- left_join(left, agg)
-agg$n[is.na(agg$n)] <- 0
-agg$retweets[is.na(agg$retweets)] <- 0
-agg$likes[is.na(agg$likes)] <- 0
-agg$interactions <- agg$n + agg$retweets + agg$likes
-
-
-# date_breaks <- data.frame(date_time = sort(unique(agg$hour)))
-# date_breaks$date <- as.Date(date_breaks$date_time)
-# date_breaks$hour <- as.numeric(substr(date_breaks$date_time, 12, 13))
-# keep_breaks <- date_breaks %>%
-#   filter(hour %in% seq(0, 24, 8)) %>%
-#   dplyr::select(date_time) %>%
-#   .$date_time
-# strong_lines <- date_breaks %>%
-#   filter(hour %in% 0) %>%
-#   dplyr::select(date_time) %>%
-#   .$date_time
-# 
-# shader <- date_breaks %>% filter(hour == 0)
-# shader$end <- shader$date_time + hours(24)
-
-
-make_plot <- function(ca = FALSE){
+make_plot <- function(ca = FALSE,
+                      y = 'n'){
   if(ca){
+    if(y == 'interactions'){
+      the_title <- "'Interaccions' per dia"
+    } else {
+     the_title <- 'Piulets per dia' 
+    }
     the_labs <- labs(x = 'Dia',
                    y = 'Piulets',
-                   title = 'Piulets per dia esmentant polítics catalans',
-                   subtitle = '1 de juny - 3 de juliol 2019',
+                   title = the_title,
+                   subtitle = 'Twitter. 1 de juny - 3 de juliol 2019',
                    caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
+    
   } else {
+    if(y == 'interactions'){
+      the_title <- "'Interactions' per day"
+    } else {
+     the_title <- 'Tweets per day'
+    }
     the_labs <- labs(x = 'Day',
                    y = 'Tweets',
-                   title = 'Tweets per day mentioning Catalan politicians',
-                   subtitle = 'June 1 - July 3 2019',
+                   title = the_title,
+                   subtitle = 'Twitter. June 1 - July 3 2019',
                    caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
   }
+  agg$y <- unlist(agg[,y])
   ggplot(data = agg %>% filter(hour <= '2019-07-03'),
          aes(x = hour,
-             y = n,
+             y = y,
              group = search_string,
              fill = search_string)) +
     geom_bar(stat = 'identity', width = 1) +
@@ -204,38 +167,125 @@ make_plot <- function(ca = FALSE){
     the_labs
 }
 
+make_plot()
 ```
+
+In the above, it's clear that Borrell receives less attention than either Junqueras or Puigdemont, _even after_ his nomination as head of external affairs for the EU. Borrell's peak of fewer than 5,000 tweets per day is lower than the number of tweets that Junqueras received some days during the election, and far lower than the number of tweets mentioning Puigdemont at the same time.
+
+The raw number of tweets, however, is a poor indication of social network interest. Many tweets are automated or institutional, and some news stories - though tweeted - generate almost no interest. An alternative measure is "interactions" (the sum of tweets, retweets, and likes). Let's have a look at "interactions" mentioning the four politicians in question:
+
+```{r}
+make_plot(y = 'interactions')
+```
+
+When retweets and likes are taken into account, it is clear that Borrell generates far less interest than any of the others. There is no noticable peak in retweets and likes following Borrell's nomination as head of external affairs; on the other hand, there are massive increases in retweets and likes mentioning Junqueras, Puigdemont, and Comín at the beginning of July.
 
 
 ## Wikipedia
 
-The below chart shows the total number of page view for the four politics in question, in English, Catalan, and Spanish, over the last x weeks.
+The below chart shows the total number of page view for the four politics in question, in English, Catalan, and Spanish, over the last two months.
 
 ```{r}
 article_people <- c('Josep Borrell',
                           'Carles Puigdemont',
                           'Antoni Comín',
                           'Oriol Junqueras')
-make_wiki_plot(since = '2019-06-20',
+start_date <- '2019-05-01'
+x <- make_wiki_plot(since = start_date,
+               people = article_people,return_table = TRUE)
+make_wiki_plot(since = start_date,
                people = article_people) +
-  labs(title = 'Wikipedia page views')
+  labs(title = 'Wikipedia page views',
+       subtitle = 'May 1 - July 3 2019')
 ```
+
+Josep Borrell had fewer than half of the English-language page-views than those of Carles Puigdemont (27,662 and 70,173, respectively). 
 
 ```{r}
 make_wiki_time_plot(people = article_people,
                     language = 'en',
+                    since = '2019-05-01',
                     alpha = 0.9,
-                    size = 0.6) +
-  labs(title = 'Monthly Wikipedia page-views for Catalan political prisoners')  +
+                    size = 0.6,
+                    the_scales = 'fixed') +
+  labs(title = 'Daily Wikipedia page-views')  +
   theme(legend.text = element_text(size = 8),
         plot.title = element_text(size = 14))
 ```
 
+Though Borrell's total surpassed those of Comín and Junqueras, it came largely in the last few days only. And the effect has died down significantly already:
+
+
+```{r}
+make_wiki_time_plot(people = article_people,
+                    language = 'en',
+                    since = '2019-06-28',
+                    alpha = 0.9,
+                    size = 0.6,
+                    the_scales = 'fixed') +
+  geom_point() +
+  labs(title = 'Daily Wikipedia page-views for Catalan politicians')  +
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(size = 14))
+```
+
+
 # Conclusion
 
-Both Wikipedia and Twitter data indicate the same general phenomenon: people are talking more about Spain's prisoners than their leaders. Pedro Sánchez's intentions to associate Spain with leadership of the democratic world abroad are noble, but unlikely to succeed until the democratic problems "at home" are resolved. 
+If the nomination of Josep Borrell as Europe's top diplomat was supposed to mark a change in era in regards to Spain's role and image, it appears not to be working. Though English-language Wikipedia page-views for Borrell increased sharply following Borrell's nomination, within three days they had reduced to less than 20% of their initial rise. And social network activity shows very little interest in Borrell, and much higher interest in Puigdemont, Comín, and Junqueras. 
+
+In other words, people on social media are talking more about Spain's imprisoned and exiled leaders than their leaders. Pedro Sánchez's intentions to associate Spain with leadership of the democratic world _abroad_ are noble, but unlikely to succeed until the democratic problems _at home_ are resolved. When a counry's exiles and prisoners are more famous than its leaders, achieving a significant leadership role among western democracies is 
+
+# Catalan language plots
+
+```{r}
+make_plot(ca = TRUE)
+```
+
+```{r}
+make_plot(ca = TRUE, y = 'interactions')
+```
+
+```{r}
+article_people <- c('Josep Borrell',
+                          'Carles Puigdemont',
+                          'Antoni Comín',
+                          'Oriol Junqueras')
+start_date <- '2019-05-01'
+make_wiki_plot(language = 'ca',
+               since = start_date,
+               people = article_people) +
+  labs(title = 'Visites de pàgines de Wikipedia',
+       subtitle = '1 de juny - 3 de juliol de 2019')
+```
+
+
+```{r}
+make_wiki_time_plot(people = article_people,
+                    language = 'ca',
+                    since = '2019-05-01',
+                    alpha = 0.9,
+                    size = 0.6,
+                    the_scales = 'fixed') +
+  labs(title = 'Visites de pàgines de Wikipedia')  +
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(size = 14))
+```
+
+```{r}
+make_wiki_time_plot(people = article_people,
+                    language = 'ca',
+                    since = '2019-06-28',
+                    alpha = 0.9,
+                    size = 0.6,
+                    the_scales = 'fixed') +
+  geom_point() +
+  labs(title = 'Visites de pàgines de Wikipedia')  +
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(size = 14))
+```
 
 # Technical details
 
 
-Data were gathered from Wikipedia in January 2019 using the `pageviews` R package. The code for this analysis is publicly available [here](https://github.com/joebrew/vilaweb/tree/master/analyses/wikipedia). The already-gathered data is also available [here](https://raw.githubusercontent.com/joebrew/vilaweb/master/analyses/wikipedia/wiki_data_2017-2018.csv). 
+Data were gathered from Wikipedia using the `pageviews` R package. Data were gathered from Twitter using the `twint` package. The code for this analysis is publicly available [here](https://github.com/joebrew/vilaweb/tree/master/analyses/wikipedia2).

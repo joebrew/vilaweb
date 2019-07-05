@@ -124,6 +124,7 @@ if(!'data.RData' %in% dir()){
   
   out_list <- list()
   for(i in 1:length(people)){
+    Sys.sleep(2)
     start_date <- "2017010100"
     person <- people[i]
     
@@ -390,7 +391,8 @@ make_wiki_time_plot <- function(people = NULL,
                                 cols = NULL,
                                 alpha = 1,
                                 size = 1,
-                                return_table = FALSE){
+                                return_table = FALSE,
+                                the_scales = 'free_y'){
   
   if(is.null(people)){
     people <- sort(unique(pv$person))
@@ -399,7 +401,8 @@ make_wiki_time_plot <- function(people = NULL,
     pv %>%
     filter(person %in% people) %>%
     filter(date >= since) %>%
-    mutate(month = date_truncate(date, 'month')) %>%
+    # mutate(month = date_truncate(date, 'week')) %>%
+    mutate(month = date) %>%
     group_by(month, person, language) %>%
     summarise(views = sum(views, na.rm = TRUE)) %>%
     mutate(language = ifelse(language == 'Catalan',
@@ -424,20 +427,20 @@ make_wiki_time_plot <- function(people = NULL,
     caption <- 'Data from Wikipedia. Chart by Joe Brew. @joethebrew. | www.vilaweb.cat'
   } 
   if(is.null(cols)){
-    if(length(unique(plot_data$person)) == 2){
+    if(length(unique(plot_data$language)) == 2){
       cols <- databrew::make_colors(10)[c(2,5)]
-    } else if(length(unique(plot_data$person)) == 3){
+    } else if(length(unique(plot_data$language)) == 3){
       cols <- databrew::make_colors(10)[c(2,5,8)]
     } else {
-      cols <- databrew::make_colors(length(unique(plot_data$person)))
+      cols <- databrew::make_colors(length(unique(plot_data$language)))
     }
   }
   
   ggplot(data = plot_data,
          aes(x = month,
              y = views,
-             color = person,
-             group = person)) +
+             color = language,
+             group = language)) +
     geom_line(size = size,
               alpha = alpha) +
     theme_vilaweb() +
@@ -449,10 +452,8 @@ make_wiki_time_plot <- function(people = NULL,
     labs(x = x,
          y = y,
          caption = caption) +
-    facet_wrap(~language, ncol = 1,
-               scales = 'free_y') +
-    scale_x_date(breaks = sort(unique(plot_data$month)),
-                 labels = date_breaks)
+    facet_wrap(~person, ncol = 2,
+               scales = the_scales) 
 }
 
 # make_wiki_time_plot(people = c('Inés Arrimadas',
