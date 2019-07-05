@@ -193,6 +193,7 @@ if(!'data_es.RData' %in% dir()){
               "Josep Borrell")
   out_list <- list()
   for(i in 1:length(people)){
+    Sys.sleep(1)
     start_date <- "2017010100"
     person <- people[i]
     message(person, '---------')
@@ -365,7 +366,22 @@ make_wiki_plot <- function(language = 'en',
     # title <- 'Wikipedia page visits, 2018'
     caption <- 'Data from Wikipedia. Chart by Joe Brew @joethebrew. | www.vilaweb.cat'
   }
-  cols <- databrew::make_colors(10)[c(3,5,7)]
+  cols <- as.character(vilaweb::colors_vilaweb()[c(1,3,5)])
+  if(language == 'ca'){
+    plot_data$language <-
+      ifelse(plot_data$language == 'English',
+             'Anglès',
+             ifelse(plot_data$language == 'Español',
+                    'Espanyol',
+                    plot_data$language))
+  } else {
+    plot_data$language <-
+      ifelse(plot_data$language == 'Català',
+             'Catalan',
+             ifelse(plot_data$language == 'Español',
+                    'Spanish',
+                    plot_data$language))
+  }
   ggplot(data = plot_data,
          aes(x = person,
              y = views,
@@ -373,9 +389,9 @@ make_wiki_plot <- function(language = 'en',
              group = language)) +
     geom_bar(stat = 'identity', position = position_dodge()) +
     theme_vilaweb() +
-    theme(axis.text.x = element_text(angle = 90,
-                                     vjust = 0.5,
-                                     hjust = 1)) +
+    # theme(axis.text.x = element_text(angle = 90,
+    #                                  vjust = 0.5,
+    #                                  hjust = 1)) +
     scale_fill_manual(name = '',
                       values = cols) +
     labs(x = x,
@@ -434,6 +450,22 @@ make_wiki_time_plot <- function(people = NULL,
     } else {
       cols <- databrew::make_colors(length(unique(plot_data$language)))
     }
+  }
+  
+  if(language == 'ca'){
+    plot_data$language <-
+      ifelse(plot_data$language == 'English',
+             'Anglès',
+             ifelse(plot_data$language == 'Español',
+                    'Espanyol',
+                    plot_data$language))
+  } else {
+    plot_data$language <-
+      ifelse(plot_data$language == 'Català',
+             'Catalan',
+             ifelse(plot_data$language == 'Español',
+                    'Spanish',
+                    plot_data$language))
   }
   
   ggplot(data = plot_data,

@@ -13,8 +13,9 @@ opts_chunk$set(comment = NA,
                message = FALSE, 
                error = TRUE, 
                cache = FALSE,
-               fig.path = 'figures/',
-               fig.height = 6)
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
 ```
 
 ```{r}
@@ -131,26 +132,26 @@ make_plot <- function(ca = FALSE,
                       y = 'n'){
   if(ca){
     if(y == 'interactions'){
-      the_title <- "'Interaccions' per dia"
+      the_title <- "'Interaccions' a Twitter per dia"
     } else {
      the_title <- 'Piulets per dia' 
     }
     the_labs <- labs(x = 'Dia',
                    y = 'Piulets',
                    title = the_title,
-                   subtitle = 'Twitter. 1 de juny - 3 de juliol 2019',
+                   subtitle = '1r de maig - 3 de juliol 2019',
                    caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
     
   } else {
     if(y == 'interactions'){
-      the_title <- "'Interactions' per day"
+      the_title <- "Twitter 'interactions' per day"
     } else {
      the_title <- 'Tweets per day'
     }
     the_labs <- labs(x = 'Day',
                    y = 'Tweets',
                    title = the_title,
-                   subtitle = 'Twitter. June 1 - July 3 2019',
+                   subtitle = 'May 1 - July 3 2019',
                    caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
   }
   agg$y <- unlist(agg[,y])
@@ -199,7 +200,7 @@ make_another <- function(ca = FALSE){
                             ifelse(pd$key == 'Retweets', 'Repiulets', pd$key)))
     the_labs <- labs(x = '',
                      y = 'Interaccions',
-                     title = 'Interaccions al Twitter: 28 juny - 3 juliol 2019',
+                     title = 'Interaccions a Twitter: 28 juny - 3 juliol 2019',
                      subtitle = '',
                      caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
   } else {
@@ -256,7 +257,7 @@ make_wiki_time_plot(people = article_people,
         plot.title = element_text(size = 14))
 ```
 
-Though Borrell's total surpassed those of Comín and Junqueras, it came largely in the last few days only. And the effect has died down significantly already:
+Though Borrell's total surpassed those of Comín and Junqueras, it came largely in the last few days only. And the effect has died down significantly already. Let's zoom-in to just the last few days:
 
 
 ```{r}
@@ -267,7 +268,7 @@ make_wiki_time_plot(people = article_people,
                     size = 0.6,
                     the_scales = 'fixed') +
   geom_point() +
-  labs(title = 'Daily Wikipedia page-views for Catalan politicians')  +
+  labs(title = 'Daily Wikipedia page-views')  +
   theme(legend.text = element_text(size = 8),
         plot.title = element_text(size = 14))
 ```
@@ -282,11 +283,31 @@ In other words, people on social media are talking more about Spain's imprisoned
 # Catalan language plots
 
 ```{r}
-make_plot(ca = TRUE)
+date_breaks <- seq(as.Date('2019-05-01'),
+                           as.Date('2019-07-04'),
+                           by = 'week')
+date_labels <- format(date_breaks, '%d %b')
+date_labels <- gsub('May', 'Maig', date_labels)
+date_labels <- gsub('Jun', 'Juny', date_labels)
+date_labels <- gsub(' ', '\n', date_labels)
+make_plot(ca = TRUE) +
+  scale_x_date(breaks = date_breaks,
+               labels = date_labels) +
+  theme(axis.text.x = element_text(size = 8))
 ```
 
 ```{r}
-make_plot(ca = TRUE, y = 'interactions')
+date_breaks <- seq(as.Date('2019-05-01'),
+                           as.Date('2019-07-04'),
+                           by = 'week')
+date_labels <- format(date_breaks, '%d %b')
+date_labels <- gsub('May', 'Maig', date_labels)
+date_labels <- gsub('Jun', 'Juny', date_labels)
+date_labels <- gsub(' ', '\n', date_labels)
+make_plot(ca = TRUE, y = 'interactions') +
+  scale_x_date(breaks = date_breaks,
+               labels = date_labels) +
+  theme(axis.text.x = element_text(size = 8))
 ```
 
 ```{r}
@@ -303,11 +324,20 @@ make_wiki_plot(language = 'ca',
                since = start_date,
                people = article_people) +
   labs(title = 'Visites de pàgines de Wikipedia',
-       subtitle = '1 de juny - 3 de juliol de 2019')
+       subtitle = '1r de maig - 3 de juliol de 2019')
 ```
 
 
 ```{r}
+date_breaks <- seq(as.Date('2019-05-01'),
+                           as.Date('2019-07-04'),
+                           by = 'week')
+date_labels <- format(date_breaks, '%d %b')
+date_labels <- gsub('May', 'Maig', date_labels)
+date_labels <- gsub('Jun', 'Juny', date_labels)
+date_labels <- gsub(' ', '\n', date_labels)
+
+
 make_wiki_time_plot(people = article_people,
                     language = 'ca',
                     since = '2019-05-01',
@@ -316,10 +346,22 @@ make_wiki_time_plot(people = article_people,
                     the_scales = 'fixed') +
   labs(title = 'Visites de pàgines de Wikipedia')  +
   theme(legend.text = element_text(size = 8),
-        plot.title = element_text(size = 14))
+        plot.title = element_text(size = 14)) +
+    scale_x_date(breaks = date_breaks,
+               labels = date_labels) +
+  theme(axis.text.x = element_text(size = 8,
+                                   angle = 0))
 ```
 
 ```{r}
+date_breaks <- seq(as.Date('2019-06-28'),
+                           as.Date('2019-07-04'),
+                           by = 'day')
+date_labels <- format(date_breaks, '%d %b')
+date_labels <- gsub('May', 'Maig', date_labels)
+date_labels <- gsub('Jun', 'Juny', date_labels)
+date_labels <- gsub(' ', '\n', date_labels)
+
 make_wiki_time_plot(people = article_people,
                     language = 'ca',
                     since = '2019-06-28',
@@ -329,7 +371,11 @@ make_wiki_time_plot(people = article_people,
   geom_point() +
   labs(title = 'Visites de pàgines de Wikipedia')  +
   theme(legend.text = element_text(size = 8),
-        plot.title = element_text(size = 14))
+        plot.title = element_text(size = 14)) +
+      scale_x_date(breaks = date_breaks,
+               labels = date_labels) +
+  theme(axis.text.x = element_text(size = 8,
+                                   angle = 0))
 ```
 
 # Technical details

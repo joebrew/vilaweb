@@ -56,7 +56,7 @@ Josep Borrell had fewer than half of the English-language page-views than those 
 
 ![](figures/unnamed-chunk-6-1.png)
 
-Though Borrell's total surpassed those of Comín and Junqueras, it came largely in the last few days only. And the effect has died down significantly already:
+Though Borrell's total surpassed those of Comín and Junqueras, it came largely in the last few days only. And the effect has died down significantly already. Let's zoom-in to just the last few days:
 
 ![](figures/unnamed-chunk-7-1.png)
 
