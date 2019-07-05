@@ -199,13 +199,13 @@ make_another <- function(ca = FALSE){
                             ifelse(pd$key == 'Retweets', 'Repiulets', pd$key)))
     the_labs <- labs(x = '',
                      y = 'Interaccions',
-                     title = 'Interaccions: 28 juny - 3 juliol 2019',
+                     title = 'Interaccions al Twitter: 28 juny - 3 juliol 2019',
                      subtitle = '',
                      caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
   } else {
     the_labs <- labs(x = '',
                      y = 'Interactions',
-                     title = 'Interactions: 28 June - 3 July 2019',
+                     title = 'Interactions on Twitter: 28 June - 3 July 2019',
                      subtitle = '',
                      caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
   }
@@ -218,7 +218,8 @@ make_another <- function(ca = FALSE){
     scale_fill_manual(name = '',
                       values = as.character(colors_vilaweb())[c(1,4,5)]) +
     theme_vilaweb() +
-    the_labs
+    the_labs +
+    theme(axis.text.x = element_text(size = 16))
 }
 make_another()
 ```
