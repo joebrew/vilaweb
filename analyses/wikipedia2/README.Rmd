@@ -181,6 +181,48 @@ make_plot(y = 'interactions')
 When retweets and likes are taken into account, it is clear that Borrell generates far less interest than any of the others. There is no noticable peak in retweets and likes following Borrell's nomination as head of external affairs; on the other hand, there are massive increases in retweets and likes mentioning Junqueras, Puigdemont, and Comín at the beginning of July.
 
 
+Another view of the same data:
+
+```{r}
+make_another <- function(ca = FALSE){
+  pd <- df %>%
+  filter(date >= '2019-06-28',
+        date <= '2019-07-03') %>%
+  group_by(search_string) %>%
+  summarise(Tweets = n(),
+            Likes = sum(likes_count, na.rm = TRUE),
+            Retweets = sum(retweets_count, na.rm = TRUE)) %>%
+  gather(key, value, Tweets:Retweets)
+  if(ca){
+    pd$key <- ifelse(pd$key == 'Tweets', 'Piulets',
+                     ifelse(pd$key == 'Likes', "M'agrada",
+                            ifelse(pd$key == 'Retweets', 'Repiulets', pd$key)))
+    the_labs <- labs(x = '',
+                     y = 'Interaccions',
+                     title = 'Interaccions: 28 juny - 3 juliol 2019',
+                     subtitle = '',
+                     caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
+  } else {
+    the_labs <- labs(x = '',
+                     y = 'Interactions',
+                     title = 'Interactions: 28 June - 3 July 2019',
+                     subtitle = '',
+                     caption = 'Joe Brew | @joethebrew | www.vilaweb.cat')
+  }
+  ggplot(data = pd,
+         aes(x = search_string,
+             y = value,
+             group = key,
+             fill = key)) +
+    geom_bar(stat = 'identity') +
+    scale_fill_manual(name = '',
+                      values = as.character(colors_vilaweb())[c(1,4,5)]) +
+    theme_vilaweb() +
+    the_labs
+}
+make_another()
+```
+
 ## Wikipedia
 
 The below chart shows the total number of page view for the four politics in question, in English, Catalan, and Spanish, over the last two months.
@@ -244,6 +286,10 @@ make_plot(ca = TRUE)
 
 ```{r}
 make_plot(ca = TRUE, y = 'interactions')
+```
+
+```{r}
+make_another(ca = TRUE)
 ```
 
 ```{r}

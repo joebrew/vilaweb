@@ -41,20 +41,24 @@ The raw number of tweets, however, is a poor indication of social network intere
 
 When retweets and likes are taken into account, it is clear that Borrell generates far less interest than any of the others. There is no noticable peak in retweets and likes following Borrell's nomination as head of external affairs; on the other hand, there are massive increases in retweets and likes mentioning Junqueras, Puigdemont, and Comín at the beginning of July.
 
+Another view of the same data:
+
+![](figures/unnamed-chunk-4-1.png)
+
 Wikipedia
 ---------
 
 The below chart shows the total number of page view for the four politics in question, in English, Catalan, and Spanish, over the last two months.
 
-![](figures/unnamed-chunk-4-1.png)
+![](figures/unnamed-chunk-5-1.png)
 
 Josep Borrell had fewer than half of the English-language page-views than those of Carles Puigdemont (27,662 and 70,173, respectively).
 
-![](figures/unnamed-chunk-5-1.png)
+![](figures/unnamed-chunk-6-1.png)
 
 Though Borrell's total surpassed those of Comín and Junqueras, it came largely in the last few days only. And the effect has died down significantly already:
 
-![](figures/unnamed-chunk-6-1.png)
+![](figures/unnamed-chunk-7-1.png)
 
 Conclusion
 ==========
@@ -66,8 +70,6 @@ In other words, people on social media are talking more about Spain's imprisoned
 Catalan language plots
 ======================
 
-![](figures/unnamed-chunk-7-1.png)
-
 ![](figures/unnamed-chunk-8-1.png)
 
 ![](figures/unnamed-chunk-9-1.png)
@@ -75,6 +77,10 @@ Catalan language plots
 ![](figures/unnamed-chunk-10-1.png)
 
 ![](figures/unnamed-chunk-11-1.png)
+
+![](figures/unnamed-chunk-12-1.png)
+
+![](figures/unnamed-chunk-13-1.png)
 
 Technical details
 =================
