@@ -1,0 +1,91 @@
+---
+title: "Arrimadas"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+library(translateR)
+library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+library(ggrepel)
+require(DBI)
+library(ggtern)
+```
+
+```{r}
+library(tidyverse)
+# Read in twitter credentials
+library(yaml)
+twitter_credentials <- yaml.load_file('../../credentials/credentials.yaml')
+## load rtweet package
+library(rtweet)
+token <- create_token(
+  app = "bcndata",
+  consumer_key = twitter_credentials$twitter_api_key,
+  consumer_secret = twitter_credentials$twitter_api_secret_key,
+  access_token = twitter_credentials$twitter_access_token,
+  access_secret = twitter_credentials$twitter_access_token_secret)
+
+# ## check to see if the token is loaded
+# identical(token, get_token())
+if(!'data.RData' %in% dir()){
+arri <-
+  rt <- search_tweets(
+    '"Arrimadas"', 
+    n = 1000000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE
+  )
+
+save(arri,
+     file = 'data.RData')
+} else {
+  load('data.RData')
+}
+
+agg <-
+  arri %>%
+  mutate(date = cut(created_at, 'hour')) %>%
+  mutate(date = as.POSIXct(date)) %>%
+  group_by(date) %>%
+  tally %>%
+  ungroup
+
+ggplot(data = agg %>% filter(date >= '2019-07-01'),
+       aes(x = date,
+           y = n)) +
+  geom_area(alpha = 0.2) +
+  geom_line() +
+  theme_databrew() +
+  labs(y = 'Tuits',
+       x = 'Hora',
+       title = '\nTuits por hora con la palabra "Arrimadas"',
+       caption = '\nDatos del API de Twitter. Gráfico: Joe Brew | @joethebrew.') +
+  theme(legend.text = element_text(size = 30),
+        plot.title = element_text(size = 28),
+        plot.subtitle =  element_text(size = 16)) 
+ggsave('~/Desktop/arrimadas.png',
+       width = 8.64,
+       height = 4.86)
+```
