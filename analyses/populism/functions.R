@@ -1326,7 +1326,7 @@ cat_immigration <- function(ca = FALSE){
     theme(legend.position = 'none',
           plot.caption = element_text(size = 9,
                                       hjust = 0),
-          axis.text.x = element_text(size = 5))
+          axis.text.x = element_text(size = 8))
 }
 
 cat_immigration2 <- function(ca = FALSE){
