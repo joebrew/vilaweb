@@ -30,22 +30,27 @@ library(waffle)
 source('functions.R')
 ```
 
-# Introduction
+## Introduction
 
 Opponents of Catalan independence often describe the movement as "populist". The intent of this characterization is to highlight similarities between the Catalan indpendence movement and populist movements with generally negative reputations, such as Brexit, Marine Le Pen's National French, Donald Trump's Republican party, the right-wing Spanish party Vox, Latin American Chavismo, etc. 
 
 
-"Populist" is hard to define, and multiple definitions exist. But an overview of the academic literature regarding populism reveals three general characteristics of modern populism:
+"Populist" is hard to define, and multiple definitions exist. It is, to some researchers, an ideology [@Arter2010]. To others, it is an oratory "style" [@Moffitt2013]. The definition is so loose that one expert on the topic says "any political actor who is in the news frequently for a substantial amount of time probably runs the risk of being labeled ‘populist’ sooner or later" [@Bale2011]. 
 
-1. *Low income*: Populism receives most support from those with low incomes [@Piketty2018].  
+Since it is nearly impossible to define _what_ populism is, it's nearly impossible to say whether a movement, party, or person is itself "populist". Too many definitions exist, allowing anyone to make the case that their political opponents are "populists".
 
-2. *Low education*: Populism receives most support from those with low education [@Waller_2017].
+So, let's take another approach. Rather than focusing on (the impossible question of) _what_ populism is, let's instead focus on _who_ populists are. Reliable data exist in multiple countries on the demographic, social, and political characteristics of those who support movements that are generally recognized as being populist in nature (UK Brexit, Trump, etc.). An overview of the academic literature regarding the _who_ of modern populism reveals five general characteristics:
+
+
+1. *Low education*: Populism receives most support from those with low education [@Waller_2017].
+
+2. *Low income*: Populism receives most support from those with low incomes [@Piketty2018].  
 
 3. *Xenophobia*: Populism receives most support from those who are opposed to immigration and outsiders [@Rydgren_2003].
 
 4. *Unhappiness*: Populism receives most support from those who are discontent, not only with politics, but with life/society in general [@Spruyt_2016].
 
-5. *Authoritarianism*: Populist movements often aspire for more "mano dura" practices, etc. (need more details / references).
+5. *Authoritarianism*: Populist movements often aspire for more "mano dura" practices (penal populism), stemming from authoritarian attitudes about obedience and the law, etc. [@Pratt]
 
 ## The question
 
@@ -53,75 +58,99 @@ Is the Catalan independence movement "populist"?
 
 ## The methods
 
-We'll examine survey data related to the above 5 characteristics in an effort to understand the extent to which it is factually accurate to classify independentism as "populist" or not.
+We'll examine survey data from Catalonia related to the above 5 characteristics in an effort to understand the extent to which it is factually accurate to classify independentism as "populist" or not, based on the extent to which the views of pro- and anti-independence Catalans match the 5 characteristics described above.
 
 ## The results
 
-### Finding 1
+### Finding 1: Education
+
+Low levels of education are associated with support for populist policies and politicians in both developing and developed countries. _Chavismo_ in Venezuela, for example, was a movement largely driven by the uneducated. [Support for Donald Trump](https://fivethirtyeight.com/features/education-not-income-predicted-who-would-vote-for-trump/) in the 2016 US presidential elections was highest in areas with low education (even after adjusting for income). And votes in favor of Brexit largely came from those without high levels of education (below):
 
 ```{r}
-df <- vilaweb::ceo 
-income_levels <- levels(df$C900)
-income_dict <-
-  data_frame(C900 = income_levels,
-             ca = c('0', 
-                    '<300',
-                    '301-600',
-                    '601-900',
-                    '901-1000',
-                    '1001-1200',
-                    '1201-1800',
-                    '1801-2000',
-                    '2001-2400',
-                    '2401-3000',
-                    '3001-4000',
-                    '4001-4500',
-                    '4501-5000',
-                    '5001-6000',
-                    '>6000',
-                    'NS/NC',
-                    'NS/NC'),
-             ca_group = c('<600', 
-                    '<600',
-                    '<600',
-                    '601-1200',
-                    '601-1200',
-                    '601-1200',
-                    '1201-2000',
-                    '1201-2000',
-                    '2001-3000',
-                    '2001-3000',
-                    '3001-4000',
-                    '4001-5000',
-                    '4001-5000',
-                    '5001+',
-                    '5001+',
-                    'NS/NC',
-                    'NS/NC'))
-df <- df %>%
-  left_join(income_dict)
+uk_education()
 ```
 
-### Finding 3: Immigration
+If the Catalan independence movement were "populist" in nature, we would expect that those in favor of independence - like their populist counterparts elsewhere - would have low levels of education. But when we actually examine the data, the opposite trend appears. The below chart shows the association between support for independence and level of education. The association is strong and clear: the more one is education, the more in favor he/she is of indepenence:
 
 ```{r}
-x <- df %>%
-  filter(!is.na(P56I), !is.na(P31),
-         !P56I %in% c('No ho sap', 'No contesta'),
-         !P31 %in% c('No ho sap', 'No contesta')) %>%
-  group_by(immigration = P56I,
-           independence = P31) %>%
-  tally %>%
-  ungroup %>%
-  group_by(independence) %>%
-  mutate(p = n / sum(n) * 100) %>%
-  ungroup 
-
-ggplot(data = x,
-       aes(x = immigration,
-           y = p,
-           group = independence,
-           color = independence)) +
-  geom_bar(stat = 'identity') +
-  facet_wrap(~independence)
+cat_education()
 ```
+
+### Finding 2: Income
+
+Income and education are closely correlated. It is should come as no surprise then that since the bulk of support for union with Spain in Catalonia comes from those with low levels of education, it also comes from those with low income. In other words, there is truth to the accusation that the Catalan independence movement is a movement of the elites or rich: it is! But a movement cannot be simultaneously "populist"  and "elitist", since a general characteristic of populist movements is counterposing the people and the elites.
+
+The below chart shows the association between income and support for indepenence in Catalonia. If the indepenence movement were "populist"  in nature, we would expect support to greatest among those  with low levels of education. Instead, we see the opposite pattern: in the lowest income groups (0 to 1200 euros per month), support for union with Spain is majority. But among the wealth (2000 or more euros per month), support for independence is high.
+
+```{r}
+cat_income()
+```
+
+### Finding 3: Xenophobia
+
+One issue associated with populism is xenophobia. Populist movements often use binary rhetoric which juxtaposes "us" and "them". Because of the "separatist" nature of the Catalan independence movement, the accusation that the movement is xenophobic and populist in nature is frequent.
+
+But the data, again, show the opposite. When asked whether they agree or disagree with the xenophobic phrase "with so much immigration, one no longer feels at home", a majority of pro-indepenence Catalans (60.3%) disagree, and only one quarter (25.6%) agree. But among Catalans in favor of union with Spain, only a minority reject the xenophobic phrase (47.2%) and 4 in 10 (40.5%) agree with it. In other words, to the extent that we accept that xenophobia is an integral part of populism, we must also accept that Catalan unionism is more "populist" than Catalan independentism.
+
+```{r}
+cat_immigration()
+```
+
+### Finding 4: Unhappiness
+
+Populism thrive on general discontent. According to Spruyt et al, "populism is embedded in deep feelings of discontent, not only with politics but also with societal life in general" [@Spruyt_2016]. Accordingly, if Catalan independentism were populist, we would expect that pro-independence Catalans would be less happy than their anti-indepenence counterparts. Is this the case?
+
+No. Catalans of all political stripes are generally happy witht their personal lives (average of approximately 7 of 10 on a 0-10 scale). But pro-independence Catalans are actually _slightly happier_ than their pro-union counterparts. Again, this does not fit the pattern of populist movements elsewhere. 
+
+```{r}
+happy_plot()
+```
+
+### Finding 5: Authoritarianism
+
+Movements generally considered to be populist often exhibit a "hard-line" stance on crime, and seek high levels of obedience from their followers. The authoritarian nature of these movements is no secret: one of the keys to Trump's electoral success was his "law and order" attitude, and analysis of the attitudes of Brexit voters in the UK also show an authoritarian tilt:
+
+```{r}
+uk_authority()
+```
+
+Do we find this same attachment to authoritarianism among Catalan independentists? Gauging authoritarian attitudes is not straightforward, but data do exist on the subject. For example, when asked about the extent to which schools should teach children to obey authority, Catalan unionists exhibit much higher degrees of authoritarian attitudes than their independentists counterparts:
+
+```{r}
+var_cat(ca = FALSE, var = 'P56E')
+```
+
+By the same token, the rate of Catalans who say that "the law should always be obeyed in any circumstances" is nearly twice as high among anti-independence Catalans than their pro-independence counterparts. 
+
+```{r}
+var_cat(ca = FALSE, var = 'P56G')
+```
+
+In other words, if the Catalan independence movement were "populist", we would expect that it would share with other populist movements an affection for obedience, law, and order. But the data show, once again, the opposite. 
+
+## Conclusion
+
+The term "populist" is problematic, since no commonly accepted definition exists. By focusing on _who_ populists are, rather than _what_ they are, we can get around the problem of not having a clear definition, and instead dive right into the more relevant question: whether people who support Catalan independence are like supporters of populist movements elsewhere.
+
+In this regard, the Catalan independence movement is not populist. Relative to Catalans in favor of continued union with Spain, pro-independence Catalans are (i) more educated, (ii) wealthier, (iii) less xenophobic, (iv) more satisfied with their personal lives, and (v) less authoritarian. In fact, by these measures, the pro-union movement appears to embody populist tendencies much more than the pro-independence movement. Catalans in favor of union with Spain exhibit all five of the characteristics of populist movements elsewhere: they are (i) less educated, (ii) less wealth, (iii) more xenophobic, (iv) less satisfied with their personal lives and (v) more authoritarian.
+
+One could argue that the cultural "identity" issue of Catalan independentism makes the movement _inherently_ populist. That is, since Catalan-speakers and those who self-identify as more Catalan than Spanish are generally pro-independence, this makes independentism "populist". This is a common refrain in Spanish politics: that Catalan independentists are populist since their politics are driven by identity. But if one accepts such a thesis, then unionism must also be considered equally "populist" since its support also relies on clumping by language and culture: those who speak Spanish mainly and who self-identify as Spanish largely vote for unionist policies.
+
+Ultimately, the "populist" label is so devoid of meaning, so controversial in content, and so flexible as to be applied to almost any political movement. Perhaps, then, the term simply should not be used. I personally avoid it entirely (with the notable exception of this article) because of its lack of agreed-upon meaning. 
+
+But if we (society) are going to use the term "populism", then we should use so with at least some degree of rigor, and in line with the reality of objective data. And the data are clear on this matter: the Catalan independence movement is many things - but it is not populist.
+
+## Catalan-language plots
+
+```{r}
+uk_education(ca = TRUE)
+cat_education(ca = TRUE)
+cat_income(ca = TRUE)
+cat_immigration(ca = TRUE)
+happy_plot(ca = TRUE)
+uk_authority(ca = TRUE)
+var_cat(ca = TRUE, var = 'P56E')
+var_cat(ca = TRUE, var = 'P56G')
+```
+
+## Bibliography

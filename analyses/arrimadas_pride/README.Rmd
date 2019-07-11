@@ -20,26 +20,15 @@ opts_chunk$set(comment = NA,
 
 ```{r}
 # Libraries
-library(vilaweb)
 library(rtweet)
 library(tidyverse)
-library(databrew)
-library(translateR)
-library(sentimentr) # https://github.com/trinker/sentimentr
-require(RPostgreSQL)
-require(readr)  
-library(ggrepel)
-require(DBI)
-library(ggtern)
 ```
 
 ```{r}
-library(tidyverse)
 # Read in twitter credentials
 library(yaml)
 twitter_credentials <- yaml.load_file('../../credentials/credentials.yaml')
 ## load rtweet package
-library(rtweet)
 token <- create_token(
   app = "bcndata",
   consumer_key = twitter_credentials$twitter_api_key,
@@ -51,41 +40,71 @@ token <- create_token(
 # identical(token, get_token())
 if(!'data.RData' %in% dir()){
 arri <-
-  rt <- search_tweets(
+  arri <- search_tweets(
     '"Arrimadas"', 
     n = 1000000000, 
     include_rts = T, 
     retryonratelimit = TRUE
   )
 
-save(arri,
+  puig <- search_tweets(
+      '"Puigdemont"', 
+      n = 1000000000, 
+      include_rts = T, 
+      retryonratelimit = TRUE
+    )
+  
+  junq <- search_tweets(
+      '"Junqueras"', 
+      n = 1000000000, 
+      include_rts = T, 
+      retryonratelimit = TRUE
+    )
+  sanch <- search_tweets(
+      '"Pedro Sánchez"', 
+      n = 1000000000, 
+      include_rts = T, 
+      retryonratelimit = TRUE
+    )
+
+  save(arri, puig, junq, #sanch,
      file = 'data.RData')
 } else {
   load('data.RData')
 }
 
 agg <-
-  arri %>%
+  arri %>% mutate(person = 'Arrimadas') %>%
+  bind_rows(junq %>% mutate(person = 'Junqueras'),
+            puig %>% mutate(person = 'Puigdemont')) %>%
   mutate(date = cut(created_at, 'hour')) %>%
   mutate(date = as.POSIXct(date)) %>%
-  group_by(date) %>%
+  group_by(date, person) %>%
   tally %>%
   ungroup
 
-ggplot(data = agg %>% filter(date >= '2019-07-01'),
+library(databrew)
+ggplot(data = agg %>% filter(date >= '2019-07-03'),
        aes(x = date,
            y = n)) +
-  geom_area(alpha = 0.2) +
-  geom_line() +
+  # geom_bar(stat = 'identity') +
+  # geom_area(alpha = 0.2) +
+  geom_line(aes(color = person)) +
   theme_databrew() +
-  labs(y = 'Tuits',
+  labs(y = 'Piulets',
        x = 'Hora',
-       title = '\nTuits por hora con la palabra "Arrimadas"',
-       caption = '\nDatos del API de Twitter. Gráfico: Joe Brew | @joethebrew.') +
-  theme(legend.text = element_text(size = 30),
+       title = 'Piulets per hora esmentant polítics',
+       caption = '\nDades del API de Twitter. Gràfic: Joe Brew | @joethebrew.') +
+  # facet_wrap(~person) +
+  theme(legend.text = element_text(size = 20),
         plot.title = element_text(size = 28),
-        plot.subtitle =  element_text(size = 16)) 
+        plot.subtitle =  element_text(size = 16),
+        strip.text = element_text(size = 20)) +
+  scale_color_manual(name = '',
+                     values = databrew::make_colors(5)[c(2,4,5)])
+  # theme(legend.position = 'none')
 ggsave('~/Desktop/arrimadas.png',
        width = 8.64,
        height = 4.86)
 ```
+
