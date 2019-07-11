@@ -230,7 +230,7 @@ comparison_plot <- function(language = 'en',
     mutate(bad = unsatisfied > satisfied)
   
   x <- 'CCAA'
-  y <- 'Percentage'
+  y <- '%'
   if(language == 'en'){
     subtitle <- 'By CCAA (autonomous community)'
     xxx <- 'Not at all satisfied'
@@ -383,14 +383,16 @@ ideology_spain_plot <- function(language = 'en',
   
   
   x <- 'CCAA'
-  y <- 'Percentage'
+  y <- 'Percentatge'
   if(language == 'en'){
+    y <- 'Percentage'
     subtitle <- 'By ideology. All of Spain, not including Catalonia.'
     xxx <- 'Not at all satisfied'
     title <- 'Level of satisfacation with Spanish Constitution'
     caption <- 'Data from CIS survey, September 2018.\nChart: Joe Brew | @joethebrew | www.vilaweb.cat.\nIdeology: 1-3; left; 4-7: center; 8-10: right.'
     plot_data$x <- plot_data$en
   } else {
+    y <- 'Percentatge'
     subtitle <- 'Per ideologia. Tota Espanya, sense incloure Catalunya.'
     xxx <- 'Gens satisfet'
     title <- 'Nivell de satisfacció amb la Constitució Espanyola'
@@ -463,10 +465,10 @@ left_right_plot <- function(language = 'en',
   } else {
     
     x = 'Ideologia autoubicada (escala 0-10)'
-    y = 'Percentage'
+    y = 'Percentatge'
     title = 'Suport de la constitució espanyola entre catalans'
     subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nConstitució espanyola aprovada el 1978, tal com és ara, vostè què faria?'
-    caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1500 residents de Catalunya amb ciutadania espayola. Codificació de categories:\nescala ideòlogica 0-10: 0-1=extrema esquerra;2-3=esquerra;4-6=centre;7-8=dreta;9-10=extrema dreta.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
+    caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1.500 residents de Catalunya amb ciutadania espayola. Codificació de categories:\nescala ideòlogica 0-10: 0-1=extrema esquerra;2-3=esquerra;4-6=centre;7-8=dreta;9-10=extrema dreta.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
     new_axis <- 
       c('Extrema esquerra',
         'Extrema esquerra',
@@ -627,8 +629,9 @@ referendum_plot <- function(language = 'en',
   plot_data <- left_join(plot_data, right)
   
   x <-''
-  y <- 'Percentage'
+  y <- 'Percentatge'
   if(language == 'en'){
+    y <- 'Percentage'
     plot_data$en <-
       factor(plot_data$en,
              levels = c('Strongly\nagree',
@@ -686,6 +689,7 @@ referendum_plot <- function(language = 'en',
 simple_plot <- function(language = 'en',
                             return_table = FALSE){
   x <- ''
+  y <- 'Percentatge'
   if(language == 'en'){
     y = 'Percentage'
     title = 'Support for the Spanish Constitution among Catalans'
@@ -694,10 +698,10 @@ simple_plot <- function(language = 'en',
     
   } else {
     
-    y = 'Percentage'
+    y = 'Percentatge'
     title = 'Suport de la constitució espanyola entre catalans'
     subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nConstitució espanyola aprovada el 1978, tal com és ara, vostè què faria?'
-    caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1500 residents de Catalunya amb ciutadania espayola.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
+    caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1.500 residents de Catalunya amb ciutadania espayola.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
   }
 
   plot_data <- 
@@ -836,7 +840,7 @@ self_determination_plot <- function(language = 'en',
     plot_data$x <- plot_data$ca    
     title <- 'Preferències sobre organització territorial'
     caption <- 'Dades del CIS, Octubre 2018.\nJoe Brew | @joethebrew | www.vilaweb.cat.'
-    x <- 'Percentage'
+    x <- 'Percentatge'
     y <- ''
   }
   plot_data <- plot_data %>%
@@ -948,8 +952,9 @@ referendum_plot_party <- function(language = 'en',
   plot_data <- left_join(plot_data, right)
   
   x <-''
-  y <- 'Percentage'
+  y <- 'Percentatge'
   if(language == 'en'){
+    y <- 'Percentatge'
     plot_data$en <-
       factor(plot_data$en,
              levels = c('Strongly\nagree',
@@ -1018,7 +1023,7 @@ uk_education <- function(ca = FALSE){
     the_labs <- labs(x = '',
                      y = 'Percent in favor of Brexit',
                      title = 'Education and support for Brexit',
-                     caption = 'Data source: "Understanding the Leave Vote" by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
+                     caption = 'Data source: \'Understanding the Leave Vote\' by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
     education <- factor(c('Secondary school not completed',
                           'Secondary schoool completed',
                           'Higher education below degree',
@@ -1028,11 +1033,11 @@ uk_education <- function(ca = FALSE){
                         labels = gsub(' ', '\n', education))
   } else {
     the_labs <- labs(x = '',
-                     y = 'Percentage a favor del Brexit',
+                     y = 'Percentatge a favor del Brexit',
                      title = 'Nivell educatiu i suport al Brexit',
-                     caption = 'Font de dades: "Understanding the Leave Vote" de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
-    education <- factor(c('Escola secundaria no acabada',
-                          'Escola secundaria acabada',
+                     caption = 'Font de dades: \'Understanding the Leave Vote\' de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
+    education <- factor(c('Escola secundària no acabada',
+                          'Escola secundària acabada',
                           'Estudis universitaris no acabats',
                           'Grau universitari'))
     education <- factor(education, 
@@ -1154,16 +1159,16 @@ cat_education <- function(ca = FALSE){
   
   if(ca){
     the_labs <- labs(x = '',
-                     y = 'Percentage',
+                     y = 'Percentatge',
                      title = 'Nivell educatiu i independentisme',
                      caption = paste0(
-                       'Font de dades: Combinació d\'enquestes del Baròmetre d\'Opinió Política, Centre d\'Estudios d\'Opinió.\nDades recollides 2015-2018. Mostreig: ', sum(pd$n),  ' residents de Catalunya amb ciutadania espanyola.\nGràfic de Joe Brew. www.vilaweb.cat'))
+                       'Font de dades: Combinació d\'enquestes del Baròmetre d\'Opinió Política, Centre d\'Estudios d\'Opinió.\nDades recollides 2015-2018. Mostreig: ', numberfy(sum(pd$n)),  ' residents de Catalunya amb ciutadania espanyola.\nGràfic de Joe Brew. www.vilaweb.cat'))
   } else {
     the_labs <- labs(x = '',
                      y = 'Percentage',
                      title = 'Education and support for Catalan independence',
                      caption = paste0(
-                       'Data source: Combination of surveys from the Baròmetre d\'Opinió Política, Centre d\'Estudios d\'Opinió.\nData collected 2015-2018. Sample: ', sum(pd$n),  ' residents of Catalonia with Spanish citizenship.\nChart: Joe Brew. www.vilaweb.cat'))
+                       'Data source: Combination of surveys from the Baròmetre d\'Opinió Política, Centre d\'Estudios d\'Opinió.\nData collected 2015-2018. Sample: ', numberfy(sum(pd$n)),  ' residents of Catalonia with Spanish citizenship.\nChart: Joe Brew. www.vilaweb.cat'))
   }
   
   ggplot(data = pd,
@@ -1198,7 +1203,7 @@ uk_immigration <- function(ca = FALSE){
     the_labs <- labs(x = '',
                      y = 'Percent in favor of Brexit',
                      title = 'Lowering immigration was a main issue in the Brexit vote',                     
-                     caption = 'Data source: "Understanding the Leave Vote" by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
+                     caption = 'Data source: \'Understanding the Leave Vote\' by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
     immigration <- factor(c('EU membership\nundermines\nBritain\'s\nindependence',
                             'Leaving the\nEU would\nmake\nimmigration\nlower',
                             'Leaving the\nEU would\nmake Britain\'s\neconomy\nworse'))
@@ -1206,9 +1211,9 @@ uk_immigration <- function(ca = FALSE){
                           levels = immigration)
   } else {
     the_labs <- labs(x = '',
-                     y = 'Percentage a favor del Brexit',
+                     y = 'Percentatge a favor del Brexit',
                      title = 'Reduir la immigració: una des les motivacions principals del Brexit',
-                     caption = 'Font de dades: "Understanding the Leave Vote" de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
+                     caption = 'Font de dades: \'Understanding the Leave Vote\' de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
     immigration <- factor(c('Adhesió a la\nUE soscava la\nindependència de\nBretanya',
                             'Marxar de la\nUE reduiria\nla immigració',
                             'Marxar de la\nUE empitjoraria la\neconomia de\nBretanya'))
@@ -1286,16 +1291,16 @@ cat_immigration <- function(ca = FALSE){
                      y = 'Percentage',
                      subtitle = "Agreement with above phrase",
                      title =  "'With so much immigration,\none no longer feels at home'",
-                     caption = 'Sample: 3143 residents of Catalonia with Spanish citizenship.\nCombination of BOP/CEO surveys, 2015 and 2018. Questions P56I and P31.\nJoe Brew | www.vilaweb.cat.')
+                     caption = 'Sample: 3.143 residents of Catalonia with Spanish citizenship.\nCombination of BOP/CEO surveys, 2015 and 2018. Questions P56I and P31.\nJoe Brew | www.vilaweb.cat.')
   } else {
     pd$indy <- ifelse(pd$indy == 'No',
                       'Unionistes',
                       'Independentistes')
     the_labs <- labs(x = '',
-                     y = 'Percentage',
+                     y = 'Percentatge',
                      subtitle = "Grau d'acord amb l'afirmació",
                      title =  "'Amb tanta immigració,\nun ja no se sent com a casa'",
-                     caption = 'Mostra: 3143 residents de Catalunya amb ciutadania espanyola.\nCombinació enquestes CEO. 2015 i 2018. Preguntes P56I i P31.\nJoe Brew | www.vilaweb.cat.')
+                     caption = 'Mostra: 3.143 residents de Catalunya amb ciutadania espanyola.\nCombinació enquestes CEO. 2015 i 2018. Preguntes P56I i P31.\nJoe Brew | www.vilaweb.cat.')
   }
   n_cols <- length(unique(pd$economy))
   cols <- databrew::make_colors(n = n_cols, categorical = FALSE)
@@ -1459,7 +1464,7 @@ cat_immigration2 <- function(ca = FALSE){
     the_subtitle <- "Grau d'acord amb l'afirmació"
     the_levels <- cat_levels
     the_title <- "\n'Amb tanta immigració, un ja no se sent com a casa'"
-    the_caption <- 'Mostra: 3143 residents de Catalunya amb ciutadania espanyola. Dades: Combinació enquestes CEO.\n2015 i 2018. Preguntes P56I i P31. Gràfic: Joe Brew | @joethebrew.'
+    the_caption <- 'Mostra: 3.143 residents de Catalunya amb ciutadania espanyola.\nDades: Combinació enquestes CEO. 2015 i 2018.\nPreguntes P56I i P31. Gràfic: Joe Brew | @joethebrew.'
     indies <- c('A favor\nde la\nindependència',
                 'NS/NC',
                 'En contra\nde la\nindependència')
@@ -1544,15 +1549,15 @@ uk_authority <- function(ca = FALSE){
     the_labs <- labs(x = '',
                      y = 'Percent in favor of Brexit',
                      title = 'Authoritarianism in the "leave" vote',
-                     caption = 'Data source: "Understanding the Leave Vote" by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
+                     caption = 'Data source: \'Understanding the Leave Vote\' by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
     authority <- factor(c('Authoritarian', 'Neither', 'Libertarian'))
     authority <- factor(authority, 
                         levels = authority)
   } else {
     the_labs <- labs(x = '',
-                     y = 'Percentage a favor del Brexit',
+                     y = 'Percentatge a favor del Brexit',
                      title = 'Autoritarisme i suport al Brexit',
-                     caption = 'Font de dades: "Understanding the Leave Vote" de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
+                     caption = 'Font de dades: \'Understanding the Leave Vote\' de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
     authority <- factor(c('Autoritari', 'Cap dels dos', 'Llibertari'))
     authority <- factor(authority, 
                         levels = authority)
@@ -1630,20 +1635,20 @@ var_cat <- function(ca = FALSE, var = 'P56I'){
                        "“Cal baixar els impostos, encara que això impliqui reduir\nserveis i prestacions públiques”",
                        "“El Govern hauria de prendre mesures per reduir les diferències en els nivells d’ingressos”",
                        "“Les parelles de gais i lesbianes han de poder adoptar fills en les mateixes condicions que les parelles heterosexuals”",
-                       "“L’escola ha d’ensenyar als nens a obeir l’autoritat”",
+                       "'L’escola ha d’ensenyar els nens a obeir l’autoritat'",
                        "“La religió no hauria de tenir cap influència en la política”",
-                       "“En qualsevol circumstància, la llei sempre ha de ser obeïda”",
+                       "'En qualsevol circumstància, la llei sempre\nha de ser obeïda'",
                        "“Algú amb plenes facultats hauria de poder decidir quan vol morir”",
-                       "“Amb tanta immigració, un ja no se sent com a casa”",
+                       "'Amb tanta immigració, un ja no se sent com a casa'",
                        "“El creixement econòmic ha de tenir prioritat sobre la protecció del medi ambient”",
                        "“Catalunya no té el dret de celebrar un referèndum d’autodeterminació”"),
            english = c("“The less the government interferes in the economy, the better off the country will be”",
                        "“Taxes must be lowered, even though it may\nmean reducing public services”",
                        "“The government should take measures to\nreduce differenes in income”",
                        "“Gay and lesbian couples should be able to adopt children under the same conditions as heterosexual couples”",
-                       "“School should teach children to obey authority”",
+                       "'School should teach children to obey authority'",
                        "“Religion should have no influence on politics”",
-                       "“The law should always be obeyed in any circumstance”",
+                       "'The law should always be obeyed in any circumstance'",
                        "“Someone with full abilities should be allowed to decide when (s)he wants to die”",
                        "“With so much immigration, one no longer feels at home”",
                        "“Economic growth should have priority over protection of the environment”",
@@ -1654,8 +1659,8 @@ var_cat <- function(ca = FALSE, var = 'P56I'){
     the_levels <- cat_levels
     the_title <- phrase_dict$catalan[phrase_dict$var == var]
     the_caption <- paste0('Mostra: ',
-                          sum(pd$Muestra),
-                          ' residents de Catalunya amb ciutadania espanyola. Dades: Combinació enquestes CEO.\n2015 i 2018. Preguntes ',
+                          numberfy(sum(pd$Muestra)),
+                          ' residents de Catalunya amb ciutadania espanyola.\nDades: Combinació enquestes CEO. 2015 i 2018.\nPreguntes ',
                           var,' i P31. Gràfic: Joe Brew | @joethebrew.')
     indies <- c('A favor\nde la\nindependència',
                 'NS/NC',
@@ -1665,8 +1670,8 @@ var_cat <- function(ca = FALSE, var = 'P56I'){
     the_subtitle <- "Extent of agreement with the phrase"
     the_title <- phrase_dict$english[phrase_dict$var == var]
     the_caption <- paste0('Sample: ',
-                          sum(pd$Muestra),
-                          ' residents of Catalonia with Spanish citizenship. Data: Combination of CEO/BOP surveys.\n2015 and 2018. Questions ',
+                          numberfy(sum(pd$Muestra)),
+                          ' residents of Catalonia with Spanish citizenship.\nData: Combination of CEO/BOP surveys. 2015 and 2018.\nQuestions ',
                           var,' and P31. Chart: Joe Brew | @joethebrew.')
     indies <- c('In favor of\nCatalan independence',
                 'Not sure/no answer',
@@ -1734,12 +1739,12 @@ uk_age <- function(ca = FALSE){
     the_labs <- labs(x = '',
                      y = 'Percent in favor of Brexit',
                      title = 'Age and support for Brexit',
-                     caption = 'Data source: "Understanding the Leave Vote" by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
+                     caption = 'Data source: \'Understanding the Leave Vote\' by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
   } else {
     the_labs <- labs(x = '',
-                     y = 'Percentage a favor del Brexit',
+                     y = 'Percentatge a favor del Brexit',
                      title = 'Edat i suport al Brexit',
-                     caption = 'Font de dades: "Understanding the Leave Vote" de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
+                     caption = 'Font de dades: \'Understanding the Leave Vote\' de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
   }
   education <- factor(c('18-34','35-44','45-54','55-64','65+'))
   education <- factor(education, 
@@ -1769,7 +1774,7 @@ uk_welfare <- function(ca = FALSE){
     the_labs <- labs(x = '',
                      y = 'Percent in favor of Brexit',
                      title = 'Welfarism among pro-Brexit voters',
-                     caption = 'Data source: "Understanding the Leave Vote" by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
+                     caption = 'Data source: \'Understanding the Leave Vote\' by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
     education <- factor(c('Anti-welfare',
                           'Neither',
                           'Pro-welfare'))
@@ -1777,9 +1782,9 @@ uk_welfare <- function(ca = FALSE){
                         levels = education)
   } else {
     the_labs <- labs(x = '',
-                     y = 'Percentage a favor del Brexit',
+                     y = 'Percentatge a favor del Brexit',
                      title = 'Suport a l\'estat del benestar i suport al Brexit',
-                     caption = 'Font de dades: "Understanding the Leave Vote" de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
+                     caption = 'Font de dades: \'Understanding the Leave Vote\' de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
     education <- factor(c('En contra de\nl\'estat del benestar',
                           'Cap dels dos',
                           'A favor de\nl\'estat del benestar'))
@@ -1810,12 +1815,12 @@ uk_income <- function(ca = FALSE){
     the_labs <- labs(x = '',
                      y = 'Percent in favor of Brexit',
                      title = 'Monthly income and support for Brexit',
-                     caption = 'Data source: "Understanding the Leave Vote" by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
+                     caption = 'Data source: \'Understanding the Leave Vote\' by Kirby Swales.\nChart by Joe Brew. www.vilaweb.cat')
   } else {
     the_labs <- labs(x = '',
-                     y = 'Percentage a favor del Brexit',
+                     y = 'Percentatge a favor del Brexit',
                      title = 'Ingressos mensuals i suport al Brexit',
-                     caption = 'Font de dades: "Understanding the Leave Vote" de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
+                     caption = 'Font de dades: \'Understanding the Leave Vote\' de Kirby Swales.\nGràfic de Joe Brew. www.vilaweb.cat')
     
   }
   education <- factor(c('< £1200',
@@ -1893,10 +1898,10 @@ cat_age <- function(ca = FALSE){
   if(ca){
     legend_title <- 'Independentista'
     the_labs <- labs(x = '',
-                     y = 'Percentage',
+                     y = 'Percentatge',
                      title = 'Independentisme i edat',
                      caption = paste0('Mostra: ',
-                                      sum(pd$Muestra),
+                                      numberfy(sum(pd$Muestra)),
                                       ' residents de Catalunya amb ciutadania espanyola.\nDades: Combinació enquestes CEO.\n2015 a 2018. Gràfic: Joe Brew | @joethebrew.'))
   } else {
     legend_title <- 'Pro-\nindependence'
@@ -1904,7 +1909,7 @@ cat_age <- function(ca = FALSE){
                      y = 'Percentage',
                      title = 'Age and support for Catalan independence',
                      caption = paste0('Sample: ',
-                                      sum(pd$Muestra),
+                                      numberfy(sum(pd$Muestra)),
                                       ' residents of Catalonia with Spanish citizeship.\nData: Combination of CEO/BOP surveys from 2015-2018Gràfic: Joe Brew | @joethebrew.'))
   }
   ggplot(data = pd,
@@ -1990,11 +1995,11 @@ cat_income <- function(ca = FALSE){
   cols[2] <- grey(0.2)
   if(ca){
     legend_title <- 'Independentista'
-    the_labs <- labs(y = 'Percentage',
+    the_labs <- labs(y = 'Percentatge',
                      x = 'Ingressos mensuals familiars',
                      title = paste0('Ingressos i independentisme'),
                      caption = paste0('Mostra: ',
-                                      sum(x$Muestra),
+                                      numberfy(sum(x$Muestra)),
                                       ' residents de Catalunya amb ciutadania espanyola.\nDades: Combinació enquestes CEO.\n2015 a 2018. Gràfic: Joe Brew | @joethebrew.'))
   } else {
     legend_title <- 'Pro-\nindependence'
@@ -2002,7 +2007,7 @@ cat_income <- function(ca = FALSE){
                      x = 'Family income of respondent',
                      title = paste0('Household income and support for Catalan independence'),
                      caption = paste0('Sample: ',
-                                      sum(x$Muestra),
+                                      numberfy(sum(x$Muestra)),
                                       ' residents of Catalonia with Spanish citizeship.\nData: Combination of CEO/BOP surveys from 2015-2018Gràfic: Joe Brew | @joethebrew.'))
   }
   
