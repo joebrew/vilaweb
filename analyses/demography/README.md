@@ -1,4 +1,4 @@
-60% in 2025
+Slow, but steady: Demographic change and Catalan independence
 ================
 
 # Introduction
