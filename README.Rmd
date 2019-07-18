@@ -34,7 +34,6 @@ knitr::opts_chunk$set(echo = TRUE,
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-library(cism)
 
 # knitr::knit_hooks$set(
 #    error = function(x, options) {

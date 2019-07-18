@@ -1,0 +1,1 @@
+Complete data series obtained from: https://www.mortality.org/cgi-bin/hmd/country.php?cntr=ESP&level=1

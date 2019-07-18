@@ -17,6 +17,6 @@ colors_vilaweb <- function(){
   lila <- rgb2hex(156, 118, 172)
 
   out <- c(groc, rosa, verd, turquesa, blau, lila)
-  names(out) <- c('groc', 'rosa', 'verd', 'turquesa', 'blau', 'lila') 
+  # names(out) <- c('groc', 'rosa', 'verd', 'turquesa', 'blau', 'lila') 
   return(out)
 }
