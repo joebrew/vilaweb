@@ -211,7 +211,7 @@ lloc_long <- lloc %>% tidyr::gather(key, value, Catalunya:Estranger)
 # Estimate what would happen, demographically, with Catalonia's current population
 current <- lloc_long %>% filter(year == 2018)
 the_list <- list()
-years <- 2019:2118
+years <- 2019:2070
 for(i in 1:length(years)){
   the_year <- years[i]
   # Get last year
@@ -459,7 +459,7 @@ age_plot <- function(ca = FALSE){
                      caption = paste0('Dades: Baròmetre d\'Opinió Política del Centre d\'Estudios d\'Opinió.\nMostra: ',
                                       numberfy(sum(pd$n)), ' residents de Catalunya amb ciutadania espanyola.\nGràfic: Joe Brew | @joethebrew | www.vilaweb.cat'))
     legend_title <- 'A favor\nde la\nindependència?'
-    point_name <- 'Tamany de\nmostra'
+    point_name <- 'Mida de\nmostra'
   } else {
     the_labs <- labs(x = 'Age',
                      y = 'Percentage',
@@ -531,7 +531,7 @@ age_birth_plot <- function(ca = FALSE){
                      caption = paste0('Dades: Baròmetre d\'Opinió Política del Centre d\'Estudios d\'Opinió.\nMostra: ',
                                       numberfy(sum(pd$n)), ' residents de Catalunya amb ciutadania espanyola.\nGràfic: Joe Brew | @joethebrew | www.vilaweb.cat'))
     legend_title <- 'A favor\nde la\nindependència?'
-    point_name <- 'Tamany de\nmostra'
+    point_name <- 'Mida de\nmostra'
   } else {
     the_labs <- labs(x = 'Age',
                      y = 'Percentage',
@@ -825,7 +825,7 @@ changes <- changes %>%
 # Estimate what would happen, demographically, with Catalonia's current population
 current <- lloc_long %>% filter(year == 2018)
 the_list <- list()
-years <- 2019:2118
+years <- 2019:2070
 for(i in 1:length(years)){
   the_year <- years[i]
   # Get last year

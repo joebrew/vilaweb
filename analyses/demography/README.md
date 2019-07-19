@@ -132,7 +132,7 @@ over time.
 
 If we examine only mortality (ignoring, for the moment, migration and
 fertility), Catalonia’s population by place of birth would look like
-this over the next 100 years.
+this over the next few decades.
 
 ![](figures/unnamed-chunk-9-1.png)<!-- -->
 
