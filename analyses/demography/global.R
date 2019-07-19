@@ -799,8 +799,8 @@ migrations <-
 births <- tibble(age = 0,
                  key = c('Catalunya', 'Espanya', 'Estranger'),
                  value = c(66803, 
-                           896 + 241 - 135,
-                           3051 + 938 - 945))
+                           896, # 896 + 241 - 135,
+                           3051))# + 938 - 945))
 # changes <- bind_rows(migrations, births)
 changes <- migrations
 changes <- changes %>%
@@ -883,6 +883,30 @@ projections_adj <- future_adj %>%
   mutate(p_si_ref = p_indepes / (100 - p_undecided),
          p_no_ref = p_unionistes / (100 - p_undecided))
 
+# Make a version with no foreigners
+projections_adj_no_estranger <- future_adj %>%
+  dplyr::rename(neixer = key,
+                edat = age) %>%
+  filter(!neixer %in% c('Estranger', 'Abroad')) %>%
+  # mutate(edat = ifelse(edat >= 0, 0, edat)) %>%
+  left_join(predictions) %>%
+  # remove those for whom predictions could not be made
+  filter(!is.na(p_si)) %>%
+  # calculate number of people
+  mutate(indepes = value * p_si,
+         unionistes = value * p_no,
+         undecided = value * p_ns) %>%
+  group_by(year) %>%
+  summarise(indepes = sum(indepes),
+            p_indepes = sum(indepes) / (sum(indepes) + sum(unionistes) + sum(undecided)) * 100,
+            unionistes = sum(unionistes),
+            p_unionistes = sum(unionistes) / (sum(unionistes) + sum(indepes) + sum(undecided)) * 100,
+            undecided = sum(undecided),
+            p_undecided = sum(undecided) / (sum(unionistes) + sum(indepes) + sum(undecided)) * 100,) %>%
+  mutate(p_si_ref = p_indepes / (100 - p_undecided),
+         p_no_ref = p_unionistes / (100 - p_undecided))
+
+
 make_animation_adj <- function(ca = FALSE){
   if(ca){
     legend_title <- 'LLoc de naixement'
@@ -941,7 +965,7 @@ make_animation_adj <- function(ca = FALSE){
     the_labs
 }
 
-make_plot_adj <- function(ca = FALSE){
+make_plot_adj <- function(ca = FALSE, remove_estranger = F){
   if(ca){
     legend_title <- 'LLoc de naixement'
     pd <- future_adj
@@ -957,7 +981,8 @@ make_plot_adj <- function(ca = FALSE){
     
   } else {
     legend_title <- 'Place of birth'
-    pd <- future_adj %>%
+    pd <- future_adj
+    pd <- pd %>%
       mutate(key = ifelse(key == 'Catalunya', 'Catalonia',
                           ifelse(key == 'Espanya', 'Spain',
                                  ifelse(key == 'Estranger', 'Abroad', key))))
@@ -972,6 +997,8 @@ make_plot_adj <- function(ca = FALSE){
                      caption = 'Data on places of birth and mortality from the Institut d\'Estadística de Catalunya.\nProjections and chart by Joe Brew | @joethebrew | www.vilaweb.cat')
   }
   cols <- rev(c(colors_vilaweb()[c(5,3)], 'grey'))
+  
+
   
   # Group pd
   pd <- pd %>%
@@ -995,7 +1022,8 @@ make_plot_adj <- function(ca = FALSE){
 
 
 
-projection_plot_adj <- function(ca = FALSE, short = FALSE){
+projection_plot_adj <- function(ca = FALSE, short = FALSE,
+                                remove_estranger = FALSE){
   if(ca){
     the_labs <- labs(x = 'Any',
                      y = '%',
@@ -1013,7 +1041,12 @@ projection_plot_adj <- function(ca = FALSE, short = FALSE){
     choices <- c('Opposed', 'In favor')
     legend_title <- c('View on independence')
   }
-  g <- ggplot(data = projections_adj %>% mutate(p_si_ref = p_si_ref * 100,
+  if(remove_estranger){
+    pd <- projections_adj_no_estranger
+  } else {
+    pd <- projections_adj
+  }
+  g <- ggplot(data = pd %>% mutate(p_si_ref = p_si_ref * 100,
                                        p_no_ref = p_no_ref * 100) %>%
            dplyr::select(year, p_si_ref, p_no_ref) %>%
            gather(key, value, p_si_ref:p_no_ref) %>%
@@ -1045,3 +1078,42 @@ projection_plot_adj <- function(ca = FALSE, short = FALSE){
     return(g)
 }
 
+# # calculations for Ramir
+# # independentisme by place of birth by year
+# no_know <- 'NS/NC'
+# catalunya <- 'Catalunya'
+# ccaa <- 'Espanya'
+# mon <- 'Estranger'
+# pd <- new_ceo %>%
+#   mutate(neixer = `Em podria dir on va néixer?`,
+#          indepe = `Vol que Catalunya esdevingui un Estat independent?`,
+#          edat = Edat,
+#          any = `Any de realització del baròmetre`) %>%
+#   mutate(indepe = as.character(indepe),
+#          neixer = as.character(neixer)) %>%
+#   filter(!is.na(neixer),
+#          !is.na(indepe),
+#          !neixer %in% c('No ho sap', 'No contesta')) %>%
+#   mutate(indepe = ifelse(indepe %in% c('No ho sap',
+#                                        'No contesta'),
+#                          no_know,
+#                          indepe),
+#          neixer = ifelse(neixer == 'Catalunya', catalunya,
+#                          ifelse(neixer %in% c('Altres comunitats autònomes'), ccaa,
+#                                 mon))) %>%
+#   filter(indepe != 'NS/NC') %>%
+#   group_by(neixer, indepe, any) %>%
+#   tally %>%
+#   ungroup %>%
+#   group_by(neixer, any) %>%
+#   mutate(p = n / sum(n) * 100) %>%
+#   ungroup %>%
+#   filter(neixer %in% c('Catalunya', 'Espanya'))
+# 
+# ggplot(data = pd,
+#        aes(x = any,
+#            y = p,
+#            color = indepe)) +
+#   geom_line() +
+#   facet_wrap(~neixer)
+# write_csv(pd, '~/Desktop/ramir.csv')

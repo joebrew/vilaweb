@@ -3,6 +3,7 @@ title: "Slow, but steady: Demographic change and Catalan independence"
 output: github_document
 ---
 
+Alternative title: 60% in 2039
 
 ```{r setup, include=FALSE, echo = FALSE}
 # Basic knitr options
@@ -145,10 +146,22 @@ make_animation_adj()
 What effect will this have on support for independence? The below shows estimated support for independence, assuming no changes in opinions, future migration rates identical to those of the last 10 years, and future birth rates identical to that of 2017. The effects of demographic change will be seen, even in the short-term:
 
 ```{r}
-projection_plot_adj(short = T)
+projection_plot_adj()
 ```
 
 In other words, even if ZERO people change their minds, the 50-50 split will not continue. 
+
+Still, there's one more adjustment we need to make. The above plot shows the likely outcome of a yes/no independence referendum, assuming that _all_ Catalan adults were permitted to vote. As ideal as this might be from a democratic perspective, it's unlikely to be the case. Specifically, most Catalans who were born abroad are _not_ citizens of Spain (there are many exceptions, of course), and assuming that a future referendum were held in accordance with Spanish legislation, they would not be permitted to cast a vote.
+
+So, for our final chart, let's see what would happen in a hypothetical referendum taking into account only those who are likely to be able to vote (those born in Spain/Catalonia). The result is below.
+
+```{r}
+projection_plot_adj(remove_estranger = TRUE)
+```
+
+What does the above show? That the forces of demography alone will result in support for independence reaching 60% in 2039, even if nobody changes their opinion on the matter.
+
+
 
 # Conclusion
 
@@ -210,6 +223,11 @@ make_animation_adj(ca = TRUE)
 ```
 
 ```{r}
-projection_plot_adj(ca = T, short = T)
+projection_plot_adj(ca = T)
 ```
 
+
+
+```{r}
+projection_plot_adj(remove_estranger = T, ca = T)
+```

@@ -1,6 +1,8 @@
 Slow, but steady: Demographic change and Catalan independence
 ================
 
+Alternative title: 60% in 2039
+
 # Introduction
 
 Do you know any Catalans who do not have an opinion on the matter of
@@ -180,6 +182,25 @@ change will be seen, even in the short-term:
 In other words, even if ZERO people change their minds, the 50-50 split
 will not continue.
 
+Still, there’s one more adjustment we need to make. The above plot shows
+the likely outcome of a yes/no independence referendum, assuming that
+*all* Catalan adults were permitted to vote. As ideal as this might be
+from a democratic perspective, it’s unlikely to be the case.
+Specifically, most Catalans who were born abroad are *not* citizens of
+Spain (there are many exceptions, of course), and assuming that a future
+referendum were held in accordance with Spanish legislation, they would
+not be permitted to cast a vote.
+
+So, for our final chart, let’s see what would happen in a hypothetical
+referendum taking into account only those who are likely to be able to
+vote (those born in Spain/Catalonia). The result is below.
+
+![](figures/unnamed-chunk-13-1.png)<!-- -->
+
+What does the above show? That the forces of demography alone will
+result in support for independence reaching 60% in 2039, even if nobody
+changes their opinion on the matter.
+
 # Conclusion
 
 Time is working against those who oppose Catalan independence. Catalans
@@ -223,20 +244,22 @@ used for this article is publicly available online at
 
 # Catalan-language plots
 
-![](figures/unnamed-chunk-13-1.png)<!-- -->
-
 ![](figures/unnamed-chunk-14-1.png)<!-- -->
 
-![](figures/unnamed-chunk-16-1.png)<!-- -->
+![](figures/unnamed-chunk-15-1.png)<!-- -->
 
 ![](figures/unnamed-chunk-17-1.png)<!-- -->
 
-![](figures/unnamed-chunk-18-1.gif)<!-- -->
+![](figures/unnamed-chunk-18-1.png)<!-- -->
 
-![](figures/unnamed-chunk-19-1.png)<!-- -->
+![](figures/unnamed-chunk-19-1.gif)<!-- -->
 
 ![](figures/unnamed-chunk-20-1.png)<!-- -->
 
-![](figures/unnamed-chunk-21-1.gif)<!-- -->
+![](figures/unnamed-chunk-21-1.png)<!-- -->
 
-![](figures/unnamed-chunk-22-1.png)<!-- -->
+![](figures/unnamed-chunk-22-1.gif)<!-- -->
+
+![](figures/unnamed-chunk-23-1.png)<!-- -->
+
+![](figures/unnamed-chunk-24-1.png)<!-- -->
