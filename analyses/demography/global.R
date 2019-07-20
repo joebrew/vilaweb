@@ -1117,3 +1117,255 @@ projection_plot_adj <- function(ca = FALSE, short = FALSE,
 #   geom_line() +
 #   facet_wrap(~neixer)
 # write_csv(pd, '~/Desktop/ramir.csv')
+
+
+avis_plot <- function(ca = FALSE, pares = FALSE){
+  if(ca){
+    no_know <- 'NS/NC'
+    catalunya <- 'Catalunya'
+    ccaa <- 'Espanya'
+    mon <- 'Estranger'
+  } else {
+    no_know <- 'Not sure\nNo answer'
+    catalunya <- 'Catalonia'
+    ccaa <- 'Spain'
+    mon <- 'Abroad'
+  }
+  
+  if(pares){
+    pd <- new_ceo %>%
+      # neixer = `Em podria dir on va néixer?`,
+      
+      mutate(mare = `Em podria dir el lloc de naixement de la seva mare?`,
+             pare = `Em podria dir el lloc de naixement del seu pare?`) %>%
+      filter(!mare %in% c('No ho sap', 'No contesta'),
+             !pare %in% c('No ho sap', 'No contesta')) %>%
+      mutate(mare = as.character(mare),
+             pare = as.character(pare)) %>%
+      mutate(mare = ifelse(mare == 'Catalunya', '1', '0'),
+             pare = ifelse(pare == 'Catalunya', '1', '0')) %>%
+      mutate(mare = as.numeric(mare),
+             pare = as.numeric(pare)) %>%
+      mutate(avis = mare + pare,
+             indepe = `Vol que Catalunya esdevingui un Estat independent?`,
+             edat = Edat) 
+  } else {
+    pd <- new_ceo %>%
+      mutate(avis = `Quants dels seus avis/àvies van néixer a Catalunya?`,
+             # neixer = `Em podria dir on va néixer?`,
+             indepe = `Vol que Catalunya esdevingui un Estat independent?`,
+             edat = Edat) 
+  }
+  
+  
+  
+  pd <- pd %>%
+    mutate(indepe = as.character(indepe)) %>%#,
+           # neixer = as.character(neixer)) %>%
+    filter(#!is.na(neixer),
+           !is.na(indepe),
+           !is.na(avis)) %>%
+           # !neixer %in% c('No ho sap', 'No contesta')) %>%
+    mutate(indepe = ifelse(indepe %in% c('No ho sap',
+                                         'No contesta'),
+                           no_know,
+                           indepe)) %>%#,
+           # neixer = ifelse(neixer == 'Catalunya', catalunya,
+           #                 ifelse(neixer %in% c('Altres comunitats autònomes'), ccaa,
+           #                        mon))) %>%
+    mutate(avis = as.character(avis))
+  
+  if(!pares){
+    pd <- pd %>%
+      mutate(avis = ifelse(avis == 'Cap', '0',
+                           ifelse(avis == 'Un', '1',
+                                  ifelse(avis == 'Dos', '2',
+                                         ifelse(avis == 'Tres', '3',
+                                                ifelse(avis  == 'Quatre', '4', NA)))))) %>%
+      mutate(avis = as.numeric(avis)) 
+  }
+  pd <- pd %>%
+    filter(!is.na(avis)) %>%
+    group_by(avis, indepe) %>%
+    tally %>%
+    ungroup %>%
+    group_by(avis) %>%
+    mutate(p = n / sum(n) * 100) %>%
+    ungroup
+  
+  if(ca){
+    if(pares){
+      x <- 'Quants pares van néixer a Catalunya'
+      tt <- 'Independentisme per lloc de naixement dels pares'
+    } else {
+      x <- 'Quants avis van néixer a Catalunya'
+      tt <- 'Independentisme per lloc de naixement dels avis'
+    }
+    the_labs <- labs(x = x,
+                     y = 'Percentatge',
+                     title = tt,
+                     caption = paste0('Dades: Baròmetre d\'Opinió Política del Centre d\'Estudios d\'Opinió.\nMostra: ',
+                                      numberfy(sum(pd$n)), ' residents de Catalunya amb ciutadania espanyola.\nGràfic: Joe Brew | @joethebrew | www.vilaweb.cat'))
+    legend_title <- 'A favor\nde la\nindependència?'
+  } else {
+    if(pares){
+      x <- 'How many parents born in Catalonia'
+      tt <- 'Support for independence by\nplace of birth of parents'
+    } else {
+      x <- 'How many grandparents born in Catalonia'
+      tt <- 'Support for independence by\nplace of birth of grandparents'
+    }
+    the_labs <- labs(x = x,
+                     y = 'Percentage',
+                     title = tt,
+                     caption = paste0('Data: Baròmetre d\'Opinió Política of the Centre d\'Estudios d\'Opinió.\nMostra: ',
+                                      numberfy(sum(pd$n)), ' residents of Catalonia with Spanish citizenship.\nChart: Joe Brew | @joethebrew | www.vilaweb.cat'))
+    legend_title <- 'In favor\nof\nindependence?'
+  }
+  cols <- colors_vilaweb()[c(5,4)]
+  cols <- c(cols[1], 'grey', cols[2])
+  ggplot(data = pd,
+         aes(x = avis,
+             y = p,
+             fill = indepe,
+             group = indepe)) +
+    geom_bar(stat = 'identity',
+             position = position_stack()) +
+    theme_vilaweb() +
+    the_labs +
+    scale_fill_manual(name = legend_title,
+                      values = cols) +
+    geom_text(aes(label = paste0(round(p, digits = 1), '%')),
+              position = position_stack(),
+              vjust = 1,
+              alpha = 0.6) +
+    theme(legend.position = 'right') +
+    theme(plot.caption = element_text(hjust = 0))
+}
+
+
+pares_birth_plot <- function(ca = FALSE, pares = FALSE){
+  if(ca){
+    no_know <- 'NS/NC'
+    catalunya <- 'Catalunya'
+    ccaa <- 'Espanya'
+    mon <- 'Estranger'
+  } else {
+    no_know <- 'Not sure\nNo answer'
+    catalunya <- 'Catalonia'
+    ccaa <- 'Spain'
+    mon <- 'Abroad'
+  }
+  
+  if(pares){
+    pd <- new_ceo %>%
+      mutate(neixer = `Em podria dir on va néixer?`) %>%
+      
+      mutate(mare = `Em podria dir el lloc de naixement de la seva mare?`,
+             pare = `Em podria dir el lloc de naixement del seu pare?`) %>%
+      filter(!mare %in% c('No ho sap', 'No contesta'),
+             !pare %in% c('No ho sap', 'No contesta')) %>%
+      mutate(mare = as.character(mare),
+             pare = as.character(pare)) %>%
+      mutate(mare = ifelse(mare == 'Catalunya', '1', '0'),
+             pare = ifelse(pare == 'Catalunya', '1', '0')) %>%
+      mutate(mare = as.numeric(mare),
+             pare = as.numeric(pare)) %>%
+      mutate(avis = mare + pare,
+             indepe = `Vol que Catalunya esdevingui un Estat independent?`,
+             edat = Edat) 
+  } else {
+    pd <- new_ceo %>%
+      mutate(avis = `Quants dels seus avis/àvies van néixer a Catalunya?`,
+             neixer = `Em podria dir on va néixer?`,
+             indepe = `Vol que Catalunya esdevingui un Estat independent?`,
+             edat = Edat) 
+  }
+  
+  pd <- pd %>%
+    mutate(indepe = as.character(indepe)) %>%
+    mutate(neixer = as.character(neixer)) %>%
+    filter(!is.na(neixer),
+      !is.na(indepe),
+      !is.na(avis)) %>%
+    filter(!neixer %in% c('No ho sap', 'No contesta')) %>%
+    mutate(indepe = ifelse(indepe %in% c('No ho sap',
+                                         'No contesta'),
+                           no_know,
+                           indepe),
+    neixer = ifelse(neixer == 'Catalunya', catalunya,
+                    ifelse(neixer %in% c('Altres comunitats autònomes'), ccaa,
+                           mon))) %>%
+    mutate(avis = as.character(avis))
+  
+  if(!pares){
+    pd <- pd %>%
+      mutate(avis = ifelse(avis == 'Cap', '0',
+                           ifelse(avis == 'Un', '1',
+                                  ifelse(avis == 'Dos', '2',
+                                         ifelse(avis == 'Tres', '3',
+                                                ifelse(avis  == 'Quatre', '4', NA)))))) %>%
+      mutate(avis = as.numeric(avis)) 
+  }
+  pd <- pd %>%
+    filter(!is.na(avis)) %>%
+    group_by(avis, neixer, indepe) %>%
+    tally %>%
+    ungroup %>%
+    group_by(avis, neixer) %>%
+    mutate(p = n / sum(n) * 100) %>%
+    ungroup
+  
+  if(ca){
+    if(pares){
+      x <- 'Quants pares van néixer a Catalunya'
+      tt <- 'Independentisme per lloc de naixement dels pares'
+    } else {
+      x <- 'Quants avis van néixer a Catalunya'
+      tt <- 'Independentisme per lloc de naixement dels avis'
+    }
+    the_labs <- labs(x = x,
+                     y = 'Percentatge',
+                     title = tt,
+                     caption = paste0('Dades: Baròmetre d\'Opinió Política del Centre d\'Estudios d\'Opinió.\nMostra: ',
+                                      numberfy(sum(pd$n)), ' residents de Catalunya amb ciutadania espanyola.\nGràfic: Joe Brew | @joethebrew | www.vilaweb.cat'))
+    legend_title <- 'A favor\nde la\nindependència?'
+  } else {
+    if(pares){
+      x <- 'How many parents born in Catalonia'
+      tt <- 'Support for independence by\nplace of birth of parents'
+    } else {
+      x <- 'How many grandparents born in Catalonia'
+      tt <- 'Support for independence by\nplace of birth of grandparents'
+    }
+    the_labs <- labs(x = x,
+                     y = 'Percentage',
+                     title = tt,
+                     caption = paste0('Data: Baròmetre d\'Opinió Política of the Centre d\'Estudios d\'Opinió.\nMostra: ',
+                                      numberfy(sum(pd$n)), ' residents of Catalonia with Spanish citizenship.\nChart: Joe Brew | @joethebrew | www.vilaweb.cat'))
+    legend_title <- 'In favor\nof\nindependence?'
+  }
+  cols <- colors_vilaweb()[c(5,4)]
+  cols <- c(cols[1], 'grey', cols[2])
+  ggplot(data = pd %>%
+           mutate(neixer = paste0('Persona nascuda a\n', neixer)),
+         aes(x = avis,
+             y = p,
+             fill = indepe,
+             group = indepe)) +
+    geom_bar(stat = 'identity',
+             position = position_stack()) +
+    theme_vilaweb() +
+    the_labs +
+    scale_fill_manual(name = legend_title,
+                      values = cols) +
+    geom_text(aes(label = paste0(round(p, digits = 1), '%')),
+              position = position_stack(),
+              vjust = 1,
+              size = 2,
+              alpha = 0.6) +
+    theme(legend.position = 'right') +
+    theme(plot.caption = element_text(hjust = 0),
+          strip.text = element_text(size = 10)) +
+    facet_wrap(~neixer)
+}
