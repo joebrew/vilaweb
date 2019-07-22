@@ -1369,3 +1369,115 @@ pares_birth_plot <- function(ca = FALSE, pares = FALSE){
           strip.text = element_text(size = 10)) +
     facet_wrap(~neixer)
 }
+
+# Read in a old ceo
+old_ceo <- vilaweb::old_ceo
+
+ramir_plot <- function(ca = FALSE){
+  if(ca){
+    no_know <- 'NS/NC'
+    catalunya <- 'Catalunya'
+    ccaa <- 'Espanya'
+    mon <- 'Estranger'
+  } else {
+    no_know <- 'Not sure\nNo answer'
+    catalunya <- 'Catalonia'
+    ccaa <- 'Spain'
+    mon <- 'Abroad'
+  }
+  
+  old_pd <- old_ceo %>%
+    mutate(indepe = `P39. I més concretament, si demà es fes un referèndum per decidir la independència de Catalunya, vostè què faria?`, 
+           neixer = `C100. Lloc de naixement de l'enquestat/ada`) %>%
+    mutate(indepe = as.character(indepe)) %>%
+    mutate(indepe = ifelse(grepl('a favor', indepe), 'Sí',
+                           ifelse(grepl('en contra', indepe), 'No',
+                                  ifelse(grepl('no aniria|ho sap|contesta', indepe), 'NS/NC', NA)))) %>%
+    mutate(indepe = ifelse(indepe %in% c('No ho sap',
+                                         'No contesta',
+                                         'NS/NC'),
+                           no_know,
+                           indepe),
+           neixer = ifelse(neixer == 'Catalunya', catalunya,
+                           ifelse(neixer %in% c('Altres comunitats autònomes'), ccaa,
+                                  mon))) %>%
+    mutate(any = `Any de realització del baròmetre`) %>%
+    filter(!is.na(neixer),
+           !is.na(indepe),
+           !neixer %in% c('No ho sap', 'No contesta')) %>%
+    mutate(any = as.numeric(as.character(any)))
+  
+  new_pd <- new_ceo %>%
+    mutate(neixer = `Em podria dir on va néixer?`,
+           indepe = `Vol que Catalunya esdevingui un Estat independent?`,
+           edat = Edat) %>%
+    mutate(indepe = as.character(indepe),
+           neixer = as.character(neixer),
+           any = `Any de realització del baròmetre`) %>%
+    filter(!is.na(neixer),
+           !is.na(indepe),
+           !neixer %in% c('No ho sap', 'No contesta')) %>%
+    mutate(indepe = ifelse(indepe %in% c('No ho sap',
+                                         'No contesta'),
+                           no_know,
+                           indepe),
+           neixer = ifelse(neixer == 'Catalunya', catalunya,
+                           ifelse(neixer %in% c('Altres comunitats autònomes'), ccaa,
+                                  mon))) %>%
+    mutate(any = as.numeric(as.character(any))) %>%
+    dplyr::select(neixer, indepe, any)
+  
+  pd <- new_pd %>%
+    bind_rows(
+      old_pd %>% dplyr::select(neixer, indepe, any)
+    ) %>%
+    group_by(neixer, indepe, any) %>%
+    tally %>%
+    ungroup %>%
+    group_by(neixer, any) %>%
+    mutate(p = n / sum(n) * 100) %>%
+    ungroup
+  
+  if(ca){
+    born_in <- 'Nascuts a '
+    the_labs <- labs(x = 'Lloc de naixement',
+                     y = 'Percentatge',
+                     title = 'Independentisme per lloc de naixement',
+                     caption = paste0('Dades: Baròmetre d\'Opinió Política del Centre d\'Estudios d\'Opinió.\nMostra: ',
+                                      numberfy(sum(pd$n)), ' residents de Catalunya amb ciutadania espanyola.\nGràfic: Joe Brew | @joethebrew'))
+    legend_title <- 'A favor de la independència?'
+  } else {
+    born_in <- 'Born in '
+    the_labs <- labs(x = 'Place of birth',
+                     y = 'Percentage',
+                     title = 'Support for independence by\nplace of birth',
+                     caption = paste0('Data: Baròmetre d\'Opinió Política of the Centre d\'Estudios d\'Opinió.\nMostra: ',
+                                      numberfy(sum(pd$n)), ' residents of Catalonia with Spanish citizenship.\nChart: Joe Brew | @joethebrew'))
+    legend_title <- 'In favor of independence?'
+  }
+  cols <- colors_vilaweb()[c(5,4)]
+  cols <- c(cols[1], 'grey', cols[2])
+  ggplot(data = pd %>%
+           mutate(neixer = paste0(born_in, neixer)) %>%
+           mutate(neixer = gsub('in Abroad', 'Abroad', neixer)) %>%
+           mutate(neixer = gsub('Estranger', "l'Estranger", neixer)),
+         aes(x = any,
+             y = p,
+             color = indepe,
+             group = indepe)) +
+    geom_line() +
+    geom_point() +
+    theme_vilaweb() +
+    scale_color_manual(name = legend_title,
+                      values = cols) +
+    # geom_text(aes(label = paste0(round(p, digits = 1), '%')),
+    #           vjust = 1,
+    #           alpha = 0.6) +
+    theme(legend.position = 'bottom') +
+    theme(plot.caption = element_text(hjust = 0)) +
+    facet_wrap(~neixer) +
+    scale_x_continuous(name = '',breaks = min(pd$any):max(pd$any)) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+    the_labs 
+}
+# ramir_plot(ca = T)
