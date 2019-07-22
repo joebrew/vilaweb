@@ -7,3 +7,4 @@ tweets.csv
 *.sql
 *.html
 analyses/device/*.RData
+vilaweb/*
