@@ -1,5 +1,5 @@
 ---
-title: "'Spain is back' ('España ha vuelto') but for all the wrong reasons"
+title: ''
 output: github_document
 ---
 
@@ -22,3 +22,22 @@ opts_chunk$set(comment = NA,
 source('prepare_data.R')
 ```
 
+```{r}
+options(scipen = '999')
+ggplot(data = agg,
+       aes(x = hour,
+           y = interactions)) +
+  geom_bar(stat = 'identity',
+           alpha = 0.9,
+            fill = 'darkorange',
+           color = 'white',
+           width = 1) +
+  # geom_area(alpha = 0.6,
+  #           fill = 'darkorange') +
+  # geom_line() +
+  theme_bw() +
+  labs(x = 'Dia',
+       y = 'Interaccions (tuits + retuits + m\'agradas)',
+       title = 'Interaccions a Twitter esmentant Inés Arrimadas',
+       subtitle = '@InesArrimadas o "Arrimadas"')
+```
