@@ -20,24 +20,41 @@ opts_chunk$set(comment = NA,
 
 ```{r}
 source('prepare_data.R')
+numberfy <- function(x){
+  gsub(',', '.', scales::comma(x), fixed = TRUE)
+}
 ```
 
 ```{r}
 options(scipen = '999')
+yl <- seq(0, 500000, 100000)
 ggplot(data = agg,
        aes(x = hour,
            y = interactions)) +
-  geom_bar(stat = 'identity',
-           alpha = 0.9,
-            fill = 'darkorange',
-           color = 'white',
-           width = 1) +
+  geom_step() +
+  # geom_bar(stat = 'identity',
+  #          alpha = 0.9,
+  #           fill = 'darkorange',
+  #          # color = 'white',
+  #          width = 1) +
   # geom_area(alpha = 0.6,
   #           fill = 'darkorange') +
   # geom_line() +
-  theme_bw() +
+  theme_vilaweb() +
+  theme(axis.title.y = element_text(size = 10),
+        axis.text.y = element_text(size = 8),
+        plot.caption = element_text(size = 8)) +
+  scale_y_continuous(breaks = yl,
+                     labels = numberfy(yl)) +
   labs(x = 'Dia',
-       y = 'Interaccions (tuits + retuits + m\'agradas)',
+       y = 'Interaccions (piulets + repiulets + m\'agrada)',
        title = 'Interaccions a Twitter esmentant Inés Arrimadas',
-       subtitle = '@InesArrimadas o "Arrimadas"')
+       subtitle = '(@InesArrimadas o "Arrimadas")',
+       caption = 'Dades de Twitter | Gràfic de @joethebrew | www.vilaweb.cat')
+```
+
+```{r}
+sum(agg$retweets)
+sum(agg$likes)
+range(agg$hour)
 ```

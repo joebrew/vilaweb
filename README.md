@@ -46,7 +46,7 @@ After downloading the above data, go into the `data-raw` directory and run from 
 
 ### Twitter data
 
-Many of the analyses in this package are based on data from twitter. Data are retrieved from twitter using the python `twint` package. Data are stored locally in a Posgresql database. What follows are instructions for building the database so as to reproduce analyses with twitter data.
+Many of the analyses in this package are based on data from twitter. Data are retrieved from twitter using the python `twint` package (install as per instructions at <https://github.com/twintproject/twint>). Data are stored locally in a Posgresql database. What follows are instructions for building the database so as to reproduce analyses with twitter data.
 
 1.  Create a psql database named `twitter`.
 2.  Within twitter, create a table called `twitter`.
