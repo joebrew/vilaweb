@@ -1,4 +1,4 @@
-Populism, the right, and the PSOE
+No, seriously, the PSOE is not a leftist party
 ================
 
 # Introduction

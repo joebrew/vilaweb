@@ -1,5 +1,5 @@
 ---
-title: "Populism, the right, and the PSOE"
+title: "No, seriously, the PSOE is not a leftist party"
 output: github_document
 ---
 
