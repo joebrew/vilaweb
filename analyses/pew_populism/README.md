@@ -141,10 +141,10 @@ and [“populist” to describe the PSOE’s
 adversaries](https://twitter.com/search?q=from%3Asanchezcastejon%20populistas&src=typed_query).
 But an examination of the data show that this narrative is disconnected
 from reality. 40% of PSOE voters are “populist”, a much higher figure
-than the average of the 8 European countries examined by PEW. And both
-the PSOE party, and its voters, are not left-leaning, according to both
-favorability ratings by ideology as well as self-positioning on an
-ideological scale.
+than the average of the 8 European countries examined by PEW. And the
+PSOE party, and its voters, are not left-leaning, according to both
+favorability ratings by ideology of others as well as self-positioning
+on an ideological scale.
 
 ## Technical note
 

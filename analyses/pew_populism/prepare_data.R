@@ -51,7 +51,7 @@ pew$view_cs <- pew$Q20ESd
 convert_country <- function(country, ca = FALSE){
   df <- data.frame(country = country)
   joiner <- data.frame(country = c('Denmark','France','Germany','Italy','Netherlands','Spain','Sweden','United Kingdom'),
-                       country_ca = c('Dinamarca','França','Alemanya','Italia','Països\nBaixos','Espanya','Suècia','Regne\nUnit'),
+                       country_ca = c('Dinamarca','França','Alemanya','Itàlia','Països\nBaixos','Espanya','Suècia','Regne\nUnit'),
                        country_en = c('Denmark','France','Germany','Italy','Netherlands','Spain','Sweden','United\nKingdom'))
   df <- left_join(df, joiner, by = 'country')
   if(ca){
@@ -215,7 +215,7 @@ psoe_plot <- function(ca = FALSE){
                                 ifelse(grepl('People', party_spain),
                                        'PP',
                                        ifelse(grepl('Podem', party_spain),
-                                              'Podemos',
+                                              'Podem',
                                               ifelse(grepl('Ciudada',
                                                            party_spain),
                                                            'Cs',
@@ -380,7 +380,7 @@ psoe_plot2 <- function(ca = FALSE){
                          labels = labels)
     
     pd$val <- pd$val_ca
-    the_labs <- labs(x = 'Ideologia esquerra-dreta del enquestat',
+    the_labs <- labs(x = 'Ideologia esquerra-dreta de l\'enquestat',
                      y = 'Percentatge',
                      title = 'Opinió del PSOE entre votants d\'altres partits',
                      subtitle = '(Per ideologia)',
