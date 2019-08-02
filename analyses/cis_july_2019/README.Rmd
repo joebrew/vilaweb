@@ -1,0 +1,175 @@
+---
+title: "CIS July 2019"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(tidyverse)
+library(ggplot2)
+library(tidyr)
+library(databrew)
+# library(cowplot)
+library(ggthemes)
+
+# Source document: http://datos.cis.es/pdf/Es3257ccaa_A.pdf
+
+# Define ccaas
+ccaas <- c('Andalucía',
+           'Aragón',
+           'Asturias',
+           'Balears', 
+           'Canarias', 
+           'Cantabria', 
+           'Castilla-\nLa Mancha',
+           'Castilla\ny León',
+           'Cataluña',
+           'Comunitat\nValenciana',
+           'Extremadura','Galicia',
+           'Madrid',
+           'Murcia',
+           'Navarra',
+           'País Vasco',
+           'La Rioja',
+           'Ceuta',
+           'Melilla')
+
+val_plot <- function(vals = c(3.1, 3, 2.6, 3.6, 3.4, 3.7, 2.4, 2.9, 4, 3.5, 2.7, 3.1, 3.1, 2.7, 3.9, 4.3, 2.6, 1.5, 2.2),
+                     order_it = TRUE,
+                     remove_small = TRUE){
+  df <- tibble(ccaa = ccaas,
+               val = vals)
+  if(remove_small){
+    df <- df %>%
+      filter(!ccaa %in% c('Melilla', 'Ceuta'))
+  }
+  if(order_it){
+    df <- df %>% arrange(desc(ccaa)) %>%
+      arrange(desc(val))
+    df$ccaa <- factor(df$ccaa, levels = df$ccaa)
+  }
+  ggplot(data = df,
+         aes(x = ccaa,
+             y = val)) +
+    geom_point(size = 3) +
+    geom_segment(aes(xend = ccaa,
+                     yend = 0),
+                 alpha = 0.6) +
+        theme_databrew() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5,
+                                     size = 15),
+          plot.title = element_text(hjust = 0.5, size = 22),
+          plot.caption = element_text(size = 14)) +
+    scale_y_continuous(name ='Valoración (1 = muy mal, 10 = muy bien)', breaks = NULL) +
+      geom_text(aes(y = val, label = val),
+                size = 5,
+                nudge_y = max(df$val) * 0.1,
+                alpha = 0.5) +
+        labs(x = '',
+             caption = 'Datos: CIS | Gráfico: @joethebrew')  
+}
+
+val_plot() +
+  labs(title = 'Valoración de Pablo Iglesias por Comunidad Autónoma')
+
+val_plot(vals = c(2.5, 2.2, 2.4, 2.2, 2.4, 1.9, 2.7, 2.3, 1.4, 2.3, 2.3, 1.9, 2.6, 2.6, 1.5, 1.4, 2.2, 2.7, 3.8)) +
+  labs(title = 'Valoración de Santiago Abascal por Comunidad Autónoma')
+
+val_plot(vals = c(3.5, 3.5, 3.2, 3, 3.6, 2.7, 3.7, 4.1, 1.8, 3.2, 3.9, 3.2, 3.3, 3.9, 2.2, 2, 4.4, 3.3, 5.8)) +
+  labs(title = 'Valoración de Pablo Casado por Comunidad Autónoma')
+
+val_plot(vals = c(3.8, 3.6, 3.4, 3.1, 3.8, 3.9, 3.7, 4, 2.2, 3.7, 3.6, 3.2, 3.7, 3.7, 2.4, 2.2, 3.2, 3.7, 6.2)) +
+  labs(title = 'Valoración de Albert Rivera por Comunidad Autónoma')
+
+val_plot(vals = c(4.8, 4.3, 4.1, 4.9, 5.2, 5.2, 4.3, 4.2, 4.2, 5, 4.9, 4.8, 4.5, 3.9, 4.2, 4.5, 3.7, 4.4, 5.2)) +
+  labs(title = 'Valoración de Pedro Sánchez por Comunidad Autónoma')
+```
+
+```{r}
+religion <- tibble(religion = rep(c('Católico practicante',
+                                'Católico no practicante',
+                                'Creyente de otra religión',
+                                'Agnóstico',
+                                'Indiferente, no creyente',
+                                'Ateo'), each = 19),
+                   ccaa = rep(ccaas, 6),
+                   val = c(23.6, 29.3, 37.8, 24.2, 22.7, 27.5, 34.8, 33.1, 10.9, 13.8, 25, 33.5, 20.4, 36.2, 28.2, 16.9, 40, 20, 20,
+                           50.8, 43.9, 43.2, 33.3, 52.3, 45, 38.6, 40.8, 41.8, 49.7, 57.9, 48.5, 39.7, 42.5, 28.2, 37.8, 50, 40, 40,
+                           2.4, 1.2, 0, 3, 2.3, 0, 1.5, 1.2, 2.2, 3.3, 1.3, 1.5, 3.1, 0, 2.6, 2.7, 0, 20, 40,
+                           7, 4.9, 4.1, 9.1, 6.1, 7.5, 10.6, 8.9, 6, 5.3, 3.9, 2.6, 13.5, 6.2, 10.3, 10.8, 10, 0, 0,
+                           8.7, 3.7, 1.4, 16.7, 7.6, 7.5, 4.5, 6.5, 11.3, 11.2, 1.3, 4.1, 6.9, 7.5, 20.5, 12.8, 0, 0, 0,
+                           6.3, 9.8, 13.5, 13.6, 8.3, 10, 9.8, 8.9, 26.4, 15.8, 10.5, 9.3, 15, 7.5, 7.7, 18.9, 0, 20, 0 ))
+
+religion <- religion %>%
+  mutate(religion = ifelse(religion %in% c("Agnóstico", "Ateo", "Indiferente, no creyente"),
+                           'Ateo, agnóstico,\nindiferente, o\nno creyente', religion)) %>%
+  mutate(religion = ifelse(religion == 'Creyente de otra religión', 'Otra\nreligión',
+                           ifelse(religion == 'Católico practicante', 'Católico\npracticante',
+                                  ifelse(religion == 'Católico no practicante', 'Católico\nno practicante', religion ))))
+religion$religion <- paste0('\n', religion$religion, '\n')
+religion <- religion %>%
+  group_by(religion, ccaa) %>%
+  summarise(val = sum(val)) %>%
+  group_by(ccaa) %>%
+  mutate(p = val / sum(val) * 100) %>%
+  ungroup %>%
+  filter(!ccaa %in% c('Melilla', 'Ceuta'))
+religion$religion <- factor(religion$religion, levels = rev(sort(unique(religion$religion))))
+
+sample_size <- tibble(ccaa = ccaas,
+                      n = c(543, 82, 74, 66, 132, 40, 132, 169, 450, 304, 76, 194, 393, 80, 39, 148, 20, 5, 5))
+
+gr <- religion %>% 
+  left_join(sample_size) %>%
+  mutate(people = (p/100) * n) %>%
+  group_by(catalunya = ccaa == 'Cataluña', 
+           religion) %>%
+  summarise(people = sum(people)) %>%
+  group_by(catalunya) %>%
+  mutate(p = people / sum(people) * 100)
+  
+
+cols <- RColorBrewer::brewer.pal(n = 4, name = 'Spectral')
+cols[1] <- 'darkgrey'
+ggplot(data = religion,
+       aes(x = ccaa,
+           y = p,
+           fill = religion)) +
+  geom_bar(stat = 'identity', position = position_stack()) +
+  theme_databrew() +
+   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5,
+                                     size = 12),
+          plot.title = element_text(hjust = 0.5, size = 22),
+          plot.caption = element_text(size = 14),
+         legend.text = element_text(size = 13)) +
+    scale_y_continuous(name ='Porcentaje', breaks = seq(0, 100, 10)) +
+        labs(x = '',
+             caption = 'Datos: CIS Julio 2019 | Excluidos los N.C. Tamaño de muestra: 2.952.\nGráfico: @joethebrew ')  +
+  theme(legend.position = 'right') +
+  scale_fill_manual(name = '',
+                    values = cols) +
+  geom_text(data = religion %>% filter(p >= 5),
+            aes(label = round(p, digits = 1)),
+            color = 'white',
+            size = 2.5,
+            alpha = 0.7,
+            position = position_stack(vjust = 0.5)) +
+  labs(title = 'Religión por comunidad autónoma')
+```
