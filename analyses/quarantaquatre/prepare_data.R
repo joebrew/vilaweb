@@ -543,7 +543,8 @@ parents_plot <- function(ca = FALSE){
 }
 
 make_resample <- function(var = 'pares'){
-  recent <- combined %>% filter(date >= '2018-01-01')
+  recent <- combined %>% filter(date >= '2018-01-01') %>%
+    mutate(previous4 = date <= '2019-05-01')
   recent$new_var <- unlist(recent[,var])
   # adjust population to be identical to previous
   proportions <- recent %>%

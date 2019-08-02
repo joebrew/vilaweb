@@ -190,17 +190,29 @@ one feels more Catalan or Spanish) so that our sample is identical to
 the previous four BOP surveys. If we do that, the percentage in favor of
 independence is significantly higher than the percentage opposed.
 
-    Error: Evaluation error: object 'previous4' not found.
+| Independentista | Percentatge |
+| :-------------- | ----------: |
+| No              |       43.32 |
+| NS/NC           |        7.31 |
+| Sí              |       49.36 |
 
 If we instead adjust for “own language”, we get a much more even split.
 
-    Error: Evaluation error: object 'previous4' not found.
+| Independentista | Percentatge |
+| :-------------- | ----------: |
+| No              |       46.82 |
+| NS/NC           |        7.74 |
+| Sí              |       45.43 |
 
 And if we adjusted by parents’ place of birth, support for union is
 greater than support for independence (albeit with less of a gap than in
 the most recent survey).
 
-    Error: Evaluation error: object 'previous4' not found.
+| Independentista | Percentatge |
+| :-------------- | ----------: |
+| No              |       47.17 |
+| NS/NC           |        7.62 |
+| Sí              |       45.21 |
 
 # Conclusion
 
@@ -209,14 +221,15 @@ unknowable (since Spain won’t permit a fair vote), but the yes-no split
 likely remains at approximately the 50-50 mark.
 
 Did support for independence decline drastically in the last few months?
-Probably not. Rather, the most recent BOP poll disproportionately
-represented groups that are adverse to independence (Spanish-speakers,
-those with no parents from Catalonia, and those who self-identify as
-Spanish). If we “correct” the sample to make it more in line with
-previous BOP polls, we find that support for independence is also more
-in line with previous BOP polls. In other words, there was no change in
-support for independence - only a chance in the demographic
-characteristics of the survey participants.
+And did Catalans feelings of “Spanishness” really increase so
+drastically in recent months? Probably not. Rather, the most recent BOP
+poll disproportionately represented groups that are adverse to
+independence (Spanish-speakers, those with no parents from Catalonia,
+and those who self-identify as Spanish). If we “correct” the sample to
+make it more in line with previous BOP polls, we find that support for
+independence is also more in line with previous BOP polls. In other
+words, there was no change in support for independence - only a chance
+in the demographic characteristics of the survey participants.
 
 What will the next poll show? Given the [“regression toward the mean”
 phenomenon](https://en.wikipedia.org/wiki/Regression_toward_the_mean),
