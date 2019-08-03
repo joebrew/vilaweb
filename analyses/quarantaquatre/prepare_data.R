@@ -462,19 +462,35 @@ pares_plot <- function(ca = FALSE){
 }
 
 plot_identificacio <- function(ca = FALSE){
+  pd <- combined
   if(ca){
     the_labs <- labs(title = 'Autoidentificació',
                      subtitle = 'Enquesta BOP del CEO',
                      x = 'Data',
                      y = 'Percentatge')
+    
+    pd$identificacio <- factor(pd$identificacio,
+                               levels = levels(pd$identificacio),
+                               labels = gsub(' com', '\ncom', gsub(' que', '\nque', levels(pd$identificacio))))
+    
   } else {
     the_labs <- labs(title = 'Self-identification',
                      subtitle = 'BOP survey of the CEO',
                      x = 'Date',
                      y = 'Percentage')
+    pd$identificacio <- as.character(pd$identificacio)
+    levs <- c('Only Spanish', 'More Spanish\nthan Catalan', 'As Spanish\nas Catalan',
+              'More Catalan\nthan Spanish', 'Only Catalan')
+    pd <- pd %>%
+      mutate(identificacio = ifelse(identificacio == 'Només espanyol/a', levs[1],
+                                    ifelse(identificacio == 'Més espanyol/a que català/ana', levs[2],
+                                           ifelse(identificacio == 'Tan espanyol/a com català/ana', levs[3],
+                                                  ifelse(identificacio == 'Més català/ana que espanyol/a', levs[4],
+                                                         ifelse(identificacio == 'Només català/ana', levs[5], NA))))))
+    pd$identificacio <- factor(pd$identificacio, levels = levs)
   }
   plot_sample_plot(sample_plot(var = 'identificacio',
-                               data = combined %>% filter(!identificacio %in% c('No contesta', 'No ho sap'))
+                               data = pd %>% filter(!identificacio %in% c('No contesta', 'No ho sap'))
   )) + xlim(as.Date('2017-10-01'), Sys.Date()) +
     the_labs
 }

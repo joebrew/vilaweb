@@ -192,17 +192,17 @@ independence is significantly higher than the percentage opposed.
 
 | Independentista | Percentatge |
 | :-------------- | ----------: |
-| No              |       43.32 |
-| NS/NC           |        7.31 |
-| Sí              |       49.36 |
+| No              |       43.48 |
+| NS/NC           |        7.26 |
+| Sí              |       49.27 |
 
 If we instead adjust for “own language”, we get a much more even split.
 
 | Independentista | Percentatge |
 | :-------------- | ----------: |
-| No              |       46.82 |
-| NS/NC           |        7.74 |
-| Sí              |       45.43 |
+| No              |       46.84 |
+| NS/NC           |        7.71 |
+| Sí              |       45.45 |
 
 And if we adjusted by parents’ place of birth, support for union is
 greater than support for independence (albeit with less of a gap than in
@@ -210,9 +210,9 @@ the most recent survey).
 
 | Independentista | Percentatge |
 | :-------------- | ----------: |
-| No              |       47.17 |
-| NS/NC           |        7.62 |
-| Sí              |       45.21 |
+| No              |       47.18 |
+| NS/NC           |        7.63 |
+| Sí              |       45.19 |
 
 # Conclusion
 
