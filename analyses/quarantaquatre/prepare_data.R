@@ -592,3 +592,65 @@ make_resample <- function(var = 'pares'){
   
 }
 
+x <- combined %>%
+  group_by(date,
+           var = ifelse(grepl('espany', identificacio),
+                        'Només esp/més esp/tan esp com cat',
+                        ifelse(identificacio %in% c('No ho sap', 'No contesta'), 'NS/NC',
+                               'Només cat/més cat'))) %>%
+  summarise(n = n(),
+            indepe_si = length(which(indepe == 'Sí')),
+            indepe_no = length(which(indepe == 'No')),
+            indepe_ns = length(which(indepe == 'NS/NC'))) %>%
+  group_by(date) %>%
+  mutate(p = n / sum(n) * 100,
+         p_indepe_si = indepe_si / sum(n) * 100,
+         p_indepe_no = indepe_no / sum(n) * 100,
+         p_indepe_no = indepe_no / sum(n) * 100)
+
+ggplot(data = x,
+       aes(x = date,
+           y = p,
+           color = var)) +
+  geom_line()
+
+ggplot(data = x %>% filter(date >= '2015-01-01'),
+       aes(x = date,
+           y = p_indepe_si)) +
+  geom_line(aes(color = var))
+
+
+y <- combined %>% group_by(date) %>%
+  summarise(pare_esp = sum(pare_esp) / (n() * 2) * 100,
+            pare_cat = sum(pare_cat) / (n() * 2) * 100,
+            espanyolisme = length(which(grepl('espany', identificacio) & !grepl('catal', identificacio))) / n() * 100,
+            unionisme = length(which(indepe == 'No')) / n() * 100) %>%
+  gather(key, value, pare_esp:unionisme)
+key_dict <- tibble(key = c('espanyolisme',
+                           'pare_cat',
+                           'pare_esp',
+                           'unionisme'),
+                   new_key = c('"Espanyolisme"\n(se sent només espanyol\no més espanyol que català)',
+                               "% de pares nascuts\na Catalunya",
+                               "% de pares nascuts\na la resta d'Espanya",
+                               "Unionisme"))
+y <- left_join(y, key_dict)
+library(databrew)
+ggplot(data = y %>% filter(date >= '2017-01-01'),
+       aes(x = date,
+           y = value)) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~new_key, scales = 'free_y') +
+  theme_databrew() +
+  theme(axis.text.x = element_text(angle = 90,
+                                   hjust = 1, 
+                                   vjust = 0.5)) +
+  labs(x = '',
+       y = '%') +
+  theme(legend.position = 'none',
+        strip.text = element_text(size = 12)) +
+  geom_text(aes(label = round(value, digits = 1),
+                y = value + 0.3 + (0.01 * value)),
+            alpha = 0.6,
+            size = 3)
