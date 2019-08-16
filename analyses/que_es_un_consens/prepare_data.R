@@ -432,16 +432,20 @@ party_plot <- function(ca = FALSE,
   
     
 }
-# 
-# time_plot <- function(ca = FALSE){
-#   pd <- combined %>%
-#     filter(!is.na(referendum)) %>%
-#     group_by(date, referendum) %>%
-#     tally %>%
-#     mutate(p = n / sum(n) * 100)
-#   ggplot(data = pd,
-#          aes(x = date,
-#              y = p)) +
-#     geom_bar(stat = 'identity',
-#              aes(fill = referendum))
-# }
+
+time_plot <- function(ca = FALSE){
+  pd <- combined %>%
+    filter(!is.na(referendum)) %>%
+    filter(!referendum %in% c("Ni d'acord ni en desacord",
+                              "No ho sap",
+                              "No contesta")) %>%
+    mutate(referendum = ifelse(grepl("d'acord|D'acord", referendum), "D'acord", "Desacord")) %>%
+    group_by(date, referendum) %>%
+    tally %>%
+    mutate(p = n / sum(n) * 100)
+  ggplot(data = pd,
+         aes(x = date,
+             y = p)) +
+    geom_bar(stat = 'identity',
+             aes(fill = referendum))
+}

@@ -72,36 +72,46 @@ update_database <- function(people = NULL,
     
     if(get_all){
       message(toupper(this_person), ': Getting all data')
-      system(paste0("python3 ../foreign/twint/Twint.py -u ",
-                    this_person,
-                    " --since ",
-                    after,
-                    " --until ", until,
-                    " -o ", wd, "/temp_tweets.csv --csv"))
+      
+      bash_text <- paste0(
+        'twint -u ',
+        this_person,
+        ' -o data/',
+        this_person,
+        " --since ",
+        after,
+        " --until ", until,
+        " -o ", wd, "/temp_tweets.csv --csv"
+      )
+      system(bash_text)
       
     } else if(force_old){
       message(toupper(this_person), ': Getting old data')
-      system(paste0("python3 ../foreign/twint/Twint.py -u ",
-                    this_person,
-                    " --since ",
-                    after,
-                    " --until ", until,
-                    " -o ", wd, "/temp_tweets.csv --csv"))
+      bash_text <- paste0(
+        'twint -u ',
+        this_person,
+        " --since ",
+        after,
+        " --until ", until,
+        " -o ", wd, "/temp_tweets.csv --csv")
+      system(bash_text)
     } else {
       message(toupper(this_person), ': Getting recent data only')
       # Just getting update
-      system(paste0("python3 ../foreign/twint/Twint.py -u ",
-                    this_person,
-                    " --since ",
-                    this_id,
-                    " --until ", until,
-                    " -o ", wd, "/temp_tweets.csv --csv"))
+      bash_text <- paste0(
+        'twint -u ',
+        this_person,
+        " --since ",
+        this_id,
+        " --until ", until,
+        " -o ", wd, "/temp_tweets.csv --csv")
+      system(bash_text)
     }
     
     # Read the temp written file
     message('Reading temp file which was written for ', this_person)
-    if(file.exists('temp_tweets/tweets.csv')){
-      tl <- read_csv('temp_tweets/tweets.csv')
+    if(file.exists('temp_tweets.csv')){
+      tl <- read_csv('temp_tweets.csv')
       
       # Ensure no duplicates
       tl <- tl %>% dplyr::distinct(.keep_all = TRUE) %>%
@@ -127,9 +137,7 @@ update_database <- function(people = NULL,
     
     # Rm the temp_tweets file
     suppressWarnings({
-      file.remove('temp_tweets/tweets.csv')
-      file.remove('temp_tweets/users.csv')
-      file.remove('temp_tweets/')
+      file.remove('temp_tweets.csv')
     })
     
   }

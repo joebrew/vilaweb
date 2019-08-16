@@ -1,0 +1,196 @@
+---
+title: "Puigdemont's political relevance"
+output: github_document
+---
+
+# Alternative title: the persistent difficulty of "apartar Puigdemont"
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+source('prepare_data.R')
+```
+
+# Introduction
+
+Last week, the Spanish newspaper "El País" published [an article ](https://elpais.com/politica/2019/08/06/actualidad/1565101313_277310.html) which described Carles Puigdemont as isolated, quiet, and increasingly irrelevant in politics and the international media. The narrative in the Spanish media of Puigdemont as irrelevant is nothing new. It reflects, perhaps, an expectation: that the fact that Puigdemont resides abroad means his influence in Catalan politics will diminish over time. 
+
+
+Whatever your _expectation_ is regarding Puigdemont's relevance, the narrative of the Catalan politician as "irrelevant" does not reflect the facts. Whether you like it or not, the data show that Puigdemont remains Catalonia's most "relevant" politician. He was the candidate who received the most votes in Catalonia in the European elections. He is more talked about - by both his political allies and rivals - than any other politician. He is more well-known than any other Catalan politician. And his name is searched for more - in English, Spanish, French, and German - than any other politician, on platforms like Google and Wikipedia. 
+
+Let's explore the data in five areas: (1) elections, (2) twitter, (3) wikipedia, (4) google, (5) surveys.
+
+## 1. Elections
+
+Following the October 2017 independence referendum, Spain dissolved the Catalan government, imprisoned several activisits and politicians, and imposed regional elections. The Spanish Government said it would ["gladly" accept Puigdemont's participation](https://www.europapress.es/nacional/noticia-gobierno-recibiria-agrado-participacion-puigdemont-elecciones-21d-20171028184016.html) in the December 2017 elections. But once the results came in, that position changed.
+
+Puigdemont campaigned from abroad. His candidacy received the second most number of votes.
+
+```{r}
+d21()
+```
+
+However, the candidacy of the party which received the most votes (the "Citizens'" Inés Arrimadas) was unable to convert the electoral "victory" into a presidency, since she garnered very little support among other parties. In fact, "Citizens'" received the most votes largely because it concerntrated the anti-independence votes into one party, whereas the pro-independence votes were split evenly between two.
+
+If we translate popular votes into parliamentary support for presidency, we can see that Puigdemont was - by far- the politician whose candidacy received the most parliamentary support:
+
+```{r}
+d21p()
+```
+
+Fast-forward a year and a half to the May 2019 European parliamentary elections. Puigdemont again campaigned from abroad. And just weeks before the elections, [Spain's electoral body (ilegally) blocked his candidacy](https://www.politico.eu/article/spanish-electoral-body-blocks-former-catalan-president-carles-puigdemont-from-running-in-eu-election/). The block was later overruled, Puigdemont was able to run, and he received more votes from Catalans than any other candidate.
+
+```{r}
+europees()
+```
+
+In other words, for those who believe that elections are the only reliable source of information on a politician's relevance, it is clear that Puigdemont remains relevant.
+
+And for those who seek information beyond just election results, keep reading...
+
+## 2. Twitter
+
+Twitter mentions are extremely volatile. One event or sensational article can send mentions up 10x or 100x. 
+
+
+
+## 3. Wikipedia
+
+## 4. Google
+
+## 5. Surveys
+
+
+
+# Conclusion
+
+
+The narrative of Puigdemont as "irrelevant" is not based on reality. Rather, it likely emerges from a form of "wishful thinking". The same newspapers whose [editorials advocate for making Puigdemont irrelevant](https://elpais.com/elpais/2019/04/10/opinion/1554917949_768729.html), are also the ones who publish stories on his supposed irrelevance. But stories are cheap and easy, particularly when no data are involved. Reality, on the other hand, is stubborn. Puigdemont's persistent relevance in Catalan politics is something to be acknowledged, _especially_ by those who consider it a problem. 
+
+The day after the October 2017 Catalan independence referendum, the European Commission issued a statement calling on ["all relevant players to now move very swiftly from confrontation to dialogue"](https://europa.eu/rapid/press-release_STATEMENT-17-3626_en.htm). And Spanish President Pedro Sánchez has repeatedly said that his government is a "government of dialogue". Yet neither Sánchez, nor any member of his government, has engaged in any conversation with Puigdemont since October 2017. That's nearly two years of simmering political conflict, with not even one conversation between the priniciple representatives of the two sides. The European Commission was right: "all relevant players" need to talk with one another, in order to craft a solution for the Catalan political crisis. And "all relevant players", like it or not, includes Carles Puigdemont.
+
+
+# Catalan language plots
+
+```{r}
+d21(ca = T)
+d21p(ca = T)
+europees(ca = T)
+
+```
+
+
+```{r}
+date_breaks <- seq(as.Date('2019-05-01'),
+                           as.Date('2019-07-04'),
+                           by = 'week')
+date_labels <- format(date_breaks, '%d %b')
+date_labels <- gsub('May', 'Maig', date_labels)
+date_labels <- gsub('Jun', 'Juny', date_labels)
+date_labels <- gsub(' ', '\n', date_labels)
+make_plot(ca = TRUE) +
+  scale_x_date(breaks = date_breaks,
+               labels = date_labels) +
+  theme(axis.text.x = element_text(size = 8))
+```
+
+```{r}
+date_breaks <- seq(as.Date('2019-05-01'),
+                           as.Date('2019-07-04'),
+                           by = 'week')
+date_labels <- format(date_breaks, '%d %b')
+date_labels <- gsub('May', 'Maig', date_labels)
+date_labels <- gsub('Jun', 'Juny', date_labels)
+date_labels <- gsub(' ', '\n', date_labels)
+make_plot(ca = TRUE, y = 'interactions') +
+  scale_x_date(breaks = date_breaks,
+               labels = date_labels) +
+  theme(axis.text.x = element_text(size = 8))
+```
+
+```{r}
+make_another(ca = TRUE)
+```
+
+```{r}
+article_people <- c('Josep Borrell',
+                          'Carles Puigdemont',
+                          'Antoni Comín',
+                          'Oriol Junqueras')
+start_date <- '2019-05-01'
+make_wiki_plot(language = 'ca',
+               since = start_date,
+               people = article_people) +
+  labs(title = 'Visites de pàgines de Wikipedia',
+       subtitle = '1r de maig - 3 de juliol de 2019')
+```
+
+
+```{r}
+date_breaks <- seq(as.Date('2019-05-01'),
+                           as.Date('2019-07-04'),
+                           by = 'week')
+date_labels <- format(date_breaks, '%d %b')
+date_labels <- gsub('May', 'Maig', date_labels)
+date_labels <- gsub('Jun', 'Juny', date_labels)
+date_labels <- gsub(' ', '\n', date_labels)
+
+
+make_wiki_time_plot(people = article_people,
+                    language = 'ca',
+                    since = '2019-05-01',
+                    alpha = 0.9,
+                    size = 0.6,
+                    the_scales = 'fixed') +
+  labs(title = 'Visites de pàgines de Wikipedia')  +
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(size = 14)) +
+    scale_x_date(breaks = date_breaks,
+               labels = date_labels) +
+  theme(axis.text.x = element_text(size = 8,
+                                   angle = 0))
+```
+
+```{r}
+date_breaks <- seq(as.Date('2019-06-28'),
+                           as.Date('2019-07-04'),
+                           by = 'day')
+date_labels <- format(date_breaks, '%d %b')
+date_labels <- gsub('May', 'Maig', date_labels)
+date_labels <- gsub('Jun', 'Juny', date_labels)
+date_labels <- gsub(' ', '\n', date_labels)
+
+make_wiki_time_plot(people = article_people,
+                    language = 'ca',
+                    since = '2019-06-28',
+                    alpha = 0.9,
+                    size = 0.6,
+                    the_scales = 'fixed') +
+  geom_point() +
+  labs(title = 'Visites de pàgines de Wikipedia')  +
+  theme(legend.text = element_text(size = 8),
+        plot.title = element_text(size = 14)) +
+      scale_x_date(breaks = date_breaks,
+               labels = date_labels) +
+  theme(axis.text.x = element_text(size = 8,
+                                   angle = 0))
+```
+
+# Technical details
+
+
+Data were gathered from Wikipedia using the `pageviews` R package. Data were gathered from Twitter using the `twint` package. The code for this analysis is publicly available [here](https://github.com/joebrew/vilaweb/tree/master/analyses/wikipedia2).
