@@ -93,7 +93,20 @@ Most Socialists did not mention Open Arms on Twitter either year. But among thos
 make_other_chart(ca = FALSE)
 ```
 
-In other words, despite their enthusiasm for and solidarity with Open Arms' work in 2018, and despite the crew and rescued individuals of Open Arms spending the first two weeks of August in the Mediterranean with no port, Spanish and Catalan socialists were extremely silent on the topic. 
+In other words, despite their enthusiasm for and solidarity with Open Arms' work in 2018, and despite the crew and rescued individuals of Open Arms spending the first two weeks of August in the Mediterranean with no port, Spanish and Catalan socialists were extremely silent on the topic. Only two Socialists mentioned Open Arms during the period from January 1 through August 14, 2019, and the mentions were not the enthusiastic endorsements or expressions of solidarity as before.
+
+### Socialists' mentions of Open Arms, 2018
+
+```{r}
+tl %>% filter(year == 2018, openarms) %>% dplyr::select(date, time, username, name, tweet) %>% arrange(date) %>% kable
+```
+
+### Socialists' mentions of Open Arms, 2019
+
+```{r}
+tl %>% filter(year == 2019, openarms) %>% dplyr::select(date, time, username, name, tweet) %>% arrange(date) %>% kable
+```
+
 
 # Interpretation
 
