@@ -103,7 +103,7 @@ make_chart <- function(ca = FALSE){
     scale_fill_manual(name = '',
                       values = colorRampPalette(RColorBrewer::brewer.pal(n = 8, name = 'Set1'))(length(unique(joined$username)))) +
     the_labs +
-    theme(legend.text = element_text(size = 6.5)) +
+    theme(legend.text = element_text(size = 7)) +
     theme(plot.caption = element_text(size = 6))
 }
 
@@ -163,5 +163,6 @@ make_other_chart <- function(ca = FALSE){
     the_labs +
     scale_y_continuous(name = '', breaks = c(0, 10)) +
     theme_vilaweb()  +
-    theme(plot.caption = element_text(size = 6))
+    theme(plot.caption = element_text(size = 6)) +
+    theme(strip.text = element_text(size = 8)) 
 }

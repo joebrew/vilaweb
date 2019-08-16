@@ -87,7 +87,7 @@ make_chart(ca = FALSE)
 ```
 
 
-Most Socialists did not mention Open Arms on Twitter either year. But among those that ever mentioned Open Arms on Twitter, rates were universally higher in 2018 than 2019:
+Most Socialists did not mention Open Arms on Twitter either year. But among those that ever mentioned Open Arms on Twitter, rates were higher in 2018 than 2019 among all but two of the `r length(unique(tl$username))`:
 
 ```{r}
 make_other_chart(ca = FALSE)
