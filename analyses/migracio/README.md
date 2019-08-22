@@ -32,12 +32,51 @@ So, this week’s “analysis” won’t be an analysis at all. Rather, I’ll
 present just one data visualization: a map. The map has no aggregation,
 no words, and no interpretation. Rather, there’s a dot for each person
 who has died trying to reach Europe through the Mediterranean since
-2014.
+2014. The map is [HERE](http://joebrew.net/mapa.html).
 
 17.755 dots. 17.755 humans. 17.755 deaths.
+
+Sometimes there are no words. A vegades, sobren les paraules.
 
 # Details
 
   - Raw data from <https://missingmigrants.iom.int/>
+  - Points randomly “jittered” within 0.08 lat/lng in order to avoid
+    overlap
   - All code at
     <https://github.com/joebrew/vilaweb/tree/master/analyses/migracio>
+  - Map at <http://joebrew.net/mapa.html>
+
+# Instruccions per Vilaweb
+
+  - Descarrega el fitxer `.html` del mapa a
+    <https://github.com/joebrew/vilaweb/blob/master/analyses/migracio/map.html?raw=true>
+    per poder posar en el domini www.vilaweb.cat
+
+  - Si ho vols integrat en una altre pàgina, feu servir iframe
+    així:
+
+<!-- end list -->
+
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <title>Morts al mediterrànea, 2014-2019</title>
+            <style type="text/css">
+                body, html
+                {
+                    margin: 0; padding: 0; height: 100%; overflow: hidden;
+                }
+    
+                #content
+                {
+                    position:absolute; left: 0; right: 0; bottom: 0; top: 0px;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="content">
+                <iframe width="100%" height="100%" frameborder="0" src="http://joebrew.net/mapa" frameborder="0" width="960" />
+            </div>
+        </body>
+    </html>
