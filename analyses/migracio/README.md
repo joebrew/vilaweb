@@ -1,0 +1,43 @@
+Migration
+================
+
+# Article
+
+In the last 6 years, 18,000 human beings have died trying to reach
+Europe through the Mediterranean. Many of them were fleeing situations
+of poverty, violence, and terror. They came seeking better lives for
+themselves and their children. Many of them were children.
+
+They crossed countries, sometimes continents, with nothing but a bag on
+their back, or an infant in their arms. They died in the same waters we
+go to on vacation, sometimes within sight of the beach. Most drowned.
+Some were crushed or suffocated in a panic as their boats took on water.
+Some died of hypothermia, as they treaded water for hours, waiting for a
+rescue operation which never came. Others were lost at sea, eventually
+succumbing to dehydration or starvation after days adrift.
+
+Much of data analysis is about *aggregation*: the act of combining
+things together so as to convert individual data points into a
+meaningful narrative. But in the case of migrant deaths in the
+Mediterranean, it’s difficult to conclude anything meaningful from
+something so unnecessary and meaningless. It’s difficult, with or
+without data, to make sense of a world where tens of thousands of deaths
+can be considered “legal”, [but rescuing people at sea is treated as a
+“crime”](https://www.vilaweb.cat/noticies/calvo-recorda-a-lopen-arms-que-no-te-permis-per-fer-rescats-i-que-sarrisca-a-sancions/).
+Furthermore, data aggregation runs the risk of converting human beings
+into simple numbers, losing the emotional effect which the death of a
+fellow person *should* have on us.
+
+So, this week’s “analysis” won’t be an analysis at all. Rather, I’ll
+present just one data visualization: a map. The map has no aggregation,
+no words, and no interpretation. Rather, there’s a dot for each person
+who has died trying to reach Europe through the Mediterranean since
+2014.
+
+17.755 dots. 17.755 humans. 17.755 deaths.
+
+# Details
+
+  - Raw data from <https://missingmigrants.iom.int/>
+  - All code at
+    <https://github.com/joebrew/vilaweb/tree/master/analyses/migracio>
