@@ -131,4 +131,4 @@ l <- leaflet() %>%
             opacity = 1)
 
 library(htmlwidgets)
-saveWidget(l, file="map.html")
+saveWidget(l, file="map.html", title = 'Morts a la Mediterrànea, 2014-2019')
