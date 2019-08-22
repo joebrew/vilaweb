@@ -115,13 +115,13 @@ popups <- paste0(df$date, ' | ',
 qpal <- colorFactor('RdYlBu', domain = sort(unique(df$type)))
 
 l <- leaflet() %>%
-  # addProviderTiles(providers$CartoDB.DarkMatterNoLabels) %>%
-  addProviderTiles(providers$Stamen) %>%
+  addProviderTiles(providers$CartoDB.DarkMatterNoLabels) %>%
+  # addProviderTiles(providers$Stamen) %>%
   # addProviderTiles(providers$NASAGIBS.ViirsEarthAtNight2012) %>%
   # addTiles(urlTemplate="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}") %>%
   addCircleMarkers(data = df_sp,
-                   radius = 4,
-                   fillOpacity = 0.2,
+                   radius = 2,
+                   fillOpacity = 0.5,
                    stroke = F,
                    color = qpal(df$type),
                    label = popups) %>%
