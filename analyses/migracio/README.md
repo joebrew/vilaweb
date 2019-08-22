@@ -38,6 +38,8 @@ who has died trying to reach Europe through the Mediterranean since
 
 Sometimes there are no words. A vegades, sobren les paraules.
 
+[<img src="img/d.png">](http://joebrew.net/mapa)
+
 # Details
 
   - Raw data from <https://missingmigrants.iom.int/>

@@ -42,6 +42,9 @@ So, this week's "analysis" won't be an analysis at all. Rather, I'll present jus
 
 Sometimes there are no words. A vegades, sobren les paraules.
 
+[<img src="img/d.png">](http://joebrew.net/mapa)
+
+
 # Details
 - Raw data from https://missingmigrants.iom.int/
 - Points randomly "jittered" within 0.08 lat/lng in order to avoid overlap
