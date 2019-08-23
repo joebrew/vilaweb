@@ -83,14 +83,14 @@ close contact with reality. Whereas increases in crime in Barcelona have
 been gradual, *talking about* crime in Barcelona has skyrocketed over
 recent weeks.
 
-For this analysis, we gathered 164175 tweets from 43 Catalan and Spanish
+For this analysis, we gathered 728053 tweets from 35 Catalan and Spanish
 newspapers. The full list can be seen at the end of this article. We
 identified all tweets which contained both the word “Barcelona” and a
 word referring to violence and/or crime (“violència”, “inseguretat”,
 “delictes”, “crim”) in both Spanish and Catalan.
 
 The below chart shows the combined number of monthly tweets from these
-43 newspapers mentioning the crime situation in Barcelona:
+35 newspapers mentioning the crime situation in Barcelona:
 
 ![](figures/unnamed-chunk-5-1.png)<!-- -->
 
@@ -99,7 +99,7 @@ even more striking.
 
 ![](figures/unnamed-chunk-6-1.png)<!-- -->
 
-Let’s break it down by which newspapers.
+Let’s break it down by which newspapers, by week.
 
 ![](figures/unnamed-chunk-7-1.png)<!-- -->
 
@@ -107,36 +107,146 @@ Finally, we can examine which newspapers by day:
 
 ![](figures/unnamed-chunk-8-1.png)<!-- -->
 
-The increased newspaper coverage has had an effect. The below shows
-unique tweets mentioning criminality (using the same search query as
-above) about Barcelona in Twitter in general.
-
-![](figures/unnamed-chunk-9-1.png)<!-- -->
-
-And the below shows tweets by day mentioning violence and Barcelona.
+The increased newspaper coverage has had an effect on the general
+population. The below shows unique monthly tweets mentioning criminality
+or violence (using the same search query as above) and Barcelona in
+Twitter in general, since the beginning of 2018.
 
 ![](figures/unnamed-chunk-10-1.png)<!-- -->
 
-# Interpretation and Conclusion
+Let’s look at the same data, but at the daily level and only for the
+last few months. The below shows the number of daily unique tweets
+criminality or violence and Barcelona.
 
-Bla bla bla
+![](figures/unnamed-chunk-11-1.png)<!-- -->
 
-## List of newspapers analyzed
+## Comparing reality and narrative (relat)
 
-20m 324cat abc\_es cadanaser\_espa ccmaa\_cat cope cronicaglobal
-dbalears diariaara diaridegirona diarilaveu\_ diariomallorca
-economiaed\_ elcatalan\_es elconfidencial eldiarioes eleconomistaes
-elespanolcom elmundoes elnacionalcat elpais elpais\_espana elperiodico
-elperiodico\_cat elpuntavui enoticiescat europapress larazon\_es
-lavanguardia laverdad\_es le\_figaro lemondefr libertaddigital
-lindependant naciodigital okdiario ondacero\_es publico rtve telecincoes
-uhmallorca VilaWeb voz\_populi
-
-# Catalan language charts
+Let’s examine a comparison between reality and relat (narrative). The
+below chart shows “reality” on the left (known number of monthly crimes
+and violent robberies) and “relat” (narrative) on the right (tweets from
+both newspapers and the population as a whole mentioning violence and
+criminality in Barcelona). The numbers have been standardized to
+percentage of “normal”, ie 200% means that there is twice the normal
+rate, and 50% means there is half the normal rate.
 
 ![](figures/unnamed-chunk-12-1.png)<!-- -->
 
-![](figures/unnamed-chunk-13-1.png)<!-- -->
+Both reality and relat (narrative) show an increase in criminality and
+violence in Barcelona, but the proportionality is totally lacking.
+Whereas violent robberies were up 10-12% in the most recent months for
+which data is available realtive to “normal” (2018), tweets about
+violence and criminality in Barcelona increased by 500%.
+
+# Interpretation and Conclusion
+
+Two things stand out in this analysis:
+
+1.  **Disproportionality of coverage**: The disproportionality between
+    the relatively moderate increases in criminality in Barcelona and
+    the extreme increases in newspaper coverage about criminality in
+    Barcelona.
+
+2.  **Timing of coverage**: The arbitrariness of the timing of the
+    newspaper coverage about criminality.
+
+In other words, over the last month, reality and relat (narrative)
+diverged. With no new data available on crime since June, and with no
+data suggesting a particular uptick in the rate of crime in the last few
+weeks, newspapers - and people - began talking incessantly about crime
+in Barcelona. The rate hit fever pitch over the last week, with dozens
+of newspapers covering multiple stories on the security “crisis” in the
+Catalan capital.
+
+Why did the increase take place *now*? And why is the (major) increase
+in coverage about violence and criminality in Barcelona so
+disproportionate to the actual (relatively minor) increase in violence
+and criminality?
+
+It’s helpful to consider the importance of the mental “frame” of both
+journalists and their readers in trying to understand how a story
+catches fire, and what motivates editorial decisions. The case of the
+virality of the Barcelona-crime news angle could be an example of a
+“feedback loop” or “echo chamber”. It works like this: a violent event
+occurs (a stabbing, for example), journalists write about it, not much
+else is going on in the news these days, so the story about the violent
+event gets the most clicks, which motivates journalists to write more
+about violent crime in Barcelona, which feeds a sense of fear in the
+population, which motivates more people to click on and retweet stories
+about violent crime, which motivates journalists to write more about it,
+etc. As the echo chamber grows in volume, journalists from other news
+organizations feel obliged to also cover the story (since “everyone is
+talking about it”), and politicians must also comment on it. Then, more
+stories are written about what politicians said about it. And there are
+even [stories about
+stories](https://www.lavanguardia.com/local/barcelona/20190821/464198797476/bbc-ola-crimenes-barcelona.html)
+about it.
+
+In the feedback loop, we are all at fault for the disconnect between
+reality and relat. In fact, we actively *create* that disproprtionality
+by choosing what to discuss, what to write about, what to like or
+retweet, and what to ignore. In this sense, journalism is demand-driven:
+we demand sensationality (as demonstrated by what we click on), and
+journalism provides. Classic economics: supply and demand. I myself am
+contributing to the feedback loop by choosing to write about criminality
+in Barcelona for this article.
+
+But to say that all are to blame does not mean that all are to blame
+*equally*. Journalists have an ethical responsibility to maintain some
+allegiance to reality, even if this means passing on the opportunity to
+publish a “clickworthy” headline. When the institution of journalism
+does nothing to push back against a narrative which is increasingly
+decoupled from reality - and in some cases even contributes to the
+narrative - it fails to fulfill its responsibility to society.
+
+Publishing headline stories on violent crime in Barcelona, day after
+day, at an unprecented rate, at an arbitrary moment in terms of the
+actual rate of crime, might be good for business - but it does not
+reflect well on the professionality of journalism. Sure, journalism
+should be *demand-driven* - journalists should write stories about the
+things people want to read about. But it should also be
+*reality-driven*. And in the case of Barcelona’s apparent crime
+“crisis”, reality plays only a minor role.
+
+## List of newspapers analyzed
+
+    20m
+    324cat
+    abc_es
+    cadanaser_espa
+    ccmaa_cat
+    cope
+    cronicaglobal
+    diariaara
+    diaridegirona
+    elcatalan_es
+    elconfidencial
+    eldiarioes
+    eleconomistaes
+    elespanolcom
+    elmundoes
+    elnacionalcat
+    elpais
+    elpais_espana
+    elperiodico
+    elperiodico_cat
+    elpuntavui
+    enoticiescat
+    europapress
+    larazon_es
+    lavanguardia
+    laverdad_es
+    libertaddigital
+    naciodigital
+    okdiario
+    ondacero_es
+    publico
+    rtve
+    telecincoes
+    vilaweb
+    voz_populi
+
+# Catalan language charts
 
 ![](figures/unnamed-chunk-14-1.png)<!-- -->
 
@@ -144,8 +254,14 @@ uhmallorca VilaWeb voz\_populi
 
 ![](figures/unnamed-chunk-16-1.png)<!-- -->
 
-![](figures/unnamed-chunk-17-1.png)<!-- -->
-
 ![](figures/unnamed-chunk-18-1.png)<!-- -->
 
 ![](figures/unnamed-chunk-19-1.png)<!-- -->
+
+![](figures/unnamed-chunk-20-1.png)<!-- -->
+
+![](figures/unnamed-chunk-21-1.png)<!-- -->
+
+![](figures/unnamed-chunk-22-1.png)<!-- -->
+
+![](figures/unnamed-chunk-23-1.png)<!-- -->

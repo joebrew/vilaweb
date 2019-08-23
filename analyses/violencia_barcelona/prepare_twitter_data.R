@@ -1,78 +1,79 @@
 library(tidyverse)
 # Read in twitter credentials
 library(yaml)
-twitter_credentials <- yaml.load_file('../../credentials/credentials.yaml')
-## load rtweet package
-library(rtweet)
-token <- create_token(
-  app = "bcndata",
-  consumer_key = twitter_credentials$twitter_api_key,
-  consumer_secret = twitter_credentials$twitter_api_secret_key,
-  access_token = twitter_credentials$twitter_access_token,
-  access_secret = twitter_credentials$twitter_access_token_secret)
-
-
-if('data.RData' %in% dir()){
-  load('data.RData')
-} else {
-  violencia_bcn <-
-    rt <- search_tweets(
-      '("violencia" OR "violència" OR "inseguridad" OR "inseguritat" OR "delitos" OR "delictes" OR "crimen" OR "crim")', 
-      n = 1000000000, 
-      include_rts = F, 
-      retryonratelimit = TRUE,
-      geocode = "41.385,2.173,20mi"
-    )
-  save(violencia_bcn,
-       file = 'violencia_bcn.RData')
-  
-  
-  cerveza_bcn <-
-    rt <- search_tweets(
-      '("cervesa" OR "cerveza")', 
-      n = 1000000000, 
-      include_rts = F, 
-      retryonratelimit = TRUE,
-      geocode = "41.385,2.173,20mi"
-    )
-  save(cerveza_bcn,
-       file = 'cerveza_bcn.RData')
-  
-  violencia_mad <-
-    rt <- search_tweets(
-      '("violencia" OR "violència" OR "inseguridad" OR "inseguritat" OR "delitos" OR "delictes" OR "crimen" OR "crim")', 
-      n = 1000000000, 
-      include_rts = F, 
-      retryonratelimit = TRUE,
-      geocode = "40.41678,-3.703,20mi"
-    )
-  save(violencia_mad,
-       file = 'violencia_mad.RData')
-  
-  cerveza_mad <-
-    rt <- search_tweets(
-      '("cerveza" OR "cervesa")', 
-      n = 1000000000, 
-      include_rts = F, 
-      retryonratelimit = TRUE,
-      geocode = "40.41678,-3.703,20mi"
-    )
-  save(violencia_mad,
-       file = 'cerveza_mad.RData')
-  
-  save(violencia_bcn, violencia_mad, cerveza_bcn, cerveza_mad,
-       file = 'data.RData')
-  
-}     
+# twitter_credentials <- yaml.load_file('../../credentials/credentials.yaml')
+# ## load rtweet package
+# library(rtweet)
+# token <- create_token(
+#   app = "bcndata",
+#   consumer_key = twitter_credentials$twitter_api_key,
+#   consumer_secret = twitter_credentials$twitter_api_secret_key,
+#   access_token = twitter_credentials$twitter_access_token,
+#   access_secret = twitter_credentials$twitter_access_token_secret)
+# 
+# 
+# if('data.RData' %in% dir()){
+#   load('data.RData')
+# } else {
+#   violencia_bcn <-
+#     rt <- search_tweets(
+#       '("violencia" OR "violència" OR "inseguridad" OR "inseguritat" OR "delitos" OR "delictes" OR "crimen" OR "crim")', 
+#       n = 1000000000, 
+#       include_rts = F, 
+#       retryonratelimit = TRUE,
+#       geocode = "41.385,2.173,20mi"
+#     )
+#   save(violencia_bcn,
+#        file = 'violencia_bcn.RData')
+#   
+#   
+#   cerveza_bcn <-
+#     rt <- search_tweets(
+#       '("cervesa" OR "cerveza")', 
+#       n = 1000000000, 
+#       include_rts = F, 
+#       retryonratelimit = TRUE,
+#       geocode = "41.385,2.173,20mi"
+#     )
+#   save(cerveza_bcn,
+#        file = 'cerveza_bcn.RData')
+#   
+#   violencia_mad <-
+#     rt <- search_tweets(
+#       '("violencia" OR "violència" OR "inseguridad" OR "inseguritat" OR "delitos" OR "delictes" OR "crimen" OR "crim")', 
+#       n = 1000000000, 
+#       include_rts = F, 
+#       retryonratelimit = TRUE,
+#       geocode = "40.41678,-3.703,20mi"
+#     )
+#   save(violencia_mad,
+#        file = 'violencia_mad.RData')
+#   
+#   cerveza_mad <-
+#     rt <- search_tweets(
+#       '("cerveza" OR "cervesa")', 
+#       n = 1000000000, 
+#       include_rts = F, 
+#       retryonratelimit = TRUE,
+#       geocode = "40.41678,-3.703,20mi"
+#     )
+#   save(violencia_mad,
+#        file = 'cerveza_mad.RData')
+#   
+#   save(violencia_bcn, violencia_mad, cerveza_bcn, cerveza_mad,
+#        file = 'data.RData')
+#   
+# }     
 
 if('twitter.RData' %in% dir()){
   load('twitter.RData')
 } else {
   # # Get tweets
-  # twint -s '("violencia" OR "violència" OR "inseguridad" OR "inseguritat" OR "delitos" OR "delictes" OR "crimen" OR "crim") AND ("Barcelona")' --since 2019-01-01 --until 2019-08-21 -o data/tweets --csv
+  # twint -s '("violencia" OR "violència" OR "inseguridad" OR "inseguretat" OR "delitos" OR "delictes" OR "crimen" OR "crim") AND ("Barcelona")' --since 2019-01-01 --until 2019-08-21 -o data/tweets --csv
 
 df <- read_csv('data/tweets/tweets.csv') %>%
-  filter(!duplicated(id))
+  filter(!duplicated(id)) %>%
+  filter(date <= '2019-08-22')
 
   # Adjust for time zone
   library(lubridate)
@@ -122,7 +123,7 @@ keys <-
     make_keys('Europa Press', 'europapress.es', 'europapress'),
     make_keys('E-noticies', 'e-noticies.cat', 'enoticiescat'),
     make_keys('E-noticies', 'e-noticies.es', 'enoticiescat'),
-    make_keys('VilaWeb', 'vilaweb.cat', 'VilaWeb'),
+    make_keys('VilaWeb', 'vilaweb.cat', 'vilaweb'),
     make_keys('Libertad Digital', 'libertaddigital.com', 'libertaddigital'),
     make_keys('La Razón', 'larazon.es', 'larazon_es'),
     make_keys('El Punt Avui', 'elpuntavui.cat', 'elpuntavui'),
@@ -160,6 +161,9 @@ keys <- keys %>%
                                    newspaper)))
 
 keys <- left_join(keys, goog_newspapers)
+keys <- keys %>%
+  filter(!handle %in% c('', 'le_figaro', 'lemondefr', 'economiaed_', 'diarilaveu_',
+                        'lindependant', 'diariomallorca', 'uhmallorca', 'dbalears'))
 newspapers <- rev(sort(unique(keys$handle)))
 newspapers <- newspapers[newspapers != '']
 # newspapers <- newspapers[8:length(newspapers)]
@@ -179,7 +183,7 @@ if('newspapers.RData' %in% dir()){
     con,
     query
   )
-  # dbDisconnect(con)
+  DBI::dbDisconnect(con)
   newspapers_df <- tl
   save(newspapers_df, file = 'newspapers.RData')
 }
