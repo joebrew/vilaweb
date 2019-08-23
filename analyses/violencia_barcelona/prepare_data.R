@@ -444,9 +444,9 @@ combination_chart <- function(ca = FALSE){
       category = c('Realitat', 'Relat',
                    'Realitat', 'Relat'),
       new_type = c('Delictes (tots)',
-                   'Diaris (piulets)',
+                   'Diaris (piulets sobre la\nviolència/criminalitat a Barcelona)',
                    'Robatoris violents',
-                   'Xarxes (piulets)')
+                   'Xarxes (piulets sobre la\nviolència/criminalitat a Barcelona)')
     )
     the_labs <- labs(x = 'Mes',
                      y = "Percentatge (del 'normal')",
@@ -459,9 +459,9 @@ combination_chart <- function(ca = FALSE){
                'Twitter'),
       category = c('Reality', 'Narrative',
                    'Reality', 'Narrative'),
-      new_type = c('Crime (all)', 'Newspaper tweets',
+      new_type = c('Crime (all)', 'Newspaper tweets\nabout violence/criminality in Barcelona',
                    'Violent robberies',
-                   'Social networks (tweets)')
+                   'All tweets\nabout violence/criminality in Barcelona')
     )
     the_labs <- labs(x = 'Month',
                      y = "Percentage (of 'normal')",
