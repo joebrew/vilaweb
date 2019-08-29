@@ -18,19 +18,17 @@ delete_duplicates_database <- function(){
   pg = DBI::dbDriver("PostgreSQL")
   con = DBI::dbConnect(pg, dbname="twitter")
   
+  query <- paste0("DELETE FROM twitter a USING (SELECT MIN(ctid) as ctid, id FROM twitter GROUP BY id HAVING COUNT(*) > 1) b WHERE a.id = b.id AND a.ctid <> b.ctid;")
   message('DELETING DUPLICATE ROWS IN THE DB')
-  # dbSendQuery(con, 'DELETE FROM twitter
-  #                     WHERE  ctid NOT IN (
-  #                        SELECT min(ctid) 
-  #                        FROM   twitter
-  #                        GROUP  BY id);')
-  tl <- dbReadTable(con, 'twitter')
-  # Flag the duplicates
-  flag <- duplicated(tl$id)
-  tl <- tl[!flag,]
-  message('Overwriting old table')
-  # Re-writing whole table
-  dbWriteTable(con, "twitter", tl, overwrite = TRUE, row.names = FALSE)
+    dbSendQuery(con, query)
+  
+  # tl <- dbReadTable(con, 'twitter')
+  # # Flag the duplicates
+  # flag <- duplicated(tl$id)
+  # tl <- tl[!flag,]
+  # message('Overwriting old table')
+  # # Re-writing whole table
+  # dbWriteTable(con, "twitter", tl, overwrite = TRUE, row.names = FALSE)
   
   # disconnect from the database
   dbDisconnect(con) 

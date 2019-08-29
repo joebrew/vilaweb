@@ -27,7 +27,7 @@ source('prepare_data.R')
 
 # Introduction
 
-Last week, the Spanish newspaper "El País" published [an article ](https://elpais.com/politica/2019/08/06/actualidad/1565101313_277310.html) which described Carles Puigdemont as isolated, quiet, and increasingly irrelevant in politics and the international media. The narrative in the Spanish media of Puigdemont as irrelevant is nothing new. It reflects, perhaps, an expectation: that the fact that Puigdemont resides abroad means his influence in Catalan politics will diminish over time. 
+Two weeks ago, the Spanish newspaper "El País" published [an article ](https://elpais.com/politica/2019/08/06/actualidad/1565101313_277310.html) which described Carles Puigdemont as isolated, quiet, and increasingly irrelevant in politics and the international media. The narrative in the Spanish media of Puigdemont as irrelevant is nothing new. It reflects, perhaps, an expectation: that the fact that Puigdemont resides abroad means his influence in Catalan politics will diminish over time. 
 
 
 Whatever your _expectation_ is regarding Puigdemont's relevance, the narrative of the Catalan politician as "irrelevant" does not reflect the facts. Whether you like it or not, the data show that Puigdemont remains Catalonia's most "relevant" politician. He was the candidate who received the most votes in Catalonia in the European elections. He is more talked about - by both his political allies and rivals - than any other politician. He is more well-known than any other Catalan politician. And his name is searched for more - in English, Spanish, French, and German - than any other politician, on platforms like Google and Wikipedia. 
@@ -67,6 +67,8 @@ And for those who seek information beyond just election results, keep reading...
 Twitter mentions are extremely volatile. One event or sensational article can send mentions up 10x or 100x. 
 
 
+- Aggregated over time
+- Retweets and likes per tweet
 
 ## 3. Wikipedia
 
@@ -74,7 +76,13 @@ Twitter mentions are extremely volatile. One event or sensational article can se
 
 ## 5. Surveys
 
+```{r}
+coneixement_plot()
+```
 
+```{r}
+valoracio_plot()
+```
 
 # Conclusion
 

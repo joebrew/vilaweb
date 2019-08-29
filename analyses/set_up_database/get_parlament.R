@@ -17,7 +17,7 @@ library(lubridate)
 # # Now from command line:
 # psql twitter
 
-set_up_database <- function(people = NULL){
+get_parlament <- function(people = NULL){
   
   # # If null, do everyone
   # if(is.null(people)){
@@ -46,40 +46,15 @@ set_up_database <- function(people = NULL){
   }
   people <- people[!is.na(people)]
   people <- sort(unique(people))
-  people <-people[113:length(people)]
+ 
   # Make sure everything in data is lowercase
   if(!dir.exists('data')){
     dir.create('data')
   }
   
-  # Get twitter data
-  pg = dbDriver("PostgreSQL")
-  con = dbConnect(pg, dbname="twitter")
-  for(p in 1:length(people)){
-    this_person <- people[p]
-    file_name <- (paste0('data/', this_person, '_tweets.csv'))
-    if(!file.exists(file_name)){
-      message(toupper(this_person), '----------------')
-      bash_text <- paste0(
-        'twint -u ',
-        this_person,
-        ' -o data/',
-        this_person,
-        '_tweets.csv --csv'
-      )
-      system(bash_text)
-      }
-    # Read in the data
-    tl <- read_csv(file_name)
-    dbWriteTable(con,'twitter',tl, row.names=FALSE,append = TRUE)
-    
-  }
-  # Write the database
-  # Read back
-  # dtab = dbGetQuery(con, "select * from twitter")
-  # disconnect from the database
-  dbDisconnect(con)
+  vilaweb::update_database(people = people, delete_duplicates = FALSE)
   
 }
-set_up_database()
+get_parlament()
 source('../../R/delete_duplicates_database.R')
+delete_duplicates_database()

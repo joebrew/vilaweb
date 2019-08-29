@@ -1,0 +1,138 @@
+---
+title: "Update: Spanish and Catalan Socialists and the case of Open Arms"
+output: github_document
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+source('prepare_data_update.R')
+```
+
+# Methods
+
+For this analysis, we'll look at _all_ tweets of Socialists who are either (a) PSOE Ministers in the Sánchez government, (b) PSC Parlementarians in the Catalan Parliament, or PSC/PSOE Members of European Parliament. This list is made up of the following people / twitter handles:
+
+```{r}
+x <- socialists[!is.na(socialists$username),] %>% dplyr::select(full_name, username) 
+x$username <- paste0('`', x$username, '`')
+x <- x %>% dplyr::rename(`  ` = full_name, ` ` = username)
+kable(x)
+```
+
+The following Socialist ministers/parlamentarians were excluded, since they don't have publicly-known Twitter accounts:
+
+```{r, results = 'asis'}
+cat(paste0(sort(unique(socialists$full_name[is.na(socialists$username)])), collapse = '\n'))
+```
+
+A total of `r length(sort(unique(tl$username)))` accounts were examined. A tweet was classified as "being about Open Arms" if it contained any of the following:
+
+```
+Open Arms
+OpenArms
+open arms
+openarms
+```
+
+# Results
+
+Mentions of Open Arms dropped drastically among Spanish and Catalan Socialists from 2018 to 2019:
+
+```{r}
+make_chart(ca = FALSE)
+```
+
+
+Most Socialists did not mention Open Arms on Twitter either year. But among those that ever mentioned Open Arms on Twitter, rates were higher in 2018 than 2019 among all but two of the `r length(unique(tl$username))`:
+
+```{r}
+make_other_chart(ca = FALSE)
+```
+
+In other words, despite their enthusiasm for and solidarity with Open Arms' work in 2018, and despite the crew and rescued individuals of Open Arms spending the first two weeks of August in the Mediterranean with no port, Spanish and Catalan socialists were extremely silent on the topic. Only two Socialists mentioned Open Arms during the period from January 1 through August 14, 2019, and the mentions were not the enthusiastic endorsements or expressions of solidarity as before.
+
+### Socialists' mentions of Open Arms, 2018
+
+```{r}
+tl %>% filter(year == 2018, openarms) %>% dplyr::select(date, time, username, name, tweet) %>% arrange(date) %>% kable
+```
+
+### Socialists' mentions of Open Arms, 2019
+
+```{r}
+tl %>% filter(year == 2019, openarms) %>% dplyr::select(date, time, username, name, tweet) %>% arrange(date) %>% kable
+```
+
+
+# Interpretation
+
+Why? What happened? What compelled Spanish and Catalan socialists to be so adamently vocal about the cause of Open Arms in 2018, and so stunningly silent in 2019? 
+
+What compelled MEP Javi Lopez to spend [five days aboard Open Arms in 2018](https://twitter.com/fjavilopez/status/1013172893101051904) and to [request that the NGO be given human rights awards for its work](https://twitter.com/fjavilopez/status/1049602644749242368) only to say _nothing_ about Open Arms during the two weeks it was without safe harbor in August 2019?
+
+![](img/javi.png)
+
+Why did Socialist President of Congress nMeritxell Batet call on the Spanish Government to take action for the cause of Open Arms when that Spanish Government was in the hands of another party, but say nothing about Open Arms when the Spanish Government was in the hands of her own party?
+
+![](img/meritxell.png)
+
+Why did PSC President Miquel Iceta offer his "support" for the work of Open Arms in 2018, but say nothing about Open Arms during the 2-week period during which Spain refused to offer safe harbor?\
+
+![](img/miquel.png)
+
+Why did Catalan parliamentarian Pol Gibert tweet the "BackOpenArms" hashtag from the welcoming reception for Open Arms in 2018, but say nothing during their two weeks of peril at sea in 2019?
+
+![](img/pol.png)
+
+Why did Spanish Minister of Development, Jose luis Ábalos, express his satisfaction with the rescue work of Open Arms in August 2018, but say nothing about their work a year later, when they needed a safe port at which to disembark?
+
+![](img/joseluis.png)
+
+Why did Catalan Parlamentarian Carles Castillo call the workers of Open Arms "Heroes" in March 2018, only to sit by silently during their plight in 2019?
+
+![](img/carles.png)
+
+Why did Spanish President Pedro Sánchez applaud the work of Open Arms and call on his predecssor to "stop this drama" (in reference to not letting Open Arms do rescue operations) in 2018, only to refuse a safe port in 2019?
+
+![](img/pedro.png)
+
+Could it be that the `r length(unique(tl$username))` socialists examined feel that Open Arms, whose principles many of them enthusiastically applauded in 2018, has abandoned its principles? Could it be that they feel that the work that Open Arms is doing is wrong?
+
+If so, why not say that? Why not condemn Open Arms for "breaking maritime law" or "encouraging illegal immigration"? Why not say "hey, we were wrong in 2018, Open Arms is bad!"? Why the silence? 
+
+I don't know the answer to these questions. I don't know why the Socialists have decided to abandon Open Arms, both on Twitter and in reality. What I _do_ know is this: the high degree of uniformity in the Socialists' silence on the subject in 2019 is _not_ suggestive of spontaneity. Someone in the media should ask if Socialists have been given top-down instructions not to talk about Open Arms. And if so, why?
+
+
+# Catalan-language plots
+
+
+```{r}
+make_chart(ca = TRUE)
+```
+
+
+```{r}
+make_other_chart(ca = TRUE)
+```
+
+
+
+# Technical details
+
+
+Data were gathered from twitter using the python `twint` package, and stored in a local database using the instructions in the set-up of the R `vilaweb` package (https://github.com/joebrew/vilaweb). The code for this analysis is publicly available [here](`r self_cite()`).

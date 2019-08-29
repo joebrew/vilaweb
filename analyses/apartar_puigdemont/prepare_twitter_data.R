@@ -1,15 +1,15 @@
-
-# Read in twitter credentials
-library(yaml)
-twitter_credentials <- yaml.load_file('../../credentials/credentials.yaml')
-## load rtweet package
-library(rtweet)
-token <- create_token(
-  app = "bcndata",
-  consumer_key = twitter_credentials$twitter_api_key,
-  consumer_secret = twitter_credentials$twitter_api_secret_key,
-  access_token = twitter_credentials$twitter_access_token,
-  access_secret = twitter_credentials$twitter_access_token_secret)
+library(tidyverse)
+# # Read in twitter credentials
+# library(yaml)
+# twitter_credentials <- yaml.load_file('../../credentials/credentials.yaml')
+# ## load rtweet package
+# library(rtweet)
+# token <- create_token(
+#   app = "bcndata",
+#   consumer_key = twitter_credentials$twitter_api_key,
+#   consumer_secret = twitter_credentials$twitter_api_secret_key,
+#   access_token = twitter_credentials$twitter_access_token,
+#   access_secret = twitter_credentials$twitter_access_token_secret)
 
 
 if('data.RData' %in% dir()){

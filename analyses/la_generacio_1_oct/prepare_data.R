@@ -31,7 +31,7 @@ transform_valoracions <- function(df){
   for(j in 1:length(val_vars)){
     this_var <- val_vars[j]
     vals <- as.numeric(as.character(unlist(df[,this_var])))
-    vals <- ifelse(vals %in% c(98:99), NA, vals)
+    vals <- ifelse(vals %in% 98:99, NA, vals)
     df[,this_var] <- vals
   }
   return(df)
@@ -42,13 +42,6 @@ transform_coneixements <- function(df){
   for(j in 1:length(val_vars)){
     this_var <- val_vars[j]
     vals <- as.character(unlist(df[,this_var]))
-    vals <- ifelse(vals %in% c('98', '99'),
-                   NA, vals)
-    vals <- ifelse(vals == '1', 
-                   'Coneix', 
-                   ifelse(vals == '2',
-                          'No coneix',
-                          vals))
     df[,this_var] <- vals
   }
   return(df)
@@ -179,7 +172,9 @@ transform_data <- function(df){
                     'NS/NC', indepe)) %>%
     mutate(municipi = `Grandària del municipi`) %>%
     mutate(provincia = `Província`) %>%
+    mutate(age = Edat) %>%
     dplyr::select(
+      age,
       partit,
       referendum,
       identificacio,
@@ -240,108 +235,17 @@ combined <-
     transform_data(ceo_june_2019)
 )
 
-coneixement_plot <- function(ca = TRUE,                           who = NULL){
-  
-  # Define the dataframe
-  pd <- combined
-  # Keep only the relevant columns
-  keeps <- c('date',
-             names(pd)[grepl('Coneixement: ', names(pd))])
-  pd <- pd[,keeps]
-  # Convert the column names
-  for(j in 2:ncol(pd)){
-    names(pd)[j] <- substr(names(pd)[j], 14, nchar(names(pd)[j]))
-  }
-  # Keep only the relevant people
-  if(is.null(who)){
-    who <- sort(unique(names(pd)[2:length(names(pd))]))
-  }
-  keeps <- c('date',
-             who)
-  pd <- pd[,keeps]
-  
-  # Make long
-  long <- pd %>%
-    gather(key, value,
-           keeps[2]:keeps[length(keeps)])
-  
-  # Group by date, person, and calculate summary statistics
-  pd <- long %>%
-    group_by(date, key) %>%
-    summarise(responded = length(which(!is.na(value))),
-              queried = n(),
-              coneix = length(which(value == 'Coneix')),
-              no_coneix = length(which(value == 'No coneix'))) %>%
-    mutate(p_coneix = coneix / responded * 100)
-  
-  # Plot
-  ggplot(data = pd,
-         aes(x = date,
-             y = p_coneix,
-             group = key)) +
-    geom_line() +
-    # geom_point() +
-    facet_wrap(~key) +
-    theme_vilaweb() +
-    ylim(0, 100) +
-    theme(axis.text.x = element_text(angle = 90,
-                                     vjust = 0.5,
-                                     hjust = 1),
-          strip.text = element_text(size = 7))
-}
-
-valoracio_plot <- function(ca = FALSE,
-                           who = NULL){
-  
-  # Define the dataframe
-  pd <- combined
-  # Keep only the relevant columns
-  keeps <- c('date',
-             names(pd)[grepl('Valoració: ', names(pd))])
-  pd <- pd[,keeps]
-  # Convert the column names
-  for(j in 2:ncol(pd)){
-    names(pd)[j] <- substr(names(pd)[j], 12, nchar(names(pd)[j]))
-  }
-  # Keep only the relevant people
-  if(is.null(who)){
-    who <- sort(unique(names(pd)[2:length(names(pd))]))
-  }
-  keeps <- c('date',
-             who)
-  pd <- pd[,keeps]
-  
-  # Make long
-  long <- pd %>%
-    gather(key, value,
-                  keeps[2]:keeps[length(keeps)])
-  
-  # Group by date, person, and calculate summary statistics
-  pd <- long %>%
-    group_by(date, key) %>%
-    summarise(responded = length(which(!is.na(value))),
-              queried = n(),
-              avg = mean(value, na.rm = TRUE),
-              p50 = quantile(value, 0.5, na.rm = TRUE),
-              p75 = quantile(value, 0.75, na.rm = TRUE),
-              p25 = quantile(value, 0.25, na.rm = TRUE))
-  
-  # Plot
-  ggplot(data = pd,
-         aes(x = date,
-             y = avg)) +
-    geom_bar(stat = 'identity') +
-    # geom_line() +
-    # geom_point() +
-    facet_wrap(~key) +
-    theme_vilaweb() +
-    ylim(0, 10) +
-    theme(axis.text.x = element_text(angle = 90,
-                                     vjust = 0.5,
-                                     hjust = 1),
-          strip.text = eelement_text(size = 6))
-  
-}
+# Create an estimated birth date
+combined <- 
+  combined %>%
+  mutate(dob = date - round((182.5 + (age * 365.25)))) %>%
+  # Define the oct1 generation
+  mutate(oct1 = 
+           # 16 years old
+           (dob <= '2002-10-01' &
+         # 20 years old
+         dob >= '1997-10-01'
+         ))
 
 simple_plot <- function(ca = FALSE,
                         keep_simple = FALSE){
@@ -425,6 +329,7 @@ simple_plot <- function(ca = FALSE,
               nudge_y = 5,
               alpha = 0.6)
 }
+
 
 party_plot <- function(ca = FALSE,
                        keep_simple = FALSE){
@@ -543,160 +448,72 @@ time_plot <- function(ca = FALSE){
 }
 
 
-
-d21 <- function(ca = FALSE){
-  require(vilaweb)
-  if(ca){
-    facs <- c('Favorable a\ninvestir Puigdemont',
-              'No favorable a\ninvestir Puigdemont',
-              'Cap posició explícita\nsobre Puigdemont')
-    seats <- 'escons'
-    votes <- 'vots'
-    the_labs <- labs(x = '',
-                     y = 'Diputats',
-                     title = 'Eleccions catalanes de 2017')
-  } else {
-    facs <- c('In favor of Puigdemont\nas President',
-              'Not in favor of Puigdemont\nas President',
-              'No explicit position\non Puigdemont')
-    seats <- 'seats'
-    votes <- 'votes'
-    the_labs <- labs(x = '',
-                     y = 'MPs',
-                     title = '2017 Catalan elections')
+# Plot of independentism among oct 1 generation
+oct1_chart <- function(ca = FALSE,
+                       group_time = FALSE,
+                       var = cut(combined$age, breaks = seq(0, 100, 10))){
+  pd <- combined
+  pd$var <- var
+    
+  if(group_time){
+    pd <- pd %>%
+      mutate(timing = ifelse(date >= '2016-10-01' &
+                               date <= '2017-10-01',
+                             'Before',
+                             ifelse(date > '2017-10-02' &
+                                      date <= '2018-09-30',
+                                    'After',
+                                    NA)))
+    pd$timing <- factor(pd$timing, levels = c('Before', 'After'))
+    # pd <- pd %>% filter(age_group <= 70)
+    # pd$age_group <- factor(pd$age_group)
+    
+    } else {
+    pd <- pd %>%
+      filter(date >= '2016-10-01',
+             date <= '2018-10-01') %>%
+      mutate(timing = date)
   }
-  pd <- tibble(partit = c("Cs", "JxCat", "ERC", "PSC", "Comuns", "CUP", "PP", "PACMA", "Verds", "PU M+J"),
-               vots = c(1109732, 948233, 935861, 606659, 326360, 195246, 185670, 38743, 10287, 577),
-               escons = c(36, 34, 32, 17, 8, 4, 4, 0, 0, 0),
-               favorable = c(F, T, T, F, F, T, F, NA, F, NA),
-               pa = c(T, F, F, F, F, F, T, F, F, F)) %>%
-    arrange(escons) %>%
-    group_by(favorable) %>%
-    mutate(total = sum(escons),
-           total_vots = sum(vots)) %>%
+  pd <- pd %>%
+    # mutate(timing = ifelse(date == '2017-06-15',
+    #                        'Before',
+    #                        ifelse(date == '2017-10-15',
+    #                               'After', NA))) %>%
+    filter(!is.na(indepe),
+           !is.na(timing),
+           age <= 90,
+           indepe != 'NS/NC') %>%
+    # mutate(age_group = round(age, digits = -1)) %>%
+    group_by(timing,
+             var,
+             indepe) %>%
+    tally %>%
     ungroup %>%
-    mutate(fac = ifelse(is.na(favorable), facs[3], ifelse(favorable, facs[1], facs[2]))) %>%
-    filter(!is.na(fac)) %>%
-    mutate(fac = paste0(fac, ':\n', numberfy(total_vots), ' ', votes))
-  pd$partit <- factor(pd$partit, levels = pd$partit)
-  # pd <- pd %>% filter(escons > 0)
-  cols <- c('#FFFFFF', '#2C913D', '#ABBB92', 'black', '#5DBCD2', 'purple', '#C00F19', '#9E9F97', '#5B3217', '#DF8547')
-  
-  
-  ggplot(data = pd,
-         aes(x = partit,
-             y = vots,
-             fill = partit)) +
-    facet_wrap(~fac, scales = 'free_x') +
-    geom_bar(stat = 'identity') +
-    theme_vilaweb() +
-    geom_text(aes(label = numberfy(vots)),
-              color = 'black',
-              nudge_y = 50000) +
-    the_labs +
-    scale_fill_manual(name = '',
-                      values = cols) 
-}
-
-d21p <- function(ca = FALSE){
-  require(vilaweb)
-  if(ca){
-    facs <- c('Favorable a investir Puigdemont',
-              'No favorable a investir Puigdemont',
-              'Favorable a investir Arrimadas')
-    seats <- 'escons'
-    the_labs <- labs(x = '',
-                     y = 'Diputats',
-                     title = 'Eleccions catalanes de 2017: suport pels candidats presidencials entre diputats elegits',
-                     subtitle = '135 diputats en total. Majoria absoluta = 68 vots')
-  } else {
-    facs <- c('In favor of Puigdemont as President',
-              'Not in favor of Puigdemont as President',
-              'In favor of Arrimadas as President')
-    seats <- 'seats'
-    the_labs <- labs(x = '',
-                     y = 'MPs',
-                     title = '2017 Catalan elections: support for Presidential candidates among elected MPs',
-                     subtitle = '135 total MPs. Absolute majority = 68 votes')
-  }
-  cols <- c('black', '#5DBCD2', '#C00F19', 'purple', '#DF8547')
-  pd <- tibble(partit = c("Cs", "JxCat", "ERC", "PSC", "Comuns", "CUP", "PP", "PACMA", "Verds", "PU M+J"),
-               vots = c(1109732, 948233, 935861, 606659, 326360, 195246, 185670, 38743, 10287, 577),
-               escons = c(36, 34, 32, 17, 8, 4, 4, 0, 0, 0),
-               favorable = c(F, T, T, F, F, T, F, F, F, F),
-               pa = c(T, F, F, F, F, F, T, F, F, F)) %>%
-    arrange(escons) %>%
-    group_by(favorable) %>%
-    mutate(total = sum(escons)) %>%
+    group_by(timing,
+             var) %>%
+    mutate(p = n / sum(n) * 100) %>%
     ungroup %>%
-    mutate(fac = ifelse(favorable, facs[1], 
-                        ifelse(pa, facs[3], NA))) %>%
-    filter(!is.na(fac)) %>%
-    mutate(fac = paste0(fac, ':\n', total, ' ', seats))
-  pd$partit <- factor(pd$partit, levels = pd$partit)
-  ggplot(data = pd %>% filter(escons > 0),
-         aes(x = fac,
-             y = escons,
-             fill = partit)) +
-    geom_bar(stat = 'identity',
-             position = position_stack()) +
-    theme_vilaweb() +
-    geom_text(aes(label = escons),
-              color = 'white',
-              # nudge_y = -2,
-              position = position_stack(vjust = 0.5)) +
-    the_labs +
-    scale_fill_manual(name = '',
-                      values = cols) +
-    facet_wrap(~fac, scales = 'free_x') +
-    theme(axis.text.x = element_text(size = 0))
-}
-
-europees <- function(ca = FALSE){
-  pd <- tibble(partit = c('JxCat', 'PSC', 'ERC', 'Cs', 'Podem', 'PP', 'VOX', 'PACMA', 'CV-EC',
-                          'Recortes\nCero', 'Pirates', 'Altres'),
-               vots = c(987149, 766107, 733401, 298781, 292088, 178950, 68824, 48733, 11713, 6822, 4937, 42858))
-  pd$partit <- factor(pd$partit, levels = pd$partit)
-  if(ca){
-    the_labs <- labs(title = 'Resultats 2019: elecciones europees a Catalunya',
-                     x = 'Partit',
-                     y = 'Vots')
-  } else {
-    the_labs <- labs(title = '2019 results: European elections in Catalonia',
-                     x = 'Party',
-                     y = 'Votes')
-  }
-  ggplot(data = pd,
-         aes(x = partit,
-             y = vots)) +
+    filter(indepe == 'Sí')
+  
+  g <- ggplot(data = pd %>% filter(var != 'NS/NC'),
+         aes(x = timing,
+             y = p,
+             color = var,
+             group = var)) +
     geom_point() +
-    geom_segment(aes(xend = partit,
-                     yend = 0)) +
-    theme_vilaweb() +
-    the_labs +
-    geom_text(aes(label = numberfy(vots)),
-              nudge_y = 50000,
-              alpha = 0.7)
+    theme(axis.text.x = element_text(angle = 90,
+                                     vjust = 0.5,
+                                     hjust = 1)) +
+    geom_vline(xintercept = as.Date('2017-10-01'),
+               alpha = 0.5,
+               lty = 2)
+    if(group_time){
+      g <- g + geom_line()
+    } else {
+      g <- g + geom_step()
+    }
+    
+      return(g)
 }
 
-twitter <- function(ca = FALSE){
-  pd <-
-    bind_rows(
-      puigdemont_bcn %>% mutate(who = 'Puigdemont'),
-      sanchez_bcn %>% mutate(who = 'Sánchez')
-    ) %>%
-    mutate(date = as.Date(created_at)) %>%
-    filter(date != max(date)) %>%
-    group_by(who, date) %>%
-    summarise(n = n(),
-              rt = sum(retweet_count),
-              likes = sum(favorite_count)) %>%
-    mutate(interactions = n + rt + likes)
-  ggplot(data = pd,
-         aes(x = date,
-             y = interactions,
-             color = who)) +
-    geom_line()
-}
-
-
+oct1_chart(var = combined$provincia, group_time = T)
