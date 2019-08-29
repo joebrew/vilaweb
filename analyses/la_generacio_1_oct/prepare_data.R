@@ -450,9 +450,13 @@ time_plot <- function(ca = FALSE){
 
 # Plot of independentism among oct 1 generation
 oct1_chart <- function(ca = FALSE,
+                       add_label = FALSE,
+                       label_nudge = 1,
                        group_time = FALSE,
-                       var = cut(combined$age, breaks = seq(0, 100, 10))){
-  pd <- combined
+                       cut_time = TRUE,
+                       var = cut(combined$age, breaks = seq(0, 100, 10)),
+                       data = combined){
+  pd <- data
   pd$var <- var
     
   if(group_time){
@@ -469,11 +473,26 @@ oct1_chart <- function(ca = FALSE,
     # pd$age_group <- factor(pd$age_group)
     
     } else {
-    pd <- pd %>%
-      filter(date >= '2016-10-01',
-             date <= '2018-10-01') %>%
+      if(cut_time){
+        pd <- pd %>%
+          filter(date >= '2016-10-01',
+                 date <= '2018-10-01')
+      }
+      pd <- pd %>%
       mutate(timing = date)
+    }
+  
+  
+  if(ca){
+    the_labs <- labs(x = '',
+                     y = 'Percentatge a favor de la independència*',
+                     caption = "Dades: CEO. Gràfic: Joe Brew. www.vilaweb.cat. *Exclou els que no contesten / no saben\n'Abans': les 3 enquestes fetes durant l'any anterior a l'1-O\n'Després': les 3 enquestes fetes durant l'any posterior a l'1-O")
+  } else {
+    the_labs <- labs(x = '',
+                     y = 'Percentage in favor of independence*',
+                     caption = "Data: CEO. Chart: Joe Brew. www.vilaweb.cat. *Excluding those who do not answer or do not know\n'Before': the 3 surveys carried out in the year prior to Oct 1 2017\n'After': the 3 surveys carried out in the year after Oct 1 2017")
   }
+  
   pd <- pd %>%
     # mutate(timing = ifelse(date == '2017-06-15',
     #                        'Before',
@@ -493,9 +512,27 @@ oct1_chart <- function(ca = FALSE,
              var) %>%
     mutate(p = n / sum(n) * 100) %>%
     ungroup %>%
-    filter(indepe == 'Sí')
+    filter(indepe == 'Sí') %>%
+    filter(var != 'NS/NC')
+  if(group_time){
+    if(ca){
+      pd$timing <- factor(pd$timing, levels = c('Before', 'After'), labels = c('Abans de\nl\'1-O', 'Després de\nl\'1-O'))
+    } else {
+      pd$timing <- factor(pd$timing, levels = c('Before', 'After'), labels = c('Before\nreferendum', 'After\nreferendum'))
+      
+    }
+  }
   
-  g <- ggplot(data = pd %>% filter(var != 'NS/NC'),
+  n_cols <- length(unique(pd$var))
+  cols <- colorRampPalette(RColorBrewer::brewer.pal(n = 9, 'Spectral'))(n_cols)
+  if(n_cols == 3){
+    cols[2] <- 'darkgreen'
+  }
+  if(n_cols == 5){
+    cols[3] <- 'darkgrey'
+  }
+  
+  g <- ggplot(data = pd,
          aes(x = timing,
              y = p,
              color = var,
@@ -512,8 +549,188 @@ oct1_chart <- function(ca = FALSE,
     } else {
       g <- g + geom_step()
     }
-    
-      return(g)
+
+  g <- g +
+    theme_vilaweb() +
+    the_labs +
+    theme(plot.caption = element_text(size = 6),
+          axis.title.y = element_text(size = 10)) +
+    scale_color_manual(name = '', values = cols) +
+    geom_hline(yintercept = 50, lty = 2, alpha = 0.6)
+  if(add_label){
+    g <- g +geom_text(aes(label = round(p, digits = 1)), nudge_y = label_nudge, show.legend = FALSE)
+  }
+  return(g)
+}
+combined$dummy <- TRUE
+
+overall_chart <- function(ca = FALSE, full = FALSE, group_time = F, cut_time = F){
+  if(!ca){
+    laby <- labs(title = 'Support for independence among Catalans*',
+                 subtitle = ' ')
+    if(!full){
+      laby$subtitle <- 'The year before and the year after the Oct 1 2017 referendum'
+    }
+  } else {
+    laby <- labs(title = 'Independentisme*')
+    if(!full){
+      laby$subtitle <- "L'any abans i l'any després de l'1-O"
+    }
+  }
+  oct1_chart(var = combined$dummy, group_time = group_time, cut_time = cut_time, ca = ca) + theme(legend.position = 'none') + geom_text(aes(label = round(p, digits = 1)), nudge_y = 1) + laby
 }
 
-oct1_chart(var = combined$provincia, group_time = T)
+# oct1_chart(var = combined$provincia, group_time = F)
+
+age_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T){
+  if(ca){
+    ages <- c('Jove (18-30)', 'Adult (31-60)', 'Gran (61+)')
+    laby <- labs(title = 'Independentisme per edat')
+  } else {
+    ages <- c('Young (18-30)', 'Adult (31-60)', 'Old (61+)')
+    laby <- labs(title = 'Support for independence by age')
+  }
+  
+  xd <- combined
+  xd$agey <- ifelse(xd$age <= 30, ages[1], ifelse(xd$age <= 60, ages[2], ages[3]))
+  xd$agey <- factor(xd$agey, levels = ages)
+  oct1_chart(data = xd, var = xd$agey, group_time = group_time, cut_time = cut_time, ca = ca) +
+    laby
+}
+
+
+age_plot2 <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 1){
+  if(ca){
+    ages <- c('Molt jove (18-22)', 'Altres')
+    laby <- labs(title = 'Independentisme per edat')
+  } else {
+    ages <- c('Very young (18-2)', 'Others')
+    laby <- labs(title = 'Support for independence by age')
+  }
+  
+  xd <- combined
+  xd$agey <- ifelse(xd$age <= 22, ages[1], ages[2])
+  xd$agey <- factor(xd$agey, levels = ages)
+  oct1_chart(data = xd, var = xd$agey, group_time = group_time, cut_time = cut_time, ca = ca, add_label = add_label, label_nudge = label_nudge) +
+    laby
+}
+
+province_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 1.5){
+  if(ca){
+    laby <- labs(title = 'Independentisme per provincia')
+  } else {
+    laby <- labs(title = 'Support for independence by province')
+  }
+  
+  xd <- combined
+  oct1_chart(data = xd, var = xd$provincia, group_time = group_time, cut_time = cut_time, ca = ca, add_label = add_label, label_nudge = label_nudge) +
+    laby
+}
+
+avis_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 5){
+  if(ca){
+    laby <- labs(title = "Independentisme per nombre d'avis\nnascuts a Catalunya")
+  } else {
+    laby <- labs(title = "Support for independence by number of\ngrandparents born in Catalonia")
+  }
+  
+  xd <- combined %>% mutate(avis = factor(avis))
+  oct1_chart(data = xd, var = xd$avis, group_time = group_time, cut_time = cut_time, add_label = add_label, label_nudge = label_nudge, ca = ca) +
+    laby
+}
+
+language_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 5){
+  if(ca){
+    laby <- labs(title = "Independentisme per 'llengua propia'")
+  } else {
+    laby <- labs(title = "Support for independence by 'own language'")
+  }
+  
+  xd <- combined %>% filter(llengua_propia != 'Altres')
+  oct1_chart(data = xd, var = xd$llengua_propia, group_time = group_time, cut_time = cut_time, add_label = add_label, label_nudge = label_nudge, ca = ca) +
+    laby
+}
+
+party_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = F, label_nudge = 1.5){
+  if(ca){
+    laby <- labs(title = 'Independentisme per partit polític')
+  } else {
+    laby <- labs(title = 'Support for independence by political party')
+  }
+  
+  xd <- combined
+  oct1_chart(data = xd, var = xd$partit, group_time = group_time, cut_time = cut_time, ca = ca, add_label = add_label, label_nudge = label_nudge) +
+    laby
+}
+
+informat_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 1.5){
+  xd <- combined %>% filter(informat != 'No ho sap')
+  if(ca){
+    laby <- labs(title = "Independentisme per si l'enquestat es considera\ninformat del que passa en política")
+  } else {
+    laby <- labs(title = 'Support for independence by whether one\nconsiders him/herself informed about\nwhat is happening in politics')
+    xd$informat <- factor(xd$informat, levels = c('Molt', 'Bastant', 'Poc', 'Gens'),
+                          labels = c('Very much', 'A good deal', 'A little', 'Not at all'))
+  }
+  
+  
+  oct1_chart(data = xd, var = xd$informat, group_time = group_time, cut_time = cut_time, ca = ca, add_label = add_label, label_nudge = label_nudge) +
+    laby
+}
+
+interessat_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 1.5){
+  xd <- combined
+  if(ca){
+    laby <- labs(title = "Independentisme per si l'enquestat es considera\ninteressat en el que passa en política")
+  } else {
+    laby <- labs(title = 'Support for independence by whether one\nconsiders him/herself interested in\nwhat is happening in politics')
+    xd$informat <- factor(xd$informat, levels = c('Molt', 'Bastant', 'Poc', 'Gens'),
+                          labels = c('Very much', 'A good deal', 'A little', 'Not at all'))
+  }
+  
+  xd <- xd %>% filter(!interessat %in% c('No ho sap', 'No contesta'))
+  oct1_chart(data = xd, var = xd$interessat, group_time = group_time, cut_time = cut_time, ca = ca, add_label = add_label, label_nudge = label_nudge) +
+    laby
+}
+
+
+axis_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 1.5){
+  xd <- combined
+  xd$axis <- as.character(xd$axis)
+  xd$axis <- ifelse(xd$axis == 'Extrema esquerra', '0',
+                    ifelse(xd$axis == 'Extrema dreta', '10', xd$axis))
+  xd$axis <- as.numeric(xd$axis)
+  
+  if(ca){
+    axes <- c('extrema\nesquerra', 'esquerra', 'centre', 'dreta', 'extrema\ndreta')
+    laby <- labs(title = "Independentisme per ideologia esquerra-dreta")
+  } else {
+    axes <- c('far left', 'left', 'center', 'right', 'far right')
+    laby <- labs(title = 'Support for independence by left-right ideology')
+  }
+  xd$axis <- ifelse(xd$axis %in% 0:1, axes[1],
+                    ifelse(xd$axis <= 4, axes[2],
+                           ifelse(xd$axis == 5, axes[3],
+                                  ifelse(xd$axis <= 8, axes[4], 
+                                         ifelse(xd$axis <= 10, axes[5], NA)))))
+  xd$axis <- factor(xd$axis, levels = axes)
+  
+  xd <- xd %>% filter(!is.na(axis))
+  oct1_chart(data = xd, var = xd$axis, group_time = group_time, cut_time = cut_time, ca = ca, add_label = add_label, label_nudge = label_nudge) +
+    laby
+}
+
+
+neixer_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 5){
+  if(ca){
+    laby <- labs(title = "Independentisme per lloc de naixement")
+  } else {
+    laby <- labs(title = "Support for independence by place of birth")
+  }
+  
+  xd <- combined 
+  oct1_chart(data = xd, var = xd$neixer, group_time = group_time, cut_time = cut_time, add_label = add_label, label_nudge = label_nudge, ca = ca) +
+    laby
+}
+
+
