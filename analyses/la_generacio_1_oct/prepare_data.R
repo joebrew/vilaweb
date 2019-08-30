@@ -617,7 +617,7 @@ age_plot2 <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, ad
 
 province_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 1.5){
   if(ca){
-    laby <- labs(title = 'Independentisme per provincia')
+    laby <- labs(title = 'Independentisme per província')
   } else {
     laby <- labs(title = 'Support for independence by province')
   }
