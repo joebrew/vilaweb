@@ -100,7 +100,7 @@ The only group who saw support for independence go _down_ from the year before t
 informat_plot()
 ```
 
-## By extent of being interest in politics
+## By interest in politics
 
 As with being informed, being interested in politics meant larger increases in support for independence following the referendum. The only group which saw a decrease in support for independence after the referendum were those who said there were "not at all" interested in politics.
 
@@ -122,7 +122,7 @@ Catalans born in Catalonia have the highest support for independence, but Catala
 
 
 ```{r}
-neixer_plot(ca = T)
+neixer_plot(ca = F)
 ```
 
 
@@ -161,7 +161,7 @@ age_plot2(ca = T)
 
 
 ```{r}
-province_plot()
+province_plot(ca = T)
 ```
 
 

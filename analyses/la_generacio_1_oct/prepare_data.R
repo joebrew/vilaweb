@@ -641,7 +641,7 @@ avis_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, ad
 
 language_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 5){
   if(ca){
-    laby <- labs(title = "Independentisme per 'llengua propia'")
+    laby <- labs(title = "Independentisme per 'llengua pròpia'")
   } else {
     laby <- labs(title = "Support for independence by 'own language'")
   }
@@ -681,16 +681,16 @@ informat_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T
 interessat_plot <- function(ca = FALSE, full = FALSE, group_time = T, cut_time = T, add_label = T, label_nudge = 1.5){
   xd <- combined
   if(ca){
-    laby <- labs(title = "Independentisme per si l'enquestat es considera\ninteressat en el que passa en política")
+    laby <- labs(title = "Independentisme per interès en la política")
   } else {
-    laby <- labs(title = 'Support for independence by whether one\nconsiders him/herself interested in\nwhat is happening in politics')
+    laby <- labs(title = 'Support for independence by interest in politics')
     xd$informat <- factor(xd$informat, levels = c('Molt', 'Bastant', 'Poc', 'Gens'),
                           labels = c('Very much', 'A good deal', 'A little', 'Not at all'))
   }
   
   xd <- xd %>% filter(!interessat %in% c('No ho sap', 'No contesta'))
   oct1_chart(data = xd, var = xd$interessat, group_time = group_time, cut_time = cut_time, ca = ca, add_label = add_label, label_nudge = label_nudge) +
-    laby
+    laby 
 }
 
 

@@ -99,7 +99,7 @@ they paid no attention “at all” to what is going on in politics.
 
 ![](figures/unnamed-chunk-10-1.png)<!-- -->
 
-## By extent of being interest in politics
+## By interest in politics
 
 As with being informed, being interested in politics meant larger
 increases in support for independence following the referendum. The only
