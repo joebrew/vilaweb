@@ -140,7 +140,7 @@ mossos_chart <- function(ca = FALSE, robbery = FALSE){
 }
 
 
-mossos_chart2 <- function(ca = FALSE){
+mossos_chart2 <- function(ca = TRUE){
   
   
   if(ca){
@@ -159,6 +159,14 @@ mossos_chart2 <- function(ca = FALSE){
   
   pd <- mossos %>% 
     filter(`Regió Policial (RP)` == 'RP Metropolitana Barcelona')
+  
+  helper <- pd %>%
+    group_by(`Tipus de fet`) %>%
+    tally %>% arrange(desc(n))
+  
+  pd <- pd %>%
+    mutate(`Tipus de fet` = ifelse(`Tipus de fet` %in% helper$`Tipus de fet`[1:20],
+                                   `Tipus de fet`, 'Altres delictes'))
 
   pd <- pd %>%
     group_by(date, 
@@ -180,10 +188,10 @@ mossos_chart2 <- function(ca = FALSE){
       geom_area(alpha = 0.4,
                 fill = vilaweb::colors_vilaweb()[4]) +
       theme_vilaweb() +
-      geom_line() +
-      geom_point() +
+      geom_step() +
+      # geom_point() +
       the_labs +
-      theme(plot.caption = element_text(size = 6))
+      theme(plot.caption = element_text(size = 12))
   }
   return(out_list)
   
@@ -191,6 +199,52 @@ mossos_chart2 <- function(ca = FALSE){
 
 
 
+mossos_chart3 <- function(ca = TRUE){
+  
+  
+  if(ca){
+    the_labs <- labs(x = 'Mes',
+                     y = 'Delictes',
+                     title = 'Criminalitat a Barcelona',
+                     subtitle = "Font: Mossos d'Esquadra",
+                     caption = 'Gràfic de @joethebrew. Font de dades: https://mossos.gencat.cat/ca/els_mossos_desquadra/indicadors_i_qualitat/dades_obertes/cataleg_dades_obertes/dades-delinqueencials/\nvilaweb.cat')
+  } else {
+    the_labs <- labs(x = 'Months',
+                     y = 'Crimes',
+                     title = 'Criminality in Barcelona',
+                     subtitle = 'Source: Catalan police force',
+                     caption = 'Chart by @joethebrew. Data source: https://mossos.gencat.cat/ca/els_mossos_desquadra/indicadors_i_qualitat/dades_obertes/cataleg_dades_obertes/dades-delinqueencials/\nvilaweb.cat')
+  }
+  
+  pd <- mossos %>% 
+    filter(`Regió Policial (RP)` == 'RP Metropolitana Barcelona')
+  
+  helper <- pd %>%
+    group_by(`Tipus de fet`) %>%
+    tally %>% arrange(desc(n))
+  
+  pd <- pd %>%
+    mutate(`Tipus de fet` = ifelse(`Tipus de fet` %in% helper$`Tipus de fet`[1:10],
+                                   `Tipus de fet`, 'Altres delictes'))
+  
+  pd <- pd %>%
+    group_by(date, 
+             `Tipus de fet`) %>%
+    summarise(n = sum(Coneguts,na.rm=T))
+  cols <- colorRampPalette(RColorBrewer::brewer.pal(n = 9, name = 'Spectral'))(length(unique(pd$`Tipus de fet`)))
+  
+  # cols <- sample(cols, length(cols))
+  ggplot(data = pd,
+         aes(x = date,
+             y = n,
+             group = `Tipus de fet`,
+             fill = `Tipus de fet`)) +
+    geom_area(alpha = 0.9) +
+    theme_vilaweb() +
+    scale_fill_manual(name = '', values = cols) +
+    the_labs +
+    theme(legend.text = element_text(size = 8))
+}
 
 
 

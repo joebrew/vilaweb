@@ -163,6 +163,12 @@ Publishing headline stories on violent crime in Barcelona, day after day, at an 
 cat(paste0(sort(unique(newspapers)), collapse = '\n' ))
 ```
 
+# Big chart
+
+```{r, fig.height = 11, fig.width=8}
+mossos_chart3()
+```
+
 # Catalan language charts
 
 
