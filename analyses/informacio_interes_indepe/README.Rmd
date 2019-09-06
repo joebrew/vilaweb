@@ -154,7 +154,7 @@ simple_plot(ca = T)
 ```{r}
 simple_plot_cross(ca = T,
                   cross_var = 'interessat', legend_title = "Grau d'acord amb la frase") +
-  labs(subtitle = "Grau d'acord amb la frase, creaut amb interès en la política",
+  labs(subtitle = "Grau d'acord amb la frase, encreuat amb interès en la política",
        x = 'A vostè la política li interessa molt, bastant, poc o gens?') +
   theme(legend.title = element_text())
 ```
@@ -162,7 +162,7 @@ simple_plot_cross(ca = T,
 
 ```{r}
 simple_plot_cross(ca = T, cross_var = 'informat', legend_title = "Grau d'acord amb la frase") +
-  labs(subtitle = "Grau d'acord amb la frase, creaut amb grau d'informació política",
+  labs(subtitle = "Grau d'acord amb la frase, encreuat amb grau d'informació política",
        x = 'Es considera vostè molt, bastant, poc o gens informat del que passa en política?') +
   theme(legend.title = element_text())
 ```
@@ -174,7 +174,7 @@ simple_indy_plot(ca = T)
 
 ```{r}
 simple_indy_plot_cross(ca = T, cross_var = 'interessat', legend_title = "Independència?") +
-  labs(subtitle = "Independentismecreaut amb interès per la política",
+  labs(subtitle = "Independentisme encreuat amb interès per la política",
        x = 'A vostè la política li interessa molt, bastant, poc o gens?') +
   theme(legend.title = element_text())
 ```
@@ -182,8 +182,8 @@ simple_indy_plot_cross(ca = T, cross_var = 'interessat', legend_title = "Indepen
 
 ```{r}
 simple_indy_plot_cross(ca = T, cross_var = 'informat', legend_title = "Independència?") +
-  labs(subtitle = "Independentisme creaut amb grau d'informació política",
-       x = 'Es considera vostè molt, bastant, poc o gens\ninformat/ada del que passa en política?') +
+  labs(subtitle = "Independentisme encreuat amb grau d'informació política",
+       x = 'Vostè es considera molt, bastant, poc o gens\ninformat/ada del que passa en política?') +
   theme(legend.title = element_text())
 ```
 
@@ -191,7 +191,7 @@ simple_indy_plot_cross(ca = T, cross_var = 'informat', legend_title = "Independ�
 
 ```{r}
 simple_party_plot_cross(ca = T, cross_var = 'interessat', legend_title = 'Grau d\'interès per la política') +
-  labs(subtitle = 'Grau d\'interès per la política per partit',
+  labs(subtitle = 'Grau d\'interès per la política, per partit',
        title = 'Em podria dir si a vostè la política li interessa\nmolt, bastant, poc o gens?') +
   theme(legend.title = element_text())
 ```
@@ -200,8 +200,8 @@ simple_party_plot_cross(ca = T, cross_var = 'interessat', legend_title = 'Grau d
 
 ```{r}
 simple_party_plot_cross(cross_var = 'informat', legend_title = 'Grau d\'informació política') +
-  labs(subtitle = 'Grau d\'informació política per la política per partit',
-       title = 'Es considera vostè molt, bastant, poc o gens\ninformat/ada del que passa en política?') +
+  labs(subtitle = 'Grau d\'informació política, per partit',
+       title = 'Vostè es considera molt, bastant, poc o gens\ninformat/ada del que passa en política?') +
   theme(legend.title = element_text())
 ```
 
