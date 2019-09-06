@@ -580,3 +580,90 @@ simple_indy_plot_cross <- function(ca = FALSE,
     guides(fill = guide_legend(title.position = 'top', title.hjust = 0.5))
 }
 
+simple_party_plot_cross <- function(ca = FALSE,
+                                   cross_var = 'interessat',
+                                   legend_title = ''){
+  
+  levs <- c("CUP", "ERC", "JxCat/PDeCat", "Podem", "PSC", "Cs", "PPC", "Cap o altre partit")
+  levs_en <- c("CUP", "ERC", "JxCat/PDeCat", "Podem", "PSC", "Cs", "PPC", "No or other party")
+  
+  var_levs <- c('Molt', 'Bastant', 'Poc', 'Gens', 'No ho sap', 'No contesta')
+  var_levs_en <- c('A lot', 'A fair amount', 'Little', 'Not at all', "Don't know", 'No answer')
+  
+  pd <- combined %>%
+    filter(date >= '2018-01-01') %>%
+    filter(!is.na(partit)) %>%
+    group_by(.dots = list('partit', cross_var)) %>%
+    tally
+  names(pd)[2] <- 'var'
+  
+  cols <- RColorBrewer::brewer.pal(n = 4, name = 'Spectral')
+  # cols <- rev(cols)
+  # cols[8] <- 'darkgrey'
+  
+  
+  pd <- pd %>%
+    group_by(partit) %>%
+    mutate(p = n / sum(n) * 100)
+  
+  
+  
+  if(ca){
+    the_labs <- labs(x = '',
+                     y = 'Percentatge',
+                     subtitle = 'Per partit polític',
+                     caption = paste0('Gràfic de Joe Brew | @joethebrew | www.vilaweb.cat. Dades del CEO.\n',
+                                      self_cite(),
+                                      '\nMida de mostra: ',
+                                      numberfy(sum(pd$n)), 
+                                      ' residents de Catalunya amb ciutadania espanyola, 2018-2019.\n'))
+    pd$partit <- factor(pd$partit,
+                        levels = (levs),
+                        labels = (levs_en))
+    pd$var <- factor(pd$var,
+                     levels = rev(var_levs),
+                     labels = rev(var_levs))
+  } else {
+    the_labs <- labs(x = '',
+                     y = 'Percentage',
+                     subtitle = 'By preferred political party',
+                     caption = paste0('Chart by Joe Brew | @joethebrew | www.vilaweb.cat. Raw data from the CEO.\n',
+                                      self_cite(),
+                                      '\nSample size: ',
+                                      numberfy(sum(pd$n)), 
+                                      ' residents of Catalonia with Spanish citenship, 2018-2019.\n'))
+    pd$partit <- factor(pd$partit,
+                        levels = (levs),
+                        labels = (levs_en))
+    pd$var <- factor(pd$var,
+                     levels = rev(var_levs),
+                     labels = rev(var_levs_en))
+  }
+  
+  pd <- pd %>% filter(!is.na(var),
+                      !var %in% c('No ho sap', 'No contesta', "Don't know", 'No answer'),
+                      !partit %in% c('No or other party', 'Cap o altre partit'))
+  ggplot(data = pd,
+         aes(x = partit,
+             y = p,
+             group = var)) +
+    geom_bar(stat = 'identity',
+             aes(fill = var),
+             position = position_stack()) +
+    scale_fill_manual(name = legend_title,
+                      values = cols) +
+    theme_vilaweb() +
+    # theme(legend.position = 'none') +
+    the_labs +
+    theme(plot.caption = element_text(size = 9),
+          legend.box = 'horizontal') +
+    geom_text(aes(label = round(p, digits = 1)),
+              alpha = 0.6,
+              position = position_stack(),
+              vjust = 1) +
+    guides(fill = guide_legend(title.position = 'top', title.hjust = 0.5, reverse = T)) +
+    geom_hline(yintercept = 50, alpha = 0.3)
+}
+
+
+

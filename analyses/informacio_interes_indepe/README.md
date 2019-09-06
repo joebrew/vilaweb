@@ -116,6 +116,29 @@ consider themselves not very informed about politics are generally
 opposed. The greatest opposition to independence is among the group
 which considers itself least informed about what’s going on in politics.
 
+## By party
+
+Interest in politics and being informed about politics also varies
+widely by *party*. The below shows interest in politics by party of
+preference.
+
+![](figures/unnamed-chunk-8-1.png)<!-- -->
+
+Those who support pro-independence parties (and anti-independence but
+pro-sovereignty “Podem”) largely consider themselves interested in
+politics. Supporters of unionist parties largely consider themselves
+uninterested. Nearly two-thirds of PP voters consider themselves just a
+“little” interested or “not at all” interested in politics.
+
+And the below shows level of information about politics by political
+party:
+
+![](figures/unnamed-chunk-9-1.png)<!-- -->
+
+A majority of voters of all parties consider that they are fairly
+informed about politics, but the rates are higher among pro-independence
+party voters than pro-union party voters.
+
 # Conclusion
 
 In Catalonia, engagement in what’s happening in politics (interest and
@@ -135,15 +158,12 @@ Catalans who say that they are not interested in what is happening in
 politics, and consider themselves to not be very well-informed about it.
 Whether paying attention to politics *causes* support for independence,
 or whether the causal chain is the other way around (ie, being in favor
-of independence *causes* one to engage in politics) is unknown. In
-either case, those who support continued union with Spain should be
-concerned that their base is largely uninterested, and considers itself
-uninformed, of what’s going on in politics.
-
-Though the movement in Britain to leave the UK and the movement in
-Catalonia to leave Spain are often compared, [the reality is that the
-two have very little in common with each
-other](https://www.vilaweb.cat/noticies/brexit-independencia-joe-brew/).
+of independence *causes* one to engage in politics) is unknown. It is
+also unknown the extent to which self-rated values (level of interest,
+level of information) are reliable. In either case, those who support
+continued union with Spain should be concerned that their base is
+largely uninterested, and considers itself uninformed, of what’s going
+on in politics.
 
 # Technical details
 
@@ -152,12 +172,16 @@ All code and data for this article are available at
 
 # Catalan language charts
 
-![](figures/unnamed-chunk-8-1.png)<!-- -->
-
-![](figures/unnamed-chunk-9-1.png)<!-- -->
-
 ![](figures/unnamed-chunk-10-1.png)<!-- -->
 
 ![](figures/unnamed-chunk-11-1.png)<!-- -->
 
 ![](figures/unnamed-chunk-12-1.png)<!-- -->
+
+![](figures/unnamed-chunk-13-1.png)<!-- -->
+
+![](figures/unnamed-chunk-14-1.png)<!-- -->
+
+![](figures/unnamed-chunk-15-1.png)<!-- -->
+
+![](figures/unnamed-chunk-16-1.png)<!-- -->

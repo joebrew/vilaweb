@@ -107,17 +107,37 @@ simple_indy_plot_cross(cross_var = 'informat', legend_title = 'Agreement with ph
 
 Those who consider themselves to be informed about what is going in politics are generally in favor of independence, whereas those who consider themselves not very informed about politics are generally opposed. The greatest opposition to independence is among the group which considers itself least informed about what's going on in politics.
 
+## By party
+
+Interest in politics and being informed about politics also varies widely by _party_. The below shows interest in politics by party of preference.
+
+```{r}
+simple_party_plot_cross(cross_var = 'interessat', legend_title = 'Level of interst in politics') +
+  labs(subtitle = 'Interest in politics by political party',
+       title = 'How intersted are you in politics?') +
+  theme(legend.title = element_text())
+```
+
+Those who support pro-independence parties (and anti-independence but pro-sovereignty "Podem") largely consider themselves interested in politics. Supporters of unionist parties largely consider themselves uninterested. Nearly two-thirds of PP voters consider themselves just a "little" interested or "not at all" interested in politics.
+
+
+And the below shows level of information about politics by political party:
+
+
+```{r}
+simple_party_plot_cross(cross_var = 'informat', legend_title = 'Level of political information') +
+  labs(subtitle = 'Perceived level of political information by political party',
+       title = 'How informed do you consider yoursself\nabout what is going on in politics?') +
+  theme(legend.title = element_text())
+```
+
+A majority of voters of all parties consider that they are fairly informed about politics, but the rates are higher among pro-independence party voters than pro-union party voters.
 
 # Conclusion
 
 In Catalonia, engagement in what's happening in politics (interest and information) is associated with greater levels of support for independence. In the sense, the pro-independence movement is quite unlike the populist movements with which it is often compared (Brexit, Trump, etc.), not only in terms of political engagement, but also on a [myriad of other measures](https://www.vilaweb.cat/noticies/brexit-independencia-joe-brew/). Whereas support for neo-populists like Donald Trump, Boris Johnson, or Marine Le Pen are generally driven by a disatisfaction and _disconnection_ with politics, pro-independence Catalans profess high levels of interest in politics. 
 
-Opposition to self-determination and independence stems largely from Catalans who say that they are not interested in what is happening in politics, and consider themselves to not be very well-informed about it. Whether paying attention to politics _causes_ support for independence, or whether the causal chain is the other way around (ie, being in favor of independence _causes_ one to engage in politics) is unknown. In either case, those who support continued union with Spain should be concerned that their base is largely uninterested, and considers itself uninformed, of what's going on in politics.
-
-
-
-
-Though the movement in Britain to leave the UK and the movement in Catalonia to leave Spain are often compared, [the reality is that the two have very little in common with each other](https://www.vilaweb.cat/noticies/brexit-independencia-joe-brew/).
+Opposition to self-determination and independence stems largely from Catalans who say that they are not interested in what is happening in politics, and consider themselves to not be very well-informed about it. Whether paying attention to politics _causes_ support for independence, or whether the causal chain is the other way around (ie, being in favor of independence _causes_ one to engage in politics) is unknown. It is also unknown the extent to which self-rated values (level of interest, level of information) are reliable. In either case, those who support continued union with Spain should be concerned that their base is largely uninterested, and considers itself uninformed, of what's going on in politics.
 
 
 # Technical details
@@ -158,3 +178,22 @@ simple_indy_plot_cross(ca = T, cross_var = 'interessat', legend_title = "Grau d'
        x = 'A vostè la política li interessa molt, bastant, poc o gens?') +
   theme(legend.title = element_text())
 ```
+
+
+```{r}
+simple_party_plot_cross(ca = T, cross_var = 'interessat', legend_title = 'Grau d\'interès per la política') +
+  labs(subtitle = 'Grau d\'interès per la política per partit',
+       title = 'Em podria dir si a vostè la política li interessa\nmolt, bastant, poc o gens?') +
+  theme(legend.title = element_text())
+```
+
+
+
+```{r}
+simple_party_plot_cross(cross_var = 'informat', legend_title = 'Grau d\'informació política') +
+  labs(subtitle = 'Grau d\'informació política per la política per partit',
+       title = 'Es considera vostè molt, bastant, poc o gens informat/ada del que passa en política?') +
+  theme(legend.title = element_text())
+```
+
+
