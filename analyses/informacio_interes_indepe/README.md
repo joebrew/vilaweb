@@ -185,3 +185,5 @@ All code and data for this article are available at
 ![](figures/unnamed-chunk-15-1.png)<!-- -->
 
 ![](figures/unnamed-chunk-16-1.png)<!-- -->
+
+![](figures/unnamed-chunk-17-1.png)<!-- -->

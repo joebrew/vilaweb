@@ -87,8 +87,8 @@ simple_indy_plot()
 The association between interest in politics is even stronger if we look at preferences for independence. Among those who consider themselves very interested in politics, support for independence is more than double that of support for union with Spain. The pattern is similar among those who consider themselves fairly interested in politics.
 
 ```{r}
-simple_indy_plot_cross(cross_var = 'interessat', legend_title = 'Agreement with phrase') +
-  labs(subtitle = 'Extent of agreement with phrase, crossed with interest in politics',
+simple_indy_plot_cross(cross_var = 'interessat', legend_title = 'Pro-independence?') +
+  labs(subtitle = 'Support for independence crossed with interest in politics',
        x = 'How intersted are you in politics?') +
   theme(legend.title = element_text())
 ```
@@ -99,8 +99,8 @@ If we look at level of information (grau d'informació), a similar trend emerges
 
 
 ```{r}
-simple_indy_plot_cross(cross_var = 'informat', legend_title = 'Agreement with phrase') +
-  labs(subtitle = 'Extent of agreement with phrase, crossed with how informed one is about politics',
+simple_indy_plot_cross(cross_var = 'informat', legend_title = 'Pro-independence?') +
+  labs(subtitle = 'Support for independence crossed with how informed one is about politics',
        x = 'How informed do you consider yourself about what is going on in politics?') +
   theme(legend.title = element_text())
 ```
@@ -148,7 +148,7 @@ All code and data for this article are available at `r self_cite()`.
 # Catalan language charts
 
 ```{r}
-simple_plot()
+simple_plot(ca = T)
 ```
 
 ```{r}
@@ -173,11 +173,20 @@ simple_indy_plot(ca = T)
 ```
 
 ```{r}
-simple_indy_plot_cross(ca = T, cross_var = 'interessat', legend_title = "Grau d'acord amb la frase") +
-  labs(subtitle = "Grau d'acord amb la frase, creaut amb independentisme",
+simple_indy_plot_cross(ca = T, cross_var = 'interessat', legend_title = "Independència?") +
+  labs(subtitle = "Independentismecreaut amb interès per la política",
        x = 'A vostè la política li interessa molt, bastant, poc o gens?') +
   theme(legend.title = element_text())
 ```
+
+
+```{r}
+simple_indy_plot_cross(ca = T, cross_var = 'informat', legend_title = "Independència?") +
+  labs(subtitle = "Independentisme creaut amb grau d'informació política",
+       x = 'Es considera vostè molt, bastant, poc o gens\ninformat/ada del que passa en política?') +
+  theme(legend.title = element_text())
+```
+
 
 
 ```{r}
@@ -192,7 +201,7 @@ simple_party_plot_cross(ca = T, cross_var = 'interessat', legend_title = 'Grau d
 ```{r}
 simple_party_plot_cross(cross_var = 'informat', legend_title = 'Grau d\'informació política') +
   labs(subtitle = 'Grau d\'informació política per la política per partit',
-       title = 'Es considera vostè molt, bastant, poc o gens informat/ada del que passa en política?') +
+       title = 'Es considera vostè molt, bastant, poc o gens\ninformat/ada del que passa en política?') +
   theme(legend.title = element_text())
 ```
 
