@@ -643,6 +643,9 @@ simple_party_plot_cross <- function(ca = FALSE,
   pd <- pd %>% filter(!is.na(var),
                       !var %in% c('No ho sap', 'No contesta', "Don't know", 'No answer'),
                       !partit %in% c('No or other party', 'Cap o altre partit'))
+  pd$xp <- as.numeric(pd$var)
+  pd$xp <- pd$xp + (dplyr::percent_rank(pd$xp) - 0.5)
+  
   ggplot(data = pd,
          aes(x = partit,
              y = p,

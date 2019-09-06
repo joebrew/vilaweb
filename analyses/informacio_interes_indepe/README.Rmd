@@ -199,7 +199,7 @@ simple_party_plot_cross(ca = T, cross_var = 'interessat', legend_title = 'Grau d
 
 
 ```{r}
-simple_party_plot_cross(cross_var = 'informat', legend_title = 'Grau d\'informació política') +
+simple_party_plot_cross(ca = T, cross_var = 'informat', legend_title = 'Grau d\'informació política') +
   labs(subtitle = 'Grau d\'informació política, per partit',
        title = 'Vostè es considera molt, bastant, poc o gens\ninformat/ada del que passa en política?') +
   theme(legend.title = element_text())
