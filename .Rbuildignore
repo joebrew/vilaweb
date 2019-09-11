@@ -1,1 +1,9 @@
 ^LICENSE\.md$
+^.*\.Rproj$
+^\.Rproj\.user$
+^data-raw$
+^data-raw/*$
+^analyses$
+^analyses/*$
+^credentials
+^credentials/*$

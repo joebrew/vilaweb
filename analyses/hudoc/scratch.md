@@ -1,0 +1,1 @@
+https://hudoc.echr.coe.int/app/transform/csv?library=echreng&query=contentsitename%3AECHR%20AND%20(NOT%20(doctype%3DPR%20OR%20doctype%3DHFCOMOLD%20OR%20doctype%3DHECOMOLD))%20AND%20((documentcollectionid%3D%22GRANDCHAMBER%22)%20OR%20(documentcollectionid%3D%22CHAMBER%22))&sort=&start=501&length=1000&rankingModelId=11111111-0000-0000-0000-000000000000

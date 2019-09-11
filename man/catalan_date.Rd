@@ -6,6 +6,11 @@
 \usage{
 catalan_date(month = TRUE, new_line = TRUE)
 }
+\arguments{
+\item{month}{Whether it should be at the month level}
+
+\item{new_line}{Whether a line break should be inserted}
+}
 \value{
 Function
 }

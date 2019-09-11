@@ -2,6 +2,8 @@
 #' 
 #' Create a Catalan date
 #' @import tidyverse
+#' @param month Whether it should be at the month level
+#' @param new_line Whether a line break should be inserted
 #' @return Function
 #' @export
 
