@@ -143,7 +143,10 @@ polítics de polítics unionistes.
 
 Però Twitter és util. Les seves dades són obertement accessibles, i com
 que gairebé tots els diputats hi són, ens ofereix als analistes un mitjà
-incomparable per medir tendències i interessos.
+incomparable per medir tendències i interessos. Per exemple, encara que
+no sigui (segons la llei espanyola) President de la Generalitat, Carles
+Puigdemont encara atrau més interés (tant dels seus rivals polítics que
+dels seus aliats) que altres polítics.
 
 # Technical details
 
