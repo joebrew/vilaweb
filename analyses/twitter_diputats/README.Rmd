@@ -1,0 +1,326 @@
+---
+title: "Els diputats del Parlament al Twitter"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+source('prepare_data.R')
+```
+
+## Els diputats estan gairebé tots al Twitter
+
+Dels 135 diputats al Parlament de Catalunya, 133 tenen un compte al Twitter. No els estàs seguint? [Aquí](http://www.joebrew.net/diputats) la llista.
+
+```{r, eval = FALSE}
+x <- diputats %>% arrange(name)
+names(x) <- c('Nom', "Nom d'usuari", "Partit")
+knitr::kable(x)
+```
+
+```{r}
+n_days <- as.numeric(as.Date('2019-08-31') - as.Date('2019-01-01'))
+pd <- tl %>%
+  filter(year == 2019,
+         date <= '2019-08-31') %>%
+  group_by(name, username) %>%
+  tally %>%
+  mutate(per_day  = n /n_days) %>%
+  arrange(desc(n))
+pd$name <- factor(pd$name, levels = pd$name)
+```
+
+Entre tots, han produit un corpus de documentació política d'interés. `r numberfy(nrow(tl))` piulets en total, `r numberfy(sum(nchar(tl$tweet)))` caracters de missatges, des del 2007. Analitzar cadascú de tots els `r numberfy(nrow(tl))` piulets seria molt interessant, però massa feina per un article setmanal. Així que, fem un anàlisi no del _contingut_ dels piulets (les microdades), sinó de les seves característiques (macrodades). Anem-hi.
+
+## Qui piula més?
+
+Dels 133 amb comptes de Twitter, alguns piulen menys i altres més... molt més. El piulaire més prolífic del Parlament és el Miquel Iceta, cap de llista dels Socialistes, amb `r pd$n[pd$username == 'miqueliceta']` piulets en 2019 fins al final del més d'Agost (`r pd$n[pd$per_day == 'miqueliceta']` per dia). Altres, com Alfons Montserrat, Anna Tarrés i Campa i Carlos Sánchez Martín, no piulen gaire (només 1 piulet cadascu en 2019). El gràfic següent mostra el nombre de piulets aquest any: 
+
+```{r}
+ggplot(data = pd,
+       aes(x = name,
+           y = n)) +
+  geom_segment(aes(xend = name, yend = 0), size = 0.5, alpha = 0.6) +
+  geom_point(size = 0.4) + 
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 4)) +
+  labs(x = '',
+       y = 'Piulets',
+       title = 'Nombre de piulets en 2019',
+       subtitle = '1 de gener fins al 31 d\'agost')
+```
+
+Com que 133 diputats en un gràfic és una mica massa per poder distingir bé, mirem només els 30 més piulaires.
+
+
+```{r}
+ggplot(data = pd[1:30,],
+       aes(x = name,
+           y = n)) +
+  geom_segment(aes(xend = name, yend = 0), size = 0.5, alpha = 0.6) +
+  geom_point(size = 1.4) + 
+  theme_vilaweb() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 10)) +
+  labs(x = '',
+       y = 'Piulets',
+       title = 'Nombre de piulets en 2019',
+       subtitle = '1 de gener fins al 31 d\'agost')
+```
+
+
+## Primers adoptants
+
+La majoria dels diputats van obrir un compte entre 2010 i 2015. Alguns no van obrir un compte fins 2018 (Josep M. Jové Lladó i Monsterrat Macià i Gou); altres fa més de 10 anys (Carles Puigdemont i Jose Rodríguez). El gràfic següent mostra quant de temps des de que cada diputat va obrir un compte al Twitter.
+
+```{r, fig.height = 8}
+pd <- tl %>%
+  group_by(name, username) %>%
+  summarise(first_tweet = min(date)) %>%
+  ungroup %>% left_join(diputats_info %>% dplyr::select(user_name, account_created_at) %>%
+                          dplyr::rename(username = user_name)) %>%
+  arrange(first_tweet) %>%
+  mutate(account_opened = as.Date(account_created_at)) %>%
+  mutate(days_no_tweets = as.numeric(first_tweet - account_opened)) %>%
+  arrange(desc(account_opened))
+pd$name <- factor(pd$name, levels = pd$name)
+ggplot(data = pd,
+       aes(x = name,
+           y = account_opened)) +
+  # geom_point() +
+ theme_vilaweb(y_comma = FALSE) +
+  geom_segment(aes(xend = name, yend = Sys.Date())) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 10),
+        axis.text.y = element_text(size = 4)) +
+  labs(x = '',
+       y = 'Data',
+       title = 'Temps al Twitter',
+       subtitle = 'El diputat del Parlament que porta més temps al Twitter: Carles Puigdemont') +
+  coord_flip()
+```
+
+Aquí el mateix gràfic que l'anterior, però restringint només aquells que van obrir un compte abans de l'any 2011:
+
+```{r}
+x <- pd %>% filter(account_opened < '2011-01-01')
+x$id <- as.numeric(x$name)
+# x <- pd[(nrow(pd)-29):nrow(pd),]
+x <- x %>% left_join(diputats %>% dplyr::select(username, partit))
+ggplot(data = x,
+       aes(x = name,
+           y = account_opened)) +
+  geom_point() +
+ theme_vilaweb(y_comma = FALSE) +
+  # geom_segment(aes(xend = name, yend = Sys.Date())) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 12),
+        axis.text.y = element_text(size = 8)) +
+  labs(x = '',
+       y = '',
+       title = 'Temps al Twitter',
+       subtitle = 'Data d\'obertura del compte') +
+  coord_flip() +
+  geom_text(aes(label = account_opened, y = account_opened +ifelse(account_opened < '2010-01-01', 100, -100)), size = 2) 
+```
+
+
+
+## L'eliminació de piulets
+
+Moltes vegades, quan una persona arriba a tenir cert nivell de fama (per exemple, quan entra en la política), fa una "neteja" de la seva presència en les xarxes, treient aquelles coses que podrien ofendre o desqualificar. Quan no es fa aquest exercici d'autocensura, hi ha conseqüencies (per exemple, [Quim Torra](https://www.elperiodico.com/es/politica/20180510/perlas-quim-torra-twitter-6810969) i [Màxim Huerta](https://www.elperiodico.com/es/politica/20180606/maxim-huerta-reacciones-twitter-6861393) han sigut criticats per piulets escrits anys enrere). Com que anar esborrant piulets un per un triga molt de temps, molta gent decideix fer lo més facil: esborrar _tots_ els piulets abans d'una certa data per poder començar de nou sense que ningú pugui trobar cap "skeleton in the closet".
+
+
+No es pot saber, retrospectivament, quans piulets han esborrat els diputats. Però, es pot _endevinar_ si han netejat les seves presències online a través d'una senzilla comparació entre (a) la data del seu primer tuit (disponible) i (b) la data de l'alta del seu compte. Si hi ha molta diferència entre les dues dates (o sigui, un llarg period després de l'obertura del compte sense cap piulet), sugereix que s'hagi esborrat piulets.
+
+
+```{r}
+pd <- pd %>% filter(days_no_tweets > 365)
+pd <- pd %>%
+  dplyr::select(name, first_tweet, account_opened, days_no_tweets)
+pd <- gather(pd, key, value, first_tweet:account_opened)
+pd <- pd %>% arrange(desc(days_no_tweets))
+pd$name <- factor(pd$name, levels = rev(unique(pd$name)))
+pd$key <- ifelse(pd$key == 'account_opened', 'Obertura de compte', 'Primer piulet')
+ggplot(data = pd,
+       aes(x = name, xend = name)) +
+    theme_vilaweb(y_comma = FALSE) +
+  geom_point(aes(y = value, color = key)) +
+  geom_line(aes(y = value, group = name), alpha = 0.7) +
+  theme(axis.text.y = element_text(size = 8)) +
+  labs(x = '',
+       y = 'Data',
+       title = 'Piulets esborrats?',
+       subtitle = 'Temps entre obertura de compte i (suposat) primer piulet') +
+  coord_flip() +
+  scale_color_manual(name = '',
+                     values = c(colors_vilaweb()[4], colors_vilaweb()[3]))
+```
+
+Miquel Buch va obrir un compte el 24 de gener de 2009, però el primer piulet al seu timeline apareix més d'una década més tard, el 26 de febrer de 2019. El mateix amb José Rodríguez Fernández: va obrir un compte en 2008, però no hi ha cap piulet al seu TL fins a 2017. Ells (i altres: David Pérez Ibáñez, Sergio Sanz Jiménez, Raúl Moreno Montaña, etc.) van passar anys amb un compte, però sense piulets. Van guardar un compte sense piular durant anys? O van esborrar piulets?
+
+Suposant que un period de dos anys o més entre l'obertura d'un compte i la primera aparició d'un piulet al timeline sugereix l'eliminació de piulets, el partit que més ha esborrat piulets hisòrics seria Ciutadans: 7 dels seus 36 diputats tenen un "forat" de dos anys o més als seus TLs després de l'obertura dels seus comptes fins al primer piulet. 
+
+```{r}
+pd <- tl %>%
+  group_by(name, username) %>%
+  summarise(first_tweet = min(date)) %>%
+  ungroup %>% left_join(diputats_info %>% dplyr::select(user_name, account_created_at) %>%
+                          dplyr::rename(username = user_name)) %>%
+  arrange(first_tweet) %>%
+  mutate(account_opened = as.Date(account_created_at)) %>%
+  mutate(days_no_tweets = as.numeric(first_tweet - account_opened)) %>%
+  arrange(desc(account_opened)) %>%
+  left_join(diputats %>% dplyr::select(username, partit)) %>%
+  filter(days_no_tweets >= 730)
+```
+
+
+
+## Qui parla de qui?
+
+És interessant veure fins quin punt els diputats interactuen amb els seus colegas a la xarxa social. El gràfic següent mostra les "interaccions" al Twitter (quan un esmenta/etiqueta a un altre) desdel princip de 2017 fins al 31 d'Agost de 2019. L'eix x és el diputat que piula, i l'eix-y és el diputat esmentat.
+
+
+Lo clar en aquest gràfic és que els diputats tendeixen a parlar només dels del seu propi partit. Esmenten els seus companys de partit, i en general ignoren els diputats de partits rivals. Les excepcions notables són Carles Puigdemont i Quim Torra, que són esmentats per tots els partits amb bastant freqüència. Curiosament, els diputats de Ciutadans esmenten a Carles Puigdemont fins i tot que als diputats del seu propi partit.
+
+```{r, fig.height= 8, fig.width = 8}
+pd <- tl %>%
+  filter(year >= 2017) %>%
+  filter(date <= '2019-08-31') %>%
+  dplyr::select(username, carrizosacarlos:daniserranopp) %>%
+  gather(key, value, carrizosacarlos:daniserranopp)
+pd <- pd %>%
+  group_by(username, key) %>%
+  summarise(tweets_about = length(which(value)),
+            tweets_not_about = n()) %>%
+  mutate(p = tweets_about / tweets_not_about * 100)
+pd <- left_join(pd, diputats %>% dplyr::select(username, partit))
+pd <- pd %>% arrange(partit, username) 
+pd$username <- factor(pd$username, levels = unique(pd$username))
+pd$key <- factor(pd$key, levels = levels(pd$username))
+cols <- RColorBrewer::brewer.pal(n = length(unique(pd$partit)), 'Set1')
+ggplot(data = pd,
+       aes(x = username,
+           y = key)) +
+  geom_point(aes(size = p,
+                 color = partit),
+             alpha = 0.3) +
+  theme_bw() +
+  labs(x = 'Piulets d\'aquest diputat',
+       y = 'Esmentant aquest diputat',
+       title = 'Percentatge de piulets de diputats esmentant altres diputats') +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 3)) +
+    theme(axis.text.y = element_text(size = 3)) +
+  scale_size_area(name ='Percentatge\nde piulets') +
+  scale_color_manual(name = 'Partit del diputat\nque piula',
+                     values = cols)
+```
+
+
+
+Com que el gràfic anterior és una mica dificil d'interpretar degut al nombre gran de diputats, restringim-ho una mica. Ara, a l'eix-X l'aggregació de tots els piulets del partit, i a l'eix-y només els 20 polítics més esmentats.
+
+```{r, fig.height = 6.5}
+keep <- pd %>%
+  group_by(key) %>%
+  summarise(n = sum(tweets_about)) %>%
+  arrange(desc(n))
+keep <- keep$key[1:20]
+new_pd <- pd %>%
+  group_by(partit, key) %>%
+  summarise(tweets_about = sum(tweets_about),
+            tweets_not_about = sum(tweets_not_about)) %>%
+    mutate(p = tweets_about / tweets_not_about * 100) %>%
+  filter(key %in% keep)
+
+
+ggplot(data = new_pd,
+       aes(x = partit,
+           y = key)) +
+  theme_bw() +
+  geom_point(aes(size = p,
+                 color = partit),
+             alpha = 0.3) +
+  labs(x = 'Piulets d\'aquest diputat',
+       y = 'Esmentant aquest diputat',
+       title = 'Percentatge de piulets de diputats esmentant altres diputats') +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 12)) +
+    theme(axis.text.y = element_text(size = 12)) +
+  scale_size_area(name = 'Percentage') +
+  scale_color_manual(name = 'Partit del diputat\nque piula',
+                     values = cols)
+```
+
+## Repiulets i m'agradas
+
+Una cosa és piular. L'altre és que la gent et llegeix i li agrada el missatge que transmets. Si mirem el nombre "retweets" (repiulets) mitjans per piulet, és clar que differents partits tenen més o menys efectivitat en la xarxa.
+
+El gràfic següent mostra el nombre de repiulets mitjà per cada diputat, del principi de 2019 fins al final d'agost.
+
+```{r}
+x <- tl %>%
+  filter(date >= '2019-01-01' , date <= '2019-08-31') %>%
+  group_by(username) %>%
+  summarise(avg = mean(retweets_count)) %>% 
+  left_join(diputats %>% dplyr::select(username, partit)) %>%
+  arrange(desc(avg))
+x$username <- factor(x$username, levels = x$username)
+ggplot(data = x,
+       aes(x = username,
+           y = avg,
+           color = partit)) +
+  geom_point() +
+  theme_vilaweb() +
+    scale_color_manual(name = 'Partit',
+                     values = cols) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 3)) +
+  labs(x = ' ' ,
+       y = 'Nombre mitjà de repiulets',
+       title = 'Repiulets')
+
+```
+
+Com que 133 és molt per veure en un sol gràfic, restringim-ho a només el 30 diputats més repiulats:
+
+```{r}
+ggplot(data = x[1:30,],
+       aes(x = username,
+           y = avg,
+           color = partit)) +
+  geom_point() +
+  theme_vilaweb() +
+    scale_color_manual(name = 'Partit',
+                     values = cols) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 8)) +
+  labs(x = ' ' ,
+       y = 'Nombre mitjà de repiulets',
+       title = 'Repiulets')
+
+```
+
+El que destaca és que els primers 8 llocs van a diputats de partits sobiranistes. El diputat més repiulat dels unionistes, Carlos Carrizosa, rep 247 repiulets per cada piulet, mentres que Carles Puigdemont rep gairebé 10 vegades més (2,281 per cada piulet).
+
+## Conclusió
+
+[Twitter no és la vida real](https://www.vilaweb.cat/noticies/twitter-contra-vida-real-joe-brew/). És més jove, més catalanoparlant, més independentista, i més esquerdista que la població general a Catalunya. Això explica, en grant part, per què els piulets de polítics sobiranistes són molt més repiulats que els polítics de polítics unionistes.
+
+Però Twitter és util. Les seves dades són obertement accessibles, i com que gairebé tots els diputats hi són, ens ofereix als analistes un mitjà incomparable per medir tendències i interessos. Per exemple, encara que no sigui (segons la llei espanyola) President de la Generalitat, Carles Puigdemont encara atrau més interés (tant dels seus rivals polítics que dels seus aliats) que altres polítics. 
+
+
+
+
+# Technical details
+
+The code for this analysis is publicly available at `r self_cite()`.
