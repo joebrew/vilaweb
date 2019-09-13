@@ -7,3 +7,4 @@
 ^analyses/*$
 ^credentials
 ^credentials/*$
+^twitter\.sql$
