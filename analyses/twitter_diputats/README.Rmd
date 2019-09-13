@@ -60,8 +60,8 @@ ggplot(data = pd,
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 4)) +
   labs(x = '',
        y = 'Piulets',
-       title = 'Nombre de piulets en 2019',
-       subtitle = '1 de gener fins al 31 d\'agost')
+       title = 'Nombre de piulets el 2019',
+       subtitle = 'Del 1er de gener fins al 31 d\'agost')
 ```
 
 Com que 133 diputats en un gràfic és una mica massa per poder distingir bé, mirem només els 30 més piulaires.
@@ -77,8 +77,8 @@ ggplot(data = pd[1:30,],
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 10)) +
   labs(x = '',
        y = 'Piulets',
-       title = 'Nombre de piulets en 2019',
-       subtitle = '1 de gener fins al 31 d\'agost')
+       title = 'Nombre de piulets el 2019',
+       subtitle = 'Del 1er de gener fins al 31 d\'agost')
 ```
 
 
@@ -107,14 +107,14 @@ ggplot(data = pd,
         axis.text.y = element_text(size = 4)) +
   labs(x = '',
        y = 'Data',
-       title = 'Temps al Twitter',
-       subtitle = 'El diputat del Parlament que porta més temps al Twitter: Carles Puigdemont') +
+       title = 'Temps a Twitter',
+       subtitle = 'El diputat del Parlament que fa més temps que és al Twitter: Carles Puigdemont') +
   coord_flip()
 ```
 
 Aquí el mateix gràfic que l'anterior, però restringint només aquells que van obrir un compte abans de l'any 2011:
 
-```{r}
+```{r, fig.height = 5.6}
 x <- pd %>% filter(account_opened < '2011-01-01')
 x$id <- as.numeric(x$name)
 # x <- pd[(nrow(pd)-29):nrow(pd),]
@@ -129,10 +129,10 @@ ggplot(data = x,
         axis.text.y = element_text(size = 8)) +
   labs(x = '',
        y = '',
-       title = 'Temps al Twitter',
+       title = 'Temps a Twitter',
        subtitle = 'Data d\'obertura del compte') +
   coord_flip() +
-  geom_text(aes(label = account_opened, y = account_opened +ifelse(account_opened < '2010-01-01', 100, -100)), size = 2) 
+  geom_text(aes(label = account_opened, y = account_opened +ifelse(account_opened < '2010-01-01', 80, -80)), size = 2, alpha = 0.7) 
 ```
 
 
@@ -220,7 +220,7 @@ ggplot(data = pd,
   theme_bw() +
   labs(x = 'Piulets d\'aquest diputat',
        y = 'Esmentant aquest diputat',
-       title = 'Percentatge de piulets de diputats esmentant altres diputats') +
+       title = 'Percentatge de piulets de diputats esmentant uns altres diputats') +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 3)) +
     theme(axis.text.y = element_text(size = 3)) +
   scale_size_area(name ='Percentatge\nde piulets') +
@@ -255,10 +255,10 @@ ggplot(data = new_pd,
              alpha = 0.3) +
   labs(x = 'Piulets d\'aquest diputat',
        y = 'Esmentant aquest diputat',
-       title = 'Percentatge de piulets de diputats esmentant altres diputats') +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 12)) +
-    theme(axis.text.y = element_text(size = 12)) +
-  scale_size_area(name = 'Percentage') +
+       title = 'Percentatge de piulets de diputats esmentant uns altres diputats') +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 15)) +
+    theme(axis.text.y = element_text(size = 15)) +
+  scale_size_area(name = 'Percentage', max_size = 12) +
   scale_color_manual(name = 'Partit del diputat\nque piula',
                      values = cols)
 ```
@@ -285,7 +285,7 @@ ggplot(data = x,
   theme_vilaweb() +
     scale_color_manual(name = 'Partit',
                      values = cols) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 3)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 4)) +
   labs(x = ' ' ,
        y = 'Nombre mitjà de repiulets',
        title = 'Repiulets')
@@ -303,7 +303,7 @@ ggplot(data = x[1:30,],
   theme_vilaweb() +
     scale_color_manual(name = 'Partit',
                      values = cols) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 8)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 10)) +
   labs(x = ' ' ,
        y = 'Nombre mitjà de repiulets',
        title = 'Repiulets')
