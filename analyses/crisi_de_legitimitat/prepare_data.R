@@ -243,7 +243,7 @@ cisy <- haven::read_sav('../../data-raw/cis/monthly/2018-09/3223.sav')
 cisy <- haven::as_factor(cisy)
 
 # Questions P15-P17 are of interest
-# P15: Cuarenta años después de aprobarse nuestra Constitución, ¿cree Ud. que la forma en que se llevó a cabo la transición a la democracia en España constituye un motivo de orgullo para los/as españoles/as?
+# P15: Cuarenta años después de aprobarse nuestra constitución, ¿cree Ud. que la forma en que se llevó a cabo la transición a la democracia en España constituye un motivo de orgullo para los/as españoles/as?
 # P16: En conjunto, ¿está Ud. muy satisfecho/a, bastante satisfecho/a, poco o nada satisfecho/a con la forma en que funciona la democracia en España?
 # P17: Ahora vamos a hablar sobre distintos tipos de regímenes políticos. Me gustaría que me dijera con cuál de las siguientes frases está Ud. más de acuerdo.
 
@@ -255,9 +255,9 @@ cisy_plot <- function(var = 'P15',
   if(ca){
     the_labs <- labs(x = '',
                      y = 'Percentatge',
-                     title = 'Creu vostè que la forma en que es va dur a terme la transició a la democràcia\nen Espanya constitueix un motiu d\'orgull pels espanyols?',
+                     title = 'Creieu que la manera com es va dur a terme la transició a la democràcia\na Espanya és un motiu d\'orgull per als espanyols?',
                      subtitle = 'Percentatge que respon "Sí"',
-                     caption = 'Dades del CIS, Setembre 2018. Percentatges calculats després de treure les respostes NS/NC.\nMida de mostra:2.653. Mida de mostra per geografia = Catalunya: 421; Espanya: 2232.') 
+                     caption = 'Dades del CIS del setembre del 2018. Percentatges calculats després de treure les respostes NS/NC.\nMida de mostra:2.653. Mida de mostra per geografia = Catalunya: 421; Espanya: 2232.') 
     if(group_cat){
       df$ccaa <- ifelse(df$CCAA == 'Cataluña', 'Catalunya', 'Espanya (sense Catalunya)')
     } else {
@@ -338,7 +338,7 @@ overall_plot <- function(language = 'en',
     if(language == 'en'){
       places <- c('Catalonia', 'Rest of Spain')
     } else {
-      places <- c('Catalunya', "Resta de l'Estat")
+      places <- c('Catalunya', "Resta de l'estat")
     }
     plot_data <- cis_data %>% mutate(ccaa = ifelse(CCAA == 'Cataluña', places[1], places[2])) 
     plot_data <- plot_data %>%
@@ -398,8 +398,8 @@ overall_plot <- function(language = 'en',
       plot_data$x <- plot_data$ca
       the_labs <- labs(x = '',
                        y = '',
-                       title = 'Satisfacció amb la Constitució Espanyola',
-                       subtitle = 'Dades del CIS de Setembre 2018')
+                       title = 'Satisfacció amb la constitució espanyola',
+                       subtitle = 'Dades del CIS del setembre del 2018')
     }
     plot_data$x <- factor(plot_data$x, levels = levels(plot_data$x),
                           labels = gsub(' ', '\n', levels(plot_data$x)))
@@ -427,7 +427,7 @@ overall_plot <- function(language = 'en',
   } else {
     if(geo == 'esp'){
       plot_data <- cis_data %>% filter(CCAA != 'Cataluña')  
-      if(language == 'en'){subtitle <- 'Spain, not counting Catalonia'} else {subtitle <-'Espanya, sense incloure Catalunya'}
+      if(language == 'en'){subtitle <- 'Spain, not counting Catalonia'} else {subtitle <-'Estat espanyol, sense incloure Catalunya'}
     }
     if(geo == 'cat'){
       plot_data <- cis_data %>% filter(CCAA == 'Cataluña')
@@ -490,8 +490,8 @@ overall_plot <- function(language = 'en',
       caption <- 'Data from CIS survey, September 2018.'
       plot_data$x <- plot_data$en
     } else {
-      title <- 'Nivell de satisfacció amb la Constitució Espanyola'
-      caption <- 'Dades del CIS, Setembre 2018.'
+      title <- 'Nivell de satisfacció amb la constitució espanyola'
+      caption <- 'Dades del CIS del setembre del 2018.'
       plot_data$x <- plot_data$ca
     }
     
@@ -620,10 +620,11 @@ comparison_plot <- function(language = 'en',
     caption <- 'Data from CIS survey, September 2018.\nChart: Joe Brew | @joethebrew | www.vilaweb.cat.'
     plot_data$x <- plot_data$en
   } else {
+    y <- 'Percentatge'
     subtitle <- 'Per comunitat autònoma'
     xxx <- 'Gens satisfet'
-    title <- 'Nivell de satisfacció amb la Constitució Espanyola'
-    caption <- 'Dades del CIS, Setembre 2018.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
+    title <- 'Nivell de satisfacció amb la constitució espanyola'
+    caption <- 'Dades del CIS del setembre del 2018.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
     plot_data$x <- plot_data$ca
   }
   
@@ -646,6 +647,48 @@ comparison_plot <- function(language = 'en',
            ccaa = gsub(' (Región de)', '', ccaa, fixed = TRUE),
            ccaa = gsub(' (Comunidad Foral de)', '', ccaa, fixed = TRUE),
            ccaa = gsub('unitat', '.', ccaa, fixed = TRUE))
+  
+  # Translate to catala
+  if(language != 'en'){
+    translator <- tibble(ccaa = c('Andalucía',
+                                  'Aragón',
+                                  'Asturias',
+                                  'Balears (Illes)',
+                                  'Canarias',
+                                  'Cantabria',
+                                  'Castilla y León',
+                                  'Castilla-La Mancha',
+                                  'Cataluña',
+                                  'Com. Valenciana',
+                                  'Extremadura',
+                                  'Galicia',
+                                  'Madrid',
+                                  'Murcia',
+                                  'Navarra',
+                                  'País Vasco',
+                                  'Rioja (La)'),
+                         new_ccaa = c('Andalusia',
+                                      'Aragó',
+                                      'Astúries',
+                                      'Illes Balears',
+                                      'Canàries',
+                                      'Cantàbria',
+                                      'Castilla i Lleó',
+                                      'Castella - la Manxa',
+                                      'Catalunya',
+                                      'País Valencià',
+                                      'Extremadura',
+                                      'Galícia',
+                                      'Madrid',
+                                      'Múrcia',
+                                      'Navarra',
+                                      'País Basc',
+                                      'la Rioja'))
+    plot_data <- plot_data %>% left_join(translator) %>%
+      dplyr::select(-ccaa) %>%
+      dplyr::rename(ccaa = new_ccaa)
+  }
+  
   plot_data <- plot_data %>% group_by(ccaa) %>% mutate(rangey = max(y[x == xxx], rm.na = TRUE)) %>% arrange(desc(rangey))
   plot_data$ccaa <- factor(plot_data$ccaa,
                            levels = unique(plot_data$ccaa))
@@ -764,7 +807,7 @@ ideology_spain_plot <- function(language = 'en',
   
   
   
-  x <- 'CCAA'
+  x <- 'Left-right ideology'
   y <- 'Percentage'
   if(language == 'en'){
     subtitle <- 'By ideology. All of Spain, not including Catalonia.'
@@ -773,10 +816,12 @@ ideology_spain_plot <- function(language = 'en',
     caption <- 'Data from CIS survey, September 2018.\nChart: Joe Brew | @joethebrew | www.vilaweb.cat.\nIdeology: 1-3; left; 4-7: center; 8-10: right.'
     plot_data$x <- plot_data$en
   } else {
-    subtitle <- 'Per ideologia. Tota Espanya, sense incloure Catalunya.'
+    x <- 'Ideologia esquerra-dreta'
+    y <- 'Percentatge'
+    subtitle <- 'Per ideologia. Tot l\'estat espanyol, sense incloure Catalunya.'
     xxx <- 'Gens satisfet'
-    title <- 'Nivell de satisfacció amb la Constitució Espanyola'
-    caption <- 'Dades del CIS, Setembre 2018.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.\nIdeologia: 1-3: esquerra; 4-7: centre; 8-10: dreta.'
+    title <- 'Nivell de satisfacció amb la constitució espanyola'
+    caption <- 'Dades del CIS del setembre del 2018.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.\nIdeologia: 1-3: esquerra; 4-7: centre; 8-10: dreta.'
     plot_data$x <- plot_data$ca
   }
   
@@ -849,9 +894,9 @@ left_right_plot <- function(language = 'en',
   } else {
     
     x = 'Ideologia autoubicada (escala 0-10)'
-    y = 'Percentage'
-    title = 'Suport de la constitució espanyola entre catalans'
-    subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nConstitució espanyola aprovada el 1978, tal com és ara, vostè què faria?'
+    y = 'Percentatge'
+    title = 'Suport a la constitució espanyola entre catalans'
+    subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nconstitució espanyola aprovada el 1978, tal com és ara, què faríeu?'
     caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1500 residents de Catalunya amb ciutadania espayola. Codificació de categories:\nescala ideòlogica 0-10: 0-1=extrema esquerra;2-3=esquerra;4-6=centre;7-8=dreta;9-10=extrema dreta.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
     new_axis <- 
       c('Extrema esquerra',
@@ -1047,8 +1092,8 @@ king_plot <- function(language = 'en',
     } else {
       
       x = 'Ideologia autoubicada (escala 0-10)'
-      y = 'Percentage'
-      title = 'Suport de la Monarquia espanyola entre catalans'
+      y = 'Percentatge'
+      title = 'Suport a la Monarquia espanyola entre catalans'
       subtitle = 'Grau de confiança mitjana (escala de 0-10)'
       caption = 'Dades del Baròmetre d\'Opinió Pública, combinació d\'enquestes 2014-2019.\nMostra: 12.273 residents de Catalunya amb ciutadania espayola.'
     }
@@ -1157,7 +1202,7 @@ king_plot <- function(language = 'en',
         
         x = 'Ideologia autoubicada (escala 0-10)'
         y = 'Grau de confiança'
-        title = 'Suport de la Monarquia espanyola entre catalans, per ideologia'
+        title = 'Suport a la Monarquia espanyola entre catalans, per ideologia'
         subtitle = 'Grau de confiança mitjana (escala de 0-10)'
         caption = 'Dades del Baròmetre d\'Opinió Pública, combinació d\'enquestes 2014-2019\nMostra: 12.273 residents de Catalunya amb ciutadania espayola. Codificació de categories:\nescala ideòlogica 0-10: 0-1=extrema esquerra;2-3=esquerra;4-6=centre;7-8=dreta;9-10=extrema dreta.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
         new_axis <- 
@@ -1262,7 +1307,7 @@ deal_plot <- function(ca = FALSE,
                      x = 'Date',
                      y = 'Percentage')
   } else {
-    the_labs <- labs(title = 'Fins a quin punt creu vostè que és molt probable o gens\nprobable que el Govern Espanyol acabi oferint un acord que\nsigui acceptable per la majoria del Parlament de Catalunya?',
+    the_labs <- labs(title = 'Fins a quin punt creu creieu que és molt probable o gens\nprobable que el govern espanyol acabi oferint un acord que\nsigui acceptable per a la majoria del Parlament de Catalunya?',
                      x = 'Data',
                      y = 'Percentatge')
   }
@@ -1321,10 +1366,10 @@ franco_constitution <- function(ca = FALSE){
                             labels = c('Negatiu',
                                        'Va tenir coses\npositives i negatives',
                                        'Positiu'))
-    constitution_name <- 'Com votaries en un\nreferèndum sobre la\nConstitució de 1978'
+    constitution_name <- 'Com votaries en un\nreferèndum sobre la\nconstitució de 1978'
     the_labs <- labs(x = 'Valoració del franquisme',
                      y = 'Percentatge',
-                     title = 'Relació entre franquisme i suport a la Constitució',
+                     title = 'Relació entre franquisme i suport a la constitució',
                      subtitle = 'Catalunya. Dades del CEO, ronda 3, 2018. Mida de mostra: 1.409.')
   } else {
     pd$franquisme <- factor(pd$franquisme, 
@@ -1395,9 +1440,9 @@ re_ref <- function(language = 'en',
   } else {
     
     x = ''
-    y = 'Percentage'
-    title = 'Suport de la constitució espanyola entre catalans'
-    subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nConstitució espanyola aprovada el 1978, tal com és ara, vostè què faria?'
+    y = 'Percentatge'
+    title = 'Suport a la constitució espanyola entre catalans'
+    subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nconstitució espanyola aprovada el 1978, tal com és ara, què faríeu?'
     caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1500 residents de Catalunya amb ciutadania espayola.'
   }
    
@@ -1547,6 +1592,7 @@ referendum_plot <- function(language = 'en',
     subtitle <- '"Catalonia does not have a right to celebrate a self-determination referendum"'
     caption <- 'Data from Barometer of Public Opinion, 2018, round 2.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'
   } else {
+    y <- 'Percentatge'
     plot_data$ca <-
       factor(plot_data$ca,
              levels = c("Molt\nd'acord",
@@ -1599,9 +1645,9 @@ simple_plot <- function(language = 'en',
     
   } else {
     
-    y = 'Percentage'
-    title = 'Suport de la constitució espanyola entre catalans'
-    subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nConstitució espanyola aprovada el 1978, tal com és ara, vostè què faria?'
+    y = 'Percentatge'
+    title = 'Suport a la constitució espanyola entre catalans'
+    subtitle = 'Si es tornés a celebrar un referèndum per decidir sobre l’actual\nconstitució espanyola aprovada el 1978, tal com és ara, què faríeu?'
     caption = 'Dades del Baròmetre d\'Opinió Pública, 3a onada 2018.\nMostra: 1500 residents de Catalunya amb ciutadania espayola.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
   }
   
@@ -1694,7 +1740,7 @@ self_determination_plot <- function(language = 'en',
   cis_data  <- cis_list$`2018-10`
   if(geo == 'esp'){
     plot_data <- cis_data %>% filter(CCAA != 'Cataluña')  
-    if(language == 'en'){subtitle <- 'Spain, not counting Catalonia'} else {subtitle <-'Espanya, sense incloure Catalunya'}
+    if(language == 'en'){subtitle <- 'Spain, not counting Catalonia'} else {subtitle <-'Estat espanyol, sense incloure Catalunya'}
   }
   if(geo == 'cat'){
     plot_data <- cis_data %>% filter(CCAA == 'Cataluña')
@@ -1724,8 +1770,8 @@ self_determination_plot <- function(language = 'en',
                ca = c('Estat central/\nSense autonomia',
                       'Menys autonomia',
                       'Statu Quo',
-                      'Mes autonomia',
-                      'Possibilitat de\n independència',
+                      'Més autonomia',
+                      'Possibilitat\nd\'independència',
                       'NS/NC',
                       'NS/NC'))
   
@@ -1735,14 +1781,14 @@ self_determination_plot <- function(language = 'en',
     plot_data$x <- plot_data$en
     title <- 'Preferences for territorial organization'
     caption <- 'Data from CIS survey, October 2018.\nJoe Brew | @joethebrew | www.vilaweb.cat.'
-    x <- 'Percentage'
-    y <- ''
+    y <- 'Percentage'
+    x <- 'Preference'
   } else {
     plot_data$x <- plot_data$ca    
     title <- 'Preferències sobre organització territorial'
-    caption <- 'Dades del CIS, Octubre 2018.\nJoe Brew | @joethebrew | www.vilaweb.cat.'
-    x <- 'Percentage'
-    y <- ''
+    caption <- 'Dades del CIS de l\'octubre del 2018.\nJoe Brew | @joethebrew | www.vilaweb.cat.'
+    y <- 'Percentatge'
+    x <- 'Preferència'
   }
   plot_data <- plot_data %>%
     group_by(x) %>%
@@ -1763,8 +1809,8 @@ self_determination_plot <- function(language = 'en',
                               'Menys autonomia',
                               'Statu Quo',
                               'NS/NC',
-                              'Mes autonomia',
-                              'Possibilitat de\n independència'))
+                              'Més autonomia',
+                              'Possibilitat\nd\'independència'))
   }
   
   cols <- c(bp('Blues', 8),
@@ -1868,6 +1914,8 @@ referendum_plot_party <- function(language = 'en',
     subtitle <- '"Catalonia does not have a right to celebrate a self-determination referendum"'
     caption <- 'Data from Barometer of Public Opinion, 2018, round 2.\nChart by Joe Brew | @joethebrew | www.vilaweb.cat.'
   } else {
+    y <- 'Percentatge'
+    
     plot_data$ca <-
       factor(plot_data$ca,
              levels = c("Molt\nd'acord",
