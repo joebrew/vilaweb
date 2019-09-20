@@ -427,7 +427,7 @@ overall_plot <- function(language = 'en',
   } else {
     if(geo == 'esp'){
       plot_data <- cis_data %>% filter(CCAA != 'Cataluña')  
-      if(language == 'en'){subtitle <- 'Spain, not counting Catalonia'} else {subtitle <-'Estat espanyol, sense incloure Catalunya'}
+      if(language == 'en'){subtitle <- 'Spain, not counting Catalonia'} else {subtitle <-'Estat espanyol, sense incloure-hi Catalunya'}
     }
     if(geo == 'cat'){
       plot_data <- cis_data %>% filter(CCAA == 'Cataluña')
@@ -818,7 +818,7 @@ ideology_spain_plot <- function(language = 'en',
   } else {
     x <- 'Ideologia esquerra-dreta'
     y <- 'Percentatge'
-    subtitle <- 'Per ideologia. Tot l\'estat espanyol, sense incloure Catalunya.'
+    subtitle <- 'Per ideologia. Tot l\'estat espanyol, sense incloure-hi Catalunya.'
     xxx <- 'Gens satisfet'
     title <- 'Nivell de satisfacció amb la constitució espanyola'
     caption <- 'Dades del CIS del setembre del 2018.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.\nIdeologia: 1-3: esquerra; 4-7: centre; 8-10: dreta.'
@@ -1093,7 +1093,7 @@ king_plot <- function(language = 'en',
       
       x = 'Ideologia autoubicada (escala 0-10)'
       y = 'Percentatge'
-      title = 'Suport a la Monarquia espanyola entre catalans'
+      title = 'Suport a la monarquia espanyola entre catalans'
       subtitle = 'Grau de confiança mitjana (escala de 0-10)'
       caption = 'Dades del Baròmetre d\'Opinió Pública, combinació d\'enquestes 2014-2019.\nMostra: 12.273 residents de Catalunya amb ciutadania espayola.'
     }
@@ -1202,7 +1202,7 @@ king_plot <- function(language = 'en',
         
         x = 'Ideologia autoubicada (escala 0-10)'
         y = 'Grau de confiança'
-        title = 'Suport a la Monarquia espanyola entre catalans, per ideologia'
+        title = 'Suport a la monarquia espanyola entre catalans, per ideologia'
         subtitle = 'Grau de confiança mitjana (escala de 0-10)'
         caption = 'Dades del Baròmetre d\'Opinió Pública, combinació d\'enquestes 2014-2019\nMostra: 12.273 residents de Catalunya amb ciutadania espayola. Codificació de categories:\nescala ideòlogica 0-10: 0-1=extrema esquerra;2-3=esquerra;4-6=centre;7-8=dreta;9-10=extrema dreta.\nElaboració del gràfic: Joe Brew | @joethebrew | www.vilaweb.cat.'
         new_axis <- 
@@ -1307,7 +1307,7 @@ deal_plot <- function(ca = FALSE,
                      x = 'Date',
                      y = 'Percentage')
   } else {
-    the_labs <- labs(title = 'Fins a quin punt creu creieu que és molt probable o gens\nprobable que el govern espanyol acabi oferint un acord que\nsigui acceptable per a la majoria del Parlament de Catalunya?',
+    the_labs <- labs(title = 'Fins a quin punt creieu que és molt probable o gens\nprobable que el govern espanyol acabi oferint un acord que\nsigui acceptable per a la majoria del Parlament de Catalunya?',
                      x = 'Data',
                      y = 'Percentatge')
   }
@@ -1366,7 +1366,7 @@ franco_constitution <- function(ca = FALSE){
                             labels = c('Negatiu',
                                        'Va tenir coses\npositives i negatives',
                                        'Positiu'))
-    constitution_name <- 'Com votaries en un\nreferèndum sobre la\nconstitució de 1978'
+    constitution_name <- 'Com votarieu en un\nreferèndum sobre la\nconstitució de 1978'
     the_labs <- labs(x = 'Valoració del franquisme',
                      y = 'Percentatge',
                      title = 'Relació entre franquisme i suport a la constitució',
@@ -1740,7 +1740,7 @@ self_determination_plot <- function(language = 'en',
   cis_data  <- cis_list$`2018-10`
   if(geo == 'esp'){
     plot_data <- cis_data %>% filter(CCAA != 'Cataluña')  
-    if(language == 'en'){subtitle <- 'Spain, not counting Catalonia'} else {subtitle <-'Estat espanyol, sense incloure Catalunya'}
+    if(language == 'en'){subtitle <- 'Spain, not counting Catalonia'} else {subtitle <-'Estat espanyol, sense incloure-hi Catalunya'}
   }
   if(geo == 'cat'){
     plot_data <- cis_data %>% filter(CCAA == 'Cataluña')
