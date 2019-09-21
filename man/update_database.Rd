@@ -7,7 +7,7 @@
 update_database(people = NULL, get_new = FALSE,
   delete_duplicates = TRUE, only_new_people = FALSE,
   after = "2000-01-01", until = as.character(Sys.Date() + 1),
-  force_old = FALSE)
+  force_old = FALSE, refetch = FALSE, refetch_since = NULL)
 }
 \arguments{
 \item{people}{A character vector of twitter accounts. If null, will do existing people}
@@ -23,6 +23,10 @@ update_database(people = NULL, get_new = FALSE,
 \item{until}{The date until which tweets will be retrieved}
 
 \item{force_old}{Set to TRUE if retrieving tweets older than what is already in the database (only for exceptional cases)}
+
+\item{refetch}{Set to TRUE to delete previous entries in the database for the person in question and rescrape}
+
+\item{refetch_since}{Whether to only refetch since a certain date (ie, delete all entries until that date). Only applicable if refetch is true}
 }
 \value{
 A set up database

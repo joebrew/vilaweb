@@ -114,6 +114,28 @@ if(processed %in% dir()){
                   account_lang) %>%
     mutate(user_name = tolower(screen_name))
   
+  # First define probable replies
+  library(stringr)
+  detect_reply <- function(ttl = tl){
+    ttl <- ttl %>% dplyr::select(tweet, mentions)
+    the_mentions <- get_mentions(ttl$mentions)
+    the_full_mentions <- str_extract_all(ttl$tweet, "(?<=^|\\s)@[^\\s]+")
+    the_full_mentions <- lapply(the_full_mentions, function(x){gsub('@', '', x)})
+    # Detect reply by saying if the number of people mentioned in the_mentions
+    # is greater than those in the the text of the tweet
+    ir_list <- list()
+    for(i in 1:length(the_full_mentions)){
+      message(i)
+      mentions_length <- length(unlist(the_mentions[[i]]))
+      full_mentions_length <- length(unlist(the_full_mentions[[i]]))
+      out <- mentions_length > full_mentions_length
+      ir_list[[i]] <- out
+    }
+    out <- unlist(ir_list)
+    return(out)
+  }
+  tl$is_reply <- detect_reply(tl)
+  
   save(tl, all_mentions, diputats, people, diputats_info,
        file = processed)
 }
@@ -173,4 +195,14 @@ theme_vilaweb_date <-
     out <- list(out)
   }
   return(out)
+  }
+
+get_mentions <- function(z){
+  z <- gsub('[', '', z, fixed = T)
+  z <- gsub(']', '', z, fixed = T)
+  z <- gsub("'", '', z, fixed = T)
+  z <- gsub(' ', '', z)
+  # z <- trimws(z, which = 'both')
+  z <- strsplit(z, split = ',')
+  return(z)
 }

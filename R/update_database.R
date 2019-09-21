@@ -8,6 +8,8 @@
 #' @param after The date after which tweets should be retrieved. Default to 2000-01-01
 #' @param until The date until which tweets will be retrieved
 #' @param force_old Set to TRUE if retrieving tweets older than what is already in the database (only for exceptional cases)
+#' @param refetch Set to TRUE to delete previous entries in the database for the person in question and rescrape
+#' @param refetch_since Whether to only refetch since a certain date (ie, delete all entries until that date). Only applicable if refetch is true
 #' @return A set up database
 #' @import dplyr
 #' @import RPostgreSQL
@@ -21,7 +23,9 @@ update_database <- function(people = NULL,
                             only_new_people = FALSE,
                             after = '2000-01-01',
                             until = as.character(Sys.Date() +1),
-                            force_old = FALSE){
+                            force_old = FALSE,
+                            refetch = FALSE,
+                            refetch_since = NULL){
   
   require(dplyr)
   require(RPostgreSQL)
@@ -54,6 +58,27 @@ update_database <- function(people = NULL,
   # Loop through each person and get an update
   for(p in 1:length(people)){
     this_person <- people[p]
+    
+    # If refetch, delete all the old rows from the db
+    if(refetch){
+      if(!is.null(refetch_since)){
+        delete_query <- paste0("DELETE FROM twitter WHERE (username='", 
+                               this_person,
+                               "' AND date >= '", as.character(refetch_since),
+                               "');")
+        message('Deleting rows for ', this_person, ' since ', as.character(refetch_since))
+      } else {
+        delete_query <- paste0("DELETE FROM twitter WHERE username='", 
+                               this_person,
+                               "';")
+        message('Deleting all old rows for ', this_person)
+      }
+      
+      
+      dbSendQuery(con, delete_query)
+    }
+    
+    
     this_data <- dbGetQuery(con,
                             paste0("select MAX(date) from twitter where username='", this_person, "'"))
     this_id <- this_data$max
