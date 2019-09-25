@@ -54,7 +54,7 @@ El gràfic següent mostra els piulets, m'agrada, i repiulets per hora que esmen
 lorena_plot()
 ```
 
-Nota que el gràfic anterior és per hora: o sigui, en el seu apogeu, la freqüència de piulets esmentant Roldán va arribar a 800 per hora, o un cada 4 segons. I els "m'agrada" a un ritme de més de 100 per segon.
+Nota que el gràfic anterior és per hora: o sigui, en el seu apogeu, la freqüència de piulets esmentant Roldán va arribar a 800 per hora, o un cada 4 segons. I els "m'agrada" a un ritme de més de 100 per minut
 
 Mirem-ho per dia. En els dies previs al discurs del dilluns 23 de setembre, la freqüència de piulets esmentant Roldán ja estava més alta que normal deguda al fet que pocs dies abans (el 15 de setembre) havia afirmat que la gent anava que la gent anava per la ciutat de Barcelona amb "katanas".
 

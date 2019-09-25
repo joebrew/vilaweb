@@ -83,7 +83,7 @@ Arrimadas, els 587.000 de Junqueras, o els 761.000 de Puigdemont).
 
 Nota que el gràfic anterior és per hora: o sigui, en el seu apogeu, la
 freqüència de piulets esmentant Roldán va arribar a 800 per hora, o un
-cada 4 segons. I els “m’agrada” a un ritme de més de 100 per segon.
+cada 4 segons. I els “m’agrada” a un ritme de més de 100 per minut
 
 Mirem-ho per dia. En els dies previs al discurs del dilluns 23 de
 setembre, la freqüència de piulets esmentant Roldán ja estava més alta
