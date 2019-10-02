@@ -117,18 +117,42 @@ a aquesta pregunta: Catalunya, la seva “violència”, els seus
 # Detaills tècnics
 
   - Els comptes de Twitter analitzats van ser tots els diputats del PSC
-    i tots els ministres del govern Sánchez amb un compte de
-    Twitter:
+    i tots els ministres del govern Sánchez amb un compte de Twitter:
 
-<!-- end list -->
-
-    Error in eval(lhs, parent, parent): object 'socialists' not found
-
-    Error in names(x) <- c("Nom", "Twitter"): 'names' attribute [2] must be the same length as the vector [1]
-
-| x |
-| -: |
-| 1 |
+| Nom                          | Twitter          |
+| :--------------------------- | :--------------- |
+| Pedro Sánchez                | sanchezcastejon  |
+| Carmen Calvo                 | carmencalvo\_    |
+| Josep Borrell                | JosepBorrellF    |
+| Dolores Delgado              | LolaDelgadoG     |
+| María Jesús Montero          | mjmonteroc       |
+| José Luis Ábalos             | abalosmeco       |
+| Isabel Celaá                 | CelaaIsabel      |
+| Magdalena Valerio            | mvalerio\_gu     |
+| Luis Planas                  | LuisPlanas       |
+| Meritxell Batet              | meritxell\_batet |
+| Teresa Ribera                | Teresaribera     |
+| Màxim Huerta                 | maximhuerta      |
+| Nadia Calviño                | NadiaCalvino     |
+| Carmen Montón                | CarmenMonton     |
+| Pedro Duque                  | astro\_duque     |
+| Miquel Iceta i Llorens       | miqueliceta      |
+| Eva Granados Galiano         | eva\_granados    |
+| Ferran Pedret i Santos       | ferranpedret     |
+| Rafel Bruguera Batalla       | rafelbruguera    |
+| Carles Castillo Rosique      | carlestgna       |
+| Assumpta Escarp Gibert       | aescarp          |
+| Ramon Espadaler i Parcerisas | ramon\_espadaler |
+| Pol Gibert Horcas            | polgibert        |
+| Rosa Maria Ibarra Ollé       | rosa\_m\_ibarra  |
+| Raúl Moreno Montaña          | raulmorenom      |
+| Marta Moreta Rovira          | martamoreta      |
+| Esther Niubó Cidoncha        | eniubo           |
+| Òscar Ordeig i Molist        | oscarordeig      |
+| David Pérez Ibáñez           | davidpsc         |
+| Alícia Romero Llano          | aliciarll        |
+| Beatriz Silva Gallardo       | beasilva9        |
+| Jordi Terrades i Santacreu   | jterrades        |
 
   - Tot el còdi d’aquest anàlisi és públic:
     <https://github.com/joebrew/vilaweb/tree/master/analyses/ja_no_ve_la_dreta>.
