@@ -109,9 +109,10 @@ Si ja no poden fer servir els partits de dreta com a adversari perquè
 seran els seus futurs socis de govern com a adversari, quin adversari
 poden utilitzar els socialistes per motivar els seus votants? Si la
 “por” de que vé la dreta no ha funcionat prou bé com a estratègia,
-quina altra cosa pot fer prou “por” pet que la gent vagi a votar a
+quina altra cosa podria fer prou “por” pet que la gent vagi a votar a
 Sánchez el 10-N? Les darreres setmanes han deixat molt clar la resposta
-a aquesta pregunta: la “violència” dels “terroristes” independentistes.
+a aquesta pregunta: Catalunya, la seva “violència”, els seus
+“terroristes”, i el seu govern “insurreccional”.
 
 # Detaills tècnics
 
