@@ -55,6 +55,9 @@ if(!file_name %in% dir()){
   tl_party$violence <-
     grepl('violència|violencia|terroris|cdr|atac|ataq|bomba|explosi', tolower(tl_party$tweet))
   
+  tl <- tl %>% filter(username != 'maximhuerta')
+  socialists <- socialists %>% filter(username != 'maximhuerta')
+  
   save(tl, socialists, tl_party, file = file_name)
 } else {
   load(file_name)

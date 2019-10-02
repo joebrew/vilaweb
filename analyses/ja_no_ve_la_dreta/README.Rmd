@@ -25,7 +25,7 @@ source('prepare_data.R')
 
 # La importància de l'adversari
 
-Tot i que tots els polítics diguin que volen fer campanyes "en positiu" - és a dir, destacant els avantatges de les seves propostes polítiques sense criticar massa els dels altres - la realitat demostra el contrari. Els polítics parlen constantment dels altres polítics, i solen parlar més dels seus adversaris que dels seus aliats. Per què? Perquè l'estratègia paga: parlar de l'adversari fa que la base es mogui. Tots ho fan. Cap polític es capaç de resistir a la tentació de criticar l'adversari, perquè l'adversari és un concepte políticament massa útil.
+Tot i que tots els polítics diguin que volen fer campanyes "en positiu", és a dir, destacant els avantatges de les seves propostes polítiques sense criticar massa els dels altres, la realitat demostra el contrari. Els polítics parlen constantment dels altres polítics, i solen parlar més dels seus adversaris que dels seus aliats. Per què? Perquè l'estratègia paga: parlar de l'adversari fa que la base es mogui. Tots ho fan. Cap polític es capaç de resistir a la tentació de criticar l'adversari, perquè l'adversari és un concepte políticament massa útil.
 
 Donada la universalitat de l'estratègia, resulta dificil fer comparacions entre partits diferents. En canvi, encara que no es pogui comparar el "què" (perquè l'estratègia de parlar de l'adversari és universal), sí que es pot comparar el "qui": quin adversari seleccionen els partits, quan i per què canvien d'adversari, i quin resultat esperen amb l'elecció d'un adversari o un altre.
 

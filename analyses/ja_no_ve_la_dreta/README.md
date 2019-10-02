@@ -132,7 +132,6 @@ a aquesta pregunta: Catalunya, la seva “violència”, els seus
 | Luis Planas                  | LuisPlanas       |
 | Meritxell Batet              | meritxell\_batet |
 | Teresa Ribera                | Teresaribera     |
-| Màxim Huerta                 | maximhuerta      |
 | Nadia Calviño                | NadiaCalvino     |
 | Carmen Montón                | CarmenMonton     |
 | Pedro Duque                  | astro\_duque     |
