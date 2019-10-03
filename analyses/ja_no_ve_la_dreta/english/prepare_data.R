@@ -348,7 +348,7 @@ make_post_election_plot_party <- function(){
                                      size = 6)) +
     scale_x_date(breaks = sort(unique(pd$date)),
                  labels = cat_date(sort(unique(pd$date)))) +
-    labs(title = "Tweets mentioning the 'right' from official party Twitter accounts",
+    labs(title = "Tweets mentioning the 'right' from official party accounts",
          subtitle = 'Percentage by month',
          caption = paste0("Monthly frequency of the following words: 'dreta', 'dretes', 'derecha', 'derechas'.\nChart by @joethebrew. www.vilaweb.cat"),
          x = 'Month',
