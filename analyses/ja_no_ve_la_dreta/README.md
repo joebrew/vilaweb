@@ -5,9 +5,9 @@ Però… que no venia la dreta?
 
 # La importància de l’adversari
 
-Tot i que tots els polítics diguin que volen fer campanyes “en positiu”
-- és a dir, destacant els avantatges de les seves propostes polítiques
-sense criticar massa els dels altres - la realitat demostra el contrari.
+Tot i que tots els polítics diguin que volen fer campanyes “en positiu”,
+és a dir, destacant els avantatges de les seves propostes polítiques
+sense criticar massa els dels altres, la realitat demostra el contrari.
 Els polítics parlen constantment dels altres polítics, i solen parlar
 més dels seus adversaris que dels seus aliats. Per què? Perquè
 l’estratègia paga: parlar de l’adversari fa que la base es mogui.
@@ -29,7 +29,7 @@ només mirant la freqüencia amb la qual Pedro Sánchez, i altres dirigents
 socialistes, esmentaven “la dreta” durant la campanya. El gràfic següent
 mostra el percentatge de piulets mensuals que contenen les paraules
 “derecha”, “derechas”, “dreta”, o “dretes” dels principals polítics
-socialistes catalans i espanyols:
+socialistes catalans i espanyols, fins al finals de setembre de 2019:
 
 ![](figures/unnamed-chunk-2-1.png)<!-- -->
 
@@ -75,8 +75,8 @@ llarg dels darrers mesos:
 
 El canvi d’estratègia queda igual de clar al nivell individual. Per
 exemple, ni Eva Granados, ni Josep Borrell, ni Pedro Sánchez no han
-esmentat la dreta ni tans sols una vegada al Twitter des de maig. Els
-que encara esmenten la dreta ho fan amb una freqüència molt menor
+esmentat la dreta ni tans sols una vegada al Twitter de maig a setembre.
+Els que encara esmenten la dreta ho fan amb una freqüència molt menor
 qu’abans del 28-A:
 
 ![](figures/unnamed-chunk-5-1.png)<!-- -->
@@ -153,5 +153,6 @@ a aquesta pregunta: Catalunya, la seva “violència”, els seus
 | Beatriz Silva Gallardo       | beasilva9        |
 | Jordi Terrades i Santacreu   | jterrades        |
 
-  - Tot el còdi d’aquest anàlisi és públic:
-    <https://github.com/joebrew/vilaweb/tree/master/analyses/ja_no_ve_la_dreta>.
+\-Piulets fins al 30 de setembre del 2019  
+\- Tot el còdi d’aquest anàlisi és públic:
+<https://github.com/joebrew/vilaweb/tree/master/analyses/ja_no_ve_la_dreta>.

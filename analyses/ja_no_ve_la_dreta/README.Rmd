@@ -31,7 +31,7 @@ Donada la universalitat de l'estratègia, resulta dificil fer comparacions entre
 
 # Eleccions 28-A: la dreta és l'adversari
 
-L'estratègia del partit socialista per les eleccions del 28-A era emmarcar com a adversari la dreta. Es pot quantificar aquesta estratègia només mirant la freqüencia amb la qual Pedro Sánchez, i altres dirigents socialistes, esmentaven "la dreta" durant la campanya. El gràfic següent mostra el percentatge de piulets mensuals que contenen les paraules "derecha", "derechas", "dreta", o "dretes" dels principals polítics socialistes catalans i espanyols:
+L'estratègia del partit socialista per les eleccions del 28-A era emmarcar com a adversari la dreta. Es pot quantificar aquesta estratègia només mirant la freqüencia amb la qual Pedro Sánchez, i altres dirigents socialistes, esmentaven "la dreta" durant la campanya. El gràfic següent mostra el percentatge de piulets mensuals que contenen les paraules "derecha", "derechas", "dreta", o "dretes" dels principals polítics socialistes catalans i espanyols, fins al finals de setembre de 2019:
 
 ```{r}
 make_pre_election_plot()
@@ -55,7 +55,7 @@ A menys de 6 setmanes de les eleccions del 10-N, aquest canvi és molt clar: ja 
 make_post_election_plot()
 ```
 
-El canvi d'estratègia queda igual de clar al nivell individual. Per exemple, ni Eva Granados, ni Josep Borrell, ni Pedro Sánchez no han esmentat la dreta ni tans sols una vegada al Twitter des de maig. Els que encara esmenten la dreta ho fan amb una freqüència molt menor qu'abans del 28-A:
+El canvi d'estratègia queda igual de clar al nivell individual. Per exemple, ni Eva Granados, ni Josep Borrell, ni Pedro Sánchez no han esmentat la dreta ni tans sols una vegada al Twitter de maig a setembre. Els que encara esmenten la dreta ho fan amb una freqüència molt menor qu'abans del 28-A:
 
 ```{r}
 make_post_election_plot_person()
@@ -92,4 +92,5 @@ names(x) <- c('Nom', 'Twitter')
 kable(x)
 ```
 
+-Piulets fins al 30 de setembre del 2019  
 - Tot el còdi d'aquest anàlisi és públic: `r self_cite()`.
