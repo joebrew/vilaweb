@@ -1,0 +1,151 @@
+---
+title: 'La desconnexió entre Espanya i Catalunya: la sentència i les eleccions'
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(tidyverse)
+library(databrew)
+library(gsheet)
+source('prepare_data.R')
+```
+
+
+# Introducció
+
+Al mes de març vaig escriure un article sobre [la poca atenció que es feia a l'estat espanyol al judici del procés](https://www.vilaweb.cat/noticies/desconnexio-espanya-catalunya-judici-eleccions-joe-brew/). Tot i que fos considerat per molts com el judici més important de la història de l'estat espanyol, s'en parlava poc fora de Catalunya. 
+
+Ara que la sentència està a punt per sortir, i que Espanya està (una altre vegada) en pre-campanya, és interessant reproduir aquella anàlisi. És a dir, fins quin punt es parla de la sentència a l'estat espanyol i a Catalunya? I què en podem deduir de les diferències?
+
+# Metodes
+
+Mirarem tots el piulets geolocalitzats dels últims 10 dies que feien servir les paraules "sentència" (o sentencia) a 4 ciutats de l'Estat espanyol: Barcelona, Madrid, Sevilla, Zaragoza (a menys de 32 kilómetres del centre de la ciutat). Per fer-ne un "control", comparem-los amb els tuits de les mateixes zones que contenen la paraula "eleccions" o "elecciones".
+
+La hipòtesi és aquesta: si a Catalunya es preocupa pels mateixos temes polítics que a la resta de l'estat espanyol, ens esperarem que la propoció de piulets esmentant la sentència i les eleccions serà similar a les diferents ciutats. En canvi, una diferència en la freqüència de piulets esmentant la sentència i les eleccions indica una desconnexió psicològica, i una diferència en la importància relativa que les persones posen als esdeveniments polítics.
+
+Vegem-ne els resultats
+
+# Resultats
+
+## Tots els piulets dels últims 10 dies
+
+El gràfic següent mostra la diferència entre piulets sobre les elecciones (vert) i la sentència (blau) en les 4 ciutats examinades. Les dades han estat ajustades perquè el nombre de piulets sobre les eleccions sigui la referència (100%) a cada ciutat, de manera que puguem fer comparacions entre ciutats que no tenen el mateix nombre d’habitants. És a dir, una barra blava al 100% voldria dir que en aquella ciutat es fan exactament la mateixa quantitat de piulets sobre la sentència que sobre les eleccions. Una barra blava més alta de 100% vol dir que es parla més de la sentència, i una barra blava inferior a 100% vol dir que es parla més de les eleccions.
+
+```{r}
+
+pd <- df %>%
+  group_by(city, subject#,
+           # date = as.POSIXct(cut(created_at, 'month'))
+           ) %>%
+  tally %>%
+  group_by(city) %>%
+  mutate(p = n / sum(n) * 100,
+         r = n / n[subject == 'Eleccions/Elecciones']) %>%
+  mutate(r = r * 100)
+
+library(databrew)
+ggplot(data = pd,
+       aes(x = city,
+           y = r,
+           fill = subject)) +
+  # geom_line() +
+  geom_bar(stat = 'identity',
+           # position = 'dodge',
+           alpha = 0.8,
+           lwd = 0.2,
+           color = 'black',
+           width = 0.5,
+            position = position_dodge(width = 0.7)) +
+  # facet_wrap(~city) +
+  theme_vilaweb() +
+  labs(x = '',
+       y = '% (Referència: elecciones)',
+       title = 'Freqüencia de paraula "sentència"\ncomparada amb "eleccions" en piulets',
+       subtitles = 'Piulets geolocalitzats a < 32 km del centre de la ciutat',
+       caption = '3 d\'octubre a les 6:00 fins al 12 d\'octubre a les 14:30. Sense comptar repiulets.\nDades: API REST de Twitter. Gràfic: Joe Brew. www.vilaweb.cat') +
+  theme(legend.text = element_text(size = 15),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 16),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 13),
+        plot.caption = element_text(size = 11)) +
+  scale_fill_manual(name = '',
+                    values = vilaweb::colors_vilaweb()[c(3,5)]) +
+  # scale_y_continuous(breaks = seq(0,3, by = 0.2)) +
+  geom_hline(yintercept = 100, alpha = 0.3, lty = 2) +
+  geom_text(aes(y= r + 8, label = round(r, digits = 1)),
+            position = position_dodge(width = 0.7))
+```
+
+Barcelona és la única ciutat on es parla més de la sentència que de les eleccions. A les altres ciutats, la freqüencia (ajustada) de piulets sobre la sentència és molt menor. A Madrid, la freqüencia ajustada de piulets sobre el judici és 3,3 vegades menor que a Barcelona. La bretxa és encara més a Sevilla (4 vegades menor) i a Zaragoza (3,5 vegades menor).
+
+
+La comparació Barcelona-Madrid és la més interessant perquè són de dimensions més similars i comparteixen un nivell sociodemogràfic més comparable. Mirem la freqüència de piulets per hora a cada ciutat:
+
+
+```{r}
+
+pd <- df %>%
+  group_by(city, subject,
+           date = as.POSIXct(cut(created_at, 'hour'))
+           ) %>%
+  tally %>%
+  group_by(city, date) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  filter(city %in% c('Barcelona', 'Madrid'))
+
+ggplot(data = pd,
+       aes(x = date,
+           y = n,
+           color = subject)) +
+  geom_line() +
+  facet_wrap(~city) +
+  theme_vilaweb() +
+  labs(x = 'Data',
+       y = 'Piulets per hora',
+       title = 'Freqüencia de paraula "sentència"\ncomparada amb "eleccions" en piulets',
+       subtitles = 'Piulets geolocalitzats a < 32 km del centre de la ciutat',
+       caption = '3 d\'octubre a les 6:00 fins al 12 d\'octubre a les 14:30.\nSense comptar repiulets Dades: API REST de Twitter. Gràfic: Joe Brew.\nwww.vilaweb.cat') +
+  theme(legend.text = element_text(size = 15),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 16),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        # axis.text.x = element_text(size = 25),
+        axis.text.y = element_text(size = 13),
+        plot.caption = element_text(size = 11)) +
+  scale_color_manual(name = '',
+                    values = vilaweb::colors_vilaweb()[c(3,5)])
+```
+
+És clar que, a Madrid, la sentència contra el procés atreu molta menys atenció que no pas les eleccions. I a Barcelona passa al revés.
+
+
+# Conclusió
+
+## Resume de resultats 
+
+A Catalunya es parla molt més de la sentència que no pas de les eleccions espanyoles. A la resta de l'estat, es parla més de les elecciones que no pas de la sentència.
+
+
+Quan dues poblacions no comparteixen la mateixa opinió sobre la importància relativa dels esdeveniments polítics, reflecteix una ‘desconnexió’. Els esdeveniments principals d’un lloc ja no es consideren tan importants a l’altre. La confirmació d’aquesta desconnexió la podem trobar també, anecdotalment, si donem un cop d’ull als titulars dels principals diaris de Catalunya i de l’estat: en els primers, la sentència; en els segons, les eleccions espanyoles.
+
+
+Tot el codi per aquest análisi és publicament accessible a `r self_cite()`.
+
+
