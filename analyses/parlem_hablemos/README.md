@@ -1,6 +1,15 @@
-La efectivitat de la desobediència: quantificant l’efecte
-‘Parlem/Hablemos’
+L’efecte de la desobediència: diàleg
 ================
+
+Resum:
+
+Hi va haver només un moment en els darrers anys on hi havia un clam a
+favor del diàleg real de sectors contraris a la independència: les
+primeres setmanes d’octubre. Davant la incertesa política provocada per
+la desobediència civil de l’1 d’octubre, es va crear una finestra
+d’oportunitat pel diàleg polític real. Però aquesta finestra es va
+tancar rapidament amb l’empresonament, l’exili i el 155. Tornarà a
+obrir?
 
 # Introducció
 
