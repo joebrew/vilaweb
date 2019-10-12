@@ -1,6 +1,8 @@
 L’efecte de la desobediència: diàleg
 ================
 
+Tìtol alternatiu: “l’auge i la caiguda del moviment ‘parlem/hablemos’”
+
 Resum:
 
 Hi va haver només un moment en els darrers anys on hi havia un clam a

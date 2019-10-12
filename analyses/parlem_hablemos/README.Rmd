@@ -3,6 +3,8 @@ title: "L'efecte de la desobediència: diàleg"
 output: github_document
 ---
 
+Tìtol alternatiu: "l'auge i la caiguda del moviment 'parlem/hablemos'"
+
 Resum:
 
 Hi va haver només un moment en els darrers anys on hi havia un clam a favor del diàleg real de sectors contraris a la independència: les primeres setmanes d’octubre. Davant la incertesa política provocada per la desobediència civil de l'1 d'octubre, es va crear una finestra d'oportunitat pel diàleg polític real. Però aquesta finestra es va tancar rapidament amb l'empresonament, l'exili i el 155. Tornarà a obrir?
