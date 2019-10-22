@@ -70,7 +70,7 @@ preso_overall <- function(ca = FALSE){
     other <- 'Other/not sure'
     the_labs <- labs(x = '',
                      y = 'Percentage',
-                     title = "Do you consider the imprisonment and exile of Catalan politicians to be fair?",
+                     title = "Do you consider the imprisonment and exile of Catalan politicians\nto be fair?",
                      caption = 'Data: CEO Omnibus, September 2019. Representative sample of 1,200 residents of Catalonia.')
     pd$preso[pd$preso == 'NS/NC'] <- 'Not sure/\nno answer'
   }
@@ -131,7 +131,7 @@ preso_by_party <- function(ca = FALSE){
     the_labs <- labs(x = 'Party',
                      y = 'Percentage',
                      subtitle = 'By political party',
-                     title = "Do you consider the imprisonment and exile of Catalan politicians to be fair?",
+                     title = "Do you consider the imprisonment and exile of Catalan politicians\nto be fair?",
                      caption = 'Data: CEO Omnibus, September 2019. Representative sample of 1,200 residents of Catalonia.')
     pd$preso[pd$preso == 'NS/NC'] <- 'Not sure/\nno answer'
     legend_title <- 'Is\nprison\njust?'
@@ -190,7 +190,7 @@ referendum <- function(ca = FALSE){
     other <- 'Altre/NS/NC'
     the_labs <- labs(x = '',
                      y = 'Percentatge',
-                     title = "'S’hauria de fer un referèndum a Catalunya perquè els catalans i les\ncatalanes decidissin quina relació volen que hi hagi entre Catalunya i Espanya ",
+                     title = "'S’hauria de fer un referèndum a Catalunya perquè els catalans i les\ncatalanes decidissin quina relació volen que hi hagi entre Catalunya i Espanya'",
                      subtitle = "Grau d'acord amb la frase",
                      caption = 'Dades: Òmnibus del CEO, Setembre 2019. Mostreig representatiu de 1.200 residents de Catalunya.')
   } else {
@@ -268,7 +268,7 @@ referendum_by_party <- function(ca = FALSE){
     other <- 'Altre/NS/NC'
     the_labs <- labs(x = '',
                      y = 'Percentatge',
-                     title = "'S’hauria de fer un referèndum a Catalunya perquè els catalans i les\ncatalanes decidissin quina relació volen que hi hagi entre Catalunya i Espanya ",
+                     title = "'S’hauria de fer un referèndum a Catalunya perquè els catalans i les\ncatalanes decidissin quina relació volen que hi hagi entre Catalunya i Espanya'",
                      subtitle = "Grau d'acord amb la frase. Per partit.",
                      caption = 'Dades: Òmnibus del CEO, Setembre 2019. Mostreig representatiu de 1.200 residents de Catalunya.')
   } else {
@@ -333,7 +333,7 @@ referendum_by_party <- function(ca = FALSE){
     scale_fill_manual(name = '',
                       values = cols,
                       guide = guide_legend(reverse = T)) +
-    theme(plot.title = element_text(size = 15, color = 'black'))
+    theme(plot.title = element_text(size = 13, color = 'black'))
 }
 
 referendum_by_axis <- function(ca = FALSE){
@@ -386,7 +386,7 @@ referendum_by_axis <- function(ca = FALSE){
     scale_color_manual(name = '',
                       values = cols) +
     theme(axis.text.x = element_text(size = 10)) +
-    theme(plot.title = element_text(size = 18, color = 'black'))
+    theme(plot.title = element_text(size = 15, color = 'black'))
 }
 
 
@@ -404,14 +404,15 @@ referendum_by_birthplace <- function(ca = FALSE){
                      y = 'Percentatge',
                      title = "Grau d'acord amb un referèndum d'autodeterminació per lloc de naixement",
                      caption = 'Dades: Òmnibus del CEO, Setembre 2019. Mostreig representatiu de 1.200 residents de Catalunya.')
-    pd$x <- ifelse(pd$sobiranisme_senzill == 'No sobiranista',
+    pd$y <- ifelse(pd$sobiranisme_senzill == 'No sobiranista',
                    'Anti-referèndum',
                    ifelse(pd$sobiranisme_senzill == 'Sobiranista',
                           'Pro-referèndum',
                           'NS/NC/Ni-ni'))
     pd$x <- pd$neixer
+    
   } else {
-    pd$x <- ifelse(pd$sobiranisme_senzill == 'No sobiranista',
+    pd$y <- ifelse(pd$sobiranisme_senzill == 'No sobiranista',
                    'Anti-referendum',
                    ifelse(pd$sobiranisme_senzill == 'Sobiranista',
                           'Pro-referendum',
@@ -432,8 +433,8 @@ referendum_by_birthplace <- function(ca = FALSE){
   ggplot(data = pd,
          aes(x = x,
              y = p,
-             fill = sobiranisme_senzill,
-             group = sobiranisme_senzill)) +
+             fill = y,
+             group = y)) +
     geom_bar(stat = 'identity',
              alpha = 0.8) +
     geom_text(aes(label = round(p, digits = 1)),
