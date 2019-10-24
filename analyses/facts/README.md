@@ -49,7 +49,7 @@ Catalans considers say that imprisonment is not fair.
 ![](figures/unnamed-chunk-2-1.png)<!-- -->
 
 Only in two hard-line Spanish nationalist parties (the Popular Party -
-PPC, and Citizens - C’s) is there support for imprisoning the Catalan
+PPC, and Citizens - Cs) is there support for imprisoning the Catalan
 politicians. In the pro-independence parties, expectedly, there is
 virtual unanimity against imprisonment. But what’s most striking is the
 stance of the anti-independence, left-leaning parties. 92% of the voters

@@ -41,7 +41,7 @@ On the matter of these imprisonments, there is a clear consensus in Catalonia. O
 preso_overall()
 ```
 
-Only in two hard-line Spanish nationalist parties (the Popular Party - PPC, and Citizens - C's) is there support for imprisoning the Catalan politicians. In the pro-independence parties, expectedly, there is virtual unanimity against imprisonment. But what's most striking is the stance of the anti-independence, left-leaning parties. 92% of the voters of the leftist "Comuns" party consider that the imprisonment of Catalan politicians is unjust, and 58% of Catalan socialists consider it unjust.
+Only in two hard-line Spanish nationalist parties (the Popular Party - PPC, and Citizens - Cs) is there support for imprisoning the Catalan politicians. In the pro-independence parties, expectedly, there is virtual unanimity against imprisonment. But what's most striking is the stance of the anti-independence, left-leaning parties. 92% of the voters of the leftist "Comuns" party consider that the imprisonment of Catalan politicians is unjust, and 58% of Catalan socialists consider it unjust.
 
 ```{r}
 preso_by_party()

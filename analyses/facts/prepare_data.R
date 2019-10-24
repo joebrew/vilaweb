@@ -87,7 +87,7 @@ preso_overall <- function(ca = FALSE){
     geom_bar(stat = 'identity',
              aes(fill = preso)) +
     theme_vilaweb() +
-    geom_text(aes(label = round(p, digits = 1)),
+    geom_text(aes(label = point_to_comma(round(p, digits = 1))),
               nudge_y = -5,
               color = 'white',
               alpha = 0.7,
@@ -148,7 +148,16 @@ preso_by_party <- function(ca = FALSE){
                                  'PSC',
                                  "C’s",
                                  "PPC"
-                                 ))
+                                 ),
+                      labels = c('CUP',
+                                 'ERC',
+                                 'PDeCat/Junts',
+                                 other,
+                                 'Comuns',
+                                 'PSC',
+                                 "Cs",
+                                 "PPC"
+                      ))
   cols <- rev(
     c(bp('Reds', c(7)),
       bp('Greys', c(6)),
@@ -161,7 +170,7 @@ preso_by_party <- function(ca = FALSE){
              fill = preso)) +
     geom_bar(stat = 'identity', position = position_stack(),
              alpha = 0.8) +
-    geom_text(aes(label = round(p, digits = 1),
+    geom_text(aes(label = point_to_comma(round(p, digits = 1)),
                   y = p -1.5),
               position = position_stack(vjust = 1),
               color = 'white', alpha = 0.6) +
@@ -232,7 +241,7 @@ referendum <- function(ca = FALSE){
     geom_bar(stat = 'identity',
              aes(fill = sobiranisme)) +
     theme_vilaweb() +
-    geom_text(aes(label = round(p, digits = 1)),
+    geom_text(aes(label = point_to_comma(round(p, digits = 1))),
               nudge_y = -5,
               color = 'white',
               alpha = 0.7,
@@ -243,7 +252,7 @@ referendum <- function(ca = FALSE){
                       values = cols,
                       guide = guide_legend(reverse = T)) +
     theme(legend.position = 'none') +
-    theme(plot.title = element_text(size = 14, color = 'black'))
+    theme(plot.title = element_text(size = 13, color = 'black'))
   
 }
 
@@ -310,6 +319,15 @@ referendum_by_party <- function(ca = FALSE){
                                  'PSC',
                                  "C’s",
                                  "PPC"
+                      ),
+                      labels = c('CUP',
+                                 'ERC',
+                                 'PDeCat/Junts',
+                                 other,
+                                 'Comuns',
+                                 'PSC',
+                                 "Cs",
+                                 "PPC"
                       ))
   cols <- rev(
     c(bp('Reds', c(7,5)),
@@ -323,7 +341,7 @@ referendum_by_party <- function(ca = FALSE){
              fill = sobiranisme)) +
     geom_bar(stat = 'identity', position = position_stack(),
              alpha = 0.8) +
-    geom_text(aes(label = round(p, digits = 1),
+    geom_text(aes(label = point_to_comma(round(p, digits = 1)),
                   y = p -1.5),
               position = position_stack(vjust = 1),
               color = 'white', alpha = 0.6) +
@@ -333,7 +351,7 @@ referendum_by_party <- function(ca = FALSE){
     scale_fill_manual(name = '',
                       values = cols,
                       guide = guide_legend(reverse = T)) +
-    theme(plot.title = element_text(size = 13, color = 'black'))
+    theme(plot.title = element_text(size = 11, color = 'black'))
 }
 
 referendum_by_axis <- function(ca = FALSE){
@@ -410,7 +428,9 @@ referendum_by_birthplace <- function(ca = FALSE){
                           'Pro-referèndum',
                           'NS/NC/Ni-ni'))
     pd$x <- pd$neixer
-    
+    pd$x <- factor(pd$neixer,
+                   levels = levels(pd$neixer),
+                   labels = c('Catalunya', "Resta de l'estat espanyol", 'Estranger'))
   } else {
     pd$y <- ifelse(pd$sobiranisme_senzill == 'No sobiranista',
                    'Anti-referendum',
@@ -423,7 +443,7 @@ referendum_by_birthplace <- function(ca = FALSE){
                      caption = 'Data: CEO Omnibus, September 2019. Representative sample of 1,200 residents of Catalonia.')
   pd$x <- factor(pd$neixer,
                  levels = levels(pd$neixer),
-                 labels = c('Catalonia', 'Rest of Spain', 'Abroad'))
+                 labels = c('Catalonia', 'Rest of Spanish State', 'Abroad'))
   }
   cols <- rev(
     c(bp('Reds', c(7)),
@@ -437,7 +457,7 @@ referendum_by_birthplace <- function(ca = FALSE){
              group = y)) +
     geom_bar(stat = 'identity',
              alpha = 0.8) +
-    geom_text(aes(label = round(p, digits = 1)),
+    geom_text(aes(label = point_to_comma(round(p, digits = 1))),
               position = position_stack(vjust = 0.5),
               color = 'white',
               size = 5) +
@@ -504,5 +524,8 @@ ggplot(data = pd,
   geom_point(aes(size = n)) +
   geom_line()
 
+point_to_comma <- function(x){
+  gsub('.', ',', x, fixed = T)
+}
 
 
