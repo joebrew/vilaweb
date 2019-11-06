@@ -206,3 +206,5 @@ get_mentions <- function(z){
   z <- strsplit(z, split = ',')
   return(z)
 }
+
+rtweet::get

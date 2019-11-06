@@ -714,3 +714,6 @@ ggplot(data = pd,
         legend.text = element_text(size = 24),
         plot.caption = element_text())
 ```
+
+# Franquisme
+

@@ -1,0 +1,27 @@
+---
+title: ""
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+source('prepare_data.R')
+```
+
+# Technical details
+
+The code for this analysis is publicly available at `r self_cite()`.

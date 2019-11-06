@@ -7,9 +7,11 @@ source('../../R/scrape.R')
 
 # Get tweets about parlem/hablemos
 if(!'twitter_data.csv' %in% dir()){
-  tl <- scrape("('parlem') AND ('hablamos' OR 'hablemos')")
+  tl <- scrape("('parlem') AND ('hablamos' OR 'hablemos')",
+               start_date = '2019-11-01')
 }
 tl <- read_csv('twitter_data.csv')
+tl <- tl %>% filter(!duplicated(id))
 
 # Get tweets about diálogo
 if(!'dialeg.csv' %in% dir()){
@@ -39,7 +41,7 @@ dentroleyonly <- read_csv('dentroleyonly.csv') %>% filter(!duplicated(id))
 
 month_plot <- function(tl,
                        min_date = '2016-01-01',
-                       max_date = '2019-09-30'){
+                       max_date = '2019-10-31'){
   # Make plot
   pd <- tl %>%
     # Generate date columns
@@ -60,7 +62,7 @@ month_plot <- function(tl,
                           ifelse(pd$key == 'retweets', 'Repiulets',
                                  ifelse(pd$key == 'tweets', 'Piulets', NA))))
   pd <- pd %>% filter(key == 'Repiulets') %>%
-    filter(date < '2019-10-01')
+    filter(date < '2019-11-01')
   
   date_breaks <- seq(min(pd$date),
                      max(pd$date),
@@ -82,7 +84,7 @@ month_plot <- function(tl,
          subtitle = "(Incloent 'repiulets')",
          x = 'Mes',
          y = 'Piulets',
-         caption = "Consulta de cerca: ('parlem') AND ('hablamos' OR 'hablemos')\nDades: Twitter. Gràfic: @joethebrew. www.vilaweb.cat") +
+         caption = "Consulta de cerca: ('parlem') AND ('hablamos' OR 'hablemos')\nDades: Twitter. Gràfic: @joethebrew.") +
     # geom_text(aes(label = value),
     #           nudge_y = 1000)
     scale_x_date(breaks = date_breaks,
@@ -93,7 +95,7 @@ month_plot <- function(tl,
 
 
 day_plot <- function(tl,
-                     min_date = '2017-10-01',
+                     min_date = '2017-11-01',
                      max_date = '2017-11-30'){
   # Make plot
   pd <- tl %>%
@@ -116,7 +118,7 @@ day_plot <- function(tl,
                           ifelse(pd$key == 'retweets', 'Repiulets',
                                  ifelse(pd$key == 'tweets', 'Piulets', NA))))
   pd <- pd %>% filter(key == 'Piulets') %>%
-    filter(date < '2019-10-01')
+    filter(date < '2019-11-01')
   
   date_breaks <- seq(min(pd$date),
                      max(pd$date),
@@ -148,3 +150,15 @@ day_plot <- function(tl,
                  labels = date_labels) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 }
+
+pd <- tl %>%
+  group_by(date) %>%
+  tally %>%
+  filter(date >= '2017-08-01')
+ggplot(data = pd,
+       aes(x = date,
+           y = n)) +
+  geom_line() +
+  ggthemes::theme_fivethirtyeight() +
+  labs(title = 'Tuits con las palabras\n"parlem" i "hablamos"',
+       subtitle = '(Sin contar retuits)')

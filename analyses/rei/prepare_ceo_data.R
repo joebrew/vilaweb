@@ -190,3 +190,44 @@ df$date <- as.Date(df$date)
 numberfy <- function(x){
   gsub(',', '.', scales::comma(x), fixed = TRUE)
 }
+
+get_score <- function(var = 'P26M', person){
+  z <- df
+  z$var <- as.numeric(unlist(z[,var]))
+  x <- z %>% filter(date >= '2019-01-01') %>% summarise(avg = mean(var, na.rm = T), 
+                                                        zero = length(which(var == 0)) / length(which(!is.na(var))), 
+                                                        neg = length(which(var <= 4)) / length(which(!is.na(var)))) %>% mutate(who = person)
+  return(x)
+}
+
+out <- get_score('P26J', 'Rei') %>% bind_rows(
+  get_score('P26A', 'Tribunals'),
+  get_score('P26D', 'Govern espanyol'),
+  get_score('P26F', 'Govern de la Generalitat'),
+  get_score('P26M', "Mossos d'Esquadra"),
+  get_score('P26R', 'Tribunal Constitucional'),
+  get_score('P26L', 'Guardia Civil i Policia Nacional')
+  
+)
+
+
+P26A, # tribunals
+P28, # partit
+P26B = P21B, # partits politics
+P26C = P21C, # el seu ajuntament
+P26D = P21D, # govern espanyol
+P26E = P21E, # els sindicats
+P26F = P21F, # govern de la generalitat
+P26G = P21G, # congres dels diputats
+P26H = P21H, # parlament de catalunya
+P26I = P21I, # la UE
+P26K = P21K, # l'exercit
+P26L = P21L, # PN i GC
+P26M = P21M, # mossos d'esquadra
+P26N = P21N, # esglesia catolica
+P26O = P21O, # l ONU
+P26P = P21P, # la banca
+P26Q = P21Q, # mitjans de comunicacio
+P26R = P21R, # tribunal constitucional
+P26S = P21S, # universitats
+P26T = P21T,

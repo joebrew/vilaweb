@@ -8,3 +8,12 @@ tweets.csv
 *.html
 analyses/device/*.RData
 vilaweb/*
+twitter_data.csv
+analyses/indepe_vs_judici/user_data.csv
+analyses/map/COMM-01M-2013-SH.zip
+analyses/map/data/
+analyses/map/gadm36_levels_shp.zip
+analyses/map/map/
+analyses/map/ref-nuts-2016-01m.shp.zip
+analyses/map/ref-nuts-2016-60m.shp.zip
+analyses/map/regions/

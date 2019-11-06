@@ -4,18 +4,13 @@ library(tidyverse)
 library(lubridate)
 
 # Define list of people
-people <- c('j_zaragoza_', 'inesarrimadas', 'albert_rivera', 'santi_abascal', 'pablocasado_')
+people <- c('j_zaragoza_', 'inesarrimadas', 'albert_rivera', 'santi_abascal', 'pablocasado_',
+            'sanchezcastejon', 'miqueliceta', 'pablo_iglesias_', 'pnique', 'ortega_smith', 'cayetanaat',
+            'carrizosacarlos', 'lroldansu', 'eva_granados', 'jessicaalbiach', 'carlesral', 'nataliadipp', 'alejandrotgn',
+            'rogertorrent', 'lauraborras', 'josepcosta')
 
 ## Ensure they are updated in the database
 # update_database(people = people)
-
-# Get their tweets
-# Source functions
-functions_dir <- '../../R/'
-functions_files <- dir(functions_dir)
-for(i in 1:length(functions_files)){
-  source(paste0(functions_dir, functions_files[i]))
-}
 
 if('tweets.RData' %in% dir()){
   load('tweets.RData')
@@ -26,16 +21,22 @@ if('tweets.RData' %in% dir()){
 
 # Identified torra tweets
 tl$is_torra <- grepl('quimtorraipla', tolower(tl$tweet)) |
-                    grepl('Torra', tl$tweet)
+                    grepl('Torra', tl$tweet) 
+tl$is_puigdemont <- grepl('puigdemont|krls', tolower(tl$tweet))
+tl$torra_puigdemont <- tl$is_torra | tl$is_puigdemont
 
 # Get by person and year
 tl$year <- as.numeric(format(tl$date, '%Y'))
 pd <- tl %>%
-  group_by(username, year) %>%
+  filter(year >= 2018) %>%
+  group_by(username) %>%
   summarise(torra = length(which(is_torra)),
+            puigdemont = length(which(is_puigdemont)),
+            torra_puig = length(which(torra_puigdemont)),
             tweets = n()) %>%
   ungroup %>%
-  mutate(p = torra / tweets * 100)
+  mutate(p = torra / tweets * 100) %>%
+  arrange(desc(torra_puig))
 
 if('quim.RData' %in% dir()){
   load('quim.RData')

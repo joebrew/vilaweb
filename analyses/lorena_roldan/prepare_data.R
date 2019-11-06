@@ -27,6 +27,18 @@ token <- create_token(
 #   save(rt, file = 'rt.RData')
 # }
 
+if('cc.RData' %in% dir()){
+  load('cc.RData')
+} else {
+  cc <- search_tweets(
+    '"Carlos Carrizosa" OR "@carrizosacarlos"', 
+    n = 1000000000, 
+    include_rts = T, 
+    retryonratelimit = TRUE
+  )
+  save(cc, file = 'cc.RData')
+}
+
 
 if('lr.RData' %in% dir()){
   load('lr.RData')
@@ -38,6 +50,46 @@ if('lr.RData' %in% dir()){
     retryonratelimit = TRUE
   )
   save(lr, file = 'lr.RData')
+}
+
+carlos_plot <- function(timey = 'hour',
+                        return_table = FALSE){
+  pd <- cc
+  if(timey == 'hour'){
+    pd$date <- as.POSIXct(cut(pd$created_at, timey))
+  } else {
+    pd$date <- as.Date(pd$created_at)
+  }
+  pd <- pd %>%
+    group_by(date) %>%
+    summarise(Piulets = n(),
+              # Repiulets = sum(retweet_count, na.rm = T),
+              `M'agrada` = sum(favorite_count, na.rm = T)) %>%
+    mutate(Interactions = Piulets + #Repiulets + 
+             `M'agrada` ) %>%
+    gather(key, value, Piulets:`M'agrada`)
+  options(scipen = '999')
+  pd$key <- factor(pd$key, levels = c('Piulets', 'M\'agrada', 'Repiulets'))
+  if(return_table){
+    return(pd)
+  } else {
+    ggplot(data = pd,
+           aes(x = date,
+               y = value)) +
+      geom_area(fill = 'darkorange') +
+      geom_line() +
+      # theme_vilaweb() +
+      ggthemes::theme_fivethirtyeight() +
+      
+      theme(axis.text.x = element_text(angle = 90, hjust = 0.5, vjust = 1)) +
+      # ggthemes::theme_fivethirtyeight() +
+      facet_wrap(~key, scales = 'free_y') +
+      labs(title = 'Piulets que esmenten Carlos Carrisoza, per hora',
+           subtitle = '("Carlos Carrizosa" o "@carrizosacarlos")',
+           x = '',
+           y = '',
+           caption = paste0('Dades: API de Twitter. Gràfic: Joe Brew.'))
+  }
 }
 
 lorena_plot <- function(timey = 'hour',
