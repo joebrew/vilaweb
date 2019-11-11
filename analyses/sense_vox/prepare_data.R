@@ -58,25 +58,62 @@ real <- tibble(partit = c('PSOE',
                             0, #'Bildu',
                             41703, #'Más País',
                             244754, #'CUP',
-                            sum(c(44389, 41703, 5790, 2822, 2345, 2215, 2135, 1916))))
+                            sum(c(44389, 41703, 5790, 2822, 2345, 2215, 2135, 1916))),
+               euskadi_escons = c(4, #'PSOE',
+                                  0, #'PP', 
+                                  0, #'Vox',
+                                  3, #'Podemos',
+                                  0,# 'ERC',
+                                  0, #'Cs',
+                                  0, #'JxCat',
+                                  7, #'PNV',
+                                  4, #'Bildu',
+                                  0, #'Más País',
+                                  0, #'CUP',
+                                  0),
+               euskadi_vots = c(225905, #'PSOE',
+                                103821, #'PP', 
+                                28659, #'Vox',
+                                181337, #'Podemos',
+                                0, #'ERC',
+                                13058, #'Cs',
+                                0, #'JxCat',
+                                377423, #'PNV',
+                                220132, #'Bildu',
+                                8463, #'Más País',
+                                0,# 'CUP',
+                                sum(c(6920, 1707, 1256, 969, 559, 269))))
 
 real <- real %>%
   mutate(vots_no_cat = votos - cat_vots,
-         escanos_no_cat = escanos - cat_escons) %>%
+         escanos_no_cat = escanos - cat_escons,
+         escanos_no_euskadi = escanos - euskadi_escons) %>%
+  mutate(vots_no_nacio = votos - cat_vots - euskadi_vots,
+         escanos_no_nacio = escanos - cat_escons - euskadi_escons) %>%
   mutate(p_vots = votos / sum(votos) * 100,
-         p_cat_vots = cat_vots / sum(cat_vots) * 100)
+         p_cat_vots = cat_vots / sum(cat_vots) * 100) %>%
+  mutate(p_euskadi_vots = euskadi_vots / sum(euskadi_vots) * 100) %>%
+  mutate(p_nacio_vots = (euskadi_vots + cat_vots) / sum(euskadi_vots + cat_vots) * 100)
 
 pd <- real %>%
   group_by(vox = ifelse(partit == 'Vox', 'Vox', 'No Vox')) %>%
   summarise(vots_no_cat = sum(vots_no_cat),
-            escanos_no_cat = sum(escanos_no_cat)) %>%
+            escanos_no_cat = sum(escanos_no_cat),
+            vots_no_nacio = sum(vots_no_nacio),
+            escanos_no_nacio = sum(escanos_no_nacio)) %>%
   mutate(p_vots_no_cat = vots_no_cat / sum(vots_no_cat),
-         p_escanos_no_cat = escanos_no_cat / sum(escanos_no_cat))
+         p_escanos_no_cat = escanos_no_cat / sum(escanos_no_cat),
+         p_vots_no_nacio = vots_no_nacio / sum(vots_no_nacio),
+         p_escanos_no_nacio = escanos_no_nacio / sum(escanos_no_nacio))
 
 pd <- real %>%
   group_by(vox = ifelse(partit %in% c('PSOE', 'Podemos', 'Más País'), 'left', 
                         ifelse(partit %in% c('Cs', 'PP', 'Vox'), 'right', 'other'))) %>%
   summarise(vots_no_cat = sum(vots_no_cat),
-            escanos_no_cat = sum(escanos_no_cat)) %>%
+            escanos_no_cat = sum(escanos_no_cat),
+            vots_no_nacio = sum(vots_no_nacio),
+            escanos_no_nacio = sum(escanos_no_nacio)) %>%
   mutate(p_vots_no_cat = vots_no_cat / sum(vots_no_cat),
-         p_escanos_no_cat = escanos_no_cat / sum(escanos_no_cat))
+         p_escanos_no_cat = escanos_no_cat / sum(escanos_no_cat),
+         p_vots_no_nacio = vots_no_nacio / sum(vots_no_nacio),
+         p_escanos_no_nacio = escanos_no_nacio / sum(escanos_no_nacio))
