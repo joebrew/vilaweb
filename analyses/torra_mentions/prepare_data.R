@@ -24,19 +24,22 @@ tl$is_torra <- grepl('quimtorraipla', tolower(tl$tweet)) |
                     grepl('Torra', tl$tweet) 
 tl$is_puigdemont <- grepl('puigdemont|krls', tolower(tl$tweet))
 tl$torra_puigdemont <- tl$is_torra | tl$is_puigdemont
+tl$is_violence <- grepl('violen', tolower(tl$tweet))
 
 # Get by person and year
 tl$year <- as.numeric(format(tl$date, '%Y'))
+tl$timey <- tl$date >= '2019-10-01'
 pd <- tl %>%
-  filter(year >= 2018) %>%
+  filter(timey) %>%
   group_by(username) %>%
   summarise(torra = length(which(is_torra)),
             puigdemont = length(which(is_puigdemont)),
             torra_puig = length(which(torra_puigdemont)),
-            tweets = n()) %>%
+            tweets = n(),
+            violence = length(which(is_violence))) %>%
   ungroup %>%
-  mutate(p = torra / tweets * 100) %>%
-  arrange(desc(torra_puig))
+  mutate(p = violence / tweets * 100) %>%
+  arrange(desc(violence))
 
 if('quim.RData' %in% dir()){
   load('quim.RData')
