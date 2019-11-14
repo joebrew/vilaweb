@@ -20,8 +20,6 @@ add_zero <- function(x, n){
   return(x)
 }
 
-# Get most recent CEO data
-ceo_june_2019 <- vilaweb::ceo_june_2019
 
 # Transform data to combine
 transform_data <- function(df){
@@ -232,7 +230,8 @@ transform_data <- function(df){
 }
 
 combined <- 
-  transform_data(new_ceo) %>%
-  bind_rows(
-    transform_data(ceo_june_2019)
-  )
+  transform_data(new_ceo) #%>%
+# # (NO LONGER NECESSARY SINCE UPDATED IN NOVEMBER 2019)
+  # bind_rows(
+  #   transform_data(ceo_june_2019)
+  # )

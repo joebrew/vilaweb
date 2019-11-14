@@ -4,10 +4,17 @@
 \alias{update_database}
 \title{Update the local twitter database}
 \usage{
-update_database(people = NULL, get_new = FALSE,
-  delete_duplicates = TRUE, only_new_people = FALSE,
-  after = "2000-01-01", until = as.character(Sys.Date() + 1),
-  force_old = FALSE, refetch = FALSE, refetch_since = NULL)
+update_database(
+  people = NULL,
+  get_new = FALSE,
+  delete_duplicates = TRUE,
+  only_new_people = FALSE,
+  after = "2000-01-01",
+  until = as.character(Sys.Date() + 1),
+  force_old = FALSE,
+  refetch = FALSE,
+  refetch_since = NULL
+)
 }
 \arguments{
 \item{people}{A character vector of twitter accounts. If null, will do existing people}

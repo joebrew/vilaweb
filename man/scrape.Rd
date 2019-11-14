@@ -4,8 +4,12 @@
 \alias{scrape}
 \title{Scrape data using twint}
 \usage{
-scrape(search_string, file_path = "twitter_data.csv",
-  start_date = NULL, end_date = NULL)
+scrape(
+  search_string,
+  file_path = "twitter_data.csv",
+  start_date = NULL,
+  end_date = NULL
+)
 }
 \arguments{
 \item{search_string}{A Character string}

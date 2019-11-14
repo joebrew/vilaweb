@@ -4,8 +4,10 @@
 \alias{get_google_data}
 \title{Get google data}
 \usage{
-get_google_data(name = c("parlament", "politicians", "newspapers",
-  "socialists"), url = NULL)
+get_google_data(
+  name = c("parlament", "politicians", "newspapers", "socialists"),
+  url = NULL
+)
 }
 \arguments{
 \item{name}{The name of the sheet (one of "diputats")}
