@@ -1,5 +1,5 @@
 
-# 41? Si us plau, una mica de rigor
+# 42? Si us plau, una mica de rigor
 
 ### La gran “noticia” de la setmana
 
@@ -154,16 +154,50 @@ de manera ràpida. Les diferències entre les enquestes BOP i l’enquesta
 “Cosmopolitisme i localisme” no reflecteixen canvis en la societat
 catalana, sinó canvis en un mostreig de 1.500 persones.
 
+## I si la mostra no hagúes canviat…?
+
+Intentem salvar les dades, o al menys ajustar-les de manera per què
+siguin comparables al llarg del temps. Si acceptem com a fets que (a) la
+llengua materna i l’ideològia (esquerra-dreta) són els factors
+principals que determinen la posició d’algú sobre l’independència de
+Catalunya i (b) que és molt, molt poc probable que les freqüències
+d’aquestes variables hagin canviat significativament ens els darrers
+anys, ens permet fer l’analisi següent: (i) crear un model estadístic
+bàsic, basat en la darrera enquesta (“Cosmopolitisme i localisme”) on
+l’independentisme és una funció de llengua + ideologia i després (ii)
+aplicar aquest model a la mostra “normal” del BOP (o sigui, la
+combinació de les 5 enquestes BOP de 2018-2019). Ho fem?
+
+![](figures/unnamed-chunk-9-1.png)<!-- -->
+
+Fent aquest ajust, l’independentisme seria al 47,4% mentres l’unionisme
+seria al 45.
+
+O (a) Catalunya ha canviat significativament en quant al seu perfil
+ideologic i llengua materna o (b) la mostra de la darrera enquesta és
+qualitativament diferent de la mostra dels BOP. En resum:
+l’independentisme és, més o menys, igual que fa un any o dos.
+
 ## Conclusió
+
+Les enquestes del CEO són molt útils precisament perquè, a diferència de
+moltes enquestes publicades pels diaris, publiquen les microdades (el
+que permet un analisi que va més enllà dels resultats “crus”). I
+qualsevol comparació minimament rigurosa de les dades de l’enquesta de
+“Cosmopolitisme i localisme” amb les dades del BOP hauria de prende ne
+compte les diferències ideológiques i lingüístiques entre les mostres,
+com que aquestes diferències poden determinar, en gran part, els suport
+o rebuig a l’independentisme.
 
 Un analisi de les dades de les BOP dels darrers anys i l’enquesta
 “Cosmopolitisme i localisme” deixa clar que la darrera és esbiaixada
 d’una manera que *sobrereflexiona* la dreta i els catalans d’origen
 castellanoparlant mentres que *infravalora* l’esquerra i els
-catalanoparlants. Això, logicament, té conseqüències importants alora de
-calcular el suport a l’independència. El 41% (el chifre que surt en els
-titulars de tots els diaris) prové d’un analisi que ignora les
-característiques del mostreig, i les seves conseqüències.
+catalanoparlants, comparada amb els BOP. Això, logicament, té
+conseqüències importants alora de calcular el suport a
+l’independència. El 42% (el chifre que surt en els titulars de tots
+els diaris) prové d’un analisi que ignora les característiques del
+mostreig, i les seves conseqüències.
 
 Quan es ponderen les dades per ajustar pels esbiaixos més importants
 (llengua, lloc de naixement, i provincía), com [va fer el Roger
@@ -178,7 +212,7 @@ anys: que el nivell de suport a l’independència no ha tingut canvis
 significatius en els darrers anys.
 
 Però clar, els conceptes “ponderació”, “esbiaix”, “sobrerepresentació”,
-i “marge d’error” no fan bons titulars. 41%? Això sí que és un bon
+i “marge d’error” no fan bons titulars. 42%? Això sí que és un bon
 titular. Així que prepareu-vos a sentir, una i altra vegada, aquest
 chifre - fins que surti la propera enquesta (on hi haurà molt
 probablament una suposada “pujada” en suport a l’indepèndencia només

@@ -23,7 +23,7 @@ source('prepare_data.R')
 ```
 
 
-# 41? Si us plau, una mica de rigor
+# 42? Si us plau, una mica de rigor
 
 ### La gran "noticia" de la setmana
 
@@ -279,13 +279,69 @@ ggplot(data = pd,
 
 Curiós, oi? Ens uns pocs mesos, el percentage de catalans que es considera més català que espanyol realment va baixar 10%? Perdoneu les repetcions, però no. Els sentiments identitaris canvien molt poc, i mai de manera ràpida. Les diferències entre les enquestes BOP i l'enquesta "Cosmopolitisme i localisme" no reflecteixen canvis en la societat catalana, sinó canvis en un mostreig de 1.500 persones.
 
+## I si la mostra no hagúes canviat...?
+
+Intentem salvar les dades, o al menys ajustar-les de manera per què siguin comparables al llarg del temps. Si acceptem com a fets que (a) la llengua materna i l'ideològia (esquerra-dreta) són els factors principals que determinen la posició d'algú sobre l'independència de Catalunya i (b) que és molt, molt poc probable que les freqüències d'aquestes variables hagin canviat significativament ens els darrers anys, ens permet fer l'analisi següent: (i) crear un model estadístic bàsic, basat en la darrera enquesta ("Cosmopolitisme i localisme") on l'independentisme és una funció de llengua + ideologia i després (ii) aplicar aquest model a la mostra "normal" del BOP (o sigui, la combinació de les 5 enquestes BOP de 2018-2019). Ho fem?
+
+```{r}
+# Statistical significance
+pd <- bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01') %>%
+  bind_rows(cosmo %>% mutate(source = 'Cosmo')) #%>%
+  # filter(llengua_primera %in% c('Castellà', 'Català', 'Cat+Cast'))
+# prop.test(table(pd$source, pd$llengua_primera != 'Castellà'))
+
+# Model
+fit <- glm(indepe == 'Sí' ~ llengua_primera + axis_super_simple , data = cosmo)
+fit2 <- glm(indepe == 'No' ~ llengua_primera + axis_super_simple , data = cosmo)
+fit3 <- glm(indepe == 'NS/NC' ~ llengua_primera + axis_super_simple , data = cosmo)
+
+# exp(coef(fit))
+preds <- predict(fit, newdata = bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01'))
+preds <- preds[!is.na(preds)]
+si <- sum(preds) / length(preds) * 100
+preds2 <- predict(fit2, newdata = bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01'))
+preds2 <- preds2[!is.na(preds2)]
+no <- sum(preds2) / length(preds2) * 100
+preds3 <- predict(fit3, newdata = bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01'))
+preds3 <- preds3[!is.na(preds3)]
+nsnc <- sum(preds3) / length(preds3) * 100
+
+pd <- tibble(key = c('Sí', 
+                     'No', 
+                     'NS/NC'),
+             value = c(si, no, nsnc))
+ggplot(data = pd,
+       aes(x = key,
+           y = value)) +
+  geom_bar(stat = 'identity',
+           aes(fill = key)) +
+  theme_vilaweb() +
+  geom_text(aes(label = round(value, digits = 1)),
+            nudge_y = -4, alpha = 0.7, color = 'white') +
+  labs(x = 'Vol que Catalunya esdesvingui un estat independent?',
+       y = 'Percentatge',
+       title = 'I si la mostra hagués sigut idèntica...',
+       subtitle = "'Idèntica' = mateixa proporció per llengua materna i ideologia esquerra-centre-dreta",
+       caption = 'Ajustat aplicant model de l\'enquesta "Cosmopolitisme i localisme", 2019\na les proporcions demogràfiques dels 5 BOP de 2018-2019.') +
+  scale_fill_manual(name = '',
+                    values = c(colors_vilaweb()[2],
+                               'darkgrey', 
+                               colors_vilaweb()[4]))
+```
+
+Fent aquest ajust, l'independentisme seria al 47,4% mentres l'unionisme seria al 45.
+
+O (a) Catalunya ha canviat significativament en quant al seu perfil ideologic i llengua materna o (b) la mostra de la darrera enquesta és qualitativament diferent de la mostra dels BOP. En resum: l'independentisme és, més o menys, igual que fa un any o dos.
+
 ## Conclusió
 
-Un analisi de les dades de les BOP dels darrers anys i l'enquesta "Cosmopolitisme i localisme" deixa clar que la darrera és esbiaixada d'una manera que _sobrereflexiona_ la dreta i els catalans d'origen castellanoparlant mentres que _infravalora_ l'esquerra i els catalanoparlants. Això, logicament, té conseqüències importants alora de calcular el suport a l'independència. El 41% (el chifre que surt en els titulars de tots els diaris) prové d'un analisi que ignora les característiques del mostreig, i les seves conseqüències.
+Les enquestes del CEO són molt útils precisament perquè, a diferència de moltes enquestes publicades pels diaris, publiquen les microdades (el que permet un analisi que va més enllà dels resultats "crus"). I qualsevol comparació minimament rigurosa de les dades de l'enquesta de "Cosmopolitisme i localisme" amb les dades del BOP hauria de prende ne compte les diferències ideológiques i lingüístiques entre les mostres, com que aquestes diferències poden determinar, en gran part, els suport o rebuig a l'independentisme.
+
+Un analisi de les dades de les BOP dels darrers anys i l'enquesta "Cosmopolitisme i localisme" deixa clar que la darrera és esbiaixada d'una manera que _sobrereflexiona_ la dreta i els catalans d'origen castellanoparlant mentres que _infravalora_ l'esquerra i els catalanoparlants, comparada amb els BOP. Això, logicament, té conseqüències importants alora de calcular el suport a l'independència. El 42% (el chifre que surt en els titulars de tots els diaris) prové d'un analisi que ignora les característiques del mostreig, i les seves conseqüències.
 
 Quan es ponderen les dades per ajustar pels esbiaixos més importants (llengua, lloc de naixement, i provincía), com [va fer el Roger Tugas](https://www.naciodigital.cat/noticia/191129/dades/ocultes/ceo/apunten/si/guanyaria/referendum), l'independentisme i l'unionisme estan a basicament el mateix nivell (45% cadascú). O sigui, quan es tracta les dades d'una manera crítica, no consta una baixada significativa en el suport a l'independència, sinó uns moviments adins del marge d'error estadístic. Altrament dit, un analisi rigorós de les dades d'aquesta enquesta porta a la mateixa conclusió que un analisi de qualsevol de les enquestes dels darrers anys: que el nivell de suport a l'independència no ha tingut canvis significatius en els darrers anys.
 
-Però clar, els conceptes "ponderació", "esbiaix", "sobrerepresentació", i "marge d'error" no fan bons titulars. 41%? Això sí que és un bon titular. Així que prepareu-vos a sentir, una i altra vegada, aquest chifre - fins que surti la propera enquesta (on hi haurà molt probablament una suposada "pujada" en suport a l'indepèndencia només degut al principi de "la regressió a la mitjana").
+Però clar, els conceptes "ponderació", "esbiaix", "sobrerepresentació", i "marge d'error" no fan bons titulars. 42%? Això sí que és un bon titular. Així que prepareu-vos a sentir, una i altra vegada, aquest chifre - fins que surti la propera enquesta (on hi haurà molt probablament una suposada "pujada" en suport a l'indepèndencia només degut al principi de "la regressió a la mitjana").
 
 # Technical details
 
