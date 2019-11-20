@@ -290,10 +290,11 @@ pd <- bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01') %>%
   # filter(llengua_primera %in% c('Castellà', 'Català', 'Cat+Cast'))
 # prop.test(table(pd$source, pd$llengua_primera != 'Castellà'))
 
+cosmod <- cosmo %>% filter(ciutada == 'Sí')
 # Model
-fit <- glm(indepe == 'Sí' ~ llengua_primera + axis_super_simple , data = cosmo)
-fit2 <- glm(indepe == 'No' ~ llengua_primera + axis_super_simple , data = cosmo)
-fit3 <- glm(indepe == 'NS/NC' ~ llengua_primera + axis_super_simple , data = cosmo)
+fit <- glm(indepe == 'Sí' ~ llengua_primera + axis_super_simple , data = cosmod)
+fit2 <- glm(indepe == 'No' ~ llengua_primera + axis_super_simple , data = cosmod)
+fit3 <- glm(indepe == 'NS/NC' ~ llengua_primera + axis_super_simple , data = cosmod)
 
 # exp(coef(fit))
 preds <- predict(fit, newdata = bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01'))

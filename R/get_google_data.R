@@ -7,7 +7,7 @@
 #' @return a tibble
 #' @export
 
-get_google_data <- function(name = c('parlament', 'politicians', 'newspapers', 'socialists'),
+get_google_data <- function(name = c('parlament', 'politicians', 'newspapers', 'socialists', 'congreso'),
                             url = NULL){
   if(is.null(url)){
     if(name == 'parlament'){
@@ -18,6 +18,8 @@ get_google_data <- function(name = c('parlament', 'politicians', 'newspapers', '
       url <- 'https://docs.google.com/spreadsheets/d/1k6_AlqojK47MMqzuFYAzBnDfYXysmUgSseaKvHTb3W4/edit#gid=148951570'
     } else if(name == 'socialists'){
       url <- 'https://docs.google.com/spreadsheets/d/12NwO0huV1Fo8MES5ZHBLZeEbxRwwP36wOleS1zkpPgc/edit#gid=0'
+    } else if (name =='congreso'){
+      url <- 'https://docs.google.com/spreadsheets/d/1KVyZ-VcG7cc-nnunEli-wmcqJTTbTWJi8w0w_o_1RUk/edit#gid=0'
     }
   } else {
     message('A url was provided. Ignoring name argument.')

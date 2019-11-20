@@ -5,7 +5,7 @@
 \title{Get google data}
 \usage{
 get_google_data(
-  name = c("parlament", "politicians", "newspapers", "socialists"),
+  name = c("parlament", "politicians", "newspapers", "socialists", "congreso"),
   url = NULL
 )
 }
