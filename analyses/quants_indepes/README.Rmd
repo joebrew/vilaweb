@@ -1,0 +1,443 @@
+---
+title: ""
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+source('prepare_data.R')
+```
+
+
+# Quants independentistes hi ha en aquest moment?
+
+En les darreres dues setmanes, hi ha dues dades sobre el suport per a una Catalunya independent aparentment contradictòries:
+
+1. Un creixement important de l'independentisme en les eleccions espanyoles del 10-N.
+
+2. Una baixada important de l'independentisme en l'última enquesta del Centre d'Estudis d'Opinió ("Cosmopolitisme i localisme a Catalunya")
+
+## Limitacions
+
+**Limitacions del 10-N**: Cap de les dues fonts és definitiu. En les eleccions del 10-N, es votaba sobre molts assumptes - no només l'independentisme - i per tant hi ha hagut probablament (a) persones a favor de l'independència que van votar per partits no independentistes, i (b) persones en contra de l'independència que van votar per partits independentistes. A més, històricament, existeix a Catalunya un vot "dual" a Catalunya: comparades amb les eleccions parlamentàries (i a les enquestes), els catalans voten més per partits espanyols (que són tots no independentistes) en les eleccions espanyoles. Finalment, a diferència de les enquestes, en les eleccions, les dades no són disponbiles al nivell individual: es pot analitzar coses al nivell municipal, o fins i tot el nivall d'una secció censal, però no es pot veure exactament si els que van votar, per exemple, si una persona que va votar pel partit A al congrés va votar el mateix partit pel senat o no (en estadística, això es diu la "falacia ecològica").  
+
+**Limitacions de les enquestes**: En quant a la medició de preferències sobre un assumpte polític específic (per exemple, l'independència de Catralunya), les enquestes tenen un avantatge important: es pot preguntar sobre temes específics. Però, a diferència de les eleccions, les enquestes són (a) relativament petites, (b) susceptibles a diferents tipus de biaix, i (c) relativament volàtiles: canvis en la mostra poden convertir-se en canvis en els resultats, sense que ningú de la població a la qual la mostra pretén representar hagi canviat.
+
+## El valor del CEO
+
+A diferència de moltes enquestes que es publiquen als diaris, el CEO publica _totes_ les microdades de les enquestes. Aquesta transparència permet a qualsevol persona anar al [web del CEO](http://ceo.gencat.cat/ca/inici), descarregar les dades d'una enquesta (o vàries), i mirar - per ella mateixa - qui deia què a quines preguntes. I a més de publicar les dades mateixes, el CEO també publica tots els detalls de mostreig, el que permet contextualitzar les dades segons la manera en la qual van ser recollides.
+
+## La pregunta?
+
+Com podem reconciliar (a) la pujada en el suport a l'independència en les eleccions del novembre amb (b) la baixada en el suport a l'independència en la darrera enquesta del CEO? Quans independentistes hi ha?
+
+## La resposta
+
+
+### Eleccions
+
+Les dades de les eleccions del 10-N no donen per molta anàlisi que no s'ha fet ja. El suport a partits explícitament independentistes va créixer 3%, el suport als partits explícitament unionistes en va baixar 2%, mentres que el vot pro-referèndum (però no necessàriament pro-independència) va mantenir-se més o menys igual.
+
+
+```{r}
+pd <- readr::read_delim('data.csv', delim = ';', skip = 1)
+pd <- data.frame(pd)
+pd$Partit <- ifelse(pd$Partit %in% c('ERC', 'ECP', 'PSC', 'JxCAT', 'EXP', 'PP', 'CUP', 'VOX', 'Cs', 'FR', 'Més País'),
+                    pd$Partit, 'Altres')
+for (j in 2:ncol(pd)){
+  new_val <- as.character(pd[,j])
+  new_val <- gsub('.', '', new_val, fixed = TRUE)
+  new_val <- gsub(',', '.', new_val, fixed = TRUE)
+  new_val <- as.numeric(new_val)
+  new_val <- ifelse(is.na(new_val), 0, new_val)
+  pd[,j] <- new_val
+}
+
+names(pd) <- c('partit', '10N vots', '10N %', '10N diputats', '28A vots', '28A %', '28A diputats')
+pd <- pd %>%
+  group_by(partit) %>%
+  summarise_all(funs(sum))
+pd <- pd %>%
+  gather(key, value, `10N vots`:`28A diputats`)
+
+# Map the partits
+partits <- tibble(
+  partit = c("Altres",
+             "Cs",
+             "CUP", 
+             "ECP",
+             "ERC",
+             "FR",
+             "JxCAT",
+             "Més País",
+             "PP",
+             "PSC",
+             "VOX"),
+  grp = c("Altres",
+          "Unionista",
+          "Independentista",
+          "Pro-referèndum",
+          "Independentista",
+          "Independentista",
+          "Independentista",
+          "Unionista",
+          "Unionista",
+          "Unionista",
+          "Unionista")
+)
+# Join
+pd <- left_join(pd, partits)
+pd$date <- ifelse(grepl('10N', pd$key), '2019-11-10', '2019-04-28')
+pd$date <- as.Date(pd$date)
+sub_pd <- pd %>% filter(grepl('%', key))
+cols <- colorRampPalette(RColorBrewer::brewer.pal(n = 9, 'Spectral'))(length(unique(sub_pd$partit)))
+new_cols <- c('grey', cols[2], 'yellow',
+              'deepskyblue', cols[4],
+              'black',
+              'darkorchid3',
+              cols[8],
+              cols[11],
+              cols[1],
+              'chartreuse3')
+total_pd <- sub_pd %>%
+  group_by(date, grp) %>%
+  summarise(value = sum(value))
+ggplot(data = sub_pd,
+       aes(x = date,
+           y = value)) +
+  geom_bar(stat = 'identity',
+           alpha = 0.7,
+           aes(fill = partit,
+           group = partit),
+           position = position_stack()) +
+  facet_wrap(~grp) +
+  scale_x_date(name = '', breaks = sort(unique(sub_pd$date))) +
+  scale_fill_manual(name = '',
+                    values = new_cols) +
+  theme_vilaweb() +
+  geom_text(data = total_pd,
+            aes(x = date,
+                y = value + 3,
+                label = value),
+            alpha = 0.7)
+```
+
+En el cas de les eleccions, les dades parlen per si soles. 
+
+### Enquestes
+
+Mentres que les eleccions (tant del 28A que del 26M que del 10N) semblen indicar una pujada en l'independentisme, les enquestes indiquen tot el contrari. 
+
+```{r}
+
+```
+
+
+## Llengua
+
+La llengua és intimament correlacionada amb l'independentisme. Per exemple, en els anys 2018-2019, aquesta ha sigut la relació entre llengua primera (la que es parlava a casa de petit) i suport a l'independència de Catalunya:
+
+```{r}
+pd <- bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01') %>%
+  mutate(xx = llengua_primera) %>%
+  filter(!is.na(xx)) %>%
+  group_by(xx, indepe) %>%
+  tally %>%
+  group_by(xx) %>%
+  mutate(p = n/ sum(n) * 100) %>%
+  filter(!xx %in% c('NS/NC', 'Altres'))
+
+ggplot(data = pd,
+       aes(x = xx,
+           y = p,
+           color = indepe,
+           group = indepe)) +
+  geom_line() +
+  geom_point() +
+  theme_vilaweb() +
+  labs(x = 'Llengua primera',
+       y = 'Percentatge',
+       title = 'Llengua primera i independentisme',
+       subtitle = 'Dades del BOP (CEO)',
+       caption = 'Enquestes BOP, 2018-2019. Mostra: 7.208 residents de Catalunya amb ciutadania espanyola.') +
+  geom_hline(yintercept = 50, lty = 2, alpha = 0.5) +
+  scale_color_manual(name = 'Independentista?',
+                     values = c('red', 'black', 'blue')) 
+```
+
+Que passaria en una enquesta, doncs, si es seleccionés a més persones de llengua primera castellana (~30% independentista) i menys persones de llengua materna catalana (~80% independentista)? Evidentment, pujaria en els resultats el percentatge en contra de l'independència. I això és exactament el que va passar. Mireme la llengua primera dels enquestats BOP comparada amb les de l'enquesta cosmopolitana:
+
+```{r}
+
+pd <- bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01') %>%
+  bind_rows(cosmo %>% mutate(source = 'Cosmo')) %>%
+  mutate(xx = llengua_primera) %>%
+  filter(xx %in% c('Castellà', 'Cat+Cast', 'Català')) %>%
+  filter(!is.na(xx)) %>%
+  group_by(source, xx) %>%
+  tally %>%
+  group_by(source) %>%
+  mutate(p = n / sum(n) * 100)
+
+ggplot(data = pd,
+       aes(x = xx,
+           y = p,
+           group = source, 
+           fill = source)) +
+  geom_bar(stat = 'identity', position = position_dodge(width = 0.7)) +
+  theme_vilaweb() +
+  geom_text(aes(label = round(p, digits = 2), y = p +5),
+            position = position_dodge(width = 0.7), alpha = 0.6) +
+  labs(y = 'Percentatge',
+       x = "Llengua primera dels enquestats",
+       title = "Llengua primera dels enquestats",
+       subtitle =  "BOP vs enquesta 'Cosmopolitisme i localisme'",
+       caption = '"BOP" es refereix a les 5 enquestes BOP, 2018-2019.\n"Cosmo" es refereix a l\'enquesta "Cosmopolitisme i localisme", 2019.') +
+  geom_hline(yintercept = 50, lty = 2, alpha = 0.5) +
+  scale_fill_manual(name = 'Enquesta',
+                     values = c('darkgrey', vilaweb::colors_vilaweb()[2])) 
+```
+
+Realment el percentatge de catalans de llengua materna castellana va pujar 8% en els darrers mesos? Clar que no. La llengua primera no canvia al llarg de la vida! El que ha canviat és la mostra de l'enquesta.
+
+## Eix ideològic
+
+Tant les enquestes del BOP com l'enquesta "Cosmopolitisme i localisme" pregunten sobre l'autoubicació ideològica dels enquestats en una escala de 0 (extrema esquerra) a 10 (extrema dreta). Historicament, aquest eix ideològic està molt correlacionat amb l'independentisme: com més autoubicat a l'esquerra, més independentista. Per tant, si es seleccionés a més gent de la dreta, els resultats reflectarian una baixa de suport a l'independència - i és exactament el que va passar.
+
+Mirem, primer, la relació històrica esquerra-dreta / independentisme-unionisme:
+
+```{r}
+pd <- bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01') %>%
+  # bind_rows(cosmo %>% mutate(source = 'Cosmo')) %>%
+  filter(!is.na(axis_simple)) %>%
+  group_by(axis_simple, indepe) %>%
+  tally %>%
+  group_by(axis_simple) %>%
+  mutate(p = n / sum(n) * 100)
+
+ggplot(data = pd,
+       aes(x = axis_simple,
+           y = p,
+           color = indepe,
+           group = indepe)) +
+  geom_line() +
+    geom_point() +
+  theme_vilaweb() +
+  labs(x = 'Autoubicació ideològica',
+       y = 'Percentatge',
+       title = 'Ideologia esquerra-dreta i independentisme',
+       subtitle = 'Dades del BOP (CEO)',
+       caption = 'Enquestes BOP, 2018-2019. Mostra: 6.940 residents de Catalunya amb ciutadania espanyola.') +
+  geom_hline(yintercept = 50, lty = 2, alpha = 0.5) +
+  scale_color_manual(name = 'Independentista?',
+                     values = c('red', 'black', 'blue')) 
+```
+
+Però què va passar en l'enquesta "Cosmopolitisme i localisme"? El percentatge de catalans que s'autoubiquen en la dreta política (6 o més en l'escala de 0-10) va pujar significativament.
+
+```{r}
+pd <- bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01') %>%
+  bind_rows(cosmo %>% mutate(source = 'Cosmo')) %>%
+  filter(!is.na(axis_super_simple)) %>%
+  group_by(source, axis_super_simple) %>%
+  tally %>%
+  group_by(source) %>% 
+  mutate(p = n / sum(n) * 100)
+
+ggplot(data = pd,
+       aes(x = axis_super_simple,
+           y = p,
+           group = source, 
+           fill = source)) +
+  geom_bar(stat = 'identity', position = position_dodge(width = 0.7)) +
+  theme_vilaweb() +
+  geom_text(aes(label = round(p, digits = 2), y = p +5),
+            position = position_dodge(width = 0.7), alpha = 0.6) +
+  labs(y = 'Percentatge',
+       x = "Ideologia de l'enquestat",
+       title = "Ideologia dels enquestats",
+       subtitle =  "BOP vs enquesta 'Cosmopolitisme i localisme'",
+       caption = '"BOP" es refereix a les 5 enquestes BOP, 2018-2019.\n"Cosmo" es refereix a l\'enquesta "Cosmopolitisme i localisme", 2019.') +
+  geom_hline(yintercept = 50, lty = 2, alpha = 0.5) +
+  scale_fill_manual(name = 'Enquesta',
+                     values = c('darkgrey', vilaweb::colors_vilaweb()[2]))
+```
+
+
+Realment el percentatge de catalans que s'autoubiquen en la dreta política va duplicar? Probablement pas. El més probable és que la darrera enquesta va sobreamplificar de persones de la dreta política (el que va tenir un impacte, logicament, en els resultats sobre l'independentisme).
+
+
+Mirem-ho d'una altra manera. El gràfic següent és l'autoubicació ideològica dels enquestats al llarg del temps. 
+
+```{r}
+pd <- bop %>% mutate(source = 'BOP') %>% filter(date >= '2016-01-01') %>%
+  bind_rows(cosmo %>% mutate(source = 'Cosmo')) %>%
+  filter(!is.na(axis)) %>%
+  group_by(source, date) %>%
+  summarise(val = mean(axis, na.rm = T))
+
+ggplot(data = pd,
+       aes(x = date,
+           y = val)) +
+  geom_line() +
+  geom_point(aes(color = source), size = 2) +
+  theme_vilaweb() +
+  coord_flip() +
+  scale_y_continuous(breaks = seq(0, 10, 0.1)) +
+  scale_x_date(breaks = sort(unique(pd$date)), labels = format(sort(unique(pd$date)), '%Y-%m')) +
+  labs(x = 'Data',
+       y = 'Ubicació ideològica, equerra (0) - dreta (10)') +
+  scale_color_manual(name = 'Enquesta',
+                     values = c('darkgrey', vilaweb::colors_vilaweb()[2]))
+```
+
+Els catalans realment van fer un gir radical a la dreta ens els darrers mesos? Poc probable.
+
+## Identitat
+
+L'identitat i les opinions sobre l'independència van també de la mà. Com més autoidentificació espanyola, més unionista; com més autoidentificació catalana, més independentista. Aquesta és la relació independentisme i identitat, historicament:
+
+```{r}
+
+pd <- bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01') %>%
+  # bind_rows(cosmo %>% mutate(source = 'Cosmo')) %>%
+  filter(!is.na(identificacio_simple)) %>%
+  group_by(identificacio_simple, indepe) %>%
+  tally %>%
+  group_by(identificacio_simple) %>%
+  mutate(p = n / sum(n) * 100)
+
+ggplot(data = pd,
+       aes(x = identificacio_simple,
+           y = p,
+           color = indepe,
+           group = indepe)) +
+  geom_line() +
+    geom_point() +
+  theme_vilaweb() +
+  labs(x = 'Autoidentificació',
+       y = 'Percentatge',
+       title = 'Sentiment d\'identitat i independentisme',
+       subtitle = 'Dades del BOP (CEO)',
+       caption = 'Enquestes BOP, 2018-2019. Mostra: 6.940 residents de Catalunya amb ciutadania espanyola.') +
+  geom_hline(yintercept = 50, lty = 2, alpha = 0.5) +
+  scale_color_manual(name = 'Independentista?',
+                     values = c('red', 'black', 'blue')) 
+```
+
+La gent canvia sovint d'identitat? No. Per tant, quan hi ha canvis d'identiat signifactius en unes enquestes, el més probable no és que la societat canvia, sinó que el mostreigos són diferents (i per tant, incomparables). Si es selecciona per una enquesta més gent de sentiment "català", l'independentisme pujaria; de la mateixa manera, si es seleccionés per una enquest més gent de sentiment "espanyol", l'independentisme apareixeria molt baix.
+
+Què va passar en la darrera enquesta publicada pel CEO? Mirem-ho:
+
+```{r}
+pd <- bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01') %>%
+  bind_rows(cosmo %>% mutate(source = 'Cosmo')) %>%
+  filter(!is.na(identificacio_simple)) %>%
+  group_by(source, identificacio_simple) %>%
+  tally %>%
+  group_by(source) %>% 
+  mutate(p = n / sum(n) * 100)
+
+ggplot(data = pd,
+       aes(x = identificacio_simple,
+           y = p,
+           group = source, 
+           fill = source)) +
+  geom_bar(stat = 'identity', position = position_dodge(width = 0.7)) +
+  theme_vilaweb() +
+  geom_text(aes(label = round(p, digits = 2), y = p +5),
+            position = position_dodge(width = 0.7), alpha = 0.6) +
+  labs(y = 'Percentatge',
+       x = "Sentiment / identitat",
+       title = "Identitat dels enquestats",
+       subtitle =  "BOP vs enquesta 'Cosmopolitisme i localisme'",
+       caption = '"BOP" es refereix a les 5 enquestes BOP, 2018-2019.\n"Cosmo" es refereix a l\'enquesta "Cosmopolitisme i localisme", 2019.') +
+  geom_hline(yintercept = 50, lty = 2, alpha = 0.5) +
+  scale_fill_manual(name = 'Enquesta',
+                     values = c('darkgrey', vilaweb::colors_vilaweb()[2]))
+```
+
+Curiós, oi? Ens uns pocs mesos, el percentage de catalans que es considera més català que espanyol realment va baixar 10%? Perdoneu les repetcions, però no. Els sentiments identitaris canvien molt poc, i mai de manera ràpida. Les diferències entre les enquestes BOP i l'enquesta "Cosmopolitisme i localisme" no reflecteixen canvis en la societat catalana, sinó canvis en un mostreig de 1.500 persones.
+
+## I si la mostra no hagúes canviat...?
+
+Intentem salvar les dades, o al menys ajustar-les de manera per què siguin comparables al llarg del temps. Si acceptem com a fets que (a) la llengua materna i l'ideològia (esquerra-dreta) són els factors principals que determinen la posició d'algú sobre l'independència de Catalunya i (b) que és molt, molt poc probable que les freqüències d'aquestes variables hagin canviat significativament ens els darrers anys, ens permet fer l'analisi següent: (i) crear un model estadístic bàsic, basat en la darrera enquesta ("Cosmopolitisme i localisme") on l'independentisme és una funció de llengua + ideologia i després (ii) aplicar aquest model a la mostra "normal" del BOP (o sigui, la combinació de les 5 enquestes BOP de 2018-2019). Ho fem?
+
+```{r}
+# Statistical significance
+pd <- bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01') %>%
+  bind_rows(cosmo %>% mutate(source = 'Cosmo')) #%>%
+  # filter(llengua_primera %in% c('Castellà', 'Català', 'Cat+Cast'))
+# prop.test(table(pd$source, pd$llengua_primera != 'Castellà'))
+
+cosmod <- cosmo %>% filter(ciutada == 'Sí')
+# Model
+fit <- glm(indepe == 'Sí' ~ llengua_primera + axis_super_simple , data = cosmod)
+fit2 <- glm(indepe == 'No' ~ llengua_primera + axis_super_simple , data = cosmod)
+fit3 <- glm(indepe == 'NS/NC' ~ llengua_primera + axis_super_simple , data = cosmod)
+
+# exp(coef(fit))
+preds <- predict(fit, newdata = bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01'))
+preds <- preds[!is.na(preds)]
+si <- sum(preds) / length(preds) * 100
+preds2 <- predict(fit2, newdata = bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01'))
+preds2 <- preds2[!is.na(preds2)]
+no <- sum(preds2) / length(preds2) * 100
+preds3 <- predict(fit3, newdata = bop %>% mutate(source = 'BOP') %>% filter(date >= '2018-01-01'))
+preds3 <- preds3[!is.na(preds3)]
+nsnc <- sum(preds3) / length(preds3) * 100
+
+pd <- tibble(key = c('Sí', 
+                     'No', 
+                     'NS/NC'),
+             value = c(si, no, nsnc))
+ggplot(data = pd,
+       aes(x = key,
+           y = value)) +
+  geom_bar(stat = 'identity',
+           aes(fill = key)) +
+  theme_vilaweb() +
+  geom_text(aes(label = round(value, digits = 1)),
+            nudge_y = -4, alpha = 0.7, color = 'white') +
+  labs(x = 'Vol que Catalunya esdesvingui un estat independent?',
+       y = 'Percentatge',
+       title = 'I si la mostra hagués sigut idèntica...',
+       subtitle = "'Idèntica' = mateixa proporció per llengua materna i ideologia esquerra-centre-dreta",
+       caption = 'Ajustat aplicant model de l\'enquesta "Cosmopolitisme i localisme", 2019\na les proporcions demogràfiques dels 5 BOP de 2018-2019.') +
+  scale_fill_manual(name = '',
+                    values = c(colors_vilaweb()[2],
+                               'darkgrey', 
+                               colors_vilaweb()[4]))
+```
+
+Fent aquest ajust, l'independentisme seria al 47,4% mentres l'unionisme seria al 45.
+
+O (a) Catalunya ha canviat significativament en quant al seu perfil ideologic i llengua materna o (b) la mostra de la darrera enquesta és qualitativament diferent de la mostra dels BOP. En resum: l'independentisme és, més o menys, igual que fa un any o dos.
+
+## Conclusió
+
+Les enquestes del CEO són molt útils precisament perquè, a diferència de moltes enquestes publicades pels diaris, publiquen les microdades (el que permet un analisi que va més enllà dels resultats "crus"). I qualsevol comparació minimament rigurosa de les dades de l'enquesta de "Cosmopolitisme i localisme" amb les dades del BOP hauria de prende ne compte les diferències ideológiques i lingüístiques entre les mostres, com que aquestes diferències poden determinar, en gran part, els suport o rebuig a l'independentisme.
+
+Un analisi de les dades de les BOP dels darrers anys i l'enquesta "Cosmopolitisme i localisme" deixa clar que la darrera és esbiaixada d'una manera que _sobrereflexiona_ la dreta i els catalans d'origen castellanoparlant mentres que _infravalora_ l'esquerra i els catalanoparlants, comparada amb els BOP. Això, logicament, té conseqüències importants alora de calcular el suport a l'independència. El 42% (el chifre que surt en els titulars de tots els diaris) prové d'un analisi que ignora les característiques del mostreig, i les seves conseqüències.
+
+Quan es ponderen les dades per ajustar pels esbiaixos més importants (llengua, lloc de naixement, i provincía), com [va fer el Roger Tugas](https://www.naciodigital.cat/noticia/191129/dades/ocultes/ceo/apunten/si/guanyaria/referendum), l'independentisme i l'unionisme estan a basicament el mateix nivell (45% cadascú). O sigui, quan es tracta les dades d'una manera crítica, no consta una baixada significativa en el suport a l'independència, sinó uns moviments adins del marge d'error estadístic. Altrament dit, un analisi rigorós de les dades d'aquesta enquesta porta a la mateixa conclusió que un analisi de qualsevol de les enquestes dels darrers anys: que el nivell de suport a l'independència no ha tingut canvis significatius en els darrers anys.
+
+Però clar, els conceptes "ponderació", "esbiaix", "sobrerepresentació", i "marge d'error" no fan bons titulars. 42%? Això sí que és un bon titular. Així que prepareu-vos a sentir, una i altra vegada, aquest chifre - fins que surti la propera enquesta (on hi haurà molt probablament una suposada "pujada" en suport a l'indepèndencia només degut al principi de "la regressió a la mitjana").
+
+# Technical details
+
+The code for this analysis is publicly available at `r self_cite()`.
