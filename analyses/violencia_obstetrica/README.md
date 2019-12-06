@@ -23,10 +23,6 @@
 
 ![](figures/unnamed-chunk-8-1.png)<!-- -->
 
-### Both languages combined
-
-![](figures/unnamed-chunk-9-1.png)<!-- -->
-
 # Technical details
 
 The code for this analysis is publicly available at
