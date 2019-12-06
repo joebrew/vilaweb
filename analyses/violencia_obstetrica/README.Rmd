@@ -176,10 +176,12 @@ ggplot(data = x,
        subtitle = 'Monthly')
 ```
 
+
+
+```{r, eval = FALSE}
+
 ### Both languages combined
 
-
-```{r}
 pd <- read_csv('data/vo_es.csv') %>%
   mutate(language = 'Spanish') %>%
   bind_rows(read_csv('data/vo.csv') %>% mutate(language = 'English'))
