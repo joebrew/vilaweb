@@ -1,0 +1,211 @@
+---
+title: ""
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+# source('prepare_data.R')
+```
+
+## Google trends
+
+### In English 
+
+```{r}
+library(tidyverse)
+library(ggthemes)
+library(vilaweb)
+```
+
+```{r}
+pd <- read_csv('data/obstetric_violence.csv', skip = 1)
+names(pd) <- c('date', 'value')
+pd$date <- paste0(pd$date, '-01')
+pd$date <- as.Date(pd$date)
+pd <- pd %>% filter(date >= '2010-01-01')
+ggplot(data = pd,
+       aes(x = date,
+           y = value)) +
+  geom_area(fill = 'red', alpha = 0.3) +
+  geom_point() +
+  geom_line() +
+  theme_fivethirtyeight() +
+  labs(x = 'Month',
+       y = 'Search frequency (relative)',
+       title = 'Search frequency for "obstetric violence"',
+       subtitle = 'According to "Google Trends"',
+       caption = 'Data captured on December 6, 2019')
+```
+
+## In English (yearly)
+
+
+```{r}
+pd <- read_csv('data/obstetric_violence.csv', skip = 1)
+names(pd) <- c('date', 'value')
+pd$date <- paste0(pd$date, '-01')
+pd$date <- as.Date(pd$date)
+pd <- pd %>% filter(date >= '2010-01-01')
+
+pd <- pd %>%
+  group_by(date = as.Date(cut(date, 'year'))) %>%
+  summarise(value = mean(value))
+ggplot(data = pd,
+       aes(x = date,
+           y = value)) +
+  geom_area(fill = 'red', alpha = 0.3) +
+  geom_point() +
+  geom_line() +
+  theme_fivethirtyeight() +
+  labs(x = 'Month',
+       y = 'Search frequency (relative)',
+       title = 'Search frequency for "obstetric violence"',
+       subtitle = 'Yearly. According to "Google Trends"',
+       caption = 'Data captured on December 6, 2019')
+```
+
+
+### In Spanish (yearly)
+
+
+```{r}
+pd <- read_csv('data/obstetric_violence_es.csv', skip = 1)
+names(pd) <- c('date', 'value')
+pd$date <- paste0(pd$date, '-01')
+pd$date <- as.Date(pd$date)
+pd <- pd %>% filter(date >= '2010-01-01')
+pd <- pd %>%
+  group_by(date = as.Date(cut(date, 'year'))) %>%
+  summarise(value = mean(value))
+ggplot(data = pd,
+       aes(x = date,
+           y = value)) +
+  geom_area(fill = 'red', alpha = 0.3) +
+  geom_point() +
+  geom_line() +
+  theme_fivethirtyeight() +
+  labs(x = 'Month',
+       y = 'Search frequency (relative)',
+       title = 'Search frequency for "violencia obstétrica"',
+       subtitle = 'Yearly. According to "Google Trends"',
+       caption = 'Data captured on December 6, 2019')
+```
+
+
+
+```{r, eval = FALSE}
+pd <- read_csv('data/obstetric_violence_es_vs_en.csv', skip = 1)
+pd <- pd %>%
+  dplyr::mutate(date = as.Date(paste0(Month, '-01'))) %>%
+  dplyr::select(-Month)
+pd <- pd %>%
+  gather(key, value, names(pd)[1:2])
+pd$key <- gsub(': (Worldwide)', '', pd$key, fixed = T)
+
+ggplot(data = pd,
+       aes(x = date,
+           y = value)) +
+  geom_area() +
+  facet_wrap(~key)
+```
+
+## Twitter
+
+### English
+
+```{r}
+pd <- read_csv('data/vo.csv')
+
+x <- pd %>%
+  group_by(date = as.Date(cut(date, 'month'))) %>%
+  summarise(Tweets = n(),
+            Likes = sum(likes_count, na.rm = TRUE),
+            Retweets = sum(retweets_count, na.rm = TRUE),
+            Replies = sum(replies_count, na.rm = TRUE)) %>%
+  gather(key, value, Tweets:Replies)
+
+ggplot(data = x,
+       aes(x = date,
+           y = value)) +
+  geom_area(fill = 'red', alpha = 0.3,
+            color = 'black', size = 0.1) +
+  theme_fivethirtyeight() +
+  facet_wrap(~key, scales = 'free_y') +
+  labs(title = 'Twitter data with the term "obstetric violence"',
+       subtitle = 'Monthly')
+```
+
+
+
+### Spanish
+
+```{r}
+pd <- read_csv('data/vo_es.csv')
+
+x <- pd %>%
+  group_by(date = as.Date(cut(date, 'month'))) %>%
+  summarise(Tweets = n(),
+            Likes = sum(likes_count, na.rm = TRUE),
+            Retweets = sum(retweets_count, na.rm = TRUE),
+            Replies = sum(replies_count, na.rm = TRUE)) %>%
+  gather(key, value, Tweets:Replies)
+
+ggplot(data = x,
+       aes(x = date,
+           y = value)) +
+  geom_area(fill = 'red', alpha = 0.3,
+            color = 'black', size = 0.1) +
+  theme_fivethirtyeight() +
+  facet_wrap(~key, scales = 'free_y') +
+  labs(title = 'Twitter data with the term "violencia obstétrica"',
+       subtitle = 'Monthly')
+```
+
+### Both languages combined
+
+
+```{r}
+pd <- read_csv('data/vo_es.csv') %>%
+  mutate(language = 'Spanish') %>%
+  bind_rows(read_csv('data/vo.csv') %>% mutate(language = 'English'))
+
+x <- pd %>%
+  group_by(date = as.Date(cut(date, 'month')),
+           language) %>%
+  summarise(Tweets = n(),
+            Likes = sum(likes_count, na.rm = TRUE),
+            Retweets = sum(retweets_count, na.rm = TRUE),
+            Replies = sum(replies_count, na.rm = TRUE)) %>%
+  gather(key, value, Tweets:Replies)
+
+ggplot(data = x,
+       aes(x = date,
+           y = value)) +
+  geom_line(aes(color = language), alpha = 0.8) +
+  theme_fivethirtyeight() +
+  facet_wrap(~key, scales = 'free_y') +
+  labs(title = 'Twitter data with the term "obstetric violence"',
+       subtitle = 'Monthly. "Violencia obstétrica" in Spanish vs. "Obstetric violence" in English.') +
+  scale_color_manual(name = '',
+                     values = c('red', 'blue'))
+```
+
+
+# Technical details
+
+The code for this analysis is publicly available at `r self_cite()`.
