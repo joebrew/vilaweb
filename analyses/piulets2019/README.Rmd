@@ -1,0 +1,161 @@
+---
+title: ""
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(vilaweb)
+library(rtweet)
+library(tidyverse)
+library(databrew)
+# library(translateR)
+# library(sentimentr) # https://github.com/trinker/sentimentr
+require(RPostgreSQL)
+require(readr)  
+require(DBI)
+# library(webshot)
+source('prepare_data.R')
+```
+
+
+# Les paraules més piulades pels polítics el 2019
+
+Hi ha casos on les dades parlen per si soles. Aquest és un d'ells.
+
+
+### La paraula més piulada de l'any, per polític
+
+```{r}
+peeps <- c('jaumeasens',
+           'albiol_xg',
+           'pablocasado_',
+           'jordialapreso',
+           'miriamnoguerasm',
+           'albanodante76',
+           'nadiacalvino',
+           'inesarrimadas',
+           'eva_granados',
+           'carlesral',
+           'espanaglobal',
+           'josepcosta',
+           'joantarda',
+           'toni_comin',
+           'meritxell_batet',
+           'miqueliceta',
+           'pablo_iglesias_',
+           'alejandrotgn',
+           'lozanoirene',
+           'jessicaalbiach',
+           'bassamontse',
+           'elespanolcom',
+           'ortega_smith',
+           'vox_es',
+           'ierrejon',
+           'josepborrellf',
+           'marianorajoy',
+           'rogertorrent',
+           'cupnacional',
+           'forcadellcarme',
+           'krls',
+           'cayetanaat',
+           'lroldansu',
+           'quimtorraipla',
+           'sanchezcastejon',
+           'wagensberg',
+           'lauraborras',
+           'miquelbuch',
+           'perearagones',
+           'agarzon',
+           'albert_rivera',
+           'carlescampuzano',
+           'jcuixart',
+           'junqueras',
+           'gabrielrufian',
+           'j_zaragoza_')
+
+pd <- out %>% filter(username %in% peeps,
+                     rank == 1)
+pd %>% arrange(word) %>%
+  dplyr::select(word, username, n, p) %>% View
+
+# Paraula mes piulada de l'any:
+# Inés Arrimadas: España
+# Josep Borrell: España
+# Pablo Casado: España
+# Pablo Iglesias: Derechos
+# Irene Lozano: España
+# Mariano Rajoy: España
+# Albert Rivera: España
+# Pedro Sánchez: España
+
+
+# Laura Borràs: Gràcies
+# Carles Campuzano: Gràcies
+# Toni Comín: Gràcies
+# Jordi Cuixart: Presó
+# Albano Dante: Gent
+# Carme Forcadell: Gràcies
+# Oriol Junqueras: Gràcies
+# Miram Nogueras: Gràcies
+# Carles Puigdemont: Gràcies
+# Joan Tardà: Esperem
+# Quim Torra: Catalunya
+
+
+# Comparacions
+
+KRLS
+Gràcies
+Democràcia
+Drets
+Avui
+Catalunya
+
+
+Tardà
+1. Esperem
+2. Avui
+3. Demà
+4. Presentació
+5. Llibre
+
+Roldán
+1. Torra
+2. Cataluña
+3. Catalanes
+4. Libertad
+5. Cs
+6. Sr 
+7. Separatismo
+8. Separatistas
+9. Barcelona
+10. Apoyo
+
+Sànchez:
+1. Absolució
+2. Freetothom
+3. Gràcies
+4. Força
+5. Presó
+```
+
+### Detalls
+
+Tot el codi d'aquesta analisi està publi

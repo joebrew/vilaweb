@@ -143,17 +143,17 @@ score_sentiment <- function (x, language = 'es',
 catalan_spanish_stopwords <- 
   c(
     readLines('stopwords/stopwords-ca.txt'),
-    readLines('stopwords/stopwords-es.txt')
+    readLines('stopwords/stopwords-es.txt'),
+    readLines('stopwords/stopwords-en.txt')
   )
-# Add a few
-catalan_spanish_stopwords <- 
-  c(catalan_spanish_stopwords,
-    c('señor',
-      'señoría',
-      'señorías',
-      'sánchez'))
+# # Add a few
+# catalan_spanish_stopwords <- 
+#   c(catalan_spanish_stopwords,
+#     c('señor',
+#       'señoría',
+#       'señorías'))
 # Remove numbers
-numbers <- as.character(c(0:154,156:1935,1937:1977, 1979:2018))
+numbers <- as.character(c(0:154,156:1935,1937:1977, 1979:2019))
 catalan_spanish_stopwords <- c(catalan_spanish_stopwords, numbers)
 
 
@@ -233,3 +233,12 @@ out <- bind_rows(out_list)
 out <- out %>% arrange(rank)
 View(out)
 write_csv(out, '2019.csv')
+
+x = tl %>% filter(date >= '2019-01-01', date <= '2019-12-31') %>% mutate(golpe = grepl('diálog|dialog|diàleg', tolower(tweet))) %>% group_by(username) %>% summarise(numerator = length(which(golpe)), denominator = n()) %>% mutate(p = numerator / denominator * 100) %>% arrange(desc(p))
+
+puig = tl %>% filter(date >= '2019-01-01', date <= '2019-12-31') %>% mutate(golpe = grepl('separatis', tolower(tweet))) %>% group_by(username) %>% summarise(numerator = length(which(golpe)), denominator = n()) %>% mutate(p = numerator / denominator * 100) %>% arrange(desc(p))
+
+sanch = tl %>% filter(date >= '2019-01-01', date <= '2019-12-31') %>% mutate(golpe = grepl('sánchez|sanchezcastejon', tolower(tweet))) %>% group_by(username) %>% summarise(numerator = length(which(golpe)), denominator = n()) %>% mutate(p = numerator / denominator * 100) %>% arrange(desc(p))
+
+
+forc = tl %>% filter(date >= '2019-01-01', date <= '2019-12-31') %>% mutate(golpe = grepl('forcadell', tolower(tweet))) %>% group_by(username) %>% summarise(numerator = length(which(golpe)), denominator = n()) %>% mutate(p = numerator / denominator * 100) %>% arrange(desc(p))
