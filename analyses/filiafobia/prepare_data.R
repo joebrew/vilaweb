@@ -192,7 +192,7 @@ plot_viatges_i_simpatia <- function(ca = TRUE){
              y = simpatia)) +
     # geom_bar(stat = 'identity') +
     # geom_area(alpha = 0.5, color = NA, fill = 'darkorange', group = 1) +
-    geom_point(size = 8) +
+    geom_point(size = 10) +
     geom_segment(aes(xend = visits,
                      yend = 5),
                  alpha = 0.8,
@@ -237,7 +237,7 @@ plot_viatges_i_odi <- function(ca = TRUE){
                                    'More than\n10 times'))
     the_labs <- labs(x = 'How many times have you travelled to Catalonia?',
                      y = "Percentage who say 'I don't like them at all'",
-                     title = "Extreme dislike of Catalans\nand times travelled to Catalonia",
+                     title = "Extreme dislike of Catalans among Spaniards\nand times travelled to Catalonia",
                      caption = "Data source: Survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nSample: 2,454 residents of Spain (without including Catalonia). Chart: @joethebrew") 
   } else {
     the_labs <- labs(x = 'Quantes vegades ha viatjat a Catalunya?',
@@ -252,7 +252,7 @@ plot_viatges_i_odi <- function(ca = TRUE){
              y = p0)) +
     # geom_bar(stat = 'identity') +
     # geom_area(alpha = 0.5, color = NA, fill = 'darkorange', group = 1) +
-    geom_point(size = 8) +
+    geom_point(size = 10) +
     geom_segment(aes(xend = visits,
                      yend = 5),
                  alpha = 0.8,

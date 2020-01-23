@@ -28,13 +28,13 @@ source('prepare_twitter_data.R')
 If one's only source of information about Catalan society were Spanish politicians, one might conclude that there is a high degree of anti-Spanishness in Catalonia. This belief is widely-held, and appears to be increasing among the public: for example, Google searches in Spain for the term "hispanophobia" increased sharply at the time of the 2017 Catalan independence referendum, and have remained elevated above their pre-referendum levels ever since.
 
 ```{r}
-plot_google()
+plot_google(ca = FALSE)
 ```
 
 A similar trend can be detected by examining the frequency of the word "hispanophobia" (and its variants in Catalan and Spanish) on Twitter: after the October 2017 peak in the term, the frequency never quite returned down to its pre-referendum baseline.
 
 ```{r}
-plot_twitter()
+plot_twitter(ca = FALSE)
 ```
 
 The focus on the supposed anti-Spanishness of Catalans has made its way into mainstream Spanish politics. Its main promoters are the Spanish nationalist far right, such as the "Vox" party, which, in a clear reference to Catalan independence parties, has gone so far as to call for the illegalization of "organizations which promote hispanophobia". 
@@ -51,7 +51,7 @@ Likewise, much of the supposedly centrist "Citizens" party's rise to prominence 
 
 <img src="img/rivera.gif">
 
-Like the other Spanish nationalist parties, the mainstream "Popular" party has repeatedly tried to link the Catalonia with anti-Spanishness. The week before the 2017 Catalan independence referendum, for example, the official Twitter account of the party tweeted the hashtag "#Hispanofobia" 9 times... in just one day.
+Like the other Spanish nationalist parties, the mainstream "Popular" party has repeatedly tried to link Catalonia with anti-Spanishness. The week before the 2017 Catalan independence referendum, for example, the official Twitter account of the party tweeted the hashtag "#Hispanofobia" 9 times... in just one day.
 
 <table style="width:100%">
   <tr>
@@ -92,9 +92,9 @@ This analysis uses publicly-available survey data collected from 3,600 residents
 
 ## Que pensen els catalans dels espanyols i els espanyols dels catalans?
 
-The below chart shows the average value (on a 1 to 10 scale in which 1 is "I don't like them at all" and 10 is "I like them a lot") of how people from one place (x-axis) feel about people from another place (y-axis).
+The below chart shows the average value (on a 0 to 10 scale in which 0 is "I don't like them at all" and 10 is "I like them a lot") of how people from one place (x-axis) feel about people from another place (y-axis).
 
-```{r, fig.height = 7, fig.width = 5.5}
+```{r, fig.height = 7.5, fig.width = 6}
 plot_simpatia_matrix(ca = FALSE)
 ```
 
@@ -120,15 +120,15 @@ pd <- pt %>%
 
 # What Spaniards think about Catalans
 # weighted
-es_to_cat_avg_w <- weighted.mean(pd$value[pd$ccaa != 'Catalunya' & pd$key == 'Catalans'], w = pd$weight[pd$ccaa != 'Catalunya' & pd$key == 'Catalans'], na.rm = T) * 100
+es_to_cat_avg_w <- weighted.mean(pd$value[pd$ccaa != 'Catalunya' & pd$key == 'Catalans'], w = pd$weight[pd$ccaa != 'Catalunya' & pd$key == 'Catalans'], na.rm = T) 
 # not weighted
-est_to_cat_avg_r <- mean(pd$value[pd$ccaa != 'Catalunya' & pd$key == 'Catalans'], na.rm = T) * 100
+est_to_cat_avg_r <- mean(pd$value[pd$ccaa != 'Catalunya' & pd$key == 'Catalans'], na.rm = T)
 
 # What Catalans think about Spaniards
 # weighted
-cat_to_es_avg_w <- weighted.mean(pd$value[pd$ccaa == 'Catalunya' & pd$key != 'Catalans'], w = pd$weight[pd$ccaa == 'Catalunya' & pd$key != 'Catalans'], na.rm = T) * 100
+cat_to_es_avg_w <- weighted.mean(pd$value[pd$ccaa == 'Catalunya' & pd$key != 'Catalans'], w = pd$weight[pd$ccaa == 'Catalunya' & pd$key != 'Catalans'], na.rm = T)
 # not weighted
-cat_to_es_avg_r <- mean(pd$value[pd$ccaa == 'Catalunya' & pd$key != 'Catalans'], na.rm = T) * 100
+cat_to_es_avg_r <- mean(pd$value[pd$ccaa == 'Catalunya' & pd$key != 'Catalans'], na.rm = T)
 
 # Pecent below 5: Spaniards to Catalans
 sub_data <- pd[pd$ccaa != 'Catalunya' & pd$key == 'Catalans',]
@@ -167,44 +167,44 @@ When Catalans are asked how much they like the residents of the rest of the Span
 
 Perhaps, though, it's wrong to focus on averages. After all, both numbers are above 5, suggesting that both Catalans and Spaniards like each other more than they dislike each other.
 
-So, instead of averages, let's focus on proportions: what is the percentage of Catalans that _dislike_ Spaniards, and what is the percentage of Spaniards that _dislike_ Catalans (we'll consider 0-4 on the 0-10 scale to be "disliking", and will remove from our denominator those who don't give any answer)? 
+So, instead of averages, let's focus on proportions: what is the percentage of Catalans that _dislike_ Spaniards, and what is the percentage of Spaniards that _dislike_ Catalans (we'll 4 or below on the 0-10 scale to be "disliking", and will remove from our denominator those who don't give any answer)? 
 
-```{r, fig.height = 7, fig.width = 5.5}
+```{r, fig.height = 7.5, fig.width = 6}
 plot_simpatia_matrix(ca = F, var = 'p4', roundy = 0, reverse_color = T) +
   labs(title = "Percentage of people from one place\nwho dislike people from other place",
        subtitle ="% of people from one area who give a score of < 5\n(on a 0-10 scale) to people from the other area")
 ```
 
-As with the previous chart, the same horizontal-line pattern emerges. That is, with the exception of the Basque Country and Catalonia itself, large percentages of residents of the rest of Spain "dislike" Catalans. In the areas of Castilla (la Mancha and León) and Asturias, more than 1/3 of people dislike Catalans. If we take the whole of Spain (excluding Catalonia), the percentage of people who profess to dislike Catalans is `r round(es_to_cat_p4_w, digits = 1)`.
+As with the previous chart, the same horizontal-line pattern emerges. That is, with the exception of the Basque Country and Catalonia itself, large percentages of residents of the rest of Spain "dislike" Catalans. In the areas of Castilla (la Mancha and León) and Asturias, more than 1/3 of people dislike Catalans. If we take the whole of Spain (excluding Catalonia), the percentage of people who profess to dislike Catalans is `r round(es_to_cat_p4_w, digits = 1)`%.
 
 The percentage of Catalans that dislike Spaniards is comparatively lower: `r round(cat_to_es_p4_w, digits = 1)`%. Even though a relatively high percentage of Catalans say that they dislike those from Madrid (19%), this is still significantly lower than the percentage of people from Madrid who say that they dislike Catalans (28%).
 
 In other words, Catalans are the most disliked people in the Spanish state. But the dislike that many Spaniards feel for Catalans is not bidirectional. In fact, if we break the data down region by region, we say that in _all_ cases, Catalans like the people from each of the state's other 16 regions more than those people like Catalans (Ceuta and Melilla being excluded for reasons of sample size).
 
-```{r, fig.height = 7, fig.width = 5.5}
+```{r, fig.height = 7.5, fig.width = 6}
 plot_compare(ca = FALSE)
 ```
 
 Again, sometimes averages are less interesting than the extremes. And perhaps one could argue that "disliking" somebody (ie, giving them a rating of less than 5 on a 0-10 scale) does not quite constitute a "phobia". So, let's look at the extremes. What is the percentage of people from each area that give a _zero_ on a 0 to 10 scale to people from other areas. Let's see:
 
-```{r, fig.height = 7, fig.width = 5.5}
+```{r, fig.height = 7.5, fig.width = 6}
 plot_simpatia_matrix(ca = F, var = 'p0', roundy = 1, reverse_color = T, text_size = 3) +
   labs(title = "Percentage of extreme dislike",
        subtitle ="% of people from one area who give a score of\n0 (0-10 scale) to people from the other area")
 ```
 
-Again, the same pattern emerges: the horizontal red line. `r round(es_to_cat_p0_w, digits = 1)` percent of people from the rest of the Spanish State say that they "don't like Catalans at all" (0 on a 0-10) scale, whereas only `r round(cat_to_es_p0_w, digits = 1)` of Catalans say the same about Spaniards.
+Again, the same pattern emerges: the horizontal red line. `r round(es_to_cat_p0_w, digits = 1)` percent of people from the rest of the Spanish State say that they "don't like Catalans at all" (0 on a 0-10) scale, whereas only `r round(cat_to_es_p0_w, digits = 1)` of Catalans say the same about Spaniards, on average.
 
 
 ## Why?
 
-Why does such a high portion of Spaniards say that they don't like Catalans at all? 
+Why does such a high portion of Spaniards say that they don't like Catalans at all? And why is the corresponding portion (the percentage of Catalans who say they don't like Spaniards at all) so low?
 
 If the answer were only political, then we would expect that Catalans would dislike Spaniards at a similar rate. But it's not the case; Catalans largely like Spaniards, far more than Spaniards like Catalans. What might explain this?
 
-I don't claim to have the definitive answer to this question, but I believe that the data offers a clear hint about the causal factor behind hatre: _ignorance_.
+I don't claim to have the definitive answer to this question, but the data offer some hints. One factor which could plausibly explain why many Spaniards dislike Catalans is _ignorance_.
 
-I don't mean "ignorance" as an insult, but rather as a simple descriptive word to describe lack of familiarity. As any parent of children can tell you, the more you know something, the easier it is to love it (and the harder it is to dislike it). Catalans, to a large extent, _know_ Spanish culture and Spaniards; in addition to a large percentage of them having non-Catalan Spanish ancestry due to (relatively) recent waves of immigration from Southern Spain to Cataolonia, Spanish pop culture has a predominant role (TV, movies, etc.) in Catalonia. The same cannot be said of the extent of Catalan ancestry among non-Catalan Spaniards, nor of the penetration of Catalan pop culture into non-Catalan areas. How many Andalusians have Catalan grandparents? How many Catalan-language films are screened in Madrid theatres? Very few.
+I don't mean "ignorance" as an insult, but rather as a simple descriptive word to describe lack of familiarity. As any parent of a child or owner of a pet can tell you, the more you know something, the easier it is to love it (and the harder it is to dislike it). Catalans, to a large extent, _know_ Spanish culture and Spaniards; they speak the language, and in addition to a large percentage of them having non-Catalan Spanish ancestry due to (relatively) recent waves of immigration from Southern Spain to Catalonia, Spanish pop culture has a predominant role (TV, movies, etc.) in Catalonia. The same cannot be said of linguistic familiarity in the rest of Spain, or the extent of Catalan ancestry among non-Catalan Spaniards, nor of the penetration of Catalan pop culture into non-Catalan areas. How many Leonenses speak Catalan? How many Andalusians have Catalan grandparents? How many Catalan-language films are screened in Madrid theatres? Very few.
 
 Let's test the theory. If ignorance indeed drives hatred, then we would expect that those who are least familiar with Catalonia would be the ones who like Catalans least, and those who are most familiar with Catalonia would like Catalans most.
 
@@ -227,8 +227,7 @@ Among Spaniards who have been to Catalonia 10 times or more, the percentage whic
 
 
 
-
-Ignorance of Catalonia (ie, never having been there) is not only associated with a significantly higher degree of aversion to Catalan people; it also has political implications. For example, among Spaniards, the more one has travelled to Catalonia, the more in favor he/she is of Catalans holding an independence referendum.
+Personal feelings and experiences have political consquences. For example, among Spaniards, the more one has travelled to Catalonia, the more in favor he/she is of Catalans holding an independence referendum.
 
 ```{r}
 plot_support_referendum(ca = FALSE)
@@ -244,6 +243,14 @@ Among those who dislike Catalans (0-4), only a small minority are in favor of pe
 
 # Conclusion
 
+Does there exist a large degree of hispanophobia in Catalonia? The data are clear: no.
+
+The rise in concern about hispanophobia in Catalonia is not reality-based.  On average, most Catalans like Spaniards, and most Spaniards like Catalans. Where there are differences in the rates of sympathy and antipathy between Spaniards and Catalans, these are in the direction of _catalanophobia_, not hispanophobia. That is, `r round(es_to_cat_p4_w, digits = 1)`% of Spaniards dislike (<5 on a 0-10 scale) Catalans, while only `r round(cat_to_es_p4_w, digits = 1)`% of Catalans dislike Spaniards. By the same token, `r round(es_to_cat_p0_w, digits = 1)`% of Spaniards "don't like Catalans at all" (0 on a 0-10) scale, but only `r round(cat_to_es_p0_w, digits = 1)`% of Catalans say that they same about the inhabitants of the rest of the Spanish State.
+
+If the degree of catalanophobia in Spain is greater than the degree of hispanophobia, why does the latter get so much more attention from mainstream Spanish political groups? There are two possible explanations: (1) the myth of hispanophobia is a ["moral panic"](https://en.wikipedia.org/wiki/Moral_panic), a collective fair that has emerged _organically_ out of some Spaniards' anxiety about their political future; or (2) hispanophobia is not an _organic_ social phenomenon but rather an _intentionally artificial_ one, engineered by political and social actors to justify interventionist/centralist policies. That is, questionable Spanish political decisions aimed at "correcting" Catalan polical decisions appear less questionable when framed in the (false but useful) context of a hispanophobic society which needs to be "corrected".
+
+Should one be concerned about hispanophobia in Catalonia? Of course. But the magnitude of concern should be proportional to the magnitude of the problem. And the problem of _catalanophobia_ in Spain is demonstrably of greater magnitude than that of _hispanophobia_ in Catalonia. Politicians would do well to take into account the data before accusing others of hatred or claiming to be its victims.
+
 
 # Catalan-language plots
 
@@ -251,24 +258,24 @@ Among those who dislike Catalans (0-4), only a small minority are in favor of pe
 plot_google(ca = TRUE)
 ```
 
-```{r, fig.height = 7, fig.width = 5.5}
+```{r, fig.height = 7.5, fig.width = 6}
 plot_simpatia_matrix(ca = TRUE)
 ```
 
 
 
-```{r, fig.height = 7, fig.width = 5.5}
+```{r, fig.height = 7.5, fig.width = 6}
 plot_simpatia_matrix(ca = T, var = 'p4', roundy = 0, reverse_color = T) +
   labs(title = "% qui diu que 'em cauen malament'",
        subtitle ="% de persones d\'una comunitat autònoma que posen\nuna puntuació de menys de 5 a les\npersones d\'una altra comunitat autònoma")
 ```
 
 
-```{r, fig.height = 7, fig.width = 5.5}
+```{r, fig.height = 7.5, fig.width = 6}
 plot_compare(ca = TRUE)
 ```
 
-```{r, fig.height = 7, fig.width = 5.5}
+```{r, fig.height = 7.5, fig.width = 6}
 plot_simpatia_matrix(ca = T, var = 'p0', roundy = 1, reverse_color = T) +
   labs(title = "% qui diu 'Em cauen molt malament'",
        subtitle ="% de persones d\'una comunitat autònoma que diuen que\nles persones de l\'altra comunitat autònoma li\n'cauen molt malament' (0 en escala 0-10)")
@@ -299,4 +306,6 @@ plot_simpatia_referendum(ca = TRUE)
 
 # Technical details
 
-The data used for this article came from the 'Percepció sobre el debat territorial a Espanya' survey, carried out by the Centre d'Estudis d'Opinió of Catalonia. The raw, person-level data are publicly available online at http://ceo.gencat.cat/ca/inici, as is all the code used for this analysis: `r self_cite()`.
+The data used for this article came from the 'Percepció sobre el debat territorial a Espanya' survey, carried out by the Centre d'Estudis d'Opinió of Catalonia. The raw, person-level data are publicly available online at http://ceo.gencat.cat/ca/inici.
+
+The code used for this analysis is also publicly available: `r self_cite()`.
