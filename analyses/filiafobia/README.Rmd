@@ -258,6 +258,11 @@ Should one be concerned about hispanophobia in Catalonia? Of course. But the mag
 plot_google(ca = TRUE)
 ```
 
+```{r}
+plot_twitter(ca = TRUE)
+```
+
+
 ```{r, fig.height = 7.5, fig.width = 6}
 plot_simpatia_matrix(ca = TRUE)
 ```

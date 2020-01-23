@@ -358,6 +358,8 @@ hatred or claiming to be its victims.
 
 ![](figures/unnamed-chunk-21-1.png)<!-- -->
 
+![](figures/unnamed-chunk-22-1.png)<!-- -->
+
 # Technical details
 
 The data used for this article came from the ‘Percepció sobre el debat
