@@ -15,7 +15,7 @@ plot_twitter <- function(ca = TRUE){
     the_labs <- labs(x = 'Mes',
                      y = 'Piulets (escala logarítmica)',
                      title = "Piulets amb la paraula de 'hispanofòbia'",
-                     subtitle = 'Dades de Twitter, incloent repiulets',
+                     subtitle = 'Dades de Twitter, incloent-hi repiulets',
                      caption = 'Gràfic de Joe Brew, @joethebrew')
   } else {
     the_labs <- labs(x = 'Month',
@@ -43,9 +43,9 @@ plot_google <- function(ca = TRUE){
   if(ca){
     the_labs <- labs(x = 'Mes',
                      y = 'Percentatge (escala logarítmica)',
-                     title = "Búsquedes de 'hispanofòbia'",
+                     title = "Cerques de 'hispanofòbia'",
                      subtitle = 'Dades de Google Trends',
-                     caption = 'Percentatge: búsquedes mensuals relatives al màxim. Gràfic de Joe Brew, @joethebrew')
+                     caption = 'Percentatge: cerques mensuals relatives al màxim. Gràfic de Joe Brew, @joethebrew')
   } else {
     the_labs <- labs(x = 'Month',
                      y = 'Percentage (log scale)',
@@ -328,7 +328,7 @@ plot_support_referendum <- function(ca = FALSE){
     the_labs <- 
       labs(x = 'Quantes vegades ha viatjat a Catalunya?',
            y = 'Percentatge',
-           title = "Vegades que ha viatjat a Catalunya i\nsuport pel referèndum",
+           title = "Vegades que ha viatjat a Catalunya i\nsuport al referèndum",
            subtitle = "Grau d'acord amb la frase: 'S'hauria de fer un referèndum a Catalunya perquè els catalans i les\ncatalanes decidissin quina relació volen que hi hagi entre Catalunya i l'Estat espanyol'",
            caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya'. Centre d'Estudis d'Opinió.\nMostra: 2.454 habitants d'Espanya (sense incloure Catalunya). Gràfic: @joethebrew")
     legend_title <- ""
@@ -410,7 +410,7 @@ plot_simpatia_referendum <- function(ca = TRUE){
   } else {
     the_labs <- labs(x = 'Grau de simpatia (escala 0 a 10)',
          y = 'Percentatge',
-         title = "Grau de simpatia pels catalans i\nsuport pel referèndum",
+         title = "Grau de simpatia pels catalans i\nsuport al referèndum",
          subtitle = "Grau d'acord amb la frase: 'S'hauria de fer un referèndum a Catalunya perquè els catalans i les\ncatalanes decidissin quina relació volen que hi hagi entre Catalunya i l'Estat espanyol'",
          caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya. Centre d'Estudis d'Opinió.\nMostra: 2.454 habitants d'Espanya (sense incloure Catalunya). Gràfic: @joethebrew") 
   }
@@ -553,7 +553,7 @@ plot_simpatia_matrix <- function(ca = FALSE, var = 'avg', roundy = 1, reverse_co
   if(ca){
     the_labs <- labs(x = 'Grau de simpatia de les persones d\'aqui',
                      y = '...cap a les persones d\'aqui',
-                     title = 'Grau de simpatia cap als habitants dels\nhabitants segons Comunitat Autònoma',
+                     title = 'Grau de simpatia cap als habitants dels\nhabitants segons comunitat autònoma',
                      caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nMostra: 2.454 habitants d'Espanya (sense incloure Catalunya). Gràfic: @joethebrew")
   } else {
     the_labs <- labs(x = 'How people from here feel...',
@@ -679,11 +679,11 @@ plot_compare <- function(ca = TRUE){
   
   # Make a new var
   if(ca){
-    levs <- c('Valoració mitjana dels habitants\nd\'aquesta CCAA cap als catalans',
-              'Valoració mitjana dels catalans\ncap als habitants d\'aquesta CCAA')
+    levs <- c('Valoració mitjana dels habitants d\'aquesta\ncomunitat autònoma cap als catalans',
+              'Valoració mitjana dels catalans cap als\nhabitants d\'aquesta comunitat autònoma')
     the_labs <- labs(x = '',
                      y = "Valoració mitjana (0-10)",
-                     title = 'Grau de simpatia/antipatia entre catalans\ni espanyols de diferents CCAA')
+                     title = 'Grau de simpatia/antipatia entre catalans\ni espanyols de diferents comunitats autònomes')
   } else {
     levs <- c('How people from this area feel\nabout Catalans',
               'How Catalans feel about people\nfrom this area')

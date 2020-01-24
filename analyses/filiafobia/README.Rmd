@@ -94,7 +94,7 @@ This analysis uses publicly-available survey data collected from 3,600 residents
 
 The below chart shows the average value (on a 0 to 10 scale in which 0 is "I don't like them at all" and 10 is "I like them a lot") of how people from one place (x-axis) feel about people from another place (y-axis).
 
-```{r, fig.height = 7.5, fig.width = 6}
+```{r, fig.height = 7.5, fig.width = 6.3}
 plot_simpatia_matrix(ca = FALSE)
 ```
 
@@ -169,7 +169,7 @@ Perhaps, though, it's wrong to focus on averages. After all, both numbers are ab
 
 So, instead of averages, let's focus on proportions: what is the percentage of Catalans that _dislike_ Spaniards, and what is the percentage of Spaniards that _dislike_ Catalans (we'll 4 or below on the 0-10 scale to be "disliking", and will remove from our denominator those who don't give any answer)? 
 
-```{r, fig.height = 7.5, fig.width = 6}
+```{r, fig.height = 7.5, fig.width = 6.3}
 plot_simpatia_matrix(ca = F, var = 'p4', roundy = 0, reverse_color = T) +
   labs(title = "Percentage of people from one place\nwho dislike people from other place",
        subtitle ="% of people from one area who give a score of < 5\n(on a 0-10 scale) to people from the other area")
@@ -181,13 +181,13 @@ The percentage of Catalans that dislike Spaniards is comparatively lower: `r rou
 
 In other words, Catalans are the most disliked people in the Spanish state. But the dislike that many Spaniards feel for Catalans is not bidirectional. In fact, if we break the data down region by region, we say that in _all_ cases, Catalans like the people from each of the state's other 16 regions more than those people like Catalans (Ceuta and Melilla being excluded for reasons of sample size).
 
-```{r, fig.height = 7.5, fig.width = 6}
+```{r, fig.height = 7.5, fig.width = 6.3}
 plot_compare(ca = FALSE)
 ```
 
 Again, sometimes averages are less interesting than the extremes. And perhaps one could argue that "disliking" somebody (ie, giving them a rating of less than 5 on a 0-10 scale) does not quite constitute a "phobia". So, let's look at the extremes. What is the percentage of people from each area that give a _zero_ on a 0 to 10 scale to people from other areas. Let's see:
 
-```{r, fig.height = 7.5, fig.width = 6}
+```{r, fig.height = 7.5, fig.width = 6.3}
 plot_simpatia_matrix(ca = F, var = 'p0', roundy = 1, reverse_color = T, text_size = 3) +
   labs(title = "Percentage of extreme dislike",
        subtitle ="% of people from one area who give a score of\n0 (0-10 scale) to people from the other area")
@@ -263,27 +263,27 @@ plot_twitter(ca = TRUE)
 ```
 
 
-```{r, fig.height = 7.5, fig.width = 6}
+```{r, fig.height = 7.5, fig.width = 6.3}
 plot_simpatia_matrix(ca = TRUE)
 ```
 
 
 
-```{r, fig.height = 7.5, fig.width = 6}
+```{r, fig.height = 7.5, fig.width = 6.3}
 plot_simpatia_matrix(ca = T, var = 'p4', roundy = 0, reverse_color = T) +
   labs(title = "% qui diu que 'em cauen malament'",
-       subtitle ="% de persones d\'una comunitat autònoma que posen\nuna puntuació de menys de 5 a les\npersones d\'una altra comunitat autònoma")
+       subtitle ="% de persones d\'una comunitat autònoma que posen una puntuació\nde menys de 5 a les persones d\'una altra comunitat autònoma")
 ```
 
 
-```{r, fig.height = 7.5, fig.width = 6}
+```{r, fig.height = 7.5, fig.width = 6.3}
 plot_compare(ca = TRUE)
 ```
 
-```{r, fig.height = 7.5, fig.width = 6}
+```{r, fig.height = 7.5, fig.width = 6.3}
 plot_simpatia_matrix(ca = T, var = 'p0', roundy = 1, reverse_color = T) +
   labs(title = "% qui diu 'Em cauen molt malament'",
-       subtitle ="% de persones d\'una comunitat autònoma que diuen que\nles persones de l\'altra comunitat autònoma li\n'cauen molt malament' (0 en escala 0-10)")
+       subtitle ="% de persones d\'una comunitat autònoma que diuen que les\npersones de l\'altra comunitat autònoma li 'cauen molt malament'\n(0 en escala 0-10)")
 ```
 
 
