@@ -1,5 +1,4 @@
-Phobia and philia - the data what Catalans and Spaniards think of one
-another
+Phobia and philia: what Catalans and Spaniards think of one another
 ================
 
 # Introduction
@@ -171,10 +170,10 @@ decipherable:
     Spain.
 
 When Catalans are asked how much they like the residents of the rest of
-the Spanish State (excluding Catalonia), the average score they give is
-6.8. When Spaniards (excluding Catalans) are asked how much they like
-Catalans, the average score they give (weighted for sampling bias) is
-5.6.
+the Spanish State (excluding Catalonia, see technical note), the average
+score they give is 6.8. When Spaniards (excluding Catalans) are asked
+how much they like Catalans, the average score they give (weighted for
+sampling bias) is 5.6.
 
 Perhaps, though, it’s wrong to focus on averages. After all, both
 numbers are above 5, suggesting that both Catalans and Spaniards like
@@ -251,9 +250,12 @@ immigration from Southern Spain to Catalonia, Spanish pop culture has a
 predominant role (TV, movies, etc.) in Catalonia. The same cannot be
 said of linguistic familiarity in the rest of Spain, or the extent of
 Catalan ancestry among non-Catalan Spaniards, nor of the penetration of
-Catalan pop culture into non-Catalan areas. How many Leonenses speak
-Catalan? How many Andalusians have Catalan grandparents? How many
-Catalan-language films are screened in Madrid theatres? Very few.
+Catalan pop culture into non-Catalan areas. For example, how many
+Leonenses speak Catalan? 77% of Andalusians have 4 Andalusian
+grandparents, while only [20% of
+Catalans](https://twitter.com/rogertugas/status/1198201075905507328)
+have 4 Catalan grandparents? How many Catalan-language films are
+screened in Madrid theatres? Very few.
 
 Let’s test the theory. If ignorance indeed drives hatred, then we would
 expect that those who are least familiar with Catalonia would be the
@@ -360,12 +362,21 @@ hatred or claiming to be its victims.
 
 ![](figures/unnamed-chunk-22-1.png)<!-- -->
 
-# Technical details
+# Technical note
 
 The data used for this article came from the ‘Percepció sobre el debat
 territorial a Espanya’ survey, carried out by the Centre d’Estudis
 d’Opinió of Catalonia. The raw, person-level data are publicly
 available online at <http://ceo.gencat.cat/ca/inici>.
+
+Survey participant were asked to answer the question of how much they
+like people from other “autonomous communities” on a scale from 0 to 10,
+with 0 being “I dislike them a lot” (“em cauen molt malament”) and 10
+being “I like them a lot” (“em cauen molt bé”). It should be noted that
+in this article the term “Spaniards” refers to people from autonomous
+communities other than Catalonia, and that the proportions (for example,
+the percentage of Catalans who dislike Spaniards) consist of the
+aggregation of all those CCAA-specific scores.
 
 The code used for this analysis is also publicly available:
 <https://github.com/joebrew/vilaweb/tree/master/analyses/filiafobia>.

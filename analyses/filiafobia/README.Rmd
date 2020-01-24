@@ -1,5 +1,5 @@
 ---
-title: "Phobia and philia - the data what Catalans and Spaniards think of one another"
+title: "Phobia and philia: what Catalans and Spaniards think of one another"
 output: github_document
 ---
 
@@ -163,7 +163,7 @@ cat_to_es_p0_r <- length(which(sub_data$value == 0)) / length(which(!is.na(sub_d
 
 ```
 
-When Catalans are asked how much they like the residents of the rest of the Spanish State (excluding Catalonia), the average score they give is `r round(cat_to_es_avg_w, digits = 1)`. When Spaniards (excluding Catalans) are asked how much they like Catalans, the average score they give (weighted for sampling bias) is `r round(es_to_cat_avg_w, digits = 1)`.
+When Catalans are asked how much they like the residents of the rest of the Spanish State (excluding Catalonia, see technical note), the average score they give is `r round(cat_to_es_avg_w, digits = 1)`. When Spaniards (excluding Catalans) are asked how much they like Catalans, the average score they give (weighted for sampling bias) is `r round(es_to_cat_avg_w, digits = 1)`.
 
 Perhaps, though, it's wrong to focus on averages. After all, both numbers are above 5, suggesting that both Catalans and Spaniards like each other more than they dislike each other.
 
@@ -204,7 +204,7 @@ If the answer were only political, then we would expect that Catalans would disl
 
 I don't claim to have the definitive answer to this question, but the data offer some hints. One factor which could plausibly explain why many Spaniards dislike Catalans is _ignorance_.
 
-I don't mean "ignorance" as an insult, but rather as a simple descriptive word to describe lack of familiarity. As any parent of a child or owner of a pet can tell you, the more you know something, the easier it is to love it (and the harder it is to dislike it). Catalans, to a large extent, _know_ Spanish culture and Spaniards; they speak the language, and in addition to a large percentage of them having non-Catalan Spanish ancestry due to (relatively) recent waves of immigration from Southern Spain to Catalonia, Spanish pop culture has a predominant role (TV, movies, etc.) in Catalonia. The same cannot be said of linguistic familiarity in the rest of Spain, or the extent of Catalan ancestry among non-Catalan Spaniards, nor of the penetration of Catalan pop culture into non-Catalan areas. How many Leonenses speak Catalan? How many Andalusians have Catalan grandparents? How many Catalan-language films are screened in Madrid theatres? Very few.
+I don't mean "ignorance" as an insult, but rather as a simple descriptive word to describe lack of familiarity. As any parent of a child or owner of a pet can tell you, the more you know something, the easier it is to love it (and the harder it is to dislike it). Catalans, to a large extent, _know_ Spanish culture and Spaniards; they speak the language, and in addition to a large percentage of them having non-Catalan Spanish ancestry due to (relatively) recent waves of immigration from Southern Spain to Catalonia, Spanish pop culture has a predominant role (TV, movies, etc.) in Catalonia. The same cannot be said of linguistic familiarity in the rest of Spain, or the extent of Catalan ancestry among non-Catalan Spaniards, nor of the penetration of Catalan pop culture into non-Catalan areas. For example, how many Leonenses speak Catalan? 77% of Andalusians have 4 Andalusian grandparents, while only [20% of Catalans](https://twitter.com/rogertugas/status/1198201075905507328) have 4 Catalan grandparents? How many Catalan-language films are screened in Madrid theatres? Very few.
 
 Let's test the theory. If ignorance indeed drives hatred, then we would expect that those who are least familiar with Catalonia would be the ones who like Catalans least, and those who are most familiar with Catalonia would like Catalans most.
 
@@ -309,8 +309,10 @@ plot_simpatia_referendum(ca = TRUE)
 ```
 
 
-# Technical details
+# Technical note
 
 The data used for this article came from the 'Percepció sobre el debat territorial a Espanya' survey, carried out by the Centre d'Estudis d'Opinió of Catalonia. The raw, person-level data are publicly available online at http://ceo.gencat.cat/ca/inici.
+
+Survey participant were asked to answer the question of how much they like people from other "autonomous communities" on a scale from 0 to 10, with 0 being "I dislike them a lot" ("em cauen molt malament") and 10 being "I like them a lot" ("em cauen molt bé"). It should be noted that in this article the term "Spaniards" refers to people from autonomous communities other than Catalonia, and that the proportions (for example, the percentage of Catalans who dislike Spaniards) consist of the aggregation of all those CCAA-specific scores.
 
 The code used for this analysis is also publicly available: `r self_cite()`.
