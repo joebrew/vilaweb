@@ -178,12 +178,12 @@ plot_viatges_i_simpatia <- function(ca = TRUE){
     the_labs <- labs(x = 'How many times have you travelled to Catalonia?',
                      y = 'Degree of sympathy (0-10) for\nthe residents of Catalonia',
                      title = "Times travelled to Catalonia and\nfeelings about Catalans",
-                     caption = "Data source: Survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nSample: 2,454 residents of Spain (without including Catalonia). Chart: @joethebrew") 
+                     caption = "Data source: Survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nChart: @joethebrew") 
   } else {
     the_labs <- labs(x = 'Quantes vegades ha viatjat a Catalunya?',
                      y = 'Grau de simpatia (0-10) cap\nals habitants de Catalunya',
                      title = "Vegades que ha viatjat a Catalunya i\ngrau de simpatia cap als catalans",
-                     caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nMostra: 2.454 habitants d'Espanya (sense incloure Catalunya). Gràfic: @joethebrew") 
+                     caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nGràfic: @joethebrew") 
   }
   
   library(databrew)
@@ -238,12 +238,12 @@ plot_viatges_i_odi <- function(ca = TRUE){
     the_labs <- labs(x = 'How many times have you travelled to Catalonia?',
                      y = "Percentage who say 'I don't like them at all'",
                      title = "Extreme dislike of Catalans among Spaniards\nand times travelled to Catalonia",
-                     caption = "Data source: Survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nSample: 2,454 residents of Spain (without including Catalonia). Chart: @joethebrew") 
+                     caption = "Data source: Survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nChart: @joethebrew") 
   } else {
     the_labs <- labs(x = 'Quantes vegades ha viatjat a Catalunya?',
                      y = "Percentatge qui diu que els catalans\n'em cauen molt malament'",
                      title = "Aversió extrema dels catalans i\nvegades que ha viatjat a Catalunya",
-                     caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nMostra: 2.454 habitants d'Espanya (sense incloure Catalunya). Gràfic: @joethebrew") 
+                     caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nGràfic: @joethebrew") 
   }
   
   library(databrew)
@@ -312,17 +312,17 @@ plot_support_referendum <- function(ca = FALSE){
                                    '6-10 times',
                                    'More than\n10 times'))
     pd$referendum <- factor(pd$referendum,
-                            labels = c("Strongly agree",
+                            labels = rev(c("Strongly agree",
                                        "Agree",
                                        "Don't know/No answer",
                                        "Neither agree nor disagree",
                                        "Disagree",
-                                       "Strongly disagree"))
+                                       "Strongly disagree")))
     the_labs <- labs(x = 'How many times have you travelled to Catalonia?',
                      y = 'Percentage',
                      title = "Times travelled to Catalonia\nand support for  referendum",
                      subtitle = "Agreement with phrase: 'A referendum should take place so Catalans\ncan decide the relationship they want between Catalonia and the Spanish State'",
-                     caption = "Data source: survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nSample size: 2,454 residents of Spain (not counting Catalonia). Chart: @joethebrew")
+                     caption = "Data source: survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nChart: @joethebrew")
     legend_title <- ''
   } else {
     the_labs <- 
@@ -330,7 +330,7 @@ plot_support_referendum <- function(ca = FALSE){
            y = 'Percentatge',
            title = "Vegades que ha viatjat a Catalunya i\nsuport al referèndum",
            subtitle = "Grau d'acord amb la frase: 'S'hauria de fer un referèndum a Catalunya perquè els catalans i les\ncatalanes decidissin quina relació volen que hi hagi entre Catalunya i l'Estat espanyol'",
-           caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya'. Centre d'Estudis d'Opinió.\nMostra: 2.454 habitants d'Espanya (sense incloure Catalunya). Gràfic: @joethebrew")
+           caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya'. Centre d'Estudis d'Opinió.\nGràfic: @joethebrew")
     legend_title <- ""
   }
   
@@ -405,14 +405,14 @@ plot_simpatia_referendum <- function(ca = TRUE){
                      y = 'Percentage',
                      title = "Sympathy/antipathy for Catalans\nand support for  referendum",
                      subtitle = "Agreement with phrase: 'A referendum should take place so Catalans\ncan decide the relationship they want between Catalonia and the Spanish State'",
-                     caption = "Data source: survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nSample size: 2,454 residents of Spain (not counting Catalonia). Chart: @joethebrew")
+                     caption = "Data source: survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nChart: @joethebrew")
     legend_title <- ''
   } else {
     the_labs <- labs(x = 'Grau de simpatia (escala 0 a 10)',
          y = 'Percentatge',
          title = "Grau de simpatia pels catalans i\nsuport al referèndum",
          subtitle = "Grau d'acord amb la frase: 'S'hauria de fer un referèndum a Catalunya perquè els catalans i les\ncatalanes decidissin quina relació volen que hi hagi entre Catalunya i l'Estat espanyol'",
-         caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya. Centre d'Estudis d'Opinió.\nMostra: 2.454 habitants d'Espanya (sense incloure Catalunya). Gràfic: @joethebrew") 
+         caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya. Centre d'Estudis d'Opinió.\nGràfic: @joethebrew") 
   }
   
   
@@ -495,7 +495,7 @@ plot_que_es_catalunya <- function(){
          y = 'Percentatge',
          title = "Vegades que ha viatjat a Catalunya i\nopinió sobre què és Catalunya",
          subtitle = "xxxyyyzzz",
-         caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya. Centre d'Estudis d'Opinió.\nMostra: NNNN habitants d'Espanya (sense incloure Catalunya). Gràfic: @joethebrew") +
+         caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya. Centre d'Estudis d'Opinió.\n. Gràfic: @joethebrew") +
     theme_simple(black = T, base_size = 16) +
     theme(plot.title = element_text(size = 22),
           plot.caption = element_text(hjust = 0),
@@ -513,9 +513,11 @@ plot_que_es_catalunya <- function(){
 plot_simpatia_matrix <- function(ca = FALSE, var = 'avg', roundy = 1, reverse_color = FALSE, text_size = 4){
   library(RColorBrewer)
   pd <- pt %>%
+    mutate(weight = `Coeficients de ponderació`) %>%
     mutate(ccaa = `Comunitat autònoma`) %>%
     dplyr::select(contains('Grau de simpatia cap als habitants'),
-                  contains('ccaa'))
+                  contains('ccaa'),
+                  weight)
   names(pd) <- gsub("Grau de simpatia cap als habitants de cadascuna de les diferents comunitats autònomes:  ", '', names(pd))
   # Make long
   pd <- pd %>% gather(key, value, Andalusos:Ceutencs)
@@ -529,6 +531,7 @@ plot_simpatia_matrix <- function(ca = FALSE, var = 'avg', roundy = 1, reverse_co
     summarise(n = n(),
               n_no_na = length(which(!is.na(value))),
               avg = mean(value, na.rm = TRUE),
+              avgx = weighted.mean(x = value, w = weight, na.rm = TRUE),
               p75 = quantile(value, 0.75, na.rm = TRUE),
               p25 = quantile(value, 0.25, na.rm = TRUE),
               n_zero = length(which(value == 0)),
@@ -554,12 +557,12 @@ plot_simpatia_matrix <- function(ca = FALSE, var = 'avg', roundy = 1, reverse_co
     the_labs <- labs(x = 'Grau de simpatia de les persones d\'aqui',
                      y = '...cap a les persones d\'aqui',
                      title = 'Grau de simpatia cap als habitants dels\nhabitants segons comunitat autònoma',
-                     caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nMostra: 2.454 habitants d'Espanya (sense incloure Catalunya). Gràfic: @joethebrew")
+                     caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nGràfic: @joethebrew")
   } else {
     the_labs <- labs(x = 'How people from here feel...',
                      y = '...about people from here',
                      title = "How people from one area feel\nabout people from another area",
-                     caption = "Data source: Survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nSample: 2,454 residents of Spain (without including Catalonia). Chart: @joethebrew")
+                     caption = "Data source: Survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nChart: @joethebrew")
   }
   
   # Define the variable
