@@ -1,0 +1,48 @@
+---
+title: "Gràfics: quan els polítics crean i eliminen els seus piulets"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures_plot_when/')
+```
+
+```{r}
+source('prepare_data.R')
+```
+
+# Català
+
+```{r}
+people <- tolower(sort(unique(df$username)))
+for(i in 1:length(people)){
+  this_person <- people[i]
+  print(plot_when(user = this_person, ca = TRUE))
+}
+```
+
+# English
+
+```{r}
+for(i in 1:length(people)){
+  this_person <- people[i]
+  print(plot_when(user = this_person, ca = FALSE))
+}
+```
+
+
+
+# Technical details
+
+The code for this analysis is publicly available at `r self_cite()`. These charts are part of an analysis at `r paste0( self_cite(), '/README.md')`.
