@@ -1,0 +1,62 @@
+---
+title: "Els piulets esborrats dels polítics"
+output: github_document
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+source('prepare_data.R')
+```
+
+# Introduction
+
+In today's era, social networks are an integral part of politics. Politicians say what they think and react to the news (and one another) in real-time. What they do on social media gets recorded in an easily searchable format forever. Unless, of course, it gets deleted.
+
+Deleting a social network post, such as a tweet, is fairly commonplace. Normal people do it, and so do politicians. Most deleted tweets occur in the minutes immediately following the original post, often because of an error in spelling or grammar. Some were simply accidental touches of the "retweet" button, corrected by un-retweeting.
+
+But there are other deleted tweets which are of far more interest. That is, sometimes a politician goes back to a tweet from 1, 2 or even 5 years ago and removes it. This usually goes entirely undetected by the public. In fact, this is how Twitter (and other social networks) want it to be: if users can't control (delete) their content, users might be more hesitant to generate that content which, ultimately, would be bad for business.
+
+But public figures, such as politicians, are a different case. What they say (and tweet) is of public interest, and so is what they delete. [Politwoops](https://www.politwoops.eu/) is a platform dedicated to keeping tabs on politicians on Twitter, and capturing their deleted tweets for the historical record. The Politwoops data is publicly available and searchable: for example, through Politwoops' website, one can easily and quickly see the deleted tweets of [Lorena Roldán](https://www.politwoops.eu/p/unknown/Lroldansu),  [Carles Puigdemont](https://www.politwoops.eu/p/eu/krls). Today's article is an exploration of those data.
+
+# The questions
+
+Which politicians delete their tweets? How many do they delete? How long after the original tweet do they take them down? What kind of tweets get deleted?
+
+# The method
+
+Unlike most of the articles I write, there is no "hypothesis" to test here. Instead, this is _exploratory data_ analysis, meaning that the structure of the analysis is not guided by a pre-designated plan, nor by a falsifiable premise, but rather by a sort of "wandering" around in the data. For the sake of transparency, and as a check on my own selection and confirmation biases, I'll do my best to document the process here. This exploratory analysis is by no means complete or impartial (nor could it be); accordingly, I encourage others to explore these data for themselves.
+
+# The results
+
+## Data acquisition
+
+**Defining the politicians**: First, I compiled a list of `r length(all_people)` politicians of interest and retrieved their Twitter usernames. This included (a) all of the representatives in the Catalan Parliament, (b) all of the representatives in the Spanish Congress, and (c) a few dozen other political figures of relevance to Catalan and Spanish politics. The full list is available here.
+
+**Retrieving the data**: Next, I retrieved all of the deleted tweets for all the politicians in my list. The Politwoops platform does not track all politicians, so my final dataset ended up being only `r length(unique(df$user_name))` politicians. I wrote some code to fetch the data from the Politwoops platform, and voilà, 12 hours later I had `r nrow(df)` deleted tweets in a local database. Both the data retrieval code and the data itself are publicly available at `r self_cite()`.
+
+
+## Basic analysis
+
+
+Let's start by 
+
+
+
+
+# Technical details
+
+The code for this analysis is publicly available at `r self_cite()`.
