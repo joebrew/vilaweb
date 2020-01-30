@@ -166,8 +166,13 @@ sudo apt-get update
 - Install packages
 
 ```
+sudo add-apt-repository ppa:marutter/c2d4u3.5
+sudo apt update
+sudo apt install r-cran-dplyr
 sudo su - -c "R -e \"install.packages('devtools')\""
 sudo su - -c "R -e \"install.packages('shinydashboard')\""
+sudo su - -c "R -e \"install.packages('tidyverse')\""
+
 sudo su - -c "R -e \"devtools::install_github('rstudio/DT')\""
 sudo su - -c "R -e \"devtools::install_github('joebrew/vilaweb')\""
 sudo su - -c "R -e \"devtools::install_github('databrew/databrew')\""
@@ -176,7 +181,37 @@ sudo su - -c "R -e \"install.packages('jsonlite')\""
 sudo su - -c "R -e \"install.packages('rvest')\""
 sudo su - -c "R -e \"install.packages('yaml')\""
 sudo su - -c "R -e \"install.packages('rtweet')\""
+sudo su - -c "R -e \"install.packages('ggmap')\""
+sudo su - -c "R -e \"install.packages('ggthemes')\""
+sudo su - -c "R -e \"install.packages('leaflet')\""
+sudo su - -c "R -e \"install.packages('lubridate')\""
+sudo su - -c "R -e \"install.packages('maps')\""
+sudo su - -c "R -e \"install.packages('sp')\""
+sudo su - -c "R -e \"install.packages('Hmisc')\""
+sudo su - -c "R -e \"install.packages('extrafont')\""
+sudo su - -c "R -e \"install.packages('grid')\""
+sudo su - -c "R -e \"install.packages('scales')\""
+sudo su - -c "R -e \"install.packages('DBI')\""
+sudo su - -c "R -e \"install.packages('RPostgreSQL')\""
+sudo su - -c "R -e \"install.packages('gsheet')\""
+sudo su - -c "R -e \"install.packages('readr')\""
+sudo su - -c "R -e \"install.packages('broom')\""
+sudo su - -c "R -e \"install.packages('dbplyr')\""
+sudo su - -c "R -e \"install.packages('haven')\""
+sudo su - -c "R -e \"install.packages('jsonlite')\""
+sudo su - -c "R -e \"install.packages('modelr')\""
+sudo su - -c "R -e \"install.packages('tidyr')\""
+sudo su - -c "R -e \"install.packages('dplyr')\""
+sudo su - -c "R -e \"install.packages('tidyverse')\""
+
 ```
+
+‘broom’, ‘dbplyr’, ‘haven’, ‘jsonlite’, ‘modelr’, ‘readr’, ‘tidyr’ are not available for package ‘tidyverse’
+
+
+
+
+
 
 - Port from local to remote
 ```

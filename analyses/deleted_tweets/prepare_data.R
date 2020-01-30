@@ -1,10 +1,6 @@
 # Libraries
 library(vilaweb)
 library(tidyverse)
-library(lubridate)
-library(RCurl)
-library(jsonlite)
-library(rvest)
 library(databrew)
 
 
@@ -27,6 +23,10 @@ if('all_people.RData' %in% dir()){
 
 # Capture the data from politwoops API
 if(first_time){
+  library(lubridate)
+  library(RCurl)
+  library(jsonlite)
+  library(rvest)
   # Define function for searching
   person_exists <- function(x){
     url <- paste0('https://www.politwoops.eu/user/',
