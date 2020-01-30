@@ -193,18 +193,11 @@ pronounced diagonal line). Most of his deletions are retweets.
 The calendar of Sánchez’s deleted tweets is notably different from
 Alibol’s. Ones eyes are immediately drawn to the horizontal lines: one
 at the beginning of 2019, and one at the beginning of 2020. Horizontal
-lines in this kind of chart means deleting many tweets at once.
+lines in this kind of chart means deleting many tweets at once. Like
+Albiol, nearly all of Sánchez’s deleted tweets are simply removals of
+retweets.
 
 ![](figures/unnamed-chunk-5-1.png)<!-- -->
-
-### Carmen de Rivera
-
-Compare Sánchez’s deletion patterns with his fellow Ciutadans
-parliamentarian, Carmen de Rivera. What’s notable in her chart is the
-*vertical* rather than horizontal line, meaning that she regularly goes
-back and deletes tweets from one period.
-
-![](figures/unnamed-chunk-6-1.png)<!-- -->
 
 ### Fernando de Páramo
 
@@ -213,15 +206,15 @@ secretary of communication for the Ciutadans party deleted [his twitter
 account](https://twitter.com/ferdeparamo) entirely, along with 2201
 tweets.
 
-![](figures/unnamed-chunk-7-1.png)<!-- -->
+![](figures/unnamed-chunk-6-1.png)<!-- -->
 
 ### Gabriel Rufián
 
 Rufián tweets frequently, and also deletes frequently. Most of his
 deletions are retweets. There are no clear patterns in his plot,
-suggesting that he regularly goes through and cleans up old tweets.
+suggesting that he randomly goes through and cleans up old tweets.
 
-![](figures/unnamed-chunk-8-1.png)<!-- -->
+![](figures/unnamed-chunk-7-1.png)<!-- -->
 
 ### Inés Arrimadas
 
@@ -232,30 +225,30 @@ tweets prior to July 22, 2017 have been deleted (in total, this makes
 for 3517 deleted tweets). Since then, she now rarely deletes tweets
 (apart from those which are tweeted and then immediately retweeted).
 
-![](figures/unnamed-chunk-9-1.png)<!-- -->
+![](figures/unnamed-chunk-8-1.png)<!-- -->
 
 ### Oriol Junqueras
 
 Relative to Arrimadas’ 3517 deleted tweets, Junqueras deletes very
 little (only 437), mostly retweets.
 
-![](figures/unnamed-chunk-10-1.png)<!-- -->
+![](figures/unnamed-chunk-9-1.png)<!-- -->
 
 ### Carles Puigdemont
 
 Like Junqueras, Puigdemont has deleted relatively few tweets, most of
 them retweets.
 
-![](figures/unnamed-chunk-11-1.png)<!-- -->
+![](figures/unnamed-chunk-10-1.png)<!-- -->
 
 ### Miquel Iceta
 
-Iceta is a very prolific tweeter (59922 tweets\!). Which makes it all
-the more surprising that he has only deleted 651, mostly retweets. It is
-curious, however, that he appears to regularly go back to mid-2015 and
-delete retweets from that period.
+Iceta is a very prolific tweeter and retweeter (59922 tweets\!). Which
+makes it all the more surprising that he has only deleted 651, mostly
+retweets. It is curious, however, that he appears to regularly go back
+to mid-2015 and delete retweets from that period.
 
-![](figures/unnamed-chunk-12-1.png)<!-- -->
+![](figures/unnamed-chunk-11-1.png)<!-- -->
 
 ### Miriam Nogueras
 
@@ -263,7 +256,7 @@ Nogueras used to delete more tweets than she does nowadays. And almost
 all of her deletions are retweets. Her plot shows a clear pattern of
 random, rather than systematic, deletions.
 
-![](figures/unnamed-chunk-13-1.png)<!-- -->
+![](figures/unnamed-chunk-12-1.png)<!-- -->
 
 ### Pol Gibert
 
@@ -276,14 +269,14 @@ deleted tweets after one year).
 The horizontal line: May 24, 2017, when he deleted 1892 tweets in one
 day.
 
-![](figures/unnamed-chunk-14-1.png)<!-- -->
+![](figures/unnamed-chunk-13-1.png)<!-- -->
 
 ### Raúl Moreno
 
 Moreno also appears to have undergone a social network cleanup on May
 22, 2019, a day in which he deleted 7834 tweets.
 
-![](figures/unnamed-chunk-15-1.png)<!-- -->
+![](figures/unnamed-chunk-14-1.png)<!-- -->
 
 ### Further analysis
 
@@ -297,14 +290,46 @@ job.
 
 So, rather than explore the 73269 tweets myself, I’ll simply hand them
 over to you, the public. You can explore them through the [politwoops
-website interface](www.politwoops.eu), or through this simple web
-application built for quickly searching (for any text) and filtering
+website interface](www.politwoops.eu) if you’d like, but that interface
+is built around scrolling through specific politicians, rather than
+looking for specific text. So, to faciliate the latter, here’s a simple
+web application built for quickly searching (for any text) and filtering
 (for the Spanish/Catalan politicians in this analysis):
 <https://datacat.cc/piulets>.
 
 Enjoy\!
 
+![](a.png)
+
 # Technical details
 
 The code for this analysis is publicly available at
 <https://github.com/joebrew/vilaweb/tree/master/analyses/deleted_tweets>.
+
+# Plots in Catalan
+
+![](figures/unnamed-chunk-15-1.png)<!-- -->
+
+![](figures/unnamed-chunk-16-1.png)<!-- -->
+
+![](figures/unnamed-chunk-17-1.png)<!-- -->
+
+![](figures/unnamed-chunk-18-1.png)<!-- -->
+
+![](figures/unnamed-chunk-19-1.png)<!-- -->
+
+![](figures/unnamed-chunk-20-1.png)<!-- -->
+
+![](figures/unnamed-chunk-21-1.png)<!-- -->
+
+![](figures/unnamed-chunk-22-1.png)<!-- -->
+
+![](figures/unnamed-chunk-23-1.png)<!-- -->
+
+![](figures/unnamed-chunk-24-1.png)<!-- -->
+
+![](figures/unnamed-chunk-25-1.png)<!-- -->
+
+![](figures/unnamed-chunk-26-1.png)<!-- -->
+
+![](figures/unnamed-chunk-27-1.png)<!-- -->

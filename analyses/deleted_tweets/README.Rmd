@@ -208,6 +208,87 @@ Enjoy!
 ![](a.png)
 
 
+
+
 # Technical details
 
 The code for this analysis is publicly available at `r self_cite()`.
+
+
+# Plots in Catalan
+
+```{r}
+plot_n_deleted(ca = TRUE)
+```
+
+
+```{r}
+plot_p_deleted(ca = TRUE)
+```
+
+
+```{r}
+print(plot_when(user = 'albiol_xg', ca = TRUE))
+```
+
+
+
+
+```{r}
+print(plot_when(user = 'carlossm_cs', ca = TRUE))
+```
+
+
+
+
+```{r}
+print(plot_when(user = 'ferdeparamo', ca = TRUE))
+```
+
+
+
+```{r}
+print(plot_when(user = 'gabrielrufian', ca = TRUE))
+```
+
+
+```{r}
+print(plot_when(user = 'inesarrimadas', ca = TRUE))
+# inesarrimadasx  = df %>% filter(username == 'inesarrimadas')
+```
+
+
+
+```{r}
+print(plot_when(user = 'junqueras', ca = TRUE))
+```
+
+
+
+
+```{r}
+print(plot_when(user = 'krls', ca = TRUE))
+```
+
+
+```{r}
+print(plot_when(user = 'miqueliceta', ca = TRUE))
+```
+
+
+
+```{r}
+print(plot_when(user = 'miriamnoguerasm', ca = TRUE))
+```
+
+
+
+
+```{r}
+print(plot_when(user = 'polgibert', ca = TRUE))
+```
+
+
+```{r}
+print(plot_when(user = 'raulmorenom', ca = TRUE))
+```
