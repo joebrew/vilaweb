@@ -1,5 +1,4 @@
 # Libraries
-library(vilaweb)
 library(tidyverse)
 library(databrew)
 
@@ -12,6 +11,8 @@ first_time <- FALSE
 if('all_people.RData' %in% dir()){
   load('all_people.RData')
 } else {
+  library(vilaweb)
+  
   # Get a list of all people
   x = get_google_data(name = 'politicians')
   y = get_google_data(name = 'parlament')
@@ -287,15 +288,15 @@ plot_when <- function(user = 'krls', ca = FALSE, input_data){
   nd <- sum(pd$n)
   
   if(ca){
-    the_labs <- labs(x = 'Mes quan es va crear el piulet',
-                     y = 'Mes quan es va esborrar el piulet',
-                     title = paste0(user_text, ' (', nd, ' piulets esborrats)'),
+    the_labs <- labs(x = 'Mes en què es va crear el piulet',
+                     y = 'Mes en què es va esborrar el piulet',
+                     title = paste0(user_text, ' (', format(nd, big.mark = '.', decimal.mark = ','), ' piulets esborrats)'),
                      subtitle = 'Calendari de la creació i eliminació de piulets')
     pd$rt <- ifelse(pd$rt, 'Repiulets', 'Piulets')
   } else {
     the_labs <- labs(x = 'Month when the tweet was created',
                      y = 'Month when the tweet was deleted',
-                     title = paste0(user_text, ' (', nd, ' deleted tweets)'),
+                     title = paste0(user_text, ' (', format(nd, big.mark = ',', decimal.mark = '.'), ' deleted tweets)'),
                      subtitle = 'Timing of creation and deletion of tweets')
     pd$rt <- factor(ifelse(pd$rt, 'Retweets', 'Tweets'), levels = c('Tweets', 'Retweets'))
   }
