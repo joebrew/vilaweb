@@ -212,7 +212,7 @@ Enjoy!
 
 # Technical details
 
-The code for this analysis is publicly available at `r self_cite()`.
+The code for this analysis is publicly available at https://github.com/joebrew/vilaweb/tree/master/analyses/deleted_tweets.
 
 
 # Plots in Catalan

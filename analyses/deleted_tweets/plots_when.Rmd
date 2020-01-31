@@ -45,4 +45,4 @@ for(i in 1:length(people)){
 
 # Technical details
 
-The code for this analysis is publicly available at `r self_cite()`. These charts are part of an analysis at `r paste0( self_cite(), '/README.md')`.
+The code for this analysis is publicly available at https://github.com/joebrew/vilaweb/tree/master/analyses/deleted_tweets. These charts are part of an analysis at `r paste0("https://github.com/joebrew/vilaweb/tree/master/analyses/deleted_tweets", '/README.md')`.
