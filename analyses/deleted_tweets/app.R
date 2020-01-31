@@ -87,7 +87,7 @@ body <- dashboardBody(
           p('The deleted tweets were retrieved from ',
             tags$a(href = 'https://politwoops.eu', 'Politwoops'),'.'),
           p('This app was built to accompany ',
-            tags$a(href = self_cite(), 'this article'),'.')
+            tags$a(href =  'https://github.com/joebrew/vilaweb/tree/master/analyses/deleted_tweets', 'this article'),'.')
           
         )
       )

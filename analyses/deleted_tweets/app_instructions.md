@@ -9,7 +9,6 @@ sudo apt-get update && sudo apt-get upgrade
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
 sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
 sudo apt update
-
 sudo apt install r-base
 
 
@@ -23,20 +22,25 @@ sudo R CMD javareconf
 IMPORTANT:
 Change R package directory from user-based to system-wide. Find the below lines in your Renviron file and use your favorite text editor to swap the comment hashes to the configuration below.
 
-sudo nano /usr/lib/R/etc/Renviron
+`sudo nano /usr/lib/R/etc/Renviron`
+
 Your Renviron file should look like this when you’re done.
+```
 #R_LIBS_USER=${R_LIBS_USER-‘~/R/x86_64-pc-linux-gnu-library/3.0’}
 R_LIBS_USER=${R_LIBS_USER-‘~/Library/R/3.0/library’}
+```
 
-5. Check lib paths in R to make sure your package library changed correctly.
+Check lib paths in R to make sure your package library changed correctly.
 “/usr/local/lib/R/site-library” should be the first of the library paths.
 
 R
-.libPaths()
-5. Make your new package lib readable for Shiny Server.
+`.libPaths()`
 
+
+Make your new package lib readable for Shiny Server.
+```
 sudo chmod 777 /usr/lib/R/site-library
-
+```
 ### Install shiny
 
 sudo su - -c "R -e \"install.packages('shiny', repos='http://cran.rstudio.com/')\""
@@ -51,7 +55,6 @@ sudo gdebi shiny-server-1.5.5.872-amd64.deb
 sudo netstat -plunt | grep -i shiny
 sudo ufw allow 3838
 
-### Set up https
 
 
 ### Setting up https
@@ -69,7 +72,9 @@ sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --re
 
 ### Set up proxy, certificate, etc.
 
+```
 sudo nano /etc/nginx/nginx.conf
+```
 
 Copy the following into the http block of /etc/nginx/nginx.conf
 
@@ -87,7 +92,7 @@ http {
 Now create a new block
 sudo nano /etc/nginx/sites-available/datacat.cc
 
-In example.com’>/etc/nginx/sites-available/example.com
+In /etc/nginx/sites-available/datacat.cc, add the following:
 
 ```
 server {
@@ -122,32 +127,32 @@ server {
 sudo ln -s /etc/nginx/sites-available/datacat.cc /etc/nginx/sites-enabled/datacat.cc
 ```
 
-Disable the default block (?) since our server now handles all incoming traffic
+Disable the default block since our server now handles all incoming traffic
 ```
 sudo rm -f /etc/nginx/sites-enabled/default
 ```
 
 Test the config:
-
+```
 sudo nginx -t
-
+```
 Restart nginx
-
+```
 sudo systemctl restart nginx
-
+```
 
 ## hosting interactive R docs
 
+Install the following:
+```
 sudo su - -c "R -e \"install.packages('rmarkdown', repos='http://cran.rstudio.com/')\""
-
+```
 
 Check that it worked at https://datacat.cc/sample-apps/rmd/
 
 - Intall some additional software:
 ```
 sudo apt-get -y install \
-    nginx \
-    gdebi-core \
     apache2-utils \
     pandoc \
     pandoc-citeproc \
@@ -163,19 +168,13 @@ sudo apt-get -y install \
 sudo apt-get update
 ```
 
-- Install packages
+- Install some R packages
 
 ```
 sudo add-apt-repository ppa:marutter/c2d4u3.5
 sudo apt update
 sudo apt install r-cran-dplyr
-sudo su - -c "R -e \"install.packages('devtools')\""
-sudo su - -c "R -e \"install.packages('shinydashboard')\""
-sudo su - -c "R -e \"install.packages('tidyverse')\""
-
-sudo su - -c "R -e \"devtools::install_github('rstudio/DT')\""
-sudo su - -c "R -e \"devtools::install_github('joebrew/vilaweb')\""
-sudo su - -c "R -e \"devtools::install_github('databrew/databrew')\""
+sudo su - -c "R -e \"install.packages('raster')\""
 sudo su - -c "R -e \"install.packages('RCurl')\""
 sudo su - -c "R -e \"install.packages('jsonlite')\""
 sudo su - -c "R -e \"install.packages('rvest')\""
@@ -204,24 +203,27 @@ sudo su - -c "R -e \"install.packages('tidyr')\""
 sudo su - -c "R -e \"install.packages('dplyr')\""
 sudo su - -c "R -e \"install.packages('tidyverse')\""
 
+sudo su - -c "R -e \"install.packages('devtools')\""
+sudo su - -c "R -e \"install.packages('shinydashboard')\""
+sudo su - -c "R -e \"install.packages('tidyverse')\""
+
+sudo su - -c "R -e \"devtools::install_github('rstudio/DT')\""
+sudo su - -c "R -e \"devtools::install_github('joebrew/vilaweb')\""
+sudo su - -c "R -e \"devtools::install_github('databrew/databrew')\""
+
 ```
-
-‘broom’, ‘dbplyr’, ‘haven’, ‘jsonlite’, ‘modelr’, ‘readr’, ‘tidyr’ are not available for package ‘tidyverse’
-
-
-
-
 
 
 - Port from local to remote
 ```
+mkdir ~/Documents
 scp -r -i "/home/joebrew/.ssh/openhdskey.pem" ~/Documents/vilaweb/analyses/deleted_tweets ubuntu@datacat.cc:/home/ubuntu/Documents
 ```
 
 - On remote machine, move to deploy area
 
 ```
-sudo cp -r ~/Documents/deleted_tweets /srv/shiny-server/deleted_tweets
+sudo cp -r ~/Documents/deleted_tweets /srv/shiny-server/piulets
 ```
 
 - Ensure permissions are okay and restart server:
@@ -229,10 +231,6 @@ sudo cp -r ~/Documents/deleted_tweets /srv/shiny-server/deleted_tweets
 sudo ufw allow 3838/tcp
 sudo ufw allow 80/tcp
 cd /srv/shiny-server
-sudo chmod 555 deleted_tweets
+sudo chmod 555 piulets
 sudo systemctl restart shiny-server
-```
-```
-sudo systemctl restart shiny-server
-
 ```
