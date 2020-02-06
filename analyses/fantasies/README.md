@@ -23,8 +23,8 @@ autonomy to independence-seeking regions, in order to decrease support
 for independence among the inhabitants of those regions. An optimist
 might believe that the severity of the ongoing territorial crisis in
 Spain will soon lead to a constitutional reform so as to create a
-federalist state in which a majority of Catalans are satisfied within
-the Spanish State.
+federalist state in which a majority of Catalans are satisfied *within*
+the Spanish State, and are no longer advocating for separation.
 
 In fact, the “federalist” solution has long been advocated for by
 Catalan socialists as a sort of “third way” between independence and
@@ -42,8 +42,8 @@ federalism or decentralization as a solution to Catalans’ calls for more
 autonomy, for the same reason he cannot “offer” permitting Catalan
 self-determination: a large majority of Spaniards want the opposite. In
 other words, the concepts of (a) granting Catalonia more autonomy or (b)
-making Spain less centralized are both illegal and extremely unpopular
-in most of Spain.
+making Spain less centralized, are both “illegal” and extremely
+unpopular in most of Spain.
 
 The prospect of a federalist or decentralizing reform might be
 politically useful to those who want to difuse the tense situation
@@ -51,7 +51,7 @@ between the governments of Spain and Catalonia, but its likelihood of
 success is essentially zero. Proposing either (a) an explicit federalist
 reform for the entire State or (b) increased autonomy for Catalonia
 might capture the support of a majority of Catalans, but it would be
-politically suicidal at the level of the Spanish State.
+electorally suicidal at the level of the Spanish State.
 
 In this article, I’ll use data to make 2 simple points:
 
@@ -81,10 +81,10 @@ feel that Catalonia has *too much* autonomy, whereas 6 times as many
 
 The Catalan consensus for decentralization is very clear; when asked
 about their preferences for the territorial organization of Spain,
-two-thirds of Catalans (66%) want Spain “autonomous communities”
-(regions) to have either more autonomy or the possibility of
-independence. Only 16% want to keep the current system of autonomous
-communities, and fewer than 14% want a more centralized Spain.
+two-thirds of Catalans (66%) want Spain’s “autonomous communities” to
+have either more autonomy or the possibility of independence. Only 16%
+want to keep the current system of autonomous communities, and fewer
+than 14% want a more centralized Spain.
 
 ![](figures/unnamed-chunk-3-1.png)<!-- -->
 
@@ -96,6 +96,8 @@ percentage (16%) of those Catalans who say they are in favor of
 independence (when asked a yes/no question) say that they prefer being a
 state in a federal Spain if given the option.
 
+![](figures/unnamed-chunk-4-1.png)<!-- -->
+
 In other words, offering a “federation” to Catalonia would reduce
 support for indepenence to well below 50%. So, if Spain wants to
 “defeat” the indepenence movement, why not go with this obvious
@@ -106,11 +108,11 @@ option? That brings us to point
 
 Outside of Catalonia, there is a large degree of consensus *against*
 granting Catalonia more autonomy, or granting autonomous communities
-more generally any more self-government. Even a large majority of
-Catalans want *more* autonomy, a majority of Spaniards (outside of
-Catalonia), 51.1%, think that Catalonia has *too much* autonomy.
+more generally any more self-government. Even though a large majority of
+Catalans want *more* autonomy, 51.1% of Spaniards (outside of Catalonia)
+think that Catalonia has *too much* autonomy already.
 
-![](figures/unnamed-chunk-4-1.png)<!-- -->
+![](figures/unnamed-chunk-5-1.png)<!-- -->
 
 If we break the above down by autonomous community, we see that there is
 mostly uniformity. Large majorities of each of Spain’s autonomous
@@ -118,28 +120,28 @@ communities believe that Catalonia already has *too much* autonomy (the
 notable exception being the Basque country, where a majority feel the
 opposite).
 
-![](figures/unnamed-chunk-5-1.png)<!-- -->
+![](figures/unnamed-chunk-6-1.png)<!-- -->
 
 Given these data, is a reform in which Catalonia is granted more
-autonomy feasible? Of course not. Most Spaniards feel that Catalonia has
-too much autonomy already; if any reform had electoral viability, it
-would be one in which autonomy was stripped from Catalonia (case in
-point: Spain’s suspension of Catalan self-rule in 2017 and 2018 had
-large popular support in the rest of Spain, but was opposed by a
-majority of Catalans).
+autonomy feasible? Of course not. Since most Spaniards feel that
+Catalonia has too much autonomy already, the only reform which *might*
+have electoral viability would be one in which autonomy was stripped
+from Catalonia (case in point: Spain’s suspension of Catalan self-rule
+in 2017 and 2018 had large popular support in the rest of Spain, but was
+opposed by a majority of Catalans).
 
 Since a “special” deal granting Catalonia more autonomy doesn’t appear
 to be electorally possible, perhaps *all of Spain* could undergo a
-reform. That way, the electorate (which is opposed to granting Catalans
-more autonomy) would feel that they are getting the same “privileges” as
-Catalans.
+reform. That way, the Spanish electorate would feel that they are
+getting the same “privileges” as Catalans.
 
 This, too, is electorally impossible. Unlike Catalonia, where two-thirds
 want a State with more autonomy, in the rest of Spain only a small
 minority (22%) want a state with more autonomy for its constituent
-parts.
+parts. A large majority (nearly 70%) want either the status quo or
+*less* self-government for Spain’s autonomous regions.
 
-![](figures/unnamed-chunk-6-1.png)<!-- -->
+![](figures/unnamed-chunk-7-1.png)<!-- -->
 
 Again, the Basque country is the exception here (a large majority of
 Basques, like Catalans, want a more decentralized State), but it is
@@ -147,23 +149,24 @@ relatively so small in terms of population (compared to the rest of the
 State), that even its strong preference in favor of more autonomy makes
 no significant difference.
 
-![](figures/unnamed-chunk-7-1.png)<!-- -->
+![](figures/unnamed-chunk-8-1.png)<!-- -->
 
 # Conclusion
 
 In the case of the Catalonia-Spain territorial conflict, it’s clear that
-both Spaniards and Catalans agree that there is a problem. But they
-disagree on the nature of that problem. Catalans largely want more
-autonomy and more decentralization; in the rest of the Spanish State
-(except the Basque country), they want the opposite.
+both Spaniards and Catalans agree that there is a problem. To Catalans,
+the problem is that they don’t have enough self-government, and that the
+state they’re in is too centralized. To the rest of the citizens of
+Spain (with the notable exception of Basques), the problem is just the
+opposite: Catalans have *too much* autonomy and the Spanish state is
+*too* decentralized.
 
-Solving the Catalonia-Spain crisis through reform is, of course, a
-desirable outcome. The most frequently proposed reform-based solution is
-giving more autonomy to Catalonia, or decentralizing the Spanish State.
-These proposals are intelligent in the sense that their fulfillment
-would likely indeed reduce the support for Catalan independence to a
-minority. But Catalan support for a federal Spain is not sufficient to
-create a federal Spain; this would require Spanish support. And,
+The most frequently proposed reform-based solution is giving more
+autonomy to Catalonia, or decentralizing the Spanish State. These
+proposals are intelligent in the sense that their fulfillment would
+likely indeed reduce the support for Catalan independence to a minority.
+But Catalan support for a federal Spain is not, unto itself, sufficient
+to create a federal Spain; this would require Spanish support. And,
 frankly, this is not possible: the data on prefences regarding (a)
 Catalonia’s autonomy and (b) the territorial organization of the Spanish
 state as a whole show that Spaniards would not accept a solution which
@@ -171,15 +174,14 @@ granted Catalonia more autonomy or resulted in a more decentralized
 state.
 
 Despite all the talk about federalism or constitutional reform as a
-means to resolve the political crisis between Catalonia and Spain, it’s
-not realistic. Either (a) the majority of Catalans in favor of
-self-determination and greater autonomy need to change their mind or (b)
-the majority of Spaniards opposed to self-determination and greater
-autonomy need to change their mind. Since neither is likely to happen,
-further political deadlock is the most probable outcome. Reform of any
-kind is unlikely, and the only option which is even close to reaching a
-significant majority capable of reform would be those in favor of
-centralization, not federalism.
+means to resolve the political crisis between Catalonia and Spain,
+federalism, constituional reform, and/or decentralization are simply not
+realistic given Spanish political majorities. Either (a) the majority of
+Catalans in favor of self-determination and greater autonomy need to
+change their mind or (b) the majority of Spaniards opposed to
+self-determination and greater autonomy need to change their mind. Since
+neither is likely to happen, further political deadlock is the most
+probable outcome.
 
 “Federalists” often accuse Catalan “independentists” of being
 “unrealistic”, since (legal) independence would require a
@@ -189,34 +191,41 @@ both “illegal” and lacking in popular support in Spain. But, unlike
 independence (for which there are many historical examples of
 “unilateral” success, ie, a country achieving independence without the
 permission from the state it leaves), there are no examples of a state
-achieving federalism against the wishes of its citizens. Even though a
-federal reform *could* reduce support for Catalan independence (since
-many pro-independence Catalans would be satisfied with it), it *won’t*
-because the (much more numerous) Spanish population is opposed to it. In
-other words, Spanish federalism is of lower probability than Catalan
-independence.
+achieving federalism against the wishes of its citizens. In other words,
+Spanish federalism is of lower probability than Catalan independence.
 
 What does the lack of decentralizing reformability mean for the future
-of the Spain-Catalonia conflict? Spain’s coalition government will
-likely continue to wave the flag of dialogue, as a signal to Catalans
-that it wants to engage in constructive reform; however, given the
+of the Spain-Catalonia conflict? It’s hard to say, but this much is
+clear: Spain won’t employ the reform-based strategies used by the UK and
+Canada to push pro-independence Scots and Quebeckers into a minority. It
+won’t, because it (electorally) can’t.
+
+Spain’s coalition government will likely continue to wave the flag of
+dialogue, as a signal to Catalans that it wants to engage in
+constructive reform and reduce political tension; however, given the
 majority opposition in the rest of Spain, Sánchez’s government will be
 unable to offer anything concrete (doing so would be electoral suicide).
 Given the lack of a political offer, the “grace period” given to Sánchez
 by pro-independence Catalans will likely come to an end. That is, the
 window of hope that Sánchez will resolve the conflict will close when it
-becomes clear that the mechanism which could assuage Catalans
-(federalism) is not possible. And, as time passes and no federalist
-reform materializes, some pro-decentralization Catalans who were
-previously anti-independence will become disenchanted with Spain’s
-immobility and convert to the pro-independence camp. In other words, the
-(inevitable) lack of a federalist solution to the Catalonia-Spain
-political conflict will most likely generate *more* support among
-Catalans for independence from Spain.
+becomes clear that the mechanism which could persuade pro-independence
+Catalans to switch sides (federalism) is not possible. And, as time
+passes and no federalist reform materializes, some anti-independence
+Catalans will become disenchanted with the fact that no political
+reforms are being made, and will therefore convert to the
+pro-independence camp. In other words, the (inevitable) lack of a
+federalist solution to the Catalonia-Spain political conflict will most
+likely generate *more* support among Catalans for independence from
+Spain.
+
+Regardless of how one feels about Catalan independence, it’s important
+to be realistic. And in the case of the Catalonia-Spain territorial
+conflict, there are, for all effective purposes, only two possible
+outcomes: (a) status quo or (b) independence (without permission).
+Anything other than would require electoral majorities in Spain which
+simply do not exist.
 
 # Catalan-language charts
-
-![](figures/unnamed-chunk-8-1.png)<!-- -->
 
 ![](figures/unnamed-chunk-9-1.png)<!-- -->
 
@@ -227,6 +236,10 @@ Catalans for independence from Spain.
 ![](figures/unnamed-chunk-12-1.png)<!-- -->
 
 ![](figures/unnamed-chunk-13-1.png)<!-- -->
+
+![](figures/unnamed-chunk-14-1.png)<!-- -->
+
+![](figures/unnamed-chunk-15-1.png)<!-- -->
 
 # Data and technical details
 

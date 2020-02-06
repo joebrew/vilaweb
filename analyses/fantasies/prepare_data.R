@@ -427,7 +427,7 @@ plot_centralism_es <- function(ca = FALSE, agg = FALSE){
                     'More autonomy for the autonomous communities',
                     "The possibility of independence for the autonomous communities")
   }
-  the_labels <- line_breaker(the_labels, n = 16)
+  the_labels <- line_breaker(the_labels, n = 20)
   pd <- pd %>%
     # mutate(centralization = nsnc_convert(centralization)) %>%
     # mutate(centralization = line_breaker(centralization)) %>%
@@ -604,7 +604,7 @@ plot_conditional <- function(ca = FALSE){
   if(ca){
     the_labs <- labs(x = '',
                      y = 'Percentage',
-                     title = 'Els catalans volen que Catalunya sigui',
+                     title = 'El que volen els catalans que Catalunya sigui',
                      subtitle = 'Creuada binària vs quatrenària',
                      caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nGràfic: @joethebrew")
     
