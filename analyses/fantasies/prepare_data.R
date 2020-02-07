@@ -79,6 +79,23 @@ label_df <- tibble(
            'Navarra',
            'Euskadi/País Basc',
            'La Rioja', 'Ceuta', 'Melilla'),
+  fixed = c('Andalusia',
+                   'Aragó',
+                   'Astúries',
+                   'Balears',
+                   'Canàries',
+                   'Cantàbria',
+                   'Castella - la Manxa',
+                   'Castella i Lleó',
+                   'Catalunya',
+                   'País Valencià',
+                   'Extremadura',
+                   'Galícia',
+                   'Madrid',
+                   'Múrcia',
+                   'Navarra',
+                   'País Basc',
+                   'La Rioja', 'Ceuta', 'Melilla'),
   key = c('Andalusos',
           'Aragonesos',
           'Asturians',
@@ -166,7 +183,7 @@ plot_self_government_es <- function(ca = FALSE, agg = FALSE){
              p_weighted = weighted / denom_weighted * 100)
     
     if(ca){
-      the_labs$title <- paste0(the_labs$title, '\n(entre ciutadans de l\'estat espanyol, excloent-hi Catalunya)')
+      the_labs$title <- paste0(the_labs$title, '\n(entre ciutadans de l\'estat espanyol, excloent-ne Catalunya)')
       the_labs$x <- 'Opinió: Catalunya ha assolit...'
     } else {
       the_labs$title <- paste0(the_labs$title, '\n(among citizens of the Spanish state, excluding Catalonia)')
@@ -186,6 +203,7 @@ plot_self_government_es <- function(ca = FALSE, agg = FALSE){
                 nudge_y = -4, alpha = 0.6)
   } else {
     pd <- pd %>%
+      left_join(label_df) %>% dplyr::select(-ccaa) %>% dplyr::mutate(ccaa = fixed) %>%
       group_by(ccaa, catalan_autonomy) %>%
       summarise(raw = n(),
                 weighted = sum(weight, na.rm = TRUE)) %>%
@@ -251,6 +269,7 @@ plot_self_government <- function(ca = FALSE){
   }
   
   pd <- pd %>%
+    left_join(label_df) %>% dplyr::select(-ccaa) %>% dplyr::mutate(ccaa = fixed) %>%
     group_by(ccaa, catalan_autonomy) %>%
     summarise(raw = n(),
               weighted = sum(weight, na.rm = TRUE)) %>%
@@ -293,7 +312,7 @@ plot_centralism <- function(ca = FALSE){
                      y = 'Percentatge',
                      title = 'Preferències de catalans sobre l\'organització territorial de l\'estat espanyol',
                      
-                     subtitle = "Amb quina fórmula d'organització de l'Estat a Espanya esteu més d'acord?",
+                     subtitle = "Amb quina fórmula d'organització de l'estat a Espanya esteu més d'acord?",
                      caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nGràfic: @joethebrew")
   }
   
@@ -302,7 +321,7 @@ plot_centralism <- function(ca = FALSE){
     mutate(centralization = recode(centralization,
                                    "Un estat amb un únic govern central sense autonomies" = 'Únic govern central sense autonomies',
                                    "Un estat en el que les comunitats autònomes tinguin menys a" = 'Menys autonomia',
-                                   "Un estat de les comunitats autònomes com l’actual" = "Statu quo",
+                                   "Un estat de les comunitats autònomes com l’actual" = "Status quo",
                                    "Un estat en el que les comunitats autònomes tinguin més au" = "Més autonomia",
                                    "Un estat en el que es reconegui a les comunitats autònomes" = 'Possibilitat d\'independència',
                                    "No ho sap" = "NS/NC",
@@ -311,20 +330,20 @@ plot_centralism <- function(ca = FALSE){
     the_levels <- c('NS/NC',
                     'Únic govern central sense autonomies',
                     'Menys autonomia',
-                    'Statu quo',
+                    'Status quo',
                     'Més autonomia',
                     "Possibilitat d'independència")
     the_labels <- c('NS/NC',
                     'Únic govern central sense autonomies',
-                    'Menys autonomia per les comunitats autònomes',
-                    'Statu quo',
-                    'Més autonomia per les comunitats autònomes',
-                    "Possibilitat d'independència per les comunitats autònomes")
+                    'Menys autonomia per a les comunitats autònomes',
+                    'Status quo',
+                    'Més autonomia per a lescomunitats autònomes',
+                    "Possibilitat d'independència per a lescomunitats autònomes")
   } else {
     the_levels <- c('NS/NC',
                     'Únic govern central sense autonomies',
                     'Menys autonomia',
-                    'Statu quo',
+                    'Status quo',
                     'Més autonomia',
                     "Possibilitat d'independència")
     the_labels <- c('Does not know or no answer',
@@ -343,6 +362,7 @@ plot_centralism <- function(ca = FALSE){
                                    labels = the_labels))
   
   pd <- pd %>%
+    left_join(label_df) %>% dplyr::select(-ccaa) %>% dplyr::mutate(ccaa = fixed) %>%
     group_by(ccaa, centralization) %>%
     summarise(raw = n(),
               weighted = sum(weight, na.rm = TRUE)) %>%
@@ -386,7 +406,7 @@ plot_centralism_es <- function(ca = FALSE, agg = FALSE){
                      y = 'Percentatge',
                      title = 'Preferències sobre l\'organització territorial de l\'estat espanyol',
                      
-                     subtitle = "Amb quina fórmula d'organització de l'Estat a Espanya esteu més d'acord?\n(Poblacio d'Espanya (excloent-hi Catalunya)",
+                     subtitle = "Amb quina fórmula d'organització de l'estat a Espanya esteu més d'acord?\n(Població d'Espanya (excloent-ne Catalunya)",
                      caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nGràfic: @joethebrew")
   }
   
@@ -395,7 +415,7 @@ plot_centralism_es <- function(ca = FALSE, agg = FALSE){
     mutate(centralization = recode(centralization,
                                    "Un estat amb un únic govern central sense autonomies" = 'Únic govern central sense autonomies',
                                    "Un estat en el que les comunitats autònomes tinguin menys a" = 'Menys autonomia',
-                                   "Un estat de les comunitats autònomes com l’actual" = "Statu quo",
+                                   "Un estat de les comunitats autònomes com l’actual" = "Status quo",
                                    "Un estat en el que les comunitats autònomes tinguin més au" = "Més autonomia",
                                    "Un estat en el que es reconegui a les comunitats autònomes" = 'Possibilitat d\'independència',
                                    "No ho sap" = "NS/NC",
@@ -404,20 +424,20 @@ plot_centralism_es <- function(ca = FALSE, agg = FALSE){
     the_levels <- c('NS/NC',
                     'Únic govern central sense autonomies',
                     'Menys autonomia',
-                    'Statu quo',
+                    'Status quo',
                     'Més autonomia',
                     "Possibilitat d'independència")
     the_labels <- c('NS/NC',
                     'Únic govern central sense autonomies',
-                    'Menys autonomia per les comunitats autònomes',
-                    'Statu quo',
-                    'Més autonomia per les comunitats autònomes',
-                    "Possibilitat d'independència per les comunitats autònomes")
+                    'Menys autonomia per a lescomunitats autònomes',
+                    'Status quo',
+                    'Més autonomia per a lescomunitats autònomes',
+                    "Possibilitat d'independència per a lescomunitats autònomes")
   } else {
     the_levels <- c('NS/NC',
                     'Únic govern central sense autonomies',
                     'Menys autonomia',
-                    'Statu quo',
+                    'Status quo',
                     'Més autonomia',
                     "Possibilitat d'independència")
     the_labels <- c('Does not know or no answer',
@@ -468,6 +488,7 @@ plot_centralism_es <- function(ca = FALSE, agg = FALSE){
   } else {
     pd <- pd %>%
       # filter(ccaa != 'Catalunya') %>%
+      left_join(label_df) %>% dplyr::select(-ccaa) %>% dplyr::mutate(ccaa = fixed) %>%
       group_by(ccaa, centralization) %>%
       summarise(raw = n(),
                 weighted = sum(weight, na.rm = TRUE)) %>%
@@ -592,6 +613,7 @@ plot_conditional <- function(ca = FALSE){
   if(ca){
     the_labels <- the_levels
     bi_labels <- bi_levels
+    bi_labels <- gsub('espanya', 'Espanya', bi_labels)
   } else {
     the_labels <- c('A region of Spain',
                     'An autonomous community of Spain',
@@ -604,15 +626,15 @@ plot_conditional <- function(ca = FALSE){
   if(ca){
     the_labs <- labs(x = '',
                      y = 'Percentage',
-                     title = 'El que volen els catalans que Catalunya sigui',
-                     subtitle = 'Creuada binària vs quatrenària',
+                     title = 'Què volen que sigui Catalunya els catalans?',
+                     subtitle = 'Encreuament binari vs quaternari',
                      caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nGràfic: @joethebrew")
     
   } else {
     the_labs <- labs(x = '',
                      y = 'Percentatge',
                      title = "What Catalans want Catalonia to be",
-                     subtitle = "Binary vs. quatrenary breakdown",
+                     subtitle = "Quatrenary breakdown among 'independentists' and 'unionists'",
                      caption = "Data source: Survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nChart: @joethebrew")
   }
   
@@ -636,533 +658,4 @@ plot_conditional <- function(ca = FALSE){
           panel.background  = element_rect(fill = NA, color = 'black')) +
     the_labs
 }
-
-
-plot_viatges_i_odi <- function(ca = TRUE){
-  # Viatges a Cat i favorabilitat e Cats
-  pd <- pt %>%
-    filter(ccaa != 'Catalunya') %>%
-    filter(!is.na(visits)) %>%
-    filter(!visits %in% c('No ho sap', 'No contesta')) %>%
-    group_by(visits) %>%
-    summarise(avg = mean(simpatia, na.rm = TRUE),
-              n = n(),
-              n_no_na = length(which(!is.na(simpatia))),
-              n0 = length(which(simpatia == 0))) %>%
-    mutate(p0 = n0 / n_no_na * 100)
-  pd$visits <- factor(pd$visits,
-                      levels = unique(c('No, mai',
-                                        levels(pd$visits))))
-  pd$visits <- factor(pd$visits,
-                      levels = levels(pd$visits),
-                      labels = gsub(' vegad', '\nvegad', c('Mai', levels(pd$visits)[2:length(levels(pd$visits))])))
-  if(!ca){
-    pd$visits <- factor(pd$visits,
-                        labels = c('Never', 'Just\nonce', 
-                                   '2-5 times',
-                                   '6-10 times',
-                                   'More than\n10 times'))
-    the_labs <- labs(x = 'How many times have you travelled to Catalonia?',
-                     y = "Percentage who say 'I don't like them at all'",
-                     title = "Extreme dislike of Catalans among Spaniards\nand times travelled to Catalonia",
-                     caption = "Data source: Survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nChart: @joethebrew") 
-  } else {
-    the_labs <- labs(x = 'Quantes vegades ha viatjat a Catalunya?',
-                     y = "Percentatge qui diu que els catalans\n'em cauen molt malament'",
-                     title = "Aversió extrema dels catalans i\nvegades que ha viatjat a Catalunya",
-                     caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nGràfic: @joethebrew") 
-  }
-  
-  library(databrew)
-  ggplot(data = pd,
-         aes(x = visits,
-             y = p0)) +
-    # geom_bar(stat = 'identity') +
-    # geom_area(alpha = 0.5, color = NA, fill = 'darkorange', group = 1) +
-    geom_point(size = 10) +
-    geom_segment(aes(xend = visits,
-                     yend = 5),
-                 alpha = 0.8,
-                 # size = 2,
-                 lty = 3) +
-    geom_line(alpha = 0.2, group = 1) +
-    geom_text(aes(label = round(p0, digits = 1)),
-              # nudge_y = 0.2,
-              # alpha = 0.8,
-              color = 'white',
-              size = 3.6) +
-    the_labs +
-    theme_simple(black = T, base_size = 16) +
-    theme(plot.title = element_text(size = 22)) +
-    ylim(3.5, 12)
-}
-
-
-plot_support_referendum <- function(ca = FALSE){
-  # Viatges a Cat i suport pel referendum
-  pd <- pt %>%
-    filter(`Comunitat autònoma` != 'Catalunya') %>%
-    mutate(visits = `I d’aquestes, en concret, em podria dir quantes vegades a viatjat a Catalunya?`) %>%
-    filter(!is.na(visits)) %>%
-    filter(!visits %in% c('No ho sap', 'No contesta')) %>%
-    mutate(referendum = as.character(referendum)) %>%
-    mutate(referendum = ifelse(referendum %in% c('Nc', 'Nhs'),
-                               'NS/NC', referendum)) %>%
-    group_by(visits, referendum) %>%
-    tally %>%
-    group_by(visits) %>%
-    mutate(p = n / sum(n) * 100) %>%
-    ungroup 
-  pd$visits <- factor(pd$visits,
-                      levels = unique(c('No, mai',
-                                        levels(pd$visits))))
-  pd$visits <- factor(pd$visits,
-                      levels = levels(pd$visits),
-                      labels = gsub(' vegad', '\nvegad', c('Mai', levels(pd$visits)[2:length(levels(pd$visits))])))
-  pd$referendum <- as.character(pd$referendum)
-  pd$referendum <- ifelse(pd$referendum %in% c('Nhs', 'Nc'),
-                          'NS/NC', pd$referendum)
-  pd$referendum <- factor(pd$referendum,
-                          levels = c("Molt d’acord",
-                                     "Més aviat d’acord",
-                                     "NS/NC",
-                                     "Ni d’acord ni en desacord",
-                                     "Més aviat en desacord",
-                                     "Molt en desacord"))
-  pd$referendum <- factor(pd$referendum,
-                          levels = rev(levels(pd$referendum)))
-  
-  if(!ca){
-    pd$visits <- factor(pd$visits,
-                        labels = c('Never', 'Just\nonce', 
-                                   '2-5 times',
-                                   '6-10 times',
-                                   'More than\n10 times'))
-    pd$referendum <- factor(pd$referendum,
-                            labels = rev(c("Strongly agree",
-                                       "Agree",
-                                       "Don't know/No answer",
-                                       "Neither agree nor disagree",
-                                       "Disagree",
-                                       "Strongly disagree")))
-    the_labs <- labs(x = 'How many times have you travelled to Catalonia?',
-                     y = 'Percentage',
-                     title = "Times travelled to Catalonia\nand support for  referendum",
-                     subtitle = "Agreement with phrase: 'A referendum should take place so Catalans\ncan decide the relationship they want between Catalonia and the Spanish State'",
-                     caption = "Data source: survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nChart: @joethebrew")
-    legend_title <- ''
-  } else {
-    the_labs <- 
-      labs(x = 'Quantes vegades ha viatjat a Catalunya?',
-           y = 'Percentatge',
-           title = "Vegades que ha viatjat a Catalunya i\nsuport al referèndum",
-           subtitle = "Grau d'acord amb la frase: 'S'hauria de fer un referèndum a Catalunya perquè els catalans i les\ncatalanes decidissin quina relació volen que hi hagi entre Catalunya i l'Estat espanyol'",
-           caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya'. Centre d'Estudis d'Opinió.\nGràfic: @joethebrew")
-    legend_title <- ""
-  }
-  
-  
-  library(databrew)
-  library(RColorBrewer)
-  cols <- brewer.pal(n = 6, 'Spectral')
-  cols[3] <- grey(c(0.5))
-  ggplot(data = pd,
-         aes(x = visits,
-             y = p)) +
-    geom_bar(stat = 'identity',
-             aes(fill = referendum),
-             alpha = 0.9) +
-    # geom_text(aes(label = round(simpatia, digits = 1)),
-    #           # nudge_y = 0.2,
-    #           # alpha = 0.8,
-    #           color = 'white',
-    #           size = 3.6) +
-    the_labs +
-    theme_simple(black = T, base_size = 16) +
-    theme(plot.title = element_text(size = 22),
-          plot.caption = element_text(hjust = 0),
-          axis.text.x = element_text(size = 8),
-          plot.subtitle = element_text(size = 10)) +
-    theme(legend.position = 'right') +
-    scale_fill_manual(name = legend_title,
-                      values = cols) +
-    geom_hline(yintercept = 50, lty = 2, alpha = 0.7)
-}
-
-
-
-
-# Grau de simpatia i suport pel referendum
-plot_simpatia_referendum <- function(ca = TRUE){
-  pd <- pt %>%
-    filter(`Comunitat autònoma` != 'Catalunya') %>%
-    mutate(simpatia = `Grau de simpatia cap als habitants de cadascuna de les diferents comunitats autònomes:  Catalans`) %>%
-    mutate(simpatia = simpatia_cleaner(simpatia)) %>%
-    mutate(referendum = as.character(referendum)) %>%
-    mutate(referendum = ifelse(referendum %in% c('Nc', 'Nhs'),
-                               'NS/NC', referendum)) %>%
-    group_by(referendum, simpatia) %>%
-    tally %>%
-    group_by(simpatia) %>%
-    mutate(p = n / sum(n) * 100) %>%
-    ungroup
-  
-  pd$referendum <- as.character(pd$referendum)
-  pd$referendum <- ifelse(pd$referendum %in% c('Nhs', 'Nc'),
-                          'NS/NC', pd$referendum)
-  pd$referendum <- factor(pd$referendum,
-                          levels = c("Molt d’acord",
-                                     "Més aviat d’acord",
-                                     "NS/NC",
-                                     "Ni d’acord ni en desacord",
-                                     "Més aviat en desacord",
-                                     "Molt en desacord"))
-  pd$referendum <- factor(pd$referendum,
-                          levels = rev(levels(pd$referendum)))
-  
-  if(!ca){
-    pd$referendum <- factor(pd$referendum,
-                            labels = c("Strongly agree",
-                                       "Agree",
-                                       "Don't know/No answer",
-                                       "Neither agree nor disagree",
-                                       "Disagree",
-                                       "Strongly disagree"))
-    the_labs <- labs(x = 'How much do you like Catalans (0-10)?',
-                     y = 'Percentage',
-                     title = "Sympathy/antipathy for Catalans\nand support for  referendum",
-                     subtitle = "Agreement with phrase: 'A referendum should take place so Catalans\ncan decide the relationship they want between Catalonia and the Spanish State'",
-                     caption = "Data source: survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nChart: @joethebrew")
-    legend_title <- ''
-  } else {
-    the_labs <- labs(x = 'Grau de simpatia (escala 0 a 10)',
-         y = 'Percentatge',
-         title = "Grau de simpatia pels catalans i\nsuport al referèndum",
-         subtitle = "Grau d'acord amb la frase: 'S'hauria de fer un referèndum a Catalunya perquè els catalans i les\ncatalanes decidissin quina relació volen que hi hagi entre Catalunya i l'Estat espanyol'",
-         caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya. Centre d'Estudis d'Opinió.\nGràfic: @joethebrew") 
-  }
-  
-  
-  
-  cols <- brewer.pal(n = 6, 'Spectral')
-  cols[3] <- grey(c(0.5))
-  ggplot(data = pd,
-         aes(x = simpatia,
-             y = p)) +
-    geom_bar(stat = 'identity',
-             aes(fill = referendum),
-             alpha = 0.9) +
-    # geom_text(aes(label = round(simpatia, digits = 1)),
-    #           # nudge_y = 0.2,
-    #           # alpha = 0.8,
-    #           color = 'white',
-    #           size = 3.6) +
-    the_labs +
-    theme_simple(black = T, base_size = 16) +
-    theme(plot.title = element_text(size = 22),
-          plot.caption = element_text(hjust = 0),
-          axis.text.x = element_text(size = 8),
-          plot.subtitle = element_text(size = 10)) +
-    theme(legend.position = 'right') +
-    scale_fill_manual(name = '',
-                      values = cols) +
-    geom_hline(yintercept = 50, lty = 2, alpha = 0.7) +
-    scale_x_continuous(breaks = 0:10)
-}
-
-
-
-plot_que_es_catalunya <- function(){
-  # Que és Catalunya
-  pd <- pt %>%
-    filter(`Comunitat autònoma` != 'Catalunya') %>%
-    mutate(visits = `I d’aquestes, en concret, em podria dir quantes vegades a viatjat a Catalunya?`) %>%
-    filter(!is.na(visits)) %>%
-    filter(!visits %in% c('No ho sap', 'No contesta')) %>%
-    mutate(what_is_cat = as.character(`I parlant de Catalunya, quin terme preferiu per a referir-vos a Catalunya?`)) %>%
-    mutate(what_is_cat = ifelse(what_is_cat %in% c('No ho sap', 'No contesta', 'Altres (especificar)'), 'NS/NC/Altres', what_is_cat)) %>%
-    group_by(visits, what_is_cat) %>%
-    tally %>%
-    group_by(visits) %>%
-    mutate(p = n / sum(n) * 100) %>%
-    ungroup 
-  pd$visits <- factor(pd$visits,
-                      levels = unique(c('No, mai',
-                                        levels(pd$visits))))
-  pd$visits <- factor(pd$visits,
-                      levels = levels(pd$visits),
-                      labels = gsub(' vegad', '\nvegad', c('Mai', levels(pd$visits)[2:length(levels(pd$visits))])))
-  
-  pd$what_is_cat <- factor(pd$what_is_cat,
-                           levels = c("Un país",
-                                      "Una nació",
-                                      "Una nacionalitat",
-                                      "NS/NC/Altres",
-                                      "Una comunitat autònoma",
-                                      "Una regió"))
-  pd$what_is_cat <- factor(pd$what_is_cat, levels = rev(levels(pd$what_is_cat)))
-  
-  library(databrew)
-  library(RColorBrewer)
-  cols <- brewer.pal(n = 6, 'Spectral')
-  # cols[2:3] <- 'white'
-  cols[2:3] <- grey(c(0.4, 0.7))
-  ggplot(data = pd,
-         aes(x = visits,
-             y = p)) +
-    geom_bar(stat = 'identity',
-             aes(fill = what_is_cat),
-             alpha = 0.9) +
-    # geom_text(aes(label = round(simpatia, digits = 1)),
-    #           # nudge_y = 0.2,
-    #           # alpha = 0.8,
-    #           color = 'white',
-    #           size = 3.6) +
-    labs(x = 'Quantes vegades ha viatjat a Catalunya?',
-         y = 'Percentatge',
-         title = "Vegades que ha viatjat a Catalunya i\nopinió sobre què és Catalunya",
-         subtitle = "xxxyyyzzz",
-         caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya. Centre d'Estudis d'Opinió.\n. Gràfic: @joethebrew") +
-    theme_simple(black = T, base_size = 16) +
-    theme(plot.title = element_text(size = 22),
-          plot.caption = element_text(hjust = 0),
-          axis.text.x = element_text(size = 8),
-          plot.subtitle = element_text(size = 10)) +
-    theme(legend.position = 'right') +
-    scale_fill_manual(name = "Grau d'acord",
-                      values = cols) +
-    geom_hline(yintercept = 50, lty = 2, alpha = 0.7)
-}
-
-
-
-# Grau de simpatia cap als habitants
-plot_simpatia_matrix <- function(ca = FALSE, var = 'avg', roundy = 1, reverse_color = FALSE, text_size = 4){
-  library(RColorBrewer)
-  pd <- pt %>%
-    mutate(weight = `Coeficients de ponderació`) %>%
-    mutate(ccaa = `Comunitat autònoma`) %>%
-    dplyr::select(contains('Grau de simpatia cap als habitants'),
-                  contains('ccaa'),
-                  weight)
-  names(pd) <- gsub("Grau de simpatia cap als habitants de cadascuna de les diferents comunitats autònomes:  ", '', names(pd))
-  # Make long
-  pd <- pd %>% gather(key, value, Andalusos:Ceutencs)
-  pd$value <- simpatia_cleaner(pd$value)
-  pda <- pd
-  # Now agg and get averages
-  pd <- pd %>%
-    filter(!ccaa %in% c('Ceuta', 'Melilla'),
-           !key %in% c('Ceutencs')) %>%
-    group_by(ccaa, key) %>%
-    summarise(n = n(),
-              n_no_na = length(which(!is.na(value))),
-              avg = mean(value, na.rm = TRUE),
-              avgx = weighted.mean(x = value, w = weight, na.rm = TRUE),
-              p75 = quantile(value, 0.75, na.rm = TRUE),
-              p25 = quantile(value, 0.25, na.rm = TRUE),
-              n_zero = length(which(value == 0)),
-              n1 = length(which(value <= 1)),
-              n2 = length(which(value <= 2)),
-              n3 = length(which(value <= 3)),
-              n4 = length(which(value <=4)),
-              n5 = length(which(value <= 5)),
-              n6 = length(which(value <= 6)),
-              n10 = length(which(value == 10))) %>%
-    mutate(p0 = n_zero / n_no_na * 100,
-           p1 = n1 / n_no_na * 100,
-           p2 = n2 / n_no_na * 100,
-           p3 = n3 / n_no_na * 100,
-           p4 = n4 / n_no_na * 100,
-           p5 = n5 / n_no_na * 100,
-           p10 = n10 / n_no_na * 100)
-  pd <- pd %>% ungroup %>%
-    mutate(gent_de = fix_levels(ccaa, from_place = TRUE, to_place = TRUE),
-           cap_a = fix_levels(key, from_place = FALSE, to_place = TRUE))
-  
-  if(ca){
-    the_labs <- labs(x = 'Grau de simpatia de les persones d\'aqui',
-                     y = '...cap a les persones d\'aqui',
-                     title = 'Grau de simpatia cap als habitants dels\nhabitants segons comunitat autònoma',
-                     caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nGràfic: @joethebrew")
-  } else {
-    the_labs <- labs(x = 'How people from here feel...',
-                     y = '...about people from here',
-                     title = "How people from one area feel\nabout people from another area",
-                     caption = "Data source: Survey 'Percepció sobre el debat territorial a Espanya' from the Centre d'Estudis d'Opinió.\nChart: @joethebrew")
-  }
-  
-  # Define the variable
-  pd$y <- as.numeric(unlist(pd[,var] ))
-  
-  # Colors
-  cols <-  colorRampPalette(brewer.pal(n = 9, name = 'Spectral'))(10)
-  if(reverse_color){
-    cols <- rev(cols)
-  }
-  
-  ggplot(data = pd,
-         aes(x = gent_de,
-             y = cap_a)) +
-    geom_point(size = 7.5,
-               aes(color = y)) +
-    # geom_point(size = 5,
-    #            aes(#size = avg,
-    #              # color = p2
-    #                # color = avg
-    #                )) +
-    # ggthemes::theme_fivethirtyeight() +
-    scale_color_gradientn(colours = cols) +
-    the_labs +
-    theme_simple() +
-    theme(axis.text.x = element_text(angle = 90,
-                                     hjust = 1)) +
-    geom_text(aes(label = round(y, digits = roundy)), size = text_size) +
-    theme(legend.position = 'none')
-}
-
-# Get average
-get_avg <- function(where_from = 'Catalunya',
-                    var = 'avg',
-                    where_to = label_df$ccaa[label_df$ccaa != 'Catalunya']){
-  pd <- pt %>%
-    dplyr::select(contains('Grau de simpatia cap als habitants'),
-                  contains('ccaa'),
-                  contains('weight'))
-  names(pd) <- gsub("Grau de simpatia cap als habitants de cadascuna de les diferents comunitats autònomes:  ", '', names(pd))
-  # Make long
-  pd <- pd %>% gather(key, value, Andalusos:Ceutencs)
-  pd$value <- simpatia_cleaner(pd$value)
-  # Now agg and get averages
- pd <- pd %>%
-      # filter(!ccaa %in% c('Ceuta', 'Melilla'),
-      #        !key %in% c('Ceutencs')) %>%
-      group_by(ccaa, key) %>%
-      summarise(n = n(),
-                n_no_na = length(which(!is.na(value))),
-                avg = mean(value, na.rm = TRUE),
-                p75 = quantile(value, 0.75, na.rm = TRUE),
-                p25 = quantile(value, 0.25, na.rm = TRUE),
-                n_zero = length(which(value == 0)),
-                n1 = length(which(value <= 1)),
-                n2 = length(which(value <= 2)),
-                n3 = length(which(value <= 3)),
-                n4 = length(which(value <=4)),
-                n5 = length(which(value <= 5)),
-                n6 = length(which(value <= 6)),
-                n10 = length(which(value == 10))) %>%
-      mutate(p0 = n_zero / n_no_na * 100,
-             p1 = n1 / n_no_na * 100,
-             p2 = n2 / n_no_na * 100,
-             p3 = n3 / n_no_na * 100,
-             p4 = n4 / n_no_na * 100,
-             p5 = n5 / n_no_na * 100,
-             p10 = n10 / n_no_na * 100)
-  
-  pd <- pd %>%
-    mutate(gent_de = fix_levels(ccaa, from_place = TRUE, to_place = TRUE),
-           cap_a = fix_levels(key, from_place = FALSE, to_place = TRUE))
-  
-  pd$y <- as.numeric(unlist(pd[,var]))
-  
-    pd %>% ungroup %>%
-      filter(gent_de %in% where_from,
-             cap_a %in% where_to) %>%
-      summarise(avg = mean(y, na.rm = T)) %>%
-      .$avg
-}
-
-
-
-# For each ccaa, what do the people there think of catalans compared to what catalans think of them
-plot_compare <- function(ca = TRUE){
-  pd <- pt %>%
-    mutate(weight = `Coeficients de ponderació`) %>%
-    mutate(ccaa = `Comunitat autònoma`) %>%
-    dplyr::select(contains('Grau de simpatia cap als habitants'),
-                  contains('ccaa'),
-                  weight)
-  names(pd) <- gsub("Grau de simpatia cap als habitants de cadascuna de les diferents comunitats autònomes:  ", '', names(pd))
-  # Make long
-  pd <- pd %>% gather(key, value, Andalusos:Ceutencs)
-  pd$value <- simpatia_cleaner(pd$value)
-  # Rename
-  pd <- pd %>%
-    mutate(gent_de = fix_levels(ccaa, from_place = TRUE, to_place = TRUE),
-           cap_a = fix_levels(key, from_place = FALSE, to_place = TRUE)) %>%
-    dplyr::select(gent_de,
-                  cap_a, value, weight) %>%
-    group_by(gent_de, cap_a) %>%
-    summarise(avg = mean(value, na.rm = TRUE),
-              value_weighted = weighted.mean(value, w= weight, na.rm = TRUE)) %>%
-    mutate(value = avg)
-  pd$discrep <- pd$value - pd$value_weighted
-  
-  # Keep only what people think about catalans or vice-versa
-  pd <- pd %>%
-    filter(gent_de == 'Catalunya' | cap_a == 'Catalunya')
-  
-  # Define the ccaa
-  pd$cap_a <- as.character(pd$cap_a); pd$gent_de <- as.character(pd$gent_de)
-  pd$ccaa <- ifelse(pd$cap_a == 'Catalunya', pd$gent_de,
-                    ifelse(pd$gent_de == 'Catalunya', pd$cap_a,
-                           NA))
-  pd <- pd %>%
-    filter(!(cap_a == 'Catalunya' & gent_de == 'Catalunya')) %>%
-    filter(!ccaa %in% c('Ceuta', 'Melilla'))
-  
-  
-  # Make a new var
-  if(ca){
-    levs <- c('Valoració mitjana dels habitants d\'aquesta\ncomunitat autònoma cap als catalans',
-              'Valoració mitjana dels catalans cap als\nhabitants d\'aquesta comunitat autònoma')
-    the_labs <- labs(x = '',
-                     y = "Valoració mitjana (0-10)",
-                     title = 'Grau de simpatia entre catalans i habitants d\'altres comunitats autònomes',
-                     caption = 'Escala de 0 a 10 on 0 significa: "Em cauen molt malament" i 10 significa: "Em cauen molt bé".\nDades de l\'enquesta "Percepció sobre el debat territorial a Espanya. 2019", Centre d\'Estudis d\'Opinió.\nEl texte entre parèntesis és la xifra NO ponderada. La ponderació fa servir factors demogràfics per ajustar pel biaix de selecció/mostreig.\nMés detalls sobre la ponderació a http://upceo.ceo.gencat.cat/wsceop/7368/Press%20dossier%20-952.pdf\nGràfic de Joe Brew, @joethebrew. Codi a https://github.com/joebrew/vilaweb/tree/master/analyses/filiafobia')
-  } else {
-    levs <- c('How people from this area feel\nabout Catalans',
-              'How Catalans feel about people\nfrom this area')
-    the_labs <- labs(x = '',
-                     y = "Degree to which they 'like' the other (0-10)",
-                     title = 'Degree to which Catalans and inhabitants of other regions like one another',
-                     caption = 'Scale from 0 to 10, where 0 means "I don\'t like them at all" and 10 means "I like them a lot".\nData from the survey "Percepció sobre el debat territorial a Espanya. 2019", Centre d\'Estudis d\'Opinió.\nText in parenthesis is the unadjusted/raw figure. Adjustment used demographic factors to generate weights to account for sampling bias.\nFull details on weighting at http://upceo.ceo.gencat.cat/wsceop/7368/Press%20dossier%20-952.pdf\nChart by Joe Brew, @joethebrew. Code at https://github.com/joebrew/vilaweb/tree/master/analyses/filiafobia')
-  }
-  
-  pd$var <- ifelse(pd$cap_a == 'Catalunya', levs[1], levs[2])
-  pd$var <- factor(pd$var, levels = levs)
-  fl <- sort(unique(pd$ccaa))
-  pd$ccaa <- factor(pd$ccaa, levels = ,
-                    labels = gsub('Castella', 'Cas.', gsub('/País Basc','', fl)))
-  
-  
-  ggplot(data = pd,
-         aes(x = var,
-             y = value_weighted)) +
-    geom_line(aes(group = ccaa), alpha = 0.7) +
-    geom_point(aes(color = var), size = 9) +
-    facet_wrap(~ccaa, nrow = 2) +
-    theme_simple() +
-    theme(axis.text.x = element_blank(),
-          strip.text = element_text(size = 10)) +
-    scale_color_manual(name = '',
-                       values = c('darkorange', 'lightblue')) +
-    geom_text(aes(label = round(value_weighted, digits = 1))) +
-    the_labs +
-    ylim(min(pd$value_weighted) - 0.7,
-         max(pd$value_weighted) + 0.5) +
-    theme(legend.position = 'top',
-          plot.title = element_text(size = 16),
-          legend.text = element_text(size = 12),
-          plot.caption = element_text(size = 8)) +
-    geom_text(aes(label = paste0('(',
-                                 round(value, digits = 1),
-                                 ')')),
-              nudge_y = -1.1,
-              size = 2.5, alpha = 0.8, color = 'black')
-}
-
-# Autonomia
-# Pel que fa a les relacions entre Catalunya i Espanya, creieu que Catalunya ha assolit...
-# pt$`Pel que fa a les relacions entre Catalunya i la resta de l’Estat espanyol, què diríeu que és més necessari?`
 

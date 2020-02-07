@@ -219,11 +219,13 @@ likely generate *more* support among Catalans for independence from
 Spain.
 
 Regardless of how one feels about Catalan independence, it’s important
-to be realistic. And in the case of the Catalonia-Spain territorial
-conflict, there are, for all effective purposes, only two possible
-outcomes: (a) status quo or (b) independence (without permission).
-Anything other than would require electoral majorities in Spain which
-simply do not exist.
+for all parties to be open to all forms of dialogue, with all relevant
+stakeholders, about all possibilities (including those which may not be
+one’s first preference). However, it’s also important to be realistic.
+And in the case of the Catalonia-Spain territorial conflict, there are,
+for all effective purposes, only two possible outcomes: (a) status quo
+or (b) independence (without permission). Anything other than that would
+require electoral majorities in Spain which simply do not exist.
 
 # Catalan-language charts
 
