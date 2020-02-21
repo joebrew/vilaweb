@@ -106,13 +106,13 @@ label_df <- tibble(
            'Castella la Manxa',
            'Castella i Lleó',
            'Catalunya',
-           'País Valencià',
            'Extremadura',
            'Galícia',
            'Madrid',
            'Múrcia',
            'Navarra',
            'Euskadi/País Basc',
+           'País Valencià',
            'La Rioja', 'Ceuta', 'Melilla'),
   key = c('Andalusos',
           'Aragonesos',
@@ -123,17 +123,20 @@ label_df <- tibble(
           'Castellanomanxecs',
           'Castellanolleonesos',
           'Catalans',
-          'Valencians',
           'Extremenys',
           'Gallecs',
           'Madrilenys',
           'Murcians',
           'Navarresos',
           'Bascos',
+          'Valencians',
           'Riojans',
           'Ceutencs',
           'Melillencs')
 )
+label_df$ccaa <- factor(label_df$ccaa, levels = label_df$ccaa)
+label_df$key <- factor(label_df$key, levels = label_df$key)
+
 fix_levels <- function(var, from_place = FALSE, to_place = TRUE){
   if(from_place){
     x <- tibble(ccaa = var)
@@ -709,11 +712,29 @@ plot_compare <- function(ca = TRUE, only_indepes = FALSE){
   
   pd$var <- ifelse(pd$cap_a == 'Catalunya', levs[1], levs[2])
   pd$var <- factor(pd$var, levels = levs)
-  fl <- sort(unique(pd$ccaa))
-  pd$ccaa <- factor(pd$ccaa, levels = ,
+  # Get the corrected levels order
+  pd$ccaa <- factor(pd$ccaa,
+                    levels = c('Andalusia',
+                               'Aragó',
+                               'Astúries',
+                               'Balears',
+                               'Canàries',
+                               'Cantàbria',
+                               'Castella i Lleó',
+                               'Castella la Manxa',
+                               'Extremadura',
+                               'Galícia',
+                               'Madrid',
+                               'Múrcia',
+                               'Navarra',
+                               'Euskadi/País Basc',
+                               'País Valencià',
+                               'La Rioja'))
+  fl <- levels(pd$ccaa)
+  pd$ccaa <- factor(pd$ccaa, levels = fl,
                     labels = gsub('Castella', 'Cas.', gsub('Euskadi/','', fl)))
   
-  
+
   ggplot(data = pd,
          aes(x = var,
              y = value_weighted)) +
