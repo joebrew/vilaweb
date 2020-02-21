@@ -176,7 +176,7 @@ Let's examine only what the pro-independence Catalans think of people from the r
 
 ```{r, fig.height = 7, fig.width = 7.5}
 plot_compare(ca = FALSE, only_indepes = TRUE) +
-  labs(title = 'Degree to which PRO-INDY Catalans and inhabitants of\nother regions like each other')
+  labs(title = 'How much PRO-INDY Catalans like inhabitants of\nother regions, and how much they like Catalans')
 ```
 
 The weighted average of the score given by people from the rest of Spain to Catalans is 5.63. The weighted average of the score given by Catalans to people from the rest of Spain is 6.77. Among pro-independence Catalans, the weighted average of the score they give to people from the rest of Spain is 6.48.
@@ -238,7 +238,8 @@ plot_simpatia_matrix(ca = T, only_indepes = T) +
 
 ```{r, fig.height = 7, fig.width = 7.5}
 plot_compare(ca = T, only_indepes = TRUE) +
-  labs(subtitle = '(Valoració CAP a tots el catalans; valoració DE només catalans independentistes)')
+  labs(title = 'Grau de simpatia de catalans independentistes cap als\nhabitants de les altres comunitats autònomes i grau de\nsimpatia dels habitants de les altres comunitats\nautònomes cap a tots els catalans',
+       subtitle = '(Valoració CAP a tots el catalans; valoració DE només catalans independentistes)')
 ```
 
 

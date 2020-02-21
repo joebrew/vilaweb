@@ -506,21 +506,39 @@ plot_simpatia_matrix <- function(ca = FALSE, var = 'avg', roundy = 1, reverse_co
                         levels = levels(pd$gent_de),
                         labels = ifelse(levels(pd$gent_de) == 'Catalunya',
                                         'Catalunya\n(només independentistes)',
-                                        levels(pd$gent_de)))
+                                        ifelse(levels(pd$gent_de) == 'Euskadi/País Basc', 'País Basc', 
+                                               ifelse(levels(pd$gent_de) == 'Castella la Manxa', 'Castella - la Manxa', levels(pd$gent_de)))))
     } else {
       pd$gent_de <- factor(pd$gent_de,
                         levels = levels(pd$gent_de),
                         labels = ifelse(levels(pd$gent_de) == 'Catalunya',
                                         'Catalunya\n(only pro-indy)',
-                                        levels(pd$gent_de)))
+                                        ifelse(levels(pd$gent_de) == 'Euskadi/País Basc', 'País Basc', 
+                                               ifelse(levels(pd$gent_de) == 'Castella la Manxa', 'Castella - la Manxa', levels(pd$gent_de)))))
     }
     
+  } else {
+    pd$gent_de <- factor(pd$gent_de,
+                         levels = levels(pd$gent_de),
+                         labels = ifelse(levels(pd$gent_de) == 'Euskadi/País Basc',
+                                         'País Basc',
+                                         ifelse(levels(pd$gent_de) == 'Castella la Manxa', 
+                                                'Castella - la Manxa',
+                                                levels(pd$gent_de))))
   }
   
+  pd$cap_a <- factor(pd$cap_a,
+                     levels = levels(pd$cap_a),
+                     labels = ifelse(levels(pd$cap_a) == 'Euskadi/País Basc',
+                                     'País Basc',
+                                     ifelse(levels(pd$cap_a) == 'Castella la Manxa', 
+                                            'Castella - la Manxa',
+                                            levels(pd$cap_a))))
+  
   if(ca){
-    the_labs <- labs(x = 'Grau de simpatia de les persones d\'aqui',
-                     y = '...cap a les persones d\'aqui',
-                     title = 'Grau de simpatia cap als habitants d\'altres\ncomunitats autònomes segons comunitat autònoma',
+    the_labs <- labs(x = 'Grau de simpatia de les persones d\'aquí',
+                     y = '...cap a les persones d\'aquí',
+                     title = 'Grau de simpatia cap als habitants de les altres\ncomunitats autònomes, segons comunitat autònoma',
                      caption = "Font de dades: Enquesta 'Percepció sobre el debat territorial a Espanya' del Centre d'Estudis d'Opinió.\nGràfic: @joethebrew")
   } else {
     the_labs <- labs(x = 'How people from here feel...',
@@ -665,7 +683,7 @@ plot_compare <- function(ca = TRUE, only_indepes = FALSE){
   # Make a new var
   if(ca){
     if(only_indepes){
-      levs <- c('Valoració mitjana dels habitants\nd\'aquestacomunitat cap als catalans',
+      levs <- c('Valoració mitjana dels habitants\nd\'aquesta comunitat cap als catalans',
                 'Valoració mitjana de catalans INDEPENDENTISTES\ncap als habitants d\'aquesta comunitat')
     } else {
       levs <- c('Valoració mitjana dels habitants d\'aquesta\ncomunitat cap als catalans',
@@ -673,8 +691,8 @@ plot_compare <- function(ca = TRUE, only_indepes = FALSE){
     }
     the_labs <- labs(x = '',
                      y = "Valoració mitjana (0-10)",
-                     title = 'Grau de simpatia entre catalans i habitants\nd\'altres comunitats autònomes',
-                     caption = 'Escala de 0 a 10 on 0 significa: "Em cauen molt malament" i 10 significa: "Em cauen molt bé".\nDades de l\'enquesta "Percepció sobre el debat territorial a Espanya. 2019", Centre d\'Estudis d\'Opinió.\nEl texte entre parèntesis és la xifra NO ponderada. La ponderació fa servir factors demogràfics per ajustar pel biaix de selecció/mostreig.\nMés detalls sobre la ponderació a http://upceo.ceo.gencat.cat/wsceop/7368/Press%20dossier%20-952.pdf\nGràfic de Joe Brew, @joethebrew. Codi a https://github.com/joebrew/vilaweb/tree/master/analyses/filiafobia')
+                     title = 'Grau de simpatia entre catalans i habitants\nde les altres comunitats autònomes',
+                     caption = 'Escala de 0 a 10 on 0 significa: "Em cauen molt malament" i 10 significa: "Em cauen molt bé".\nDades de l\'enquesta "Percepció sobre el debat territorial a Espanya. 2019", Centre d\'Estudis d\'Opinió.\nEl text entre parèntesis és la xifra NO ponderada. La ponderació fa servir factors demogràfics per ajustar pel biaix de selecció/mostratge.\nMés detalls sobre la ponderació a http://upceo.ceo.gencat.cat/wsceop/7368/Press%20dossier%20-952.pdf\nGràfic de Joe Brew, @joethebrew. Codi a https://github.com/joebrew/vilaweb/tree/master/analyses/filiafobia')
   } else {
     if(only_indepes){
       levs <- c('How people from this area\nfeel about Catalans',
@@ -693,7 +711,7 @@ plot_compare <- function(ca = TRUE, only_indepes = FALSE){
   pd$var <- factor(pd$var, levels = levs)
   fl <- sort(unique(pd$ccaa))
   pd$ccaa <- factor(pd$ccaa, levels = ,
-                    labels = gsub('Castella', 'Cas.', gsub('/País Basc','', fl)))
+                    labels = gsub('Castella', 'Cas.', gsub('Euskadi/','', fl)))
   
   
   ggplot(data = pd,
@@ -739,20 +757,20 @@ line_breaker <- function(x,n = 10){
 
 df <- dff <- tibble(
   partit = c('PP', 'PSC', 'Cs', 'JxCat', 'ERC', 'Comuns'),
-  `% "d'acord" o "molt d'acord" amb que "els immigrants haurien d'abandonar la seva cultura d'origen i adoptar la cultura del país al quan han arribat"` = c(40.9, 35.3, 33.3, 21.4, 19.1, 17.7),
-  `Grau d'acord amb la frase "M'agrada aprendre d'altres cultures"` = c(6.8, 7.8, 7.5, 8.4, 8.5, 8.3),
-  `Grau d'acord amb la frase "Cap cultura en concret és superior a les altres"` = c(7.6, 8.4, 8.4, 8.6, 8.9, 9),
-  `% que vol "posar límits estrictes al nombre d'estrangers que poden venir aquí" o prohibir l'arribada completament"` = c(50.5, 24.7, 42.4, 16.1, 13.4, 13.8),
+  `% "d'acord" o "molt d'acord" amb la frase "Els immigrants haurien d'abandonar la seva cultura d'origen i adoptar la cultura del país al quan han arribat"` = c(40.9, 35.3, 33.3, 21.4, 19.1, 17.7),
+  `Grau d'acord amb la frase "M'agrada aprendre de les altres cultures"` = c(6.8, 7.8, 7.5, 8.4, 8.5, 8.3),
+  `Grau d'acord amb la frase "Cap cultura en concret no és superior a les altres"` = c(7.6, 8.4, 8.4, 8.6, 8.9, 9),
+  `% que vol "posar límits estrictes al nombre d'estrangers que poden venir aquí" o "prohibir-ne l'arribada completament"` = c(50.5, 24.7, 42.4, 16.1, 13.4, 13.8),
   `% d'acord amb la frase "Amb tanta immigració, un ja no se sent com a casa"` = c(62.2, 32.2, 50.5, 32.9, 25.8, 30.7),
-  `% que vol gastar més o molt més en l'acollida de la immigració` = c(9.3, 37.5, 13, 48.1, 47.3, 56.8)
+  `% que vol gastar més o molt més en l'acolliment de la immigració` = c(9.3, 37.5, 13, 48.1, 47.3, 56.8)
 )
 
-fonts <- font <- tibble(`% "d'acord" o "molt d'acord" amb que "els immigrants haurien d'abandonar la seva cultura d'origen i adoptar la cultura del país al quan han arribat"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", '% "agree" or "very much agree" that "immigrants should abandon their culture of origin and aopt the culture of the country where they have arrived"'),
-                `Grau d'acord amb la frase "M'agrada aprendre d'altres cultures"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", 'Extent of agreement with the phrase "I like learning from other cultures"'),
-                `Grau d'acord amb la frase "Cap cultura en concret és superior a les altres"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", 'Extent of agreement with the phrase "No specific culture is superior to others"'),
-                `% que vol "posar límits estrictes al nombre d'estrangers que poden venir aquí" o prohibir l'arribada completament"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", '% that wants to "put strict limits on the number of foreigners that can come here" or "completely ban" their arrival'),
+fonts <- font <- tibble(`% "d'acord" o "molt d'acord" amb la frase "Els immigrants haurien d'abandonar la seva cultura d'origen i adoptar la cultura del país al quan han arribat"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", '% "agree" or "very much agree" that "immigrants should abandon their culture of origin and aopt the culture of the country where they have arrived"'),
+                `Grau d'acord amb la frase "M'agrada aprendre de les altres cultures"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", 'Extent of agreement with the phrase "I like learning from other cultures"'),
+                `Grau d'acord amb la frase "Cap cultura en concret no és superior a les altres"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", 'Extent of agreement with the phrase "No specific culture is superior to others"'),
+                `% que vol "posar límits estrictes al nombre d'estrangers que poden venir aquí" o "prohibir-ne l'arribada completament"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", '% that wants to "put strict limits on the number of foreigners that can come here" or "completely ban" their arrival'),
                 `% d'acord amb la frase "Amb tanta immigració, un ja no se sent com a casa"` = c("Aggregació d'enquestes CEO, 2015 i 2018. Mostra: 3.127 residents de Catalunya amb ciutadania espanyola. Preguntes P56i i P31.", 'Extent of agreement with the phrase "With so much immigration, one no longer feels at home"'),
-                `% que vol gastar més o molt més en l'acollida de la immigració` = c('http://upceo.ceo.gencat.cat/wsceop/7428/Dossier%20de%20premsa%20-955.pdf', '% that wants to spend more on welcoming immigrants'))
+                `% que vol gastar més o molt més en l'acolliment de la immigració` = c('http://upceo.ceo.gencat.cat/wsceop/7428/Dossier%20de%20premsa%20-955.pdf', '% that wants to spend more on welcoming immigrants'))
 
 pd <- df %>%
   gather(key, value, names(df)[2:length(names(df))])
@@ -764,20 +782,20 @@ key_plot <- function(index = 1, ca = FALSE){
   
   df <- dff <- tibble(
     partit = c('PP', 'PSC', 'Cs', 'JxCat', 'ERC', 'Comuns'),
-    `% "d'acord" o "molt d'acord" amb que "els immigrants haurien d'abandonar la seva cultura d'origen i adoptar la cultura del país al quan han arribat"` = c(40.9, 35.3, 33.3, 21.4, 19.1, 17.7),
-    `Grau d'acord amb la frase "M'agrada aprendre d'altres cultures"` = c(6.8, 7.8, 7.5, 8.4, 8.5, 8.3),
-    `Grau d'acord amb la frase "Cap cultura en concret és superior a les altres"` = c(7.6, 8.4, 8.4, 8.6, 8.9, 9),
-    `% que vol "posar límits estrictes al nombre d'estrangers que poden venir aquí" o prohibir l'arribada completament"` = c(50.5, 24.7, 42.4, 16.1, 13.4, 13.8),
+    `% "d'acord" o "molt d'acord" amb la frase "Els immigrants haurien d'abandonar la seva cultura d'origen i adoptar la cultura del país al quan han arribat"` = c(40.9, 35.3, 33.3, 21.4, 19.1, 17.7),
+    `Grau d'acord amb la frase "M'agrada aprendre de les altres cultures"` = c(6.8, 7.8, 7.5, 8.4, 8.5, 8.3),
+    `Grau d'acord amb la frase "Cap cultura en concret no és superior a les altres"` = c(7.6, 8.4, 8.4, 8.6, 8.9, 9),
+    `% que vol "posar límits estrictes al nombre d'estrangers que poden venir aquí" o "prohibir-ne l'arribada completament"` = c(50.5, 24.7, 42.4, 16.1, 13.4, 13.8),
     `% d'acord amb la frase "Amb tanta immigració, un ja no se sent com a casa"` = c(62.2, 32.2, 50.5, 32.9, 25.8, 30.7),
-    `% que vol gastar més o molt més en l'acollida de la immigració` = c(9.3, 37.5, 13, 48.1, 47.3, 56.8)
+    `% que vol gastar més o molt més en l'acolliment de la immigració` = c(9.3, 37.5, 13, 48.1, 47.3, 56.8)
   )
   
-  fonts <- font <- tibble(`% "d'acord" o "molt d'acord" amb que "els immigrants haurien d'abandonar la seva cultura d'origen i adoptar la cultura del país al quan han arribat"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", '% "agree" or "very much agree" that "immigrants should abandon their culture of origin and aopt the culture of the country where they have arrived"'),
-                          `Grau d'acord amb la frase "M'agrada aprendre d'altres cultures"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", 'Extent of agreement with the phrase "I like learning from other cultures"'),
-                          `Grau d'acord amb la frase "Cap cultura en concret és superior a les altres"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", 'Extent of agreement with the phrase "No specific culture is superior to others"'),
-                          `% que vol "posar límits estrictes al nombre d'estrangers que poden venir aquí" o prohibir l'arribada completament"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", '% that wants to "put strict limits on the number of foreigners that can come here" or "completely ban" their arrival'),
+  fonts <- font <- tibble(`% "d'acord" o "molt d'acord" amb la frase "Els immigrants haurien d'abandonar la seva cultura d'origen i adoptar la cultura del país al quan han arribat"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", '% "agree" or "very much agree" that "immigrants should abandon their culture of origin and aopt the culture of the country where they have arrived"'),
+                          `Grau d'acord amb la frase "M'agrada aprendre de les altres cultures"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", 'Extent of agreement with the phrase "I like learning from other cultures"'),
+                          `Grau d'acord amb la frase "Cap cultura en concret no és superior a les altres"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", 'Extent of agreement with the phrase "No specific culture is superior to others"'),
+                          `% que vol "posar límits estrictes al nombre d'estrangers que poden venir aquí" o "prohibir-ne l'arribada completament"` = c("http://upceo.ceo.gencat.cat/wsceop/7348/Dossier%20de%20premsa%20-951.pdf", '% that wants to "put strict limits on the number of foreigners that can come here" or "completely ban" their arrival'),
                           `% d'acord amb la frase "Amb tanta immigració, un ja no se sent com a casa"` = c("Aggregació d'enquestes CEO, 2015 i 2018. Mostra: 3.127 residents de Catalunya amb ciutadania espanyola. Preguntes P56i i P31.", 'Extent of agreement with the phrase "With so much immigration, one no longer feels at home"'),
-                          `% que vol gastar més o molt més en l'acollida de la immigració` = c('http://upceo.ceo.gencat.cat/wsceop/7428/Dossier%20de%20premsa%20-955.pdf', '% that wants to spend more on welcoming immigrants'))
+                          `% que vol gastar més o molt més en l'acolliment de la immigració` = c('http://upceo.ceo.gencat.cat/wsceop/7428/Dossier%20de%20premsa%20-955.pdf', '% that wants to spend more on welcoming immigrants'))
   
   pd <- df %>%
     gather(key, value, names(df)[2:length(names(df))])
@@ -791,7 +809,7 @@ key_plot <- function(index = 1, ca = FALSE){
   
   if(ca){
     the_labs <- the_labs <- labs(x = '',
-                     y = 'Percentatge/Grau d\'acord',
+                     y = 'Percentatge/grau d\'acord',
                      title = line_breaker(this_key, n = 65),
                      caption = paste0("Font de dades: ", line_breaker(font[1, index], n = 100)))
   } else {
