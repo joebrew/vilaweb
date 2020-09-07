@@ -79,11 +79,11 @@ Sé el que estàs pensant: "però Joe, per què reduir la realitat complexa a pr
 
 La resposta és senzilla: cal ser realista. De la mateixa manera que Sanders no és una opció realista per les eleccions americanes de novembre, i de la mateixa manera que "la teva parella es canvïi" no és una opció realista per molts que s'estan divorciant, la opció "reforma de la Constitució" simplement no existeix. I no existeix per dos raons. 1. Perquè el grau de satisfacció amb la constitució espanyola és molt alta a Espanya, fent impossible una reforma actual:
 
-![](https://imatges.vilaweb.cat/nacional/wp-content/uploads/2019/01/Grafic-1-11163949.png)
+![](img/a.png)
 
 2. Encara que una reforma fos possible numericament, la preferència territorial a Espanya és clarament entre statu quo i més centralització: 
 
-![](https://imatges.vilaweb.cat/nacional/wp-content/uploads/2019/01/Grafic-4-11164003.png)
+![](img/b.png)
 
 O sigui, tot i que fos possible una reforma constitucional (insisteixo: ara no ho és), lo més probable és que aquesta reforma reduiria l'autonomia de Catalunya perquè la majoria a Espanya opina que Catalunya ja té _massa_ autonomia:
 
