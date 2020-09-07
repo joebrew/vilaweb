@@ -1,5 +1,5 @@
 ---
-title: "Opcions inexistents"
+title: "Opcions inexistents: una reflexió sobre enquestes recents"
 output: github_document
 ---
 
@@ -30,7 +30,9 @@ library(ggplot2)
 ```
 
 
-# Introducció: unes metàfores absurdes
+Aquest article és una breu reflexió sobre els resultats de l'enquesta GAD3 de la Vanguardia, publicada fa un parell de dies [aquí](https://www.lavanguardia.com/politica/20200907/483338612815/encuesta-lavanguardia-cataluna-autogobierno-referendum-independencia-dialogo-espana-quim-torra.html).
+
+## Introducció: unes metàfores absurdes
 
 "Què preferiries: (a) divorciar-te, (b) no divorciar-te or (c) no divorciar-te i que la teva parella canvïi radicalment?"
 
@@ -51,7 +53,7 @@ E. Clinton
 
 Quin seria el resultat? És clar: un fraccionament d'aquells que votarien Biden entre les altres opcions. Quins serien els titulars? "Una majoria clara en contra de Biden".
 
-# Preguntes diluïdes amb opcions inexistents
+## Preguntes diluïdes amb opcions inexistents
 
 Què té a veure l'anterior amb la política catalana? **Afegir opcions inexistents a preguntes binàries per diluir el percentatge a favor d'una opció específica permet generar titulars cridaners amb poc signifcat real.** Un exemple recent: "solo un 26% se aferra al referéndum". Aquest titular, que es refereix als resultats de l'enquesta GAD3 de la Vanguardia (https://www.lavanguardia.com/politica/20200907/483338612815/encuesta-lavanguardia-cataluna-autogobierno-referendum-independencia-dialogo-espana-quim-torra.html) es basa en aquesta pregunta: "Si se inicia una negociación bilateral ¿que vía preferiría para resolver el conflicto?"
 
@@ -65,13 +67,13 @@ Per què són problemàtiques aquestes opcions? Perquè:
 
 És a dir, afegint opcions a la llista de respostes fa que el percentatge de cada resposta baixi, però no de manera homogènia: de la mateixa manera que la preferència pel divorci baixaria davant l'addició d'opcions de millora de la parella (tot i ser gairebé impossibles), la preferència pel referèndum d'autodeterminació baixa davant l'addició d'opcions radicalment reformistes (reforma de la Constitució, per exemple).
 
-# Independentistes condicionals
+## Independentistes condicionals
 
 Si volen mesurar el suport per un referèndum d'independència a Catalunya, per què no preguntar: "Vols que hi hagi un referèndum d'independència a Catalunya? Sí o no"? Per què fan això d'afegir més respotes?  
 
 Ho fan perquè el titular generat per una pregunta binària seria força diferent que el titular generat per una pregunta quatrenària (i al final, siguem honestos, la gent només llegeix el titular). Una pregunta binària sobre el referèndum produiria un titular referint-se a la majoria de catalans a favor d'un referèndum ([enquesta](https://www.publico.es/politica/encuesta-catalunya-82-catalanes-creen-solucion-referendum-independencia-pactado.html), rera [enquesta](https://www.lavanguardia.com/politica/20190925/47633667382/barometro-encuesta-ceo-referendum-jucio-presos-cataluna.html), rera [enquesta](https://www.ccma.cat/324/7-de-cada-10-catalans-voldrien-un-referendum-mentre-que-a-espanya-3-de-cada-10/noticia/2964974/)). De la mateixa manera que donar la possibilitat de votar per Obama o Clinton té l'efecte de reduir el suport per Biden, donar la possibilitat d'una reforma constitucional té l'efecte de reduir el suport pel referèndum. Una pregunta amb quartre respostes és capaç de generar titulars amb xifres petites, perquè crea aquelles condicions que converteixen els independentistes "condicionals" (aquells que estan a favor de la independència però acceptarien altres opcions) en no-independentistes, o fins i tot no-sobiranistes.
 
-# Realisme  
+## Realisme  
 
 Sé el que estàs pensant: "però Joe, per què reduir la realitat complexa a preguntes binàries simplistes? Per què excloure una opció com la reforma constitucional si és una opció que atrau molt suport a Catalunya?"  
 
@@ -87,7 +89,7 @@ O sigui, tot i que fos possible una reforma constitucional (insisteixo: ara no h
 
 ![](https://imatges.vilaweb.cat/nacional/wp-content/uploads/2020/02/JOE-BREW-GRAFIC-4-07172048.png)
 
-# Conclusió
+## Conclusió
 
 En resum, pel que fa el conflicte polític entre Catalunya i Espanya, la preguntes binàries (referèndum o no; independència o no) són les més adecuades perquè les altres opcions senzillament no existeixen. Al meu parer, donada la composició de la opinió pública espanyola sobre la quëstió catalana, hi ha només 2 opcions "realistes": (i) statu quo i (ii) referèndum.
 

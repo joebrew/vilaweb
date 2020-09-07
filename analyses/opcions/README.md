@@ -1,7 +1,11 @@
-Opcions inexistents
+Opcions inexistents: una reflexió sobre enquestes recents
 ================
 
-# Introducció: unes metàfores absurdes
+Aquest article és una breu reflexió sobre els resultats de l’enquesta
+GAD3 de la Vanguardia, publicada fa un parell de dies
+[aquí](https://www.lavanguardia.com/politica/20200907/483338612815/encuesta-lavanguardia-cataluna-autogobierno-referendum-independencia-dialogo-espana-quim-torra.html).
+
+## Introducció: unes metàfores absurdes
 
 “Què preferiries: (a) divorciar-te, (b) no divorciar-te or (c) no
 divorciar-te i que la teva parella canvïi radicalment?”
@@ -40,7 +44,7 @@ Quin seria el resultat? És clar: un fraccionament d’aquells que votarien
 Biden entre les altres opcions. Quins serien els titulars? “Una majoria
 clara en contra de Biden”.
 
-# Preguntes diluïdes amb opcions inexistents
+## Preguntes diluïdes amb opcions inexistents
 
 Què té a veure l’anterior amb la política catalana? **Afegir opcions
 inexistents a preguntes binàries per diluir el percentatge a favor d’una
@@ -74,7 +78,7 @@ preferència pel referèndum d’autodeterminació baixa davant l’addició
 d’opcions radicalment reformistes (reforma de la Constitució, per
 exemple).
 
-# Independentistes condicionals
+## Independentistes condicionals
 
 Si volen mesurar el suport per un referèndum d’independència a
 Catalunya, per què no preguntar: “Vols que hi hagi un referèndum
@@ -100,7 +104,7 @@ converteixen els independentistes “condicionals” (aquells que estan a
 favor de la independència però acceptarien altres opcions) en
 no-independentistes, o fins i tot no-sobiranistes.
 
-# Realisme
+## Realisme
 
 Sé el que estàs pensant: “però Joe, per què reduir la realitat complexa
 a preguntes binàries simplistes? Per què excloure una opció com la
@@ -132,7 +136,7 @@ autonomia:
 
 ![](https://imatges.vilaweb.cat/nacional/wp-content/uploads/2020/02/JOE-BREW-GRAFIC-4-07172048.png)
 
-# Conclusió
+## Conclusió
 
 En resum, pel que fa el conflicte polític entre Catalunya i Espanya, la
 preguntes binàries (referèndum o no; independència o no) són les més
